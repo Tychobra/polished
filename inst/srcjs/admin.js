@@ -254,17 +254,30 @@ $(document).on("shiny:sessioninitialized", function() {
       const roles_ref = db.collection("apps")
       .doc(app_name)
       .collection("roles")
-      .add({
-        role: message.role
-      }).then(user => {
 
-        toastr.success("Role Successfully Invited")
-        return null
+      roles_ref.get().then(role => {
+
+        if (role.exists) {
+          throw "role_already_exists"
+        } else {
+
+          return roles_ref.doc(message.role).set({
+            role: message.role
+          })
+
+        }
 
       }).catch(error => {
 
+        if (error === "role_already_exists") {
+          // Shiny checks if the role exists before calling 'polish__add_role', so
+          // this error should only occur if user is directly manipulating the js.
+          // TODO: may want to log this to Sentry with user info
+          toastr.error("Error Role Already Exists")
+        } else {
+          toastr.error("Error Adding User Role")
+        }
 
-        toastr.error("Error Adding User Role")
 
         console.log("error adding user role")
         console.log(error)

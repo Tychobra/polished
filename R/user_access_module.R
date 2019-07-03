@@ -483,9 +483,9 @@ user_access_module <- function(input, output, session) {
     new_role <- input$new_user_role
 
     if (new_role %in% roles()$role) {
-
-      shinyjs::runjs("toastr.error('User Already Exists')")
-
+      shinyjs::runjs("toastr.error('Role Already Exists')")
+    } else if (new_role == "") {
+      shinyjs::runjs("toastr.error('Invalid Role Name')")
     } else {
       role_add_trigger(role_add_trigger() + 1)
       print(paste0(new_role, " to be added"))
@@ -508,24 +508,32 @@ user_access_module <- function(input, output, session) {
 
   roles <- reactiveVal(NULL)
 
-  shiny::observe({
-    user_roles_trigger()
 
-    session$sendCustomMessage(
-      "polish__get_roles",
-      message = list(
-        app_name = "auth_basic"
-      )
-    )
-  })
+  # this might be a good way to create the listener for the specific app
+  #session$sendCustomMessage(
+  #  "polish__create_roles_listeneer",
+  #  message = list(
+  #    app_name =
+  #  )
+  #)
+
 
   observeEvent(input$polish__user_roles, {
-    out <- tibble::tibble(
-      role = c("", input$polish__user_roles)
-    )
+    if (is.null(input$polish__user_roles)) {
+      out <- tibble::tibble(
+        role = character(0)
+      )
+    } else {
+      out <- tibble::tibble(
+        role = input$polish__user_roles
+      )
+    }
+
 
     roles(out)
-  })
+  }, ignoreNULL = FALSE)
+
+
 
   roles_table_prep <- reactive({
     req(roles())
@@ -581,16 +589,7 @@ user_access_module <- function(input, output, session) {
   })
 
 
-  user_roles_trigger <- reactiveVal(0)
 
-  #observe({
-  #  print(list(
-  #    "roles" = roles(),
-  #    "role_row_to_delete" = input$role_row_to_delete,
-  #    "role_row_to_edit" = input$role_row_to_edit,
-  #    "role_to_delete" = role_to_delete()
-  #  ))
-  #})
 
   role_to_delete <- reactiveVal(NULL)
 
