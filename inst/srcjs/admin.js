@@ -294,6 +294,42 @@ $(document).on("shiny:sessioninitialized", function() {
     }
   })
 
+  Shiny.addCustomMessageHandler(
+    "polish__delete_role",
+    /*
+    * @param messgae an object with the following properties
+    * - email the users email address
+    * - is_admin boolean whether or not the user is an admin
+    * - role character string for a custom user group
+    * - ns the namespace of the Shiny module
+    */
+    function(message) {
+
+
+      const roles_ref = db.collection("apps")
+      .doc(app_name)
+      .collection("roles")
+
+
+      roles_ref
+      .doc(message.role)
+      .delete().then(() => {
+        // TODO: need to delete role from each user with the role.  This needs to be done in a Firebase function
+
+        toastr.success("Role Successfully Deleted")
+
+        return null
+
+      }).catch(error => {
+
+        toastr.error("Error Deleting Role")
+        console.log("error deleting role")
+        console.log(error)
+      })
+
+    }
+  )
+
 })
 
 

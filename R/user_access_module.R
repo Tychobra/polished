@@ -466,8 +466,11 @@ user_access_module <- function(input, output, session) {
             style = "display: none;",
             htmltools::br(),
             h3(
+              style = "line-height: 1.3;",
               'Are you sure you want to delete role "',
-              textOutput(ns("role_to_delete_out"), inline = TRUE),
+              tags$span(
+                id = ns("role_to_delete_span")
+              ),
               '"?  Any users with this role will lose it.'
             )
           )
@@ -620,9 +623,10 @@ user_access_module <- function(input, output, session) {
     shinyjs::runjs("$('#manage_roles_modal_footers').show('slide', {direction: 'left'}, 400)")
   })
 
-  output$role_to_delete_out <- renderText({
-    role_to_delete()
+  observeEvent(role_to_delete(), {
+    shinyjs::html("role_to_delete_span", html = role_to_delete())
   })
+
 
   shiny::observeEvent(input$submit_role_delete, {
     shiny::removeModal()
@@ -630,8 +634,7 @@ user_access_module <- function(input, output, session) {
     session$sendCustomMessage(
       "polish__delete_role",
       message = list(
-        email = user_to_delete()$email,
-        ns = ns("")
+        role = role_to_delete()
       )
     )
   })
