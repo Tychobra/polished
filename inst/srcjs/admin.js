@@ -201,31 +201,89 @@ $(document).on("shiny:sessioninitialized", function() {
   )
 
 
+  //Shiny.addCustomMessageHandler(
+  //  "polish__get_roles",
+  //  function(message) {
+  //
+  //    db.collection("apps")
+  //    .doc(app_name)
+  //    .collection("roles")
+  //    .get().then((query_snapshot) => {
+  //
+  //      let roles = []
+//
+//        query_snapshot.forEach((doc) => {
+//          roles.push(doc.data())
+//        })
+//
+//        Shiny.setInputValue("admin-user_access-polish__user_roles", roles)
+//
+//        return roles
+//      }).catch(error => {
+//        console.error("error getting users", error)
+//      })
+//    }
+//  )
+
+
+
+  const unsubscribe_roles = db.collection("apps")
+  .doc(app_name)
+  .collection("roles")
+  .onSnapshot((query_snapshot) => {
+
+    let roles = []
+
+    query_snapshot.forEach((doc) => {
+      roles.push(doc.data())
+    })
+
+    Shiny.setInputValue("admin-user_access-polish__user_roles", roles)
+
+    return roles
+  }, error => {
+    console.log("Eror listening for users")
+  })
+
+
   Shiny.addCustomMessageHandler(
-    "polish__get_roles",
+    "polish__add_role",
+
     function(message) {
 
-      db.collection("apps")
+      const roles_ref = db.collection("apps")
       .doc(app_name)
       .collection("roles")
-      .get().then((query_snapshot) => {
+      .add({
+        role: message.role
+      }).then(user => {
 
-        let roles = []
+        toastr.success("Role Successfully Invited")
+        return null
 
-        query_snapshot.forEach((doc) => {
-          roles.push(doc.data())
-        })
-
-        Shiny.setInputValue("admin-user_access-polish__user_roles", roles)
-
-        return roles
       }).catch(error => {
-        console.error("error getting users", error)
+
+
+        toastr.error("Error Adding User Role")
+
+        console.log("error adding user role")
+        console.log(error)
       })
+
     }
   )
 
+  // TODO: figure out if this is properly unsubscribing from the roles listener
+  $(document).on('shiny:disconnected', function(socket) {
+    //console.log('Shiny Disconnected')
+    if (typeof unsubscribe_roles !== undefined) {
+      unsubscribe_roles()
+    }
+  })
+
 })
+
+
 
 $(document).on("click", "#polish__sign_out", () => {
 

@@ -438,7 +438,8 @@ user_access_module <- function(input, output, session) {
                 style = "color: white",
                 icon = icon("times")
               )
-            ))
+            )
+          )
         ),
         size = "s",
         div(
@@ -471,22 +472,38 @@ user_access_module <- function(input, output, session) {
             )
           )
         )
-
       )
     )
   })
+
+
+  role_add_trigger <- reactiveVal(0)
 
   observeEvent(input$new_user_role_search, {
     new_role <- input$new_user_role
 
     if (new_role %in% roles()$role) {
-      print(paste0(new_role, " already exists"))
+
+      shinyjs::runjs("toastr.error('User Already Exists')")
+
     } else {
+      role_add_trigger(role_add_trigger() + 1)
       print(paste0(new_role, " to be added"))
     }
 
   })
 
+
+  observeEvent(role_add_trigger(), {
+
+    session$sendCustomMessage(
+      "polish__add_role",
+      message = list(
+        role = input$new_user_role
+      )
+    )
+
+  }, ignoreInit = TRUE)
 
 
   roles <- reactiveVal(NULL)
