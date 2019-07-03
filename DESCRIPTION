@@ -1,4 +1,4 @@
-Package: polishing
+Package: polished
 Type: Package
 Title: enhance Shiny apps with modern front end services
 Version: 0.0.0.9000
