@@ -1,10 +1,10 @@
 Package: polished
 Type: Package
-Title: enhance Shiny apps with modern front end services
+Title: enhance Shiny apps with modern front end web services
 Version: 0.0.0.9000
 Author: person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre"))
 Maintainer: Andy Merlino <andy.merlino@tychobra.com>
-Description: enhance Shiny apps with modern front end services.  e.g. authentication via Firebase
+Description: enhance Shiny apps with modern front end web services.  e.g. authentication via Firebase
 License: 
 Encoding: UTF-8
 LazyData: true
