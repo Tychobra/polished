@@ -1,8 +1,6 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 
-// attach the variables defined in ".env" to `process.env`
-require('dotenv').config()
 
 admin.initializeApp();
 
@@ -11,6 +9,7 @@ const db = admin.firestore();
 exports.signInWithToken = functions.https.onRequest(async (req, res) => {
 
   const auth_token = req.query.token
+  const app_name = req.query.app_name
 
   // the firebase user
   let user = null
@@ -21,7 +20,7 @@ exports.signInWithToken = functions.https.onRequest(async (req, res) => {
     user = await admin.auth().verifyIdToken(auth_token)
     console.log("user: ", user)
     const user_ref = db.collection("apps")
-      .doc(process.env.SHINY_APP_NAME)
+      .doc(app_name)
       .collection("users")
       .doc(user.email)
 

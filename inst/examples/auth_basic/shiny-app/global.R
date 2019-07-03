@@ -1,5 +1,5 @@
 library(shiny)
-library(polishing)
+library(polished)
 library(config)
 library(DT)
 library(shinyjs)

@@ -26,11 +26,13 @@
 User <-  R6::R6Class(
   classname = "User",
   public = list(
-    initialize = function(firebase_function_url, firebase_auth_token) {
+    initialize = function(firebase_function_url, firebase_auth_token, app_name) {
 
       self$firebase_function_url <- firebase_function_url
 
       self$token <- firebase_auth_token
+
+      self$app_name <- app_name
 
       self$sign_in_with_token(firebase_auth_token)
 
@@ -40,10 +42,11 @@ User <-  R6::R6Class(
     },
     firebase_function_url = character(0),
     token = character(0),
+    app_name = character(0),
     sign_in_with_token = function(firebase_auth_token) {
 
       # firebase function callable via url
-      url_out <- paste0(self$firebase_function_url, "signInWithToken?token=", firebase_auth_token)
+      url_out <- paste0(self$firebase_function_url, "signInWithToken?token=", firebase_auth_token, "&app_name=", self$app_name)
       user_response <- httr::GET(url_out)
       user_text <- httr::content(user_response, "text")
       user <- jsonlite::fromJSON(user_text)
@@ -129,6 +132,7 @@ User <-  R6::R6Class(
 Users <-  R6::R6Class(
   classname = "Users",
   public = list(
+
     # list of instances of `User`
     users = vector("list", length = 0),
     add_user = function(user) {

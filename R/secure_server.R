@@ -12,11 +12,10 @@
 #' is set to NULL if user is not signed in or a list with user data if the user is
 #' signed in
 #'
-secure_server <- function(input, session, firebase_function_url, dev_user = list(
+secure_server <- function(input, session, firebase_function_url, app_name, dev_user = list(
   email = "andy.merlino@tychobra.com",
-  role = "admin",
-  app_name = "app_name"
-
+  is_admin = TRUE,
+  role = ""
 )) {
 
   session$userData$current_user <- reactiveVal(NULL)
@@ -93,7 +92,8 @@ secure_server <- function(input, session, firebase_function_url, dev_user = list
         tryCatch({
           user <- User$new(
             firebase_function_url = firebase_function_url,
-            firebase_auth_token = token
+            firebase_auth_token = token,
+            app_name = app_name
           )
 
         }, error = function(error) {

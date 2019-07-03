@@ -12,7 +12,6 @@
     "node": "8"
   },
   "dependencies": {
-    "dotenv": "^8.0.0",
     "firebase-admin": "~7.0.0",
     "firebase-functions": "^2.3.0"
   },
