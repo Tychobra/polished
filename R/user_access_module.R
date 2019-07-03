@@ -14,27 +14,6 @@ user_access_module_ui <- function(id) {
   shinydashboard::tabItem(
     tabName = "user_access",
     shiny::fluidRow(
-      shiny::column(
-        12,
-        # shiny::actionButton(
-        #   ns("add_user"),
-        #   "Add User",
-        #   class = "btn-success",
-        #   style = "color: #fff;",
-        #   icon = icon("user-plus")
-        # ),
-        shiny::actionButton(
-          ns("manage_roles"),
-          "Manage User Roles",
-          class = "btn-primary",
-          style = "color: #fff;",
-          icon = icon("cogs")
-        ),
-        htmltools::br(),
-        htmltools::br()
-      )
-    ),
-    shiny::fluidRow(
       shinydashboard::box(
         width = 12,
         title = "Users",
@@ -66,6 +45,23 @@ user_access_module_ui <- function(id) {
         )
       )
     ),
+
+    # roles_table_ui
+    shiny::fluidRow(
+      shinydashboard::box(
+        title = "User Roles",
+        width = 6,
+        shiny::actionButton(
+          ns("add_role"),
+          "Add Role",
+          class = "btn-success",
+          style = "color: #fff;",
+          icon = icon("plus")
+        ),
+        DT::DTOutput(ns("roles_table"))
+      )
+    ),
+
     # users table
     tags$script(paste0("
       $(document).on('click', '#", ns('users_table'), " .delete_btn', function() {
@@ -426,34 +422,109 @@ user_access_module <- function(input, output, session) {
     users_trigger(users_trigger() + 1)
   })
 
-  shiny::observeEvent(input$manage_roles, {
+  # shiny::observeEvent(input$manage_roles, {
+  #
+  #   shiny::showModal(
+  #     shiny::modalDialog(
+  #       title = "Manage Role",
+  #       footer = list(
+  #         div(
+  #           style = "height: 37px",
+  #
+  #           div(
+  #             id = "manage_roles_modal_footers",
+  #             modalButton("Cancel")
+  #           ),
+  #           div(
+  #             id = "delete_role_modal_footers",
+  #             style = "display: none;",
+  #             actionButton(
+  #               ns("cancel_role_delete"),
+  #               "Cancel"
+  #             ),
+  #             actionButton(
+  #               ns("submit_role_delete"),
+  #               "Delete Role",
+  #               class = "btn-danger",
+  #               style = "color: white",
+  #               icon = icon("times")
+  #             )
+  #           )
+  #         )
+  #       ),
+  #       size = "s",
+  #       div(
+  #         style = "min-height: 250px",
+  #         div(
+  #           id = "manage_roles_modal_content",
+  #           # modal content
+  #           htmltools::br(),
+  #           shinyWidgets::searchInput(
+  #             inputId = ns("new_user_role"),
+  #             label = "New Role",
+  #             btnSearch = icon("plus"),
+  #             width = "100%"
+  #           ),
+  #           #shiny::textInput(
+  #           #  ns("new_user_role"),
+  #           #  "New Role"
+  #           #),
+  #           htmltools::br(),
+  #           DT::DTOutput(ns("roles_table"))
+  #         ),
+  #         div(
+  #           id = "delete_role_modal_content",
+  #           style = "display: none;",
+  #           htmltools::br(),
+  #           h3(
+  #             style = "line-height: 1.3;",
+  #             'Are you sure you want to delete role "',
+  #             tags$span(
+  #               id = ns("role_to_delete_span")
+  #             ),
+  #             '"?  Any users with this role will lose it.'
+  #           )
+  #         )
+  #       )
+  #     )
+  #   )
+  # })
+  shiny::observeEvent(input$add_role, {
 
     shiny::showModal(
       shiny::modalDialog(
-        title = "Manage Role",
+        title = "Add Role",
         footer = list(
-          div(
-            style = "height: 37px",
+          modalButton("Cancel"),
+          actionButton(
+            ns("submit_role_add"),
+            "Add Role",
+            class = "btn-success",
+            style = "color: white",
+            icon = icon("plus")
+          )
+        ),
+        size = "s",
+        shiny::textInput(
+          inputId = ns("new_user_role"),
+          label = "New Role"
+        )
+      )
+    )
+  })
 
-            div(
-              id = "manage_roles_modal_footers",
-              modalButton("Cancel")
-            ),
-            div(
-              id = "delete_role_modal_footers",
-              style = "display: none;",
-              actionButton(
-                ns("cancel_role_delete"),
-                "Cancel"
-              ),
-              actionButton(
-                ns("submit_role_delete"),
-                "Delete Role",
-                class = "btn-danger",
-                style = "color: white",
-                icon = icon("times")
-              )
-            )
+  observeEvent(input$delete_role, {
+    shiny::showModal(
+      shiny::modalDialog(
+        title = "Add Role",
+        footer = list(
+          modalButton("Cancel"),
+          actionButton(
+            ns("submit_role_add"),
+            "Delete Role",
+            class = "btn-danger",
+            style = "color: white",
+            icon = icon("times")
           )
         ),
         size = "s",
@@ -497,7 +568,7 @@ user_access_module <- function(input, output, session) {
 
   role_add_trigger <- reactiveVal(0)
 
-  observeEvent(input$new_user_role_search, {
+  observeEvent(input$submit_role_add, {
     new_role <- input$new_user_role
 
     if (new_role %in% roles()$role) {
@@ -505,6 +576,7 @@ user_access_module <- function(input, output, session) {
     } else if (new_role == "") {
       shinyjs::runjs("toastr.error('Invalid Role Name')")
     } else {
+      removeModal()
       role_add_trigger(role_add_trigger() + 1)
       print(paste0(new_role, " to be added"))
     }
@@ -599,7 +671,7 @@ user_access_module <- function(input, output, session) {
       options = list(
         dom = dom_out,
         columnDefs = list(
-          list(targets = 0, class = "dt-center"),
+          list(targets = 0:1, class = "dt-center"),
           list(targets = 0, width = "35px")
         )
       )
