@@ -16,13 +16,13 @@ user_access_module_ui <- function(id) {
     shiny::fluidRow(
       shiny::column(
         12,
-        shiny::actionButton(
-          ns("add_user"),
-          "Add User",
-          class = "btn-success",
-          style = "color: #fff;",
-          icon = icon("user-plus")
-        ),
+        # shiny::actionButton(
+        #   ns("add_user"),
+        #   "Add User",
+        #   class = "btn-success",
+        #   style = "color: #fff;",
+        #   icon = icon("user-plus")
+        # ),
         shiny::actionButton(
           ns("manage_roles"),
           "Manage User Roles",
@@ -38,10 +38,25 @@ user_access_module_ui <- function(id) {
       shinydashboard::box(
         width = 12,
         title = "Users",
-        style = "min-height: 500px;",
+        #style = "min-height: 500px;",
+        collapsible = TRUE,
         shiny::fluidRow(
           shiny::column(
             12,
+            shiny::actionButton(
+              ns("add_user"),
+              "Add User",
+              class = "btn-success",
+              #style = "color: #fff; position: absolute: top: 20, left: 15; margin-bottom: 0;",
+              style = "color: #fff;",
+              icon = icon("user-plus")
+            )
+          )
+        ),
+        shiny::fluidRow(
+          shiny::column(
+            12,
+            style = "z-index: 10",
             DT::DTOutput(ns("users_table")) #%>%
             #shinycssloaders::withSpinner(
             #  type = 8,
