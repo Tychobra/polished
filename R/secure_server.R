@@ -125,7 +125,10 @@ secure_server <- function(input, session, firebase_function_url, app_name, dev_u
           mode = "replace"
         )
 
-        session$userData$current_user(user)
+        session$userData$current_user(list(
+          "email" = user$get_email(),
+          "role" = user$get_role()
+        ))
 
         session$reload()
 
