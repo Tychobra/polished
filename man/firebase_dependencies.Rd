@@ -16,3 +16,8 @@ the html <script> tabs with the firebase dependencies
 \description{
 load the Firebase dependencies into the ui
 }
+\examples{
+
+firebase_dependencies()
+
+}

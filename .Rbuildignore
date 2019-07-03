@@ -1,0 +1,3 @@
+node_modules/
+^.*\.Rproj$
+^\.Rproj\.user$

@@ -11,7 +11,6 @@
 #' @importFrom shiny fluidPage fluidRow column actionButton
 #' @importFrom htmltools tagList h1
 #'
-#' @name secure-shiny-app
 #'
 #' @examples
 #' if (interactive()) {

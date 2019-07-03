@@ -1,4 +1,4 @@
-#' Adds the content of inst/srcjs/ to tychobraauth/
+#' Adds the content of inst/srcjs/ to polish/
 #'
 #' @importFrom shiny addResourcePath registerInputHandler
 #' @importFrom tibble tibble
