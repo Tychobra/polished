@@ -1,0 +1,20 @@
+Package: polishing
+Type: Package
+Title: enhance Shiny apps with modern front end services
+Version: 0.0.0.9000
+Author: person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre"))
+Maintainer: Andy Merlino <andy.merlino@tychobra.com>
+Description: enhance Shiny apps with modern front end services.  e.g. authentication via Firebase
+License: 
+Encoding: UTF-8
+LazyData: true
+Imports:
+    shiny,
+    httr,
+    jsonlite,
+    R6,
+    shinyjs,
+    DT,
+    shinydashboard,
+    shinycssloaders
+RoxygenNote: 6.1.1

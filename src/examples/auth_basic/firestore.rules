@@ -1,0 +1,22 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{doc_id} {
+
+      allow get: if request.auth.ui == doc_id
+
+
+      // allow the user to update their own document.  This is used to update the time_last_signed in
+      //allow update: if request.auth.uid != null && request.auth.token.email == resource.data.email;
+
+      // allow the user to read and write (create, update, delete) all data if the user is a signed in admin
+      // create uses request.resource because resource does not yet have a value
+      //allow read, update, delete: if request.auth.uid != null && is_admin(database, request.auth.token.email, resource.data.app_name);
+      //allow read, create: if request.auth.uid != null && is_admin(database, request.auth.token.email, request.resource.data.app_name);
+    }
+    match /invited/{doc_id} {
+
+      allow get: if true
+
+    }
+  }
+}
