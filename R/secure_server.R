@@ -59,6 +59,7 @@ secure_server <- function(input, session, firebase_function_url, app_name, dev_u
           print("conditional option 2")
           user_out <- list(
             "email" = user$get_email(),
+            "is_admin" = user$get_is_admin(),
             "role" = user$get_role()
           )
           # set the signed in user to the session$userData
@@ -127,6 +128,7 @@ secure_server <- function(input, session, firebase_function_url, app_name, dev_u
 
         session$userData$current_user(list(
           "email" = user$get_email(),
+          "is_admin" = user$get_is_admin(),
           "role" = user$get_role()
         ))
 
