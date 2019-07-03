@@ -70,17 +70,13 @@ $(document).on("click", "#submit_register", () => {
 
         return user
 
-      })
-      .then((user) => {
+      }).then((user) => {
 
         sign_in(email, password)
 
         return null
       })
-      .catch((error) => {
-        //showSnackbar("register_snackbar", "Error: " + error.message)
-        console.error("error registering user", error)
-      })
+
     } else {
 
       swal({
