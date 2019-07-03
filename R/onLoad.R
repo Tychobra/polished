@@ -7,7 +7,7 @@
 #' @noRd
 #'
 .onLoad <- function(...) {
-  shiny::addResourcePath("polish", system.file("srcjs", package = "polishing"))
+  shiny::addResourcePath("polish", system.file("srcjs", package = "polished"))
 
   shiny::registerInputHandler("firestore_data_frame", function(data, ...) {
     # when a collection of documents is sent from firebase to Shiny, it comes

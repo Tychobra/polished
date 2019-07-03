@@ -150,10 +150,16 @@ $(document).on("click", "#submit_continue_register", () => {
     console.log("check user invited")
     if (doc.exists) {
 
+      // TODO: could check invite or registration status here to see if the user is already
+      // registered.  probably not worth it at the moment since it may get out of sync with actual
+      // firebase auth registered users
+
       console.log("i ran too")
       // the user has been invited so allow the user to set their password and register
       $("#continue_registation").hide()
       $("#register_passwords").slideDown()
+
+
 
     } else {
       swal({
