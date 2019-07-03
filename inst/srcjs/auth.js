@@ -103,7 +103,9 @@ $(document).on("click", "#submit_register", () => {
     }
 
   }).catch((error) => {
-    console.log("error accessing 'invites' collection")
+    toastr.error("" + error)
+    console.log("error registering user")
+    console.log(error)
   })
 
 })
