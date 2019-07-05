@@ -1,4 +1,4 @@
-var auth = firebase.auth()
+
 
 $(document).on("click", "#resend_verification_email", () => {
 

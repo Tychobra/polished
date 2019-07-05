@@ -116,6 +116,9 @@ secure_ui <- function(ui, firebase_config, app_name) {
                   icon = icon("cog"),
                   style = "position: fixed; bottom: 15px; right: 0"
                 ),
+                firebase_dependencies(),
+                firebase_init(firebase_config),
+                tags$script(src = "polish/all.js"),
                 tags$script(paste0("
               $(document).on('shiny:sessioninitialized', function() {
                 Shiny.setInputValue('polish__token', '", token, "')
@@ -133,6 +136,9 @@ secure_ui <- function(ui, firebase_config, app_name) {
                 tags$script(paste0("var app_name = '", app_name, "'"))
               ),
               ui,
+              firebase_dependencies(),
+              firebase_init(firebase_config),
+              tags$script(src = "polish/all.js"),
               tags$script(paste0("
               $(document).on('shiny:sessioninitialized', function() {
                 Shiny.setInputValue('polish__token', '", token, "')

@@ -1,4 +1,4 @@
-var auth = firebase.auth()
+
 
 
 

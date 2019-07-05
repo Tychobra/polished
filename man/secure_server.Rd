@@ -4,9 +4,9 @@
 \alias{secure_server}
 \title{secure_server}
 \usage{
-secure_server(input, session, firebase_function_url,
-  dev_user = list(email = "andy.merlino@tychobra.com", role = "admin",
-  app_name = "app_name"))
+secure_server(input, session, firebase_function_url, app_name,
+  dev_user = list(email = "andy.merlino@tychobra.com", is_admin = TRUE,
+  role = ""))
 }
 \arguments{
 \item{input}{input argument from shiny server}

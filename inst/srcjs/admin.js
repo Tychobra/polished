@@ -1,4 +1,3 @@
-var auth = firebase.auth()
 var db = firebase.firestore()
 
 
@@ -329,15 +328,5 @@ $(document).on("shiny:sessioninitialized", function() {
 
     }
   )
-
-})
-
-
-
-$(document).on("click", "#polish__sign_out", () => {
-
-  auth.signOut().catch(error => {
-    console.error("sign out error: ", error)
-  })
 
 })
