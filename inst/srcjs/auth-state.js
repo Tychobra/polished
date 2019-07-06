@@ -11,7 +11,7 @@ auth.onAuthStateChanged(firebase_user => {
     $.LoadingOverlay("show", loading_options)
     auth.currentUser.getIdToken(/* forceRefresh true*/).then(function(idToken) {
       console.log("idToken: ", idToken)
-      Shiny.setInputValue('polish__token', idToken, { priority: 'event' })
+      Shiny.setInputValue('polish__token', idToken)
     }).catch(function(error) {
        console.log('error getting token')
     })
