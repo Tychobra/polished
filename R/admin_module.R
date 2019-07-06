@@ -37,12 +37,10 @@ admin_module_ui <- function(id, firebase_config) {
           style='padding: 3px 20px;'
         ),
         tags$li(
-          actionButton(
+          actionLink(
             "polish__sign_out",
-
-            #icon("sign-out"),
-            "Sign Out"#,
-            #href="#"
+            "Sign Out",
+            icon("sign-out")
           )
         )
       )
