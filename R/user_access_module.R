@@ -64,6 +64,9 @@ user_access_module_ui <- function(id) {
 
     # users table
     tags$script(paste0("
+      $(document).on('click', '#", ns('users_table'), " .sign_in_as_btn', function() {
+        Shiny.setInputValue('", ns('sign_in_as_btn_row'), "', this.id, { priority: 'event'});
+      });
       $(document).on('click', '#", ns('users_table'), " .delete_btn', function() {
         //$(this).tooltip('hide');
         Shiny.setInputValue('", ns('user_row_to_delete'), "', this.id, { priority: 'event'});
@@ -727,4 +730,11 @@ user_access_module <- function(input, output, session) {
     )
   })
 
+  # TODO: probably need to add a "signed_in_as" property to the User R6 class.
+  # only admins should be have this property... best way to implement?
+  observe({
+    print(list(
+      "sign_in_as_btn_row" = input$sign_in_as_btn_row
+    ))
+  })
 }
