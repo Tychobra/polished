@@ -241,7 +241,8 @@ $(document).on("shiny:sessioninitialized", function() {
 
     return roles
   }, error => {
-    console.log("Eror listening for users")
+    console.log("Error listening for user roles")
+    console.log(error)
   })
 
 

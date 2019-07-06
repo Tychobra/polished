@@ -19,7 +19,7 @@ admin_module_ui <- function(id, firebase_config) {
 
 
   head <- shinydashboard::dashboardHeader(
-    title = "Polish Admin",
+    title = "Polished Admin",
     tags$li(
       class = "dropdown",
       tags$a(
