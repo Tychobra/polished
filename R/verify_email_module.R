@@ -15,14 +15,9 @@ verify_email_ui <- function(id, firebase_config, token) {
         style = "margin-top: 150px",
         h1("Verification Email Sent"),
         tags$button(
-          class = "btn action-button",
+          class = "btn btn-default action-button",
           id = "resend_verification_email",
           "Resend Verification Email"
-        ),
-        tags$button(
-          class = "btn btn-primary action-button",
-          id = ns("confirm_email_verification"),
-          "Click Here After You have Verified Your Email"
         )
       )
     ),
@@ -30,16 +25,8 @@ verify_email_ui <- function(id, firebase_config, token) {
     tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
     firebase_init(firebase_config),
     tags$script(src = "polish/all.js"),
-    tags$script(src = "polish/verify-email.js"),
-    tags$script(
-      paste0("
-        $(document).on('shiny:sessioninitialized', function() {
-          $(document).on('click', '#", ns('confirm_email_verification'), "', function() {
-            Shiny.setInputValue('polish__token', '", token, "', { priority: 'event' })
-          })
-        })
-      ")
-    )
+    tags$script(src = "polish/auth-state.js"),
+    tags$script(src = "polish/verify-email.js")
   )
 }
 

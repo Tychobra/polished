@@ -36,7 +36,7 @@ secure_server <- function(input, session, firebase_function_url, app_name, dev_u
 
     user <- .global_users$find_user_by_token(token)
     #print(list())
-    #print(list("token" = token))
+    print(list("token" = token))
     # if the user == NULL i.e. user has not yet been added to `global_users`, so create a new user here
     #print(list("user_by_token" = user))
 
@@ -45,12 +45,15 @@ secure_server <- function(input, session, firebase_function_url, app_name, dev_u
     #print(list("identical" = identical(query_token, token)))
 
     if (!is.null(query_token)) {
-      #print("identical token and query_token")
+
+
       if (is.null(user)) {
-        print("conditional option 1")
-        # this should not happen, TODO: trigger sign out
-        session$reload()
+
+        print("conditional option 1 signout")
+        sign_out_from_shiny(session)
+
         return()
+
       } else {
         # user is already signed in, so we don't need to do anything
         # user was already found in the global scope
@@ -68,18 +71,22 @@ secure_server <- function(input, session, firebase_function_url, app_name, dev_u
           print("conditional option 3")
           # go to email verification view.
           # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
-          print(list("email verification sign_in_with_token"))
+          print("email verification sign_in_with_token")
 
-          # TODO: create a firebase function to check if the email has been verified
-          # this function should be callable by a method to the `User` class
           user$refreshEmailVerification()
 
+
+          session$sendCustomMessage(
+            "remove_loading",
+            message = list()
+          )
+
           # if refreshing the email verification causes it to switch from FALSE to TRUE
-          # then reload the session, so the user can move on from the email verification page
+          # then reload the session, and the user will move from the email verification page
           # to the actual app
-          #if (isTRUE(user$get_email_verification())) {
-          #  session$reload()
-          #}
+          if (isTRUE(user$get_email_verified())) {
+            session$reload()
+          }
 
           return()
         }
@@ -110,9 +117,9 @@ secure_server <- function(input, session, firebase_function_url, app_name, dev_u
           "remove_loading",
           message = list()
         )
-        # TODO: trigger sign out display not authorized message
 
-        #session$reload()
+
+        sign_out_from_shiny(session)
 
         return()
       } else {

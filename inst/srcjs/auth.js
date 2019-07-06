@@ -5,7 +5,7 @@ const sign_in = function(email, password) {
   return auth.signInWithEmailAndPassword(email, password).then(function(user) {
     console.log("user", user)
     // send firebase token to shiny server.R
-    auth.currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+    auth.currentUser.getIdToken(/* forceRefresh true*/).then(function(idToken) {
       Shiny.setInputValue('polish__token', idToken)
     }).catch(function(error) {
        console.log('error getting token')
@@ -51,7 +51,7 @@ $(document).on("click", "#submit_register", () => {
   .doc(email).get().then((doc) => {
 
     if (doc.exists) {
-      return auth.createUserWithEmailAndPassword(email, password).then((user) => {
+      return auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
 
         // set authorization for this user for this Shiny app
         //const registerSetup = functions.httpsCallable("registerSetup")
@@ -68,11 +68,16 @@ $(document).on("click", "#submit_register", () => {
         })
         //registerSetup()
 
-        return user
+        return userCredential
 
-      }).then((user) => {
+      }).then((userCredential) => {
 
-        sign_in(email, password)
+        //sign_in(email, password)
+        userCredential.user.sendEmailVerification().catch((error) => {
+          toastr.error("error sending verification email")
+          toastr.error("" + error)
+          console.error("error sending email verification: ", error)
+        })
 
         return null
       })
@@ -88,15 +93,6 @@ $(document).on("click", "#submit_register", () => {
       return null
     }
 
-
-  }).then(user => {
-
-    if (user !== null) {
-      user.user.sendEmailVerification().catch((error) => {
-        //showSnackbar("register_snackbar", "Error: " + error.message)
-        console.error("error sending email verification: ", error)
-      })
-    }
 
   }).catch((error) => {
     toastr.error("" + error)
