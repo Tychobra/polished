@@ -114,7 +114,8 @@ secure_ui <- function(ui, firebase_config, app_name) {
                   "polish__go_to_admin_panel",
                   "Admin Panel",
                   icon = icon("cog"),
-                  style = "position: fixed; bottom: 15px; right: 0"
+                  class = "btn-primary btn-lg",
+                  style = "position: fixed; bottom: 15px; right: 15px; color: #FFFFFF;"
                 ),
                 firebase_dependencies(),
                 firebase_init(firebase_config),
