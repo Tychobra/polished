@@ -3,6 +3,8 @@
 #' @param ui UI of the application.
 #' @param firebase_config list of firebase configuration
 #' @param app_name the name of the app
+#' @param sign_in_page_ui either NULL, the default, or the HTML, CSS, and JavaScript
+#' to use for the UI of the Sign In page
 #'
 #' @return shiny app ui
 #'
@@ -36,7 +38,7 @@
 #'   shinyApp(ui, server)
 #'
 #' }
-secure_ui <- function(ui, firebase_config, app_name) {
+secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
   ui <- force(ui)
 
   function(request) {
@@ -50,14 +52,24 @@ secure_ui <- function(ui, firebase_config, app_name) {
 
 
       # go to the sign in view
-      out <- fluidPage(
-        tags$head(
-          tags$script(paste0("var app_name = '", app_name, "'"))
-        ),
-        fluidRow(
-          sign_in_ui(firebase_config)
+      if (is.null(sign_in_page_ui)) {
+        out <- tagList(
+          tags$head(
+            tags$script(paste0("var app_name = '", app_name, "'"))
+          ),
+          sign_in_ui_default(firebase_config)
         )
-      )
+      } else {
+        out <- tagList(
+          out <- tagList(
+            tags$head(
+              tags$script(paste0("var app_name = '", app_name, "'"))
+            ),
+            sign_in_page_ui
+          )
+        )
+      }
+
 
     } else {
 

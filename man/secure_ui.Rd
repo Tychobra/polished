@@ -4,7 +4,7 @@
 \alias{secure_ui}
 \title{Secure a Shiny application and manage authentication}
 \usage{
-secure_ui(ui, firebase_config, app_name)
+secure_ui(ui, firebase_config, app_name, sign_in_page_ui = NULL)
 }
 \arguments{
 \item{ui}{UI of the application.}
@@ -12,6 +12,9 @@ secure_ui(ui, firebase_config, app_name)
 \item{firebase_config}{list of firebase configuration}
 
 \item{app_name}{the name of the app}
+
+\item{sign_in_page_ui}{either NULL, the default, or the HTML, CSS, and JavaScript
+to use for the UI of the Sign In page}
 }
 \value{
 shiny app ui

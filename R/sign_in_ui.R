@@ -8,18 +8,6 @@
 sign_in_ui <- function(firebase_config) {
   tagList(
     tags$head(
-      tags$style("
-        .auth_panel {
-          width: 350px;
-          max-width: 100%;
-          margin: 0 auto;
-          margin-top: 75px;
-          border: 2px solid #eee;
-          border-radius: 25px;
-          padding: 30px;
-          background: #f9f9f9;
-        }
-      "),
       # load toastr assets
       tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"),
       tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"),
