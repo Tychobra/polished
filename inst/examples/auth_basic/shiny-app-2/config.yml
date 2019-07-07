@@ -1,0 +1,8 @@
+default:
+  firebase:
+    apiKey: "AIzaSyDXXvFTcZf-jpkl_2dKTA1ZFoTIgXIe4Cw"
+    authDomain: "tychobraauth.firebaseapp.com"
+    databaseURL: "https://tychobraauth.firebaseio.com"
+    projectId: "tychobraauth"
+  app_name: "auth_custom"
+  firebase_functions_url: "https://us-central1-tychobraauth.cloudfunctions.net/"
