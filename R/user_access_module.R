@@ -151,10 +151,11 @@ user_access_module <- function(input, output, session) {
       rows <- 1:nrow(out)
 
       actions <- paste0(
-        '<div class="btn-group" style="width: 105px" role="group" aria-label="Basic example">
+        '<div class="btn-group" style="width: 105px" role="group" aria-label="User Action Buttons">
           <button class="btn btn-default btn-sm sign_in_as_btn" data-toggle="tooltip" data-placement="top" title="Sign In As" id = ', rows, ' style="margin: 0"><i class="fas fa-user-astronaut"></i></button>
           <button class="btn btn-primary btn-sm edit_btn" data-toggle="tooltip" data-placement="top" title="Edit User" id = ', rows, ' style="margin: 0"><i class="fa fa-pencil-square-o"></i></button>
-          <button class="btn btn-danger btn-sm delete_btn" data-toggle="tooltip" data-placement="top" title="Delete User" id = ', rows, ' style="margin: 0"><i class="fa fa-trash-o"></i></button></div>'
+          <button class="btn btn-danger btn-sm delete_btn" data-toggle="tooltip" data-placement="top" title="Delete User" id = ', rows, ' style="margin: 0"><i class="fa fa-trash-o"></i></button>
+        </div>'
       )
 
       out <- cbind(
@@ -243,10 +244,7 @@ user_access_module <- function(input, output, session) {
         shiny::selectizeInput(
           ns("user_custom_role"),
           "Role",
-          choices = c(
-            "",
-            "Executive"
-          )
+          choices = c("<NA>", roles()$role)
         ) %>% shinyjs::hidden()
       )
     )
@@ -335,10 +333,7 @@ user_access_module <- function(input, output, session) {
         shiny::selectizeInput(
           ns("user_custom_role_edit"),
           "Role",
-          choices = c(
-            "",
-            "Executive"
-          ),
+          choices = c("<NA>", roles()$role),
           selected = hold_user$role
         ) %>% shinyjs::hidden()
       )
@@ -426,73 +421,9 @@ user_access_module <- function(input, output, session) {
     users_trigger(users_trigger() + 1)
   })
 
-  # shiny::observeEvent(input$manage_roles, {
-  #
-  #   shiny::showModal(
-  #     shiny::modalDialog(
-  #       title = "Manage Role",
-  #       footer = list(
-  #         div(
-  #           style = "height: 37px",
-  #
-  #           div(
-  #             id = "manage_roles_modal_footers",
-  #             modalButton("Cancel")
-  #           ),
-  #           div(
-  #             id = "delete_role_modal_footers",
-  #             style = "display: none;",
-  #             actionButton(
-  #               ns("cancel_role_delete"),
-  #               "Cancel"
-  #             ),
-  #             actionButton(
-  #               ns("submit_role_delete"),
-  #               "Delete Role",
-  #               class = "btn-danger",
-  #               style = "color: white",
-  #               icon = icon("times")
-  #             )
-  #           )
-  #         )
-  #       ),
-  #       size = "s",
-  #       div(
-  #         style = "min-height: 250px",
-  #         div(
-  #           id = "manage_roles_modal_content",
-  #           # modal content
-  #           htmltools::br(),
-  #           shinyWidgets::searchInput(
-  #             inputId = ns("new_user_role"),
-  #             label = "New Role",
-  #             btnSearch = icon("plus"),
-  #             width = "100%"
-  #           ),
-  #           #shiny::textInput(
-  #           #  ns("new_user_role"),
-  #           #  "New Role"
-  #           #),
-  #           htmltools::br(),
-  #           DT::DTOutput(ns("roles_table"))
-  #         ),
-  #         div(
-  #           id = "delete_role_modal_content",
-  #           style = "display: none;",
-  #           htmltools::br(),
-  #           h3(
-  #             style = "line-height: 1.3;",
-  #             'Are you sure you want to delete role "',
-  #             tags$span(
-  #               id = ns("role_to_delete_span")
-  #             ),
-  #             '"?  Any users with this role will lose it.'
-  #           )
-  #         )
-  #       )
-  #     )
-  #   )
-  # })
+
+
+
   shiny::observeEvent(input$add_role, {
 
     shiny::showModal(
