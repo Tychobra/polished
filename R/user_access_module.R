@@ -150,16 +150,29 @@ user_access_module <- function(input, output, session) {
     } else {
       rows <- 1:nrow(out)
 
-      actions <- paste0(
-        '<div class="btn-group" style="width: 105px" role="group" aria-label="User Action Buttons">
-          <button class="btn btn-default btn-sm sign_in_as_btn" data-toggle="tooltip" data-placement="top" title="Sign In As" id = ', rows, ' style="margin: 0"><i class="fas fa-user-astronaut"></i></button>
-          <button class="btn btn-primary btn-sm edit_btn" data-toggle="tooltip" data-placement="top" title="Edit User" id = ', rows, ' style="margin: 0"><i class="fa fa-pencil-square-o"></i></button>
-          <button class="btn btn-danger btn-sm delete_btn" data-toggle="tooltip" data-placement="top" title="Delete User" id = ', rows, ' style="margin: 0"><i class="fa fa-trash-o"></i></button>
-        </div>'
-      )
+      actions <- lapply(rows, function(row_num) {
+
+        is_admin <- out[row_num, ]$is_admin
+
+        if (isTRUE(is_admin)) {
+          buttons_out <- paste0('<div class="btn-group" style="width: 105px" role="group" aria-label="User Action Buttons">
+            <button class="btn btn-default btn-sm sign_in_as_btn" data-toggle="tooltip" data-placement="top" title="Sign In As" id = ', rows[row_num], ' style="margin: 0"><i class="fas fa-user-astronaut"></i></button>
+            <button class="btn btn-primary btn-sm edit_btn" data-toggle="tooltip" data-placement="top" title="Edit User" id = ', rows[row_num], ' style="margin: 0"><i class="fa fa-pencil-square-o"></i></button>
+            <button class="btn btn-danger btn-sm delete_btn" data-toggle="tooltip" data-placement="top" title="Delete User" id = ', rows[row_num], ' style="margin: 0" disabled><i class="fa fa-trash-o"></i></button>
+          </div>')
+        } else {
+          buttons_out <- paste0('<div class="btn-group" style="width: 105px" role="group" aria-label="User Action Buttons">
+            <button class="btn btn-default btn-sm sign_in_as_btn" data-toggle="tooltip" data-placement="top" title="Sign In As" id = ', rows[row_num], ' style="margin: 0"><i class="fas fa-user-astronaut"></i></button>
+            <button class="btn btn-primary btn-sm edit_btn" data-toggle="tooltip" data-placement="top" title="Edit User" id = ', rows[row_num], ' style="margin: 0"><i class="fa fa-pencil-square-o"></i></button>
+            <button class="btn btn-danger btn-sm delete_btn" data-toggle="tooltip" data-placement="top" title="Delete User" id = ', rows[row_num], ' style="margin: 0"><i class="fa fa-trash-o"></i></button>
+          </div>')
+        }
+
+        buttons_out
+      })
 
       out <- cbind(
-        tibble::tibble(actions = actions),
+        tibble::tibble(actions = unlist(actions)),
         out
       )
     }
