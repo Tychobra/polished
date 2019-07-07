@@ -51,19 +51,19 @@ admin_module_ui <- function(id, firebase_config) {
     sidebarMenu(
       id = ns("sidebar_menu"),
       menuItem(
+        text = "Dashboard",
+        tabName = "dashboard",
+        icon = icon("dashboard")
+      ),
+      menuItem(
         text = "User Access",
         tabName = "user_access",
         icon = icon("users")
       ),
-      menuItem(
-        text = "Shiny App",
-        tabName = "shiny_app",
-        icon = icon("rocket")
-      )#,
-      #img(
-      #  style = "position: fixed; bottom: 0; left: 0; width: 230px;",
-      #  src = "images/tychobra-logo.png"
-      #)
+      img(
+        style = "position: fixed; bottom: 0; left: 0; width: 230px;",
+        src = "https://res.cloudinary.com/dxqnb8xjb/image/upload/v1533565833/tychobra_logo_blue_co_name_jekv4a.png"
+      )
     )
   )
 
@@ -74,7 +74,23 @@ admin_module_ui <- function(id, firebase_config) {
       tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css")
     ),
     shinyjs::useShinyjs(),
+
+    div(
+      style = "position: fixed; bottom: 15px; right: 15px; z-index: 1000;",
+      actionButton(
+        ns("go_to_shiny_app"),
+        "Shiny App",
+        icon = icon("rocket"),
+        class = "btn-primary btn-lg",
+        style = "color: #FFFFFF;"
+      )
+    ),
+
     tabItems(
+      shinydashboard::tabItem(
+        tabName = "dashboard",
+        h1("Dashboard")
+      ),
       user_access_module_ui(ns("user_access"))
     ),
     firebase_dependencies(),
@@ -113,22 +129,18 @@ admin_module <- function(input, output, session) {
     session$userData$current_user()$email
   })
 
-  observeEvent(input$sidebar_menu, {
-    print(list("sidebar_menu" = input$sidebar_menu))
+  observeEvent(input$go_to_shiny_app, {
 
-    if (input$sidebar_menu == "shiny_app") {
+    # to to the Shiny app
+    query_token <- parseQueryString(session$clientData$url_search)$token
 
-      # to to the Shiny app
-      query_token <- parseQueryString(session$clientData$url_search)$token
+    updateQueryString(
+      queryString = paste0("?token=", query_token, "&admin_panel=false"),
+      session = session,
+      mode = "replace"
+    )
 
-      updateQueryString(
-        queryString = paste0("?token=", query_token, "&admin_panel=false"),
-        session = session,
-        mode = "replace"
-      )
-
-      session$reload()
-    }
+    session$reload()
 
   }, ignoreInit = TRUE)
 
