@@ -12,8 +12,7 @@ ui <- fluidPage(
       12,
       verbatimTextOutput("secure_content")
     )
-  )#,
-  #source("ui_admin.R", local = TRUE)$value
+  )
 )
 
 secure_ui(
