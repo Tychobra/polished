@@ -5,8 +5,8 @@
   },
   "hosting": [
     {
-      "target": "csia_midb",
-      "public": "csia_midb/public",
+      "target": "auth_basic",
+      "public": "auth_basic/firebase_hosting",
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -15,7 +15,7 @@
     },
     {
       "target": "qpcr",
-      "public": "qpcr/public",
+      "public": "auth_custom/firebase_hosting",
       "ignore": [
         "firebase.json",
         "**/.*",

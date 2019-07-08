@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "tychobraauth"
+  },
+  "targets": {
+    "tychobraauth": {
+      "hosting": {
+        "auth_custom": [
+          "tychobraauth"
+        ]
+      }
+    }
   }
 }

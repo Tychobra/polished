@@ -67,3 +67,5 @@ node_modules/
 # R
 .Rhistory
 *.Rproj
+rsconnect/
+
