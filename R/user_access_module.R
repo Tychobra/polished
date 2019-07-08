@@ -641,25 +641,31 @@ user_access_module <- function(input, output, session) {
   observeEvent(input$role_row_to_delete, {
     hold_role <- role_to_delete()
 
-    shinyjs::runjs("$('#manage_roles_modal_content').hide()")
-    shinyjs::runjs("$('#manage_roles_modal_footers').hide()")
-    shinyjs::runjs("$('#delete_role_modal_content').show('slide', {direction: 'right'}, 400)")
-    shinyjs::runjs("$('#delete_role_modal_footers').show('slide', {direction: 'right'}, 400)")
-    #shinyjs::hide("manage_roles_modal_content")
-    #shinyjs::show("delete_role_modal_content", anim = TRUE)
-    print(list("role_to_delete" = hold_role))
-  })
+    shiny::showModal(
+      shiny::modalDialog(
+        title = "Delete User",
+        footer = list(
+          modalButton("Cancel"),
+          actionButton(
+            ns("submit_role_delete"),
+            "Delete Role",
+            class = "btn-danger",
+            style = "color: white",
+            icon = icon("times")
+          )
+        ),
+        size = "m",
+        htmltools::br(),
+        h3(
+          style = "line-height: 1.3;",
+          paste0(
+            'Are you sure you want to delete role: "', hold_role, '"?  Any ',
+            'users with this role will lose it.'
+          )
+        )
+      )
+    )
 
-  observeEvent(input$cancel_role_delete, {
-
-    shinyjs::runjs("$('#delete_role_modal_content').hide()")
-    shinyjs::runjs("$('#delete_role_modal_footers').hide()")
-    shinyjs::runjs("$('#manage_roles_modal_content').show('slide', {direction: 'left'}, 400)")
-    shinyjs::runjs("$('#manage_roles_modal_footers').show('slide', {direction: 'left'}, 400)")
-  })
-
-  observeEvent(role_to_delete(), {
-    shinyjs::html("role_to_delete_span", html = role_to_delete())
   })
 
 
@@ -675,7 +681,7 @@ user_access_module <- function(input, output, session) {
   })
 
   # TODO: probably need to add a "signed_in_as" property to the User R6 class.
-  # only admins should be have this property... best way to implement?
+  # only admins should have this property... best way to implement?
   observe({
     print(list(
       "sign_in_as_btn_row" = input$sign_in_as_btn_row
