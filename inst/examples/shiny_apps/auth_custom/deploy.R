@@ -1,3 +1,8 @@
+remotes::install_github(
+  "tychobra/polished",
+  force = TRUE
+)
+
 
 Sys.setenv(R_CONFIG_ACTIVE = "default")
 
