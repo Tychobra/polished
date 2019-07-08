@@ -87,11 +87,12 @@ admin_module_ui <- function(id, firebase_config) {
     ),
 
     tabItems(
-      shinydashboard::tabItem(
-        tabName = "dashboard",
-        h1("Dashboard"),
-        verbatimTextOutput(ns("global_users_out"))
-      ),
+      # shinydashboard::tabItem(
+      #   tabName = "dashboard",
+      #   h1("Dashboard"),
+      #   verbatimTextOutput(ns("global_users_out"))
+      # ),
+      dashboard_module_ui(ns("dashboard")),
       user_access_module_ui(ns("user_access"))
     ),
     firebase_dependencies(),
@@ -164,6 +165,7 @@ admin_module <- function(input, output, session) {
   output$global_users_out <- shiny::renderPrint({
     global_users_prep()
   })
-
+  
+  callModule(dashboard_module, "dashboard")
   callModule(user_access_module, "user_access")
 }
