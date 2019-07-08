@@ -10,6 +10,8 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     shiny,
+    dplyr,
+    tidyr,
     httr,
     jsonlite,
     R6,
