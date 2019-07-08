@@ -14,7 +14,7 @@
       ]
     },
     {
-      "target": "qpcr",
+      "target": "auth_custom",
       "public": "auth_custom/firebase_hosting",
       "ignore": [
         "firebase.json",
