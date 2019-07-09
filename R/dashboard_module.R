@@ -2,7 +2,7 @@
 #' 
 #' @param id the module id
 #' 
-#' @import shiny shinydashboard
+#' @import shiny shinydashboard highcharter xts dplyr
 #' 
 #' @export
 dashboard_module_ui <- function(id) {
@@ -81,14 +81,27 @@ dashboard_module <- function(input, output, session) {
   })
   
   dau_chart_prep <- reactive({
-    c(3,2,2,3,1,4,2,5,7,6,9,15,16,16)
+    date_strings <- c("2019-07-01", "2019-07-02", "2019-07-03", "2019-07-04", "2019-07-05",
+                      "2019-07-06", "2019-07-07", "2019-07-08", "2019-07-09", "2019-07-10",
+                      "2019-07-11", "2019-07-12", "2019-07-13", "2019-07-14")
+    
+    dates <- do.call("c", lapply(date_strings, as.Date)) #unlist kills dates
+    
+    df <- dplyr::tibble(
+      input = c(3,2,2,3,1,4,2,5,7,6,9,15,16,16),
+      date = dates
+    )
+    
+    xts::xts(df$input, order.by = df$date)
   })
   
   output$dau_chart <- highcharter::renderHighchart({
     dat <- dau_chart_prep()
     
     highcharter::highchart(type = "stock") %>% 
-      highcharter::hc_add_series(dat)
+      highcharter::hc_title(text = "Daily Active Users") %>% 
+      highcharter::hc_xAxis(type = "datetime") %>% 
+      highcharter::hc_add_series(data = dat, name = "DAU")
   })
 }
 
