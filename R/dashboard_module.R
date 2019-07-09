@@ -23,14 +23,14 @@ dashboard_module_ui <- function(id) {
         width = 3
       ),
       shinydashboard::valueBox(
-        value = 4,
+        value = 2,
         subtitle = "DAU",
         icon = icon("users"),
         color = "teal",
         width = 3
       ),
       shinydashboard::valueBox(
-        value = 2,
+        value = 4,
         subtitle = "MAU",
         icon = icon("users"),
         color = "green",
@@ -40,7 +40,8 @@ dashboard_module_ui <- function(id) {
     shiny::fluidRow(
       shinydashboard::box(
         width = 9,
-        title = "Chart"
+        title = "Chart",
+        highcharter::highchartOutput(ns("dau_chart"))
       ),
       shinydashboard::box(
         width = 3,
@@ -69,7 +70,7 @@ dashboard_module <- function(input, output, session) {
     }
   )
   
-  output$active_users_number <- renderValueBox({
+  output$active_users_number <- shinydashboard::renderValueBox({
     shinydashboard::valueBox(
       value = length(global_users_prep()),
       subtitle = "Active Users",
@@ -77,6 +78,17 @@ dashboard_module <- function(input, output, session) {
       color = "light-blue",
       width = NULL
     )
+  })
+  
+  dau_chart_prep <- reactive({
+    c(3,2,2,3,1,4,2,5,7,6,9,15,16,16)
+  })
+  
+  output$dau_chart <- highcharter::renderHighchart({
+    dat <- dau_chart_prep()
+    
+    highcharter::highchart(type = "stock") %>% 
+      highcharter::hc_add_series(dat)
   })
 }
 
