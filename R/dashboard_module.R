@@ -2,7 +2,7 @@
 #' 
 #' @param id the module id
 #' 
-#' @import shiny shinydashboard highcharter xts dplyr
+#' @import shiny shinydashboard highcharter xts dplyr DT
 #' 
 #' @export
 dashboard_module_ui <- function(id) {
@@ -45,7 +45,8 @@ dashboard_module_ui <- function(id) {
       ),
       shinydashboard::box(
         width = 3,
-        title = "Table"
+        title = "Table",
+        DT::DTOutput(ns("active_users_table"))
       )
     )
   )
@@ -63,12 +64,14 @@ dashboard_module <- function(input, output, session) {
     intervalMillis = 1000 * 10, # check every 10 seconds,
     session = session,
     checkFunc = function() {
-      length(.global_users$users)
+      .global_users$users
     },
     valueFunc = function() {
       .global_users$users
     }
   )
+  
+  observe(print(list(users = global_users_prep(), user1 = global_users_prep()[[1]])))
   
   output$active_users_number <- shinydashboard::renderValueBox({
     shinydashboard::valueBox(
@@ -79,6 +82,8 @@ dashboard_module <- function(input, output, session) {
       width = NULL
     )
   })
+  
+  
   
   dau_chart_prep <- reactive({
     date_strings <- c("2019-07-01", "2019-07-02", "2019-07-03", "2019-07-04", "2019-07-05",
@@ -102,6 +107,36 @@ dashboard_module <- function(input, output, session) {
       highcharter::hc_title(text = "Daily Active Users") %>% 
       highcharter::hc_xAxis(type = "datetime") %>% 
       highcharter::hc_add_series(data = dat, name = "DAU")
+  })
+  
+  active_users_prep <- reactive({
+    #dplyr::tibble(
+    #  "Email" = "richard_hill@brown.edu",
+    #  "Time Signed In" = "13:09:00",
+    #  "Location" = "Atlanta"
+    #)
+    users_list <- global_users_prep()
+    
+    user_emails <- unlist(lapply(users_list, function(user) user$get_email()))
+    
+    dplyr::tibble(
+      email = unique(user_emails),
+      time = "13:09:00",
+      location = "Atlanta"
+    )
+  })
+  
+  output$active_users_table <- DT::renderDataTable({
+    out <- active_users_prep()
+    
+    DT::datatable(
+      out,
+      rownames = FALSE,
+      colnames = c("Email", "Time Signed In", "Location"),
+      options = list(
+        dom = "t"
+      )
+    )
   })
 }
 
