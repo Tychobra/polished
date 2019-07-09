@@ -71,11 +71,19 @@ dashboard_module <- function(input, output, session) {
     }
   )
   
-  observe(print(list(users = global_users_prep(), user1 = global_users_prep()[[1]])))
+  
+  active_users_number_prep <- reactive({
+    users_list <- global_users_prep()
+    users <- unique(lapply(users_list, function(user) user$get_email()))
+    
+    length(users)
+  })
   
   output$active_users_number <- shinydashboard::renderValueBox({
+    out <- active_users_number_prep()
+    
     shinydashboard::valueBox(
-      value = length(global_users_prep()),
+      value = out,
       subtitle = "Active Users",
       icon = icon("users"),
       color = "light-blue",
@@ -110,11 +118,6 @@ dashboard_module <- function(input, output, session) {
   })
   
   active_users_prep <- reactive({
-    #dplyr::tibble(
-    #  "Email" = "richard_hill@brown.edu",
-    #  "Time Signed In" = "13:09:00",
-    #  "Location" = "Atlanta"
-    #)
     users_list <- global_users_prep()
     
     user_emails <- unlist(lapply(users_list, function(user) user$get_email()))
