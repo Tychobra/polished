@@ -9,7 +9,7 @@ auth.onAuthStateChanged(firebase_user => {
     Shiny.setInputValue('polish__token', null, { priority: 'event' })
   } else {
 
-    $.LoadingOverlay("show", loading_options)
+    //$.LoadingOverlay("show", loading_options)
     auth.currentUser.getIdToken(/* forceRefresh true*/).then(function(idToken) {
       console.log("getIdToken: ", idToken)
       Shiny.setInputValue('polish__token', idToken, { priority: 'event' })
