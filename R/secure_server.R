@@ -105,7 +105,7 @@ secure_server <- function(input, session, firebase_functions_url, app_name, dev_
         # attempt to sign the user in
         tryCatch({
           user <- User$new(
-            firebase_function_url = firebase_function_url,
+            firebase_functions_url = firebase_functions_url,
             firebase_auth_token = token,
             app_name = app_name
           )
