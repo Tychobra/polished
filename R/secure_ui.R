@@ -111,9 +111,9 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
                 ),
                 admin_module_ui("admin", firebase_config),
                 tags$script(paste0("
-              $(document).on('shiny:sessioninitialized', function() {
-                Shiny.setInputValue('polish__token', '", token, "')
-              })
+              //$(document).on('shiny:sessioninitialized', function() {
+              //  Shiny.setInputValue('polish__token', '", token, "')
+              //})
             "))
               )
             } else {
@@ -131,11 +131,13 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
                 ),
                 firebase_dependencies(),
                 firebase_init(firebase_config),
+                tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
                 tags$script(src = "polish/all.js"),
+                tags$script(src = "polish/auth-state.js"),
                 tags$script(paste0("
-              $(document).on('shiny:sessioninitialized', function() {
-                Shiny.setInputValue('polish__token', '", token, "')
-              })
+              //$(document).on('shiny:sessioninitialized', function() {
+              //  Shiny.setInputValue('polish__token', '", token, "')
+              //})
             "))
               )
             }
@@ -151,11 +153,13 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
               ui,
               firebase_dependencies(),
               firebase_init(firebase_config),
+              tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
               tags$script(src = "polish/all.js"),
+              tags$script(src = "polish/auth-state.js"),
               tags$script(paste0("
-              $(document).on('shiny:sessioninitialized', function() {
-                Shiny.setInputValue('polish__token', '", token, "')
-              })
+              //$(document).on('shiny:sessioninitialized', function() {
+              //  Shiny.setInputValue('polish__token', '", token, "')
+              //})
             "))
             )
 

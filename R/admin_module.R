@@ -105,6 +105,7 @@ admin_module_ui <- function(id, firebase_config) {
     ),
     firebase_init(firebase_config),
     tags$script(src = "polish/all.js"),
+    tags$script(src = "polish/auth-state.js"),
     tags$script(src = "polish/admin.js")
   )
 
@@ -149,7 +150,7 @@ admin_module <- function(input, output, session) {
   observeEvent(input$polish__sign_out, {
     sign_out_from_shiny(session)
   })
-  
+
   callModule(dashboard_module, "dashboard")
   callModule(user_access_module, "user_access")
 }

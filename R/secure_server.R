@@ -44,14 +44,21 @@ secure_server <- function(input, session, firebase_function_url, app_name, dev_u
     #print(list("token" = token))
     #print(list("identical" = identical(query_token, token)))
 
+
+
     if (!is.null(query_token)) {
+
+      if (is.null(token)) {
+        # remove user from .global_users and return
+        sign_out_from_shiny(session)
+        return()
+      }
 
 
       if (is.null(user)) {
 
         print("conditional option 1 signout")
         sign_out_from_shiny(session)
-
         return()
 
       } else {
@@ -65,6 +72,11 @@ secure_server <- function(input, session, firebase_function_url, app_name, dev_u
             "is_admin" = user$get_is_admin(),
             "role" = user$get_role()
           )
+          session$sendCustomMessage(
+            "remove_loading",
+            message = list()
+          )
+
           # set the signed in user to the session$userData
           session$userData$current_user(user_out)
         } else {
@@ -96,6 +108,12 @@ secure_server <- function(input, session, firebase_function_url, app_name, dev_u
     } else {
 
       if (is.null(user)) {
+
+        if (is.null(token)) {
+          # user is already signed out and new token is null, so just return
+          return()
+        }
+
         # attempt to sign the user in
         tryCatch({
           user <- User$new(
@@ -145,7 +163,7 @@ secure_server <- function(input, session, firebase_function_url, app_name, dev_u
 
     }
 
-  })
+  }, ignoreNULL = FALSE, ignoreInit = TRUE)
 
   observeEvent(input$polish__sign_out, {
 

@@ -2,16 +2,19 @@
 
 ```
 # terminal
+npm install -g firebase-tools
+
 firebase init
 # check that you want to use firestore and functions
-# use JavaScript and no eslint when prompted
+# use JavaScript 
+# do not use eslint when prompted
 # Do you want to install dependencies with npm now? Yes
 ```
 
 Install Firebase functions dependencies 
 ```
 # terminal
-
+cd functions
 npm install --save firebase-admin firebase-functions
 ```
 
@@ -25,6 +28,9 @@ firebase deploy --only firestore:rules
 
 firebase deploy --only functions
 ```
+
+Go to the Shiny app and copy the Firebase configuration into the "config.yml"
+
 
 ### deploy iframe to Firebase hosting
 
