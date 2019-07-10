@@ -2,7 +2,7 @@ function(input, output, session) {
   session <- secure_server(
     input,
     session,
-    firebase_function_url = my_config$firebase_functions_url,
+    firebase_functions_url = my_config$firebase_functions_url,
     app_name = my_config$app_name
   )
 
