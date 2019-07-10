@@ -4,7 +4,7 @@
 \alias{secure_server}
 \title{secure_server}
 \usage{
-secure_server(input, session, firebase_function_url, app_name,
+secure_server(input, session, firebase_functions_url, app_name,
   dev_user = list(email = "andy.merlino@tychobra.com", is_admin = TRUE,
   role = ""))
 }
@@ -13,9 +13,7 @@ secure_server(input, session, firebase_function_url, app_name,
 
 \item{session}{session argument from shiny server}
 
-\item{firebase_function_url}{url for the firebase function to sign in}
-
-\item{dev_user}{list defining the user to sign in as during development}
+\item{firebase_functions_url}{url for the firebase function to sign in}
 }
 \value{
 session session object with new reactive session$userData$current_user which

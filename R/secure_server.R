@@ -2,8 +2,7 @@
 #'
 #' @param input input argument from shiny server
 #' @param session session argument from shiny server
-#' @param firebase_function_url url for the firebase function to sign in
-#' @param dev_user list defining the user to sign in as during development
+#' @param firebase_functions_url url for the firebase function to sign in
 #'
 #'
 #' @export
@@ -12,7 +11,7 @@
 #' is set to NULL if user is not signed in or a list with user data if the user is
 #' signed in
 #'
-secure_server <- function(input, session, firebase_function_url, app_name, dev_user = list(
+secure_server <- function(input, session, firebase_functions_url, app_name, dev_user = list(
   email = "andy.merlino@tychobra.com",
   is_admin = TRUE,
   role = ""
@@ -20,12 +19,7 @@ secure_server <- function(input, session, firebase_function_url, app_name, dev_u
 
   session$userData$current_user <- reactiveVal(NULL)
 
-  polish_sign_out <- function(token) {
-    # TODO: create this method
-    #global_users$remove_user(token)
 
-
-  }
 
   shiny::observeEvent(input$polish__token, {
     token <- input$polish__token
@@ -35,14 +29,8 @@ secure_server <- function(input, session, firebase_function_url, app_name, dev_u
     query_token <- parseQueryString(session$clientData$url_search)$token
 
     user <- .global_users$find_user_by_token(token)
-    #print(list())
-    print(list("token" = token))
-    # if the user == NULL i.e. user has not yet been added to `global_users`, so create a new user here
-    #print(list("user_by_token" = user))
 
-    #print(list("query_token" = query_token))
-    #print(list("token" = token))
-    #print(list("identical" = identical(query_token, token)))
+    print(list("token" = token))
 
 
 
