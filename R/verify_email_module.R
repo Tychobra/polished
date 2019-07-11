@@ -8,6 +8,9 @@ verify_email_ui <- function(id, firebase_config, token) {
   ns <- NS(id)
 
   fluidPage(
+    tags$head(
+      tags$link(rel = "shortcut icon", href = "polish/images/tychobra-logo-blue.png")
+    ),
     fluidRow(
       column(
         12,

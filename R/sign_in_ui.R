@@ -8,6 +8,7 @@
 sign_in_ui <- function(firebase_config) {
   tagList(
     tags$head(
+      tags$link(rel = "shortcut icon", href = "polish/images/tychobra-logo-blue.png"),
       # load toastr assets
       tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"),
       tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"),

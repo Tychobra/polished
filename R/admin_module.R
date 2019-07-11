@@ -69,7 +69,7 @@ admin_module_ui <- function(id, firebase_config) {
 
   body <- shinydashboard::dashboardBody(
     shiny::tags$head(
-      tags$link(rel = "shortcut icon", href = "https://res.cloudinary.com/dxqnb8xjb/image/upload/v1510505618/tychobra-logo-blue_d2k9vt.png"),
+      tags$link(rel = "shortcut icon", href = "polish/images/tychobra-logo-blue.png"),
       #tags$link(rel = "stylesheet", href = "styles.css"),
       tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css")
     ),

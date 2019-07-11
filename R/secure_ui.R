@@ -99,7 +99,7 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
               tags$head(
                 tags$script(paste0("var app_name = '", app_name, "'"))
               ),
-              admin_module_ui("admin", firebase_config),
+              admin_module_ui("admin", firebase_config)
             )
           } else {
 
