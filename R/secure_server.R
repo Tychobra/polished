@@ -61,14 +61,43 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
 
 
     } else {
-      #session$userData$current_user
-      session$userData$current_user(list(
-        "email" = user$get_email(),
-        "is_admin" = user$get_is_admin(),
-        "uid" = uid
-      ))
 
-      return()
+      # user is already signed in, so we don't need to do anything
+      # user was already found in the global scope
+      print(list("email_verified" = user$get_email_verified()))
+      if (isTRUE(user$get_email_verified())) {
+
+        print("conditional option 2")
+        session$userData$current_user(list(
+          "email" = user$get_email(),
+          "is_admin" = user$get_is_admin(),
+          "role" = user$get_role(),
+          "uid" = uid
+        ))
+
+      } else {
+        print("conditional option 3")
+        # go to email verification view.
+        # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
+        print("email verification sign_in_with_token")
+
+        user$refreshEmailVerification()
+
+
+        session$sendCustomMessage(
+          "remove_loading",
+          message = list()
+        )
+
+        # if refreshing the email verification causes it to switch from FALSE to TRUE
+        # then reload the session, and the user will move from the email verification page
+        # to the actual app
+        if (isTRUE(user$get_email_verified())) {
+          session$reload()
+        }
+
+        return()
+      }
     }
   }, ignoreInit = TRUE)
 
@@ -96,10 +125,7 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
       "admin"
     )
 
-    callModule(
-      verify_email,
-      "verify"
-    )
+
   })
 
   observeEvent(input$polish__go_to_admin_panel, {

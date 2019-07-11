@@ -6,25 +6,6 @@ const sign_in = function(email, password) {
     console.log("user", user_all.user)
     // send firebase token to shiny server.R
 
-    //user_all.user.getIdToken().then(function(token) {
-    //  console.log("token: ", token)
-    //}).catch(function(error) {
-    //  console.log("error getting token")
-    //  console.log(error)
-    //})
-
-    //auth.currentUser.getIdToken(/* forceRefresh true*/).then(function(idToken) {
-    //  console.log("getIdToken: ", idToken)
-
-    //  Cookies.set('polish__token', idToken)
-
-    //  Shiny.setInputValue('polish__token', idToken, { priority: 'event' })
-    //}).catch(function(error) {
-    //   console.log('error getting token')
-    //})
-
-
-
   }).catch(function(error) {
     toastr.error("Sign in Error: " + error.message)
     $.LoadingOverlay("hide")

@@ -33,14 +33,4 @@ verify_email_ui <- function(id, firebase_config) {
   )
 }
 
-#' server function for verify email module
-#'
-#' @export
-verify_email <- function(input, output, session) {
 
-  observeEvent(input$confirm_email_verification, {
-
-    session$reload()
-
-  }, ignoreInit = TRUE)
-}

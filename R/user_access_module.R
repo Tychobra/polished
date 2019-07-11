@@ -277,7 +277,7 @@ user_access_module <- function(input, output, session) {
   # the firebase function to add the user is triggered in the client side js, not in Shiny
   shiny::observeEvent(input$submit_user_add, {
     shiny::removeModal()
-
+    req(input$user_email)
     session$sendCustomMessage(
       "polish__add_user",
       message = list(
@@ -287,7 +287,7 @@ user_access_module <- function(input, output, session) {
         ns = ns("")
       )
     )
-  })
+  }, ignoreInit = TRUE)
 
   shiny::observeEvent(input$polish__user_add_complete, {
     users_trigger(users_trigger() + 1)
