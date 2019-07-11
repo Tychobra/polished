@@ -29,9 +29,6 @@ $(document).on("click", "#submit_register", () => {
   const password = $("#register_password").val()
   const password_2 = $("#register_password_verify").val()
 
-  console.log("password: ", password)
-  console.log("password_2: ", password_2)
-
   if (password !== password_2) {
 
     toastr.error("The passwords do not match")
@@ -39,6 +36,7 @@ $(document).on("click", "#submit_register", () => {
     return
   }
 
+  $.LoadingOverlay("show", loading_options)
   // double check that the email is in "invites" collection
   db.collection("apps")
   .doc(app_name)
@@ -75,6 +73,10 @@ $(document).on("click", "#submit_register", () => {
         })
 
         return null
+      }).catch(error => {
+
+        console.log("error registering")
+        console.log(error)
       })
 
     } else {
@@ -89,8 +91,11 @@ $(document).on("click", "#submit_register", () => {
     }
 
 
+  }).then((obj) => {
+    $.LoadingOverlay("hide", loading_options)
   }).catch((error) => {
     toastr.error("" + error)
+    $.LoadingOverlay("hide", loading_options)
     console.log("error registering user")
     console.log(error)
   })
