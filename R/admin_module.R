@@ -61,15 +61,15 @@ admin_module_ui <- function(id, firebase_config) {
         icon = icon("users")
       ),
       img(
-        style = "position: fixed; bottom: 0; left: 0; width: 230px;",
-        src = "https://res.cloudinary.com/dxqnb8xjb/image/upload/v1533565833/tychobra_logo_blue_co_name_jekv4a.png"
+        style = "position: fixed; bottom: 0; left: 0; width: 55px;",
+        src = "polish/images/tychobra_logo_white.svg"
       )
     )
   )
 
   body <- shinydashboard::dashboardBody(
     shiny::tags$head(
-      tags$link(rel = "shortcut icon", href = "polish/images/tychobra-logo-blue.png"),
+      tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
       #tags$link(rel = "stylesheet", href = "styles.css"),
       tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css")
     ),

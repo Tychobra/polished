@@ -9,7 +9,7 @@ verify_email_ui <- function(id, firebase_config, token) {
 
   fluidPage(
     tags$head(
-      tags$link(rel = "shortcut icon", href = "polish/images/tychobra-logo-blue.png")
+      tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png")
     ),
     fluidRow(
       column(
