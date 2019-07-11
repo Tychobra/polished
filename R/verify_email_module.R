@@ -24,15 +24,10 @@ verify_email_ui <- function(id, firebase_config, token) {
     firebase_dependencies(),
     tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
     firebase_init(firebase_config),
-    tags$script(src = "polish/all.js"),
+    tags$script(src = "polish/js/all.js"),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-    tags$script(src = "polish/auth-state.js"),
-    tags$script(src = "polish/verify-email.js"),
-    tags$script(paste0("
-      $(document).on('shiny:sessioninitialized', function() {
-        Shiny.setInputValue('polish__token', '", token, "')
-      })
-    "))
+    tags$script(src = "polish/js/auth-state.js"),
+    tags$script(src = "polish/js/verify-email.js")
   )
 }
 

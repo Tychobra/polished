@@ -45,8 +45,6 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
     query <- parseQueryString(request$QUERY_STRING)
 
     token <- get_cookie(request$HTTP_COOKIE, "polish__token")
-    #print(list("cookie" = request$HTTP_COOKIE))
-    #print(list("secure_ui_token" = token))
 
     user <- NULL
     tryCatch({
@@ -55,8 +53,6 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
       print("sign_in_ui_1")
       print(error)
     })
-
-    #print(list("user" = user))
 
 
     page_out <- NULL
@@ -98,19 +94,15 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
           print(list("admin_panel_query" = admin_panel_query))
           if (identical(admin_panel_query, "true")) {
 
-           # go to Admin Panel
-           page_out <- tagList(
-               tags$head(
-                 tags$script(paste0("var app_name = '", app_name, "'"))
-               ),
-               admin_module_ui("admin", firebase_config),
-               tags$script(paste0("
-             //$(document).on('shiny:sessioninitialized', function() {
-             //  Shiny.setInputValue('polish__token', '", token, "')
-             //})
-           "))
-             )
-           } else {
+            # go to Admin Panel
+            page_out <- tagList(
+              tags$head(
+                tags$script(paste0("var app_name = '", app_name, "'"))
+              ),
+              admin_module_ui("admin", firebase_config),
+            )
+          } else {
+
             page_out <- tagList(
               tags$head(
                 tags$script(paste0("var app_name = '", app_name, "'"))
@@ -126,14 +118,9 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
               firebase_dependencies(),
               firebase_init(firebase_config),
               tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
-              tags$script(src = "polish/all.js"),
+              tags$script(src = "polish/js/all.js"),
           tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-              tags$script(src = "polish/auth-state.js"),
-              tags$script(paste0("
-            //$(document).on('shiny:sessioninitialized', function() {
-            //  Shiny.setInputValue('polish__token', '", token, "')
-            //})
-          "))
+              tags$script(src = "polish/js/auth-state.js")
             )
           }
 
@@ -149,14 +136,9 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
               firebase_dependencies(),
               firebase_init(firebase_config),
               tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
-              tags$script(src = "polish/all.js"),
+              tags$script(src = "polish/js/all.js"),
               tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-              tags$script(src = "polish/auth-state.js"),
-              tags$script(paste0("
-              //$(document).on('shiny:sessioninitialized', function() {
-              //  Shiny.setInputValue('polish__token', '", token, "')
-              //})
-            "))
+              tags$script(src = "polish/js/auth-state.js")
             )
 
           } # end is_admin check
