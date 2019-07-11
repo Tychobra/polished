@@ -64,7 +64,7 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
 
       # user is already signed in, so we don't need to do anything
       # user was already found in the global scope
-      print(list("email_verified" = user$get_email_verified()))
+
       if (isTRUE(user$get_email_verified())) {
 
         print("conditional option 2")
@@ -76,10 +76,10 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
         ))
 
       } else {
-        print("conditional option 3")
+        #print("conditional option 3")
         # go to email verification view.
         # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
-        print("email verification sign_in_with_token")
+        #print("email verification sign_in_with_token")
 
         user$refreshEmailVerification()
 
