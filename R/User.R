@@ -142,26 +142,26 @@ Users <-  R6::R6Class(
       self$users[[length(self$users) + 1]] <- user
       invisible(self)
     },
-    find_user_by_token = function(token) {
-      if (length(self$users) == 0 || is.null(token)) return(NULL)
+    find_user_by_uid = function(uid) {
+      if (length(self$users) == 0 || is.null(uid)) return(NULL)
 
       user_out <- NULL
 
       for (i in seq_along(self$users)) {
 
-        if (self$users[[i]]$get_token() == token) {
+        if (self$users[[i]]$get_uid() == uid) {
           user_out <- self$users[[i]]
         }
       }
 
       user_out
     },
-    remove_user_by_token = function(token) {
-      if (length(self$users) == 0 || is.null(token)) return(NULL)
+    remove_user_by_uid = function(uid) {
+      if (length(self$users) == 0 || is.null(uid)) return(NULL)
 
       for (i in seq_along(self$users)) {
 
-        if (self$users[[i]]$get_token() == token) {
+        if (self$users[[i]]$get_uid() == uid) {
           self$users[[i]] <- NULL
 
           break

@@ -1,10 +1,9 @@
 #' verify email page ui
 #'
 #' @param firebase_config Firebase configuration
-#' @param token firebase JWT
 #'
 #' @export
-verify_email_ui <- function(id, firebase_config, token) {
+verify_email_ui <- function(id, firebase_config) {
   ns <- NS(id)
 
   fluidPage(

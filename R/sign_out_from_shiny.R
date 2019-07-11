@@ -7,10 +7,10 @@
 #'
 #' @export
 #'
-sign_out_from_shiny <- function(session, token) {
+sign_out_from_shiny <- function(session, uid) {
 
   # remove the user from `global_users`
-  .global_users$remove_user_by_token(token)
+  .global_users$remove_user_by_uid(uid)
 
   # remove any existing query string
   remove_query_string(session)

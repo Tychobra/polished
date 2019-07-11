@@ -4,12 +4,10 @@
 \alias{verify_email_ui}
 \title{verify email page ui}
 \usage{
-verify_email_ui(id, firebase_config, token)
+verify_email_ui(id, firebase_config)
 }
 \arguments{
 \item{firebase_config}{Firebase configuration}
-
-\item{token}{firebase JWT}
 }
 \description{
 verify email page ui

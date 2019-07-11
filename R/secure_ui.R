@@ -44,15 +44,21 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
   function(request) {
     query <- parseQueryString(request$QUERY_STRING)
 
-    token <- get_cookie(request$HTTP_COOKIE, "polish__token")
+    cookie_string <- request$HTTP_COOKIE
+    uid <- NULL
+    if (!is.null(cookie_string)) {
+      uid <- get_cookie(request$HTTP_COOKIE, "polish__uid")
+    }
 
     user <- NULL
-    tryCatch({
-      user <- .global_users$find_user_by_token(token)
-    }, error = function(error) {
-      print("sign_in_ui_1")
-      print(error)
-    })
+    if (!is.null(uid)) {
+      tryCatch({
+        user <- .global_users$find_user_by_uid(uid)
+      }, error = function(error) {
+        print("sign_in_ui_1")
+        print(error)
+      })
+    }
 
 
     page_out <- NULL
@@ -91,7 +97,7 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
         if (isTRUE(is_admin)) {
 
           admin_panel_query <- query$admin_panel
-          print(list("admin_panel_query" = admin_panel_query))
+
           if (identical(admin_panel_query, "true")) {
 
             # go to Admin Panel
@@ -146,7 +152,7 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
         } else {
 
           # show email verification view
-          page_out <- verify_email_ui("verify", firebase_config, token)
+          page_out <- verify_email_ui("verify", firebase_config)
 
         } # end is_email_verified block
 

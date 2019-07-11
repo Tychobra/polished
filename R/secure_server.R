@@ -15,14 +15,11 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
 
   session$userData$current_user <- reactiveVal(NULL)
 
+  shiny::observeEvent(input$polish__sign_in, {
+    token <- input$polish__sign_in$token
+    uid <- input$polish__sign_in$uid
 
-
-  shiny::observeEvent(input$polish__token, {
-    token <- input$polish__token
-
-
-    user <- .global_users$find_user_by_token(token)
-
+    user <- .global_users$find_user_by_uid(uid)
 
     if (is.null(user)) {
 
@@ -42,7 +39,7 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
       if (is.null(new_user)) {
 
 
-        sign_out_from_shiny(session, token)
+        sign_out_from_shiny(session, uid)
         print("Not Authorized")
       } else {
 
@@ -68,17 +65,27 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
       session$userData$current_user(list(
         "email" = user$get_email(),
         "is_admin" = user$get_is_admin(),
-        "token" = token
+        "uid" = uid
       ))
 
       return()
     }
   }, ignoreInit = TRUE)
 
+  # shiny::observeEvent(input$polish__token, {
+  #   token <- input$polish__token
+  #
+  #
+  #   #user <- .global_users$find_user_by_token(token)
+  #   user <- .global_users$find_user_by_id(token)
+  #
+  #
+  # }, ignoreInit = TRUE)
+
 
   observeEvent(input$polish__sign_out, {
     req(session$userData$current_user())
-    sign_out_from_shiny(session, session$userData$current_user()$token)
+    sign_out_from_shiny(session, session$userData$current_user()$uid)
   })
 
   # if the user is signed in, set up the polish firebase functions
