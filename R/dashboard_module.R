@@ -2,7 +2,7 @@
 #' 
 #' @param id the module id
 #' 
-#' @import shiny shinydashboard highcharter xts dplyr DT
+#' @import shiny shinydashboard apexcharter xts dplyr DT
 #' 
 #' @export
 dashboard_module_ui <- function(id) {
@@ -18,8 +18,10 @@ dashboard_module_ui <- function(id) {
         color = "blue",
         width = 3
       ),
-      shinydashboard::valueBoxOutput(
-        ns("active_users_number"),
+      tychobratools::value_box_module_ui(
+        ns("active_users"),
+        icon = icon("users"),
+        backgroundColor = "#81aef7",
         width = 3
       ),
       shinydashboard::valueBox(
@@ -40,12 +42,11 @@ dashboard_module_ui <- function(id) {
     shiny::fluidRow(
       shinydashboard::box(
         width = 9,
-        title = "Chart",
-        highcharter::highchartOutput(ns("dau_chart"))
+        apexcharter::apexchartOutput(ns("dau_chart"))
       ),
       shinydashboard::box(
         width = 3,
-        title = "Table",
+        title = "Active Users",
         DT::DTOutput(ns("active_users_table"))
       )
     )
@@ -78,19 +79,13 @@ dashboard_module <- function(input, output, session) {
     
     length(users)
   })
-  
-  output$active_users_number <- shinydashboard::renderValueBox({
-    out <- active_users_number_prep()
-    
-    shinydashboard::valueBox(
-      value = out,
-      subtitle = "Active Users",
-      icon = icon("users"),
-      color = "light-blue",
-      width = NULL
-    )
-  })
-  
+
+  callModule(
+    tychobratools::value_box_module,
+    "active_users",
+    active_users_number_prep,
+    reactive("Active Users")
+  )
   
   
   dau_chart_prep <- reactive({
@@ -100,21 +95,39 @@ dashboard_module <- function(input, output, session) {
     
     dates <- do.call("c", lapply(date_strings, as.Date)) #unlist kills dates
     
-    df <- dplyr::tibble(
+    dplyr::tibble(
       input = c(3,2,2,3,1,4,2,5,7,6,9,15,16,16),
       date = dates
     )
-    
-    xts::xts(df$input, order.by = df$date)
   })
   
-  output$dau_chart <- highcharter::renderHighchart({
+  output$dau_chart <- apexcharter::renderApexchart({
     dat <- dau_chart_prep()
     
-    highcharter::highchart(type = "stock") %>% 
-      highcharter::hc_title(text = "Daily Active Users") %>% 
-      highcharter::hc_xAxis(type = "datetime") %>% 
-      highcharter::hc_add_series(data = dat, name = "DAU")
+    apexcharter::apexchart() %>% 
+      apexcharter::ax_chart(
+        type = "area",
+        zoom = list(
+          type = "x",
+          enabled = TRUE
+        )
+      ) %>% 
+      apexcharter::ax_xaxis(
+        type = "datetime",
+        categories = dat$date
+      ) %>% 
+      apexcharter::ax_stroke(show = TRUE, curve = "straight") %>% 
+      apexcharter::ax_dataLabels(enabled = FALSE) %>% 
+      apexcharter::ax_fill(
+        type = "gradient",
+        gradient = list(
+          shadeIntensity = 1,
+          opacityFrom = 0.7,
+          opacityTo = 0.9,
+          stops = list(0, 100)
+        )
+      ) %>% 
+      apexcharter::ax_series(list(data = dat$input, name = "DAU"))
   })
   
   active_users_prep <- reactive({
@@ -124,8 +137,7 @@ dashboard_module <- function(input, output, session) {
     
     dplyr::tibble(
       email = unique(user_emails),
-      time = "13:09:00",
-      location = "Atlanta"
+      time = "13:09:00"
     )
   })
   
@@ -135,7 +147,7 @@ dashboard_module <- function(input, output, session) {
     DT::datatable(
       out,
       rownames = FALSE,
-      colnames = c("Email", "Time Signed In", "Location"),
+      colnames = c("Email", "Time Signed In"),
       options = list(
         dom = "t"
       )
