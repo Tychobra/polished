@@ -2,7 +2,7 @@
 #' 
 #' @param id the module id
 #' 
-#' @import shiny shinydashboard apexcharter xts dplyr DT
+#' @import shiny shinydashboard apexcharter xts dplyr DT shinycssloaders
 #' 
 #' @export
 dashboard_module_ui <- function(id) {
@@ -42,13 +42,16 @@ dashboard_module_ui <- function(id) {
     shiny::fluidRow(
       shinydashboard::box(
         width = 9,
-        apexcharter::apexchartOutput(ns("dau_chart"))
+        apexcharter::apexchartOutput(ns("dau_chart")) %>%
+          shinycssloaders::withSpinner(type = 8)
       ),
       shinydashboard::box(
         width = 3,
         title = "Active Users",
-        DT::DTOutput(ns("active_users_table"))
-      )
+        DT::DTOutput(ns("active_users_table")) %>% 
+          shinycssloaders::withSpinner(type = 8, proxy.height = "341.82px"),
+        br()
+      ) 
     )
   )
 }
@@ -103,8 +106,12 @@ dashboard_module <- function(input, output, session) {
   
   output$dau_chart <- apexcharter::renderApexchart({
     dat <- dau_chart_prep()
-    
+
     apexcharter::apexchart() %>% 
+      apexcharter::ax_title(
+        "Daily Active Users",
+        align = "center"
+      ) %>% 
       apexcharter::ax_chart(
         type = "area",
         zoom = list(
