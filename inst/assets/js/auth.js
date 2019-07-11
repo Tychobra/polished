@@ -5,11 +5,11 @@ const sign_in = function(email, password) {
   return auth.signInWithEmailAndPassword(email, password).then(function(user) {
     console.log("user", user)
     // send firebase token to shiny server.R
-    auth.currentUser.getIdToken(/* forceRefresh true*/).then(function(idToken) {
-      Shiny.setInputValue('polish__token', idToken)
-    }).catch(function(error) {
-       console.log('error getting token')
-    })
+    //auth.currentUser.getIdToken(/* forceRefresh true*/).then(function(idToken) {
+    //  Shiny.setInputValue('polish__token', idToken)
+    //}).catch(function(error) {
+    //   console.log('error getting token')
+    //})
 
   }).catch(function(error) {
     toastr.error("Sign in Error: " + error.message)
