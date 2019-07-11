@@ -27,6 +27,9 @@ User <-  R6::R6Class(
   classname = "User",
   public = list(
     initialize = function(firebase_functions_url, firebase_auth_token, app_name) {
+      stopifnot(length(firebase_functions_url) == 1 && is.character(firebase_functions_url))
+      stopifnot(length(firebase_auth_token) == 1 && is.character(firebase_auth_token))
+      stopifnot(length(app_name) == 1 && is.character(app_name))
 
       self$firebase_functions_url <- firebase_functions_url
 
