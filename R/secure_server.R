@@ -19,9 +19,9 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
     token <- input$polish__sign_in$token
     uid <- input$polish__sign_in$uid
 
-    user <- .global_users$find_user_by_uid(uid)
+    global_user <- .global_users$find_user_by_uid(uid)
 
-    if (is.null(user)) {
+    if (is.null(global_user)) {
 
       # attempt to sign in
       new_user <- NULL
@@ -37,12 +37,12 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
       })
 
       if (is.null(new_user)) {
-
+        print("Conditional Option 1")
 
         sign_out_from_shiny(session, uid)
-        print("Not Authorized")
-      } else {
 
+      } else {
+        print("Conditional Option 2")
         .global_users$add_user(new_user)
 
         is_admin <- new_user$get_is_admin()
@@ -65,23 +65,23 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
       # user is already signed in, so we don't need to do anything
       # user was already found in the global scope
 
-      if (isTRUE(user$get_email_verified())) {
+      if (isTRUE(global_user$get_email_verified())) {
 
-        print("conditional option 2")
+        print("conditional option 3")
         session$userData$current_user(list(
-          "email" = user$get_email(),
-          "is_admin" = user$get_is_admin(),
-          "role" = user$get_role(),
+          "email" = global_user$get_email(),
+          "is_admin" = global_user$get_is_admin(),
+          "role" = global_user$get_role(),
           "uid" = uid
         ))
 
       } else {
-        #print("conditional option 3")
+        print("conditional option 4")
         # go to email verification view.
         # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
         #print("email verification sign_in_with_token")
 
-        user$refreshEmailVerification()
+        global_user$refreshEmailVerification()
 
 
         session$sendCustomMessage(
@@ -92,12 +92,14 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
         # if refreshing the email verification causes it to switch from FALSE to TRUE
         # then reload the session, and the user will move from the email verification page
         # to the actual app
-        if (isTRUE(user$get_email_verified())) {
+        if (isTRUE(global_user$get_email_verified())) {
           session$reload()
         }
 
-        return()
+
       }
+
+      return()
     }
   }, ignoreInit = TRUE)
 

@@ -10,8 +10,8 @@ $(document).on("shiny:sessioninitialized", function() {
   } else {
 
     firebase_user.getIdToken(/*forceRefresh*/ true).then(function(idToken) {
-      console.log("getIdToken: ", idToken)
-      console.log("firebase_user: ", firebase_user)
+      //console.log("getIdToken: ", idToken)
+      //console.log("firebase_user: ", firebase_user)
 
       Cookies.set('polish__uid', firebase_user.uid)
       Shiny.setInputValue('polish__sign_in', { token: idToken, uid: firebase_user.uid }, { priority: 'event' })
