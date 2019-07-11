@@ -105,6 +105,7 @@ admin_module_ui <- function(id, firebase_config) {
     ),
     firebase_init(firebase_config),
     tags$script(src = "polish/all.js"),
+    tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
     tags$script(src = "polish/auth-state.js"),
     tags$script(src = "polish/admin.js")
   )
@@ -135,13 +136,8 @@ admin_module <- function(input, output, session) {
   observeEvent(input$go_to_shiny_app, {
 
     # to to the Shiny app
-    query_token <- parseQueryString(session$clientData$url_search)$token
 
-    updateQueryString(
-      queryString = paste0("?token=", query_token, "&admin_panel=false"),
-      session = session,
-      mode = "replace"
-    )
+    remove_query_string(session)
 
     session$reload()
 
