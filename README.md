@@ -1,6 +1,6 @@
 # polished
 
-Authentication and Administration for Shiny apps.  Polished provides a way to secure your Shiny application behind an authentication layer.  It also provides a UI for controlling user access and monitoring user activitiy. 
+Authentication and administration for Shiny apps.  Polished provides a way to secure your Shiny application behind an authentication layer.  It also provides a UI for controlling user access and monitoring user activitiy. 
 
 ## Getting Started
 
@@ -8,17 +8,17 @@ To add polished to one or multiple Shiny apps requires a little configuration.  
 
 - <project_name>
    - polished-<project_name>
-   - <shiny_app_1_name>
-   - <shiny_app_2_name>
+   - <shiny_app_1>
+   - <shiny_app_2>
    - ...
 
-The above Shiny apps all use the same email/password combination for authentication.  You can have as many Shiny apps in the "<project_name>" folder as you want.  At Tychobra, we build Shiny apps for many different companies, so in our work, each cleint comapny generally gets their own separate "<project_name>" directory containing one or more Shiny apps.  
+The "polished-<project_name>" folder contains all the `polished` project configuration.  "<shiny_app_1>", "<shiny_app_2>", and "..." (other Shiny apps) are the Shiny apps that use this one polished project.
 
-"<shiny_app_1_name>" and "<shiny_app_2_name>" use the same email/password combination for sign in.  User authorization is then set at a per Shiny app level.  Also the sign in and registration page layouts can be customized at a per Shiny app level. 
+The Shiny apps all use the same email/password for authentication.  e.g. if user `A` is authorized to sign into <shiny_app_1> and <shiny_app_2>, user `A` would use the same email and password to sign into both Shiny apps 1 and 2.  User authorization is then set at a per Shiny app level, so and admin could change user `A`s authorization and only allow the user to access <shiny_app_1> for example. 
+
+You can have as many Shiny apps in the "<project_name>" folder as you want.  At Tychobra, we build Shiny apps for many different companies, so in our work, each client comapny usually gets their own separate "<project_name>" directory containing one or more Shiny apps.  
 
 ### Requirements
-
-You need:
 
 - R
 - one or more Shiny app(s)
@@ -88,16 +88,9 @@ cd functions
 npm install --save firebase-admin firebase-functions
 ```
 
-
-
-2. Set up Firebase configuration 
-
-Go to the Firebase web console and create a project named "polished-<client_name>".
-
-In the Firebase Web Console go to the "Database" tab, and enable Firebase.
-
-
 Publish Firestore rules:
+
+Open R and set your working directory set to the "polished-<project_name>" folder.
 
 ```
 # R
