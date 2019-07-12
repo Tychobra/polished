@@ -154,9 +154,10 @@ dashboard_module <- function(input, output, session) {
     DT::datatable(
       out,
       rownames = FALSE,
-      colnames = c("Email", "Time Signed In"),
+      colnames = c("Email", "Signed In"),
       options = list(
-        dom = "t"
+        dom = "t",
+        scrollX = TRUE
       )
     )
   })
