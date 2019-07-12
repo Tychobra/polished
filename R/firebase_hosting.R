@@ -8,11 +8,11 @@
 #'
 #' @examples
 #'
-#' generate_hosting_text("shiny_1")
+#' generate_firebase_hosting_text("shiny_1")
 #'
-#' generate_hosting_text(c("shiny_1", "shiny_2"))
+#' generate_firebase_hosting_text(c("shiny_1", "shiny_2"))
 #'
-generate_hosting_text <- function(app_names) {
+generate_firebase_hosting_text <- function(app_names) {
 
   n_apps <- length(app_names)
 
@@ -66,7 +66,7 @@ generate_hosting_text <- function(app_names) {
 #'
 write_firebase_hosting <- function(app_names, file_path = "firebase.json") {
 
-  hosting_text <- generate_hosting_text(app_names)
+  hosting_text <- generate_firebase_hosting_text(app_names)
 
   file_conn <- file(file_path)
   on.exit(close(file_conn), add = TRUE)
