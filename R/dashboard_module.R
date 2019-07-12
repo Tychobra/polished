@@ -110,7 +110,10 @@ dashboard_module <- function(input, output, session) {
     apexcharter::apexchart() %>% 
       apexcharter::ax_title(
         "Daily Active Users",
-        align = "center"
+        align = "center",
+        style = list(
+          fontSize = 18
+        )
       ) %>% 
       apexcharter::ax_chart(
         type = "area",
