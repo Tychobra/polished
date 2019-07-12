@@ -18,5 +18,7 @@ Imports:
     shinyjs,
     DT,
     shinydashboard,
-    shinycssloaders
+    shinycssloaders,
+    apexcharter, 
+    xts 
 RoxygenNote: 6.1.1
