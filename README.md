@@ -4,7 +4,7 @@ Authentication and administration for Shiny apps.  Polished provides a way to se
 
 ## Getting Started
 
-To add polished to one or multiple Shiny apps requires a little configuration.  We recommend the following folder structure:
+We recommend the following folder structure:
 
 - <project_name>
    - polished-<project_name>
@@ -12,9 +12,9 @@ To add polished to one or multiple Shiny apps requires a little configuration.  
    - <shiny_app_2>
    - ...
 
-The "polished-<project_name>" folder contains all the `polished` project configuration.  "<shiny_app_1>", "<shiny_app_2>", and "..." (other Shiny apps) are the Shiny apps that use this one polished project.
+The "polished-<project_name>" folder contains all the `polished` project configuration.  "<shiny_app_1>", "<shiny_app_2>", and "..." (other Shiny apps) are the Shiny apps that use this polished project.
 
-The Shiny apps all use the same email/password for authentication.  e.g. if user `A` is authorized to sign into <shiny_app_1> and <shiny_app_2>, user `A` would use the same email and password to sign into both Shiny apps 1 and 2.  User authorization is then set at a per Shiny app level, so and admin could change user `A`s authorization and only allow the user to access <shiny_app_1> for example. 
+The Shiny apps all use the same email/password for authentication.  e.g. if user `A` is authorized to sign into "<shiny_app_1>" and "<shiny_app_2>", user `A` would use the same email and password to sign into both Shiny apps 1 and 2.  User authorization is then set at a per Shiny app level.  So, for example, an admin could change user `A`s authorization such that user `A` could only access "<shiny_app_1>". 
 
 You can have as many Shiny apps in the "<project_name>" folder as you want.  At Tychobra, we build Shiny apps for many different companies, so in our work, each client comapny usually gets their own separate "<project_name>" directory containing one or more Shiny apps.  
 
@@ -29,14 +29,14 @@ You can have as many Shiny apps in the "<project_name>" folder as you want.  At 
 remotes::install_github("tychobra/polished")
 ```
 
-- [nodejs](https://nodejs.org/en/) to set up `polished`.
-- a [Firebase](https://firebase.google.com/) account.
+- [nodejs](https://nodejs.org/en/)
+- a [Firebase](https://firebase.google.com/) account
 
 ### Initial Set Up
 
 1. Set up your Firebase project
 
-Go to [https://firebase.google.com/](https://firebase.google.com/) and create a firebase project named "polished-<client_name>".
+Go to [https://firebase.google.com/](https://firebase.google.com/) and create a firebase project named "polished-<project_name>".
 
 Open your new Firebase project and
  - go to the "Authentication" page "Sign-in method" tab and enable "Email/Password" sign in.
@@ -46,7 +46,7 @@ Open your new Firebase project and
 
 3. Set up the "<project_name>/polished-<project_name>" folder.
 
-Move to the <project_name> folder.
+Move to the "<project_name>" folder.
 
 ```
 # terminal
