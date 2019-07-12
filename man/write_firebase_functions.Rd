@@ -4,17 +4,20 @@
 \alias{write_firebase_functions}
 \title{write the index.js file}
 \usage{
-write_firebase_functions(path = "functions/index.js")
+write_firebase_functions(path = "functions/index.js", overwrite = TRUE)
 }
 \arguments{
-\item{path}{The file path of the created file}
+\item{path}{"functions/index.js" by default. The file path of the created file.}
+
+\item{overwrite}{TRUE by default.  Should the existing file
+be overwritted}
 }
 \description{
 write the index.js file
 }
 \examples{
 
-#must make functions folder
+# must make functions folder
 write_firebase_functions()
 
 write_firebase_functions("inst")
