@@ -119,7 +119,15 @@ dashboard_module <- function(input, output, session) {
         type = "area",
         zoom = list(
           type = "x",
-          enabled = TRUE
+          enabled = TRUE,
+          autoScaleYaxis = TRUE
+        ),
+        toolbar = list(
+          tools = list(
+            selection = FALSE,
+            zoomin = FALSE,
+            zoomout = FALSE
+          )
         )
       ) %>% 
       apexcharter::ax_xaxis(
