@@ -40,7 +40,7 @@ fluidPage(
     )
   ),
   fluidRow(
-    style = "background-color: #0277BD; color: white;",
+    style = "background-color: #0277BD; color: white; margin-top: 15px;",
     column(
       12,
       style = "margin-top: 100px; margin-bottom: 100px;",
@@ -55,6 +55,7 @@ fluidPage(
           5,
           style = "background-color: white; border-radius: 8px;",
           fluidRow(
+            style = "margin-bottom: 15px; margin-top: 15px;",
             column(
               5,
               tags$img(
@@ -82,6 +83,7 @@ fluidPage(
           5,
           style = "background-color: white; border-radius: 8px;",
           fluidRow(
+            style = "margin-bottom: 15px; margin-top: 15px;",
             column(
               5,
               tags$img(
@@ -110,6 +112,7 @@ fluidPage(
           5,
           style = "background-color: white; border-radius: 8px;",
           fluidRow(
+            style = "margin-bottom: 15px; margin-top: 15px;",
             column(
               5,
               tags$img(
