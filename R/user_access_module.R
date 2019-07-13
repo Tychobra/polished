@@ -368,7 +368,7 @@ user_access_module <- function(input, output, session) {
     session$sendCustomMessage(
       "polish__edit_user",
       message = list(
-        email = input$user_email_edit,
+        email = user_to_edit()$email,
         is_admin = input$user_is_admin_edit,
         role = if (isTRUE(input$user_include_custom_role_edit)) input$user_custom_role_edit else "",
         ns = ns("")
