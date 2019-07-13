@@ -63,20 +63,9 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
 
       } else {
         print("Conditional Option 2")
+        # go to app.  If user is admin, then they will have the blue "Admin Panel" button
+        # in the bottom right
         .global_users$add_user(new_user)
-
-        is_admin <- new_user$get_is_admin()
-
-
-
-        if (isTRUE(is_admin)) {
-          updateQueryString(
-            queryString = paste0("?admin_panel=true"),
-            session = session,
-            mode = "replace"
-          )
-        }
-
 
         session$reload()
       }
