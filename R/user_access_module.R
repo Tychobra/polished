@@ -187,9 +187,16 @@ user_access_module <- function(input, output, session) {
 
   output$users_table <- DT::renderDT({
     req(users_table_prep())
+    out <- users_table_prep()
+
+    if (nrow(out) > 10) {
+      dom_out <-  "ftp"
+    } else {
+      dom_out <- "ft"
+    }
 
     DT::datatable(
-      users_table_prep(),
+      out,
       rownames = FALSE,
       colnames = c(
         "Email",
@@ -202,7 +209,7 @@ user_access_module <- function(input, output, session) {
       escape = -1,
       selection = "none",
       options = list(
-        dom = "ftp",
+        dom = dom_out,
         scrollX = TRUE
       )
     )
