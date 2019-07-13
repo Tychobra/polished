@@ -187,9 +187,16 @@ user_access_module <- function(input, output, session) {
 
   output$users_table <- DT::renderDT({
     req(users_table_prep())
+    out <- users_table_prep()
+
+    if (nrow(out) > 10) {
+      dom_out <-  "ftp"
+    } else {
+      dom_out <- "ft"
+    }
 
     DT::datatable(
-      users_table_prep(),
+      out,
       rownames = FALSE,
       colnames = c(
         "Email",
@@ -202,7 +209,7 @@ user_access_module <- function(input, output, session) {
       escape = -1,
       selection = "none",
       options = list(
-        dom = "ftp",
+        dom = dom_out,
         scrollX = TRUE
       )
     )
@@ -306,6 +313,19 @@ user_access_module <- function(input, output, session) {
   observeEvent(input$user_row_to_edit, {
     hold_user <- user_to_edit()
 
+    role_ui <- shiny::selectizeInput(
+      ns("user_custom_role_edit"),
+      "Role",
+      choices = c("<NA>", roles()$role),
+      selected = hold_user$role
+    )
+
+    has_role <- if (hold_user$role == "") FALSE else TRUE
+
+    if (isFALSE(has_role)) {
+      role_ui <- shinyjs::hidden(role_ui)
+    }
+
     shiny::showModal(
       shiny::modalDialog(
         title = "Edit User",
@@ -343,12 +363,7 @@ user_access_module <- function(input, output, session) {
           ),
           htmltools::br()
         ),
-        shiny::selectizeInput(
-          ns("user_custom_role_edit"),
-          "Role",
-          choices = c("<NA>", roles()$role),
-          selected = hold_user$role
-        ) %>% shinyjs::hidden()
+        role_ui
       )
     )
 
@@ -368,7 +383,7 @@ user_access_module <- function(input, output, session) {
     session$sendCustomMessage(
       "polish__edit_user",
       message = list(
-        email = input$user_email_edit,
+        email = user_to_edit()$email,
         is_admin = input$user_is_admin_edit,
         role = if (isTRUE(input$user_include_custom_role_edit)) input$user_custom_role_edit else "",
         ns = ns("")
