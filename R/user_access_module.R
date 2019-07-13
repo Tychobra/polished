@@ -313,6 +313,19 @@ user_access_module <- function(input, output, session) {
   observeEvent(input$user_row_to_edit, {
     hold_user <- user_to_edit()
 
+    role_ui <- shiny::selectizeInput(
+      ns("user_custom_role_edit"),
+      "Role",
+      choices = c("<NA>", roles()$role),
+      selected = hold_user$role
+    )
+
+    has_role <- if (hold_user$role == "") FALSE else TRUE
+
+    if (isFALSE(has_role)) {
+      role_ui <- shinyjs::hidden(role_ui)
+    }
+
     shiny::showModal(
       shiny::modalDialog(
         title = "Edit User",
@@ -350,12 +363,7 @@ user_access_module <- function(input, output, session) {
           ),
           htmltools::br()
         ),
-        shiny::selectizeInput(
-          ns("user_custom_role_edit"),
-          "Role",
-          choices = c("<NA>", roles()$role),
-          selected = hold_user$role
-        ) %>% shinyjs::hidden()
+        role_ui
       )
     )
 
