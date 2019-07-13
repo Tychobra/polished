@@ -21,15 +21,21 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
 
     global_user <- .global_users$find_user_by_uid(uid)
 
-    session$sendCustomMessage(
-      "polish__remove_loading",
-      message = list()
-    )
+
 
     if (is.null(global_user)) {
 
+      session$sendCustomMessage(
+        "polish__show_loading",
+        message = list(
+          text = "Loading Polished Admin..."
+        )
+      )
+
       # attempt to sign in
       new_user <- NULL
+
+
       tryCatch({
         new_user <- User$new(
           firebase_functions_url = firebase_functions_url,
@@ -42,7 +48,16 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
       })
 
       if (is.null(new_user)) {
+
+        # user sign in failed.  Go to sign in page.
+        session()
         print("Conditional Option 1")
+
+        session$sendCustomMessage(
+          "polish__remove_loading",
+          message = list()
+        )
+
 
         sign_out_from_shiny(session, uid)
 
@@ -52,12 +67,7 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
 
         is_admin <- new_user$get_is_admin()
 
-        session$sendCustomMessage(
-          "polish__show_loading",
-          message = list(
-            text = "Loading Polished Admin..."
-          )
-        )
+
 
         if (isTRUE(is_admin)) {
           updateQueryString(
@@ -80,6 +90,10 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
       if (isTRUE(global_user$get_email_verified())) {
 
         print("conditional option 3")
+        session$sendCustomMessage(
+          "polish__remove_loading",
+          message = list()
+        )
         session$userData$current_user(list(
           "email" = global_user$get_email(),
           "is_admin" = global_user$get_is_admin(),
@@ -95,13 +109,6 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
 
         global_user$refreshEmailVerification()
 
-
-        session$sendCustomMessage(
-          "polish__show_loading",
-          message = list(
-            text = "Loading..."
-          )
-        )
 
         # if refreshing the email verification causes it to switch from FALSE to TRUE
         # then reload the session, and the user will move from the email verification page
