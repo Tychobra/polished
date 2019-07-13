@@ -96,7 +96,7 @@ dashboard_module <- function(input, output, session) {
                       "2019-07-06", "2019-07-07", "2019-07-08", "2019-07-09", "2019-07-10",
                       "2019-07-11", "2019-07-12", "2019-07-13", "2019-07-14")
     
-    dates <- do.call("c", lapply(date_strings, as.Date)) #unlist kills dates
+    dates <- as.POSIXct(date_strings)
     
     dplyr::tibble(
       input = c(3,2,2,3,1,4,2,5,7,6,9,15,16,16),
@@ -147,6 +147,7 @@ dashboard_module <- function(input, output, session) {
       ) %>% 
       apexcharter::ax_series(list(data = dat$input, name = "DAU"))
   })
+  
   
   active_users_prep <- reactive({
     users_list <- global_users_prep()
