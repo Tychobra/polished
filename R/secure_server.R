@@ -21,6 +21,11 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
 
     global_user <- .global_users$find_user_by_uid(uid)
 
+    session$sendCustomMessage(
+      "polish__remove_loading",
+      message = list()
+    )
+
     if (is.null(global_user)) {
 
       # attempt to sign in
@@ -46,6 +51,13 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
         .global_users$add_user(new_user)
 
         is_admin <- new_user$get_is_admin()
+
+        session$sendCustomMessage(
+          "polish__show_loading",
+          message = list(
+            text = "Loading Polished Admin..."
+          )
+        )
 
         if (isTRUE(is_admin)) {
           updateQueryString(
@@ -85,8 +97,10 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
 
 
         session$sendCustomMessage(
-          "remove_loading",
-          message = list()
+          "polish__show_loading",
+          message = list(
+            text = "Loading..."
+          )
         )
 
         # if refreshing the email verification causes it to switch from FALSE to TRUE
@@ -132,6 +146,12 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
 
   observeEvent(input$polish__go_to_admin_panel, {
 
+    session$sendCustomMessage(
+      "polish__show_loading",
+      message = list(
+        text = "Loading Polished Admin..."
+      )
+    )
 
     # remove admin_pane=false from query
     updateQueryString(
