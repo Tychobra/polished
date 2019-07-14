@@ -28,7 +28,7 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
       session$sendCustomMessage(
         "polish__show_loading",
         message = list(
-          text = "Loading Polished Admin..."
+          text = "Loading..."
         )
       )
 
@@ -145,7 +145,7 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
     session$sendCustomMessage(
       "polish__show_loading",
       message = list(
-        text = "Loading Polished Admin..."
+        text = "Loading..."
       )
     )
 
