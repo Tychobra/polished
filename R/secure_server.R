@@ -49,8 +49,7 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
 
       if (is.null(new_user)) {
 
-        # user sign in failed.  Go to sign in page.
-        sign_out_from_shiny()
+        # user sign in failed.
         print("Conditional Option 1")
 
         session$sendCustomMessage(
@@ -58,8 +57,15 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
           message = list()
         )
 
+        # some type of error occured with sign in, so sign out,
+        # and go to sign in page.
+        tryCatch({
+          sign_out_from_shiny(session, uid)
+        }, error = function(error) {
+          print("secure_server sign out error")
+          print(error)
+        })
 
-        sign_out_from_shiny(session, uid)
 
       } else {
         print("Conditional Option 2")
