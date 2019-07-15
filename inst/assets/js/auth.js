@@ -47,25 +47,24 @@ $(document).on("click", "#submit_register", () => {
       return auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
 
         // set authorization for this user for this Shiny app
-        //const registerSetup = functions.httpsCallable("registerSetup")
-
         db.collection("apps")
         .doc(app_name)
         .collection("users")
-        .doc("email")
+        .doc(email)
         .set({
           invite_status: "accepted"
         }, { merge: true })
         .catch(error => {
           console.log("error setting invite status on register")
+          console.log(error)
         })
-        //registerSetup()
+
 
         return userCredential
 
       }).then((userCredential) => {
 
-        //sign_in(email, password)
+        // send verification email
         userCredential.user.sendEmailVerification().catch((error) => {
           toastr.error("error sending verification email")
           toastr.error("" + error)
@@ -134,7 +133,7 @@ $(document).on("click", "#go_to_sign_in", () => {
 $(document).on("click", "#submit_continue_register", () => {
 
   const email = $("#register_email").val()
-  console.log("register email", email)
+
   db.collection("apps")
   .doc(app_name)
   .collection("users")
