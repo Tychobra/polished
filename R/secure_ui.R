@@ -45,7 +45,7 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
     query <- parseQueryString(request$QUERY_STRING)
 
     cookie_string <- request$HTTP_COOKIE
-    print(list("cookie_string" = cookie_string))
+
     uid <- NULL
     if (!is.null(cookie_string)) {
       uid <- get_cookie(cookie_string, "polish__uid")

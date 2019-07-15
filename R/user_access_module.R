@@ -333,8 +333,8 @@ user_access_module <- function(input, output, session) {
           modalButton("Cancel"),
           actionButton(
             ns("submit_user_edit"),
-            "Add User",
-            class = "btn-success",
+            "Edit User",
+            class = "btn-primary",
             icon = icon("plus"),
             style = "color: white"
           )
