@@ -134,12 +134,18 @@ admin_module <- function(input, output, session) {
   })
 
   observeEvent(input$go_to_shiny_app, {
+
     session$sendCustomMessage(
       "polish__show_loading",
       message = list(
         text = "Loading..."
       )
     )
+
+    uid <- session$userData$current_user()$uid
+    global_user <- .global_users$find_user_by_uid(uid)
+    global_user$clear_signed_in_as()
+
     # to to the Shiny app
 
     remove_query_string(session)

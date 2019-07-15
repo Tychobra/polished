@@ -50,7 +50,7 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
       if (is.null(new_user)) {
 
         # user sign in failed.  Go to sign in page.
-        session()
+        sign_out_from_shiny()
         print("Conditional Option 1")
 
         session$sendCustomMessage(
@@ -83,12 +83,24 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
           "polish__remove_loading",
           message = list()
         )
-        session$userData$current_user(list(
-          "email" = global_user$get_email(),
-          "is_admin" = global_user$get_is_admin(),
-          "role" = global_user$get_role(),
-          "uid" = uid
-        ))
+
+        signed_in_as <- global_user$get_signed_in_as()
+
+        if (!is.null(signed_in_as) && isTRUE(global_user$get_is_admin())) {
+
+          user_out <- signed_in_as[c("email", "is_admin", "role")]
+
+        } else {
+          user_out <- list(
+            "email" = global_user$get_email(),
+            "is_admin" = global_user$get_is_admin(),
+            "role" = global_user$get_role()
+          )
+        }
+
+        user_out$uid <- uid
+
+        session$userData$current_user(user_out)
 
       } else {
         print("conditional option 4")

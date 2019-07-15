@@ -73,6 +73,29 @@ User <-  R6::R6Class(
 
       invisible(self)
     },
+    set_signed_in_as = function(email) {
+
+      # firebase function callable via url
+      url_out <- paste0(
+        self$firebase_functions_url,
+        "getUserData?email=", private$email,
+        "&signed_in_as_email=", email,
+        "&app_name=", self$app_name
+      )
+
+      user_response <- httr::GET(url_out)
+      user_text <- httr::content(user_response, "text")
+      user <- jsonlite::fromJSON(user_text)
+
+
+      if (is.null(user)) {
+        private$signed_in_as <- NULL
+      } else {
+        private$signed_in_as <- user
+      }
+
+      invisible(self)
+    },
     refreshEmailVerification = function() {
 
       url_out <- paste0(self$firebase_functions_url, "getUser?uid=", private$uid)
@@ -109,6 +132,12 @@ User <-  R6::R6Class(
     },
     get_uid = function() {
       private$uid
+    },
+    get_signed_in_as = function() {
+      private$signed_in_as
+    },
+    clear_signed_in_as = function() {
+      private$signed_in_as <- NULL
     }
   ),
   private = list(
@@ -117,7 +146,9 @@ User <-  R6::R6Class(
     role = character(0),
     is_authed = "authorizing",
     email_verified = FALSE,
-    uid = character(0)
+    uid = character(0),
+    # optional use to sign in as
+    signed_in_as = NULL
   )
 )
 

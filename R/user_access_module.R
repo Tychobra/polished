@@ -697,9 +697,23 @@ user_access_module <- function(input, output, session) {
 
   # TODO: probably need to add a "signed_in_as" property to the User R6 class.
   # only admins should have this property... best way to implement?
-  observe({
-    print(list(
-      "sign_in_as_btn_row" = input$sign_in_as_btn_row
-    ))
-  })
+  observeEvent(input$sign_in_as_btn_row, {
+    email <- users()[as.numeric(input$sign_in_as_btn_row), ]$email
+
+    session$sendCustomMessage(
+      "polish__show_loading",
+      message = list(
+        text = "Loading..."
+      )
+    )
+    uid <- session$userData$current_user()$uid
+    global_user <- .global_users$find_user_by_uid(uid)
+    global_user$set_signed_in_as(email)
+
+    # to to the Shiny app
+    remove_query_string(session)
+
+    session$reload()
+  }, ignoreInit = TRUE)
+
 }

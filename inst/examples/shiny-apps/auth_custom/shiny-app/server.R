@@ -10,7 +10,7 @@ function(input, output, session) {
   observeEvent(session$userData$current_user(), {
 
     output$secure_content <- renderPrint({
-      "this is sensitive info"
+      session$userData$current_user()
     })
 
   })
