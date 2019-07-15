@@ -20,31 +20,7 @@ admin_module_ui <- function(id, firebase_config) {
 
   head <- shinydashboard::dashboardHeader(
     title = "Polished Admin",
-    tags$li(
-      class = "dropdown",
-      tags$a(
-        href="#",
-        class = "dropdown-toggle",
-        `data-toggle` = "dropdown",
-        tags$i(
-          class = "fa fa-user"
-        )
-      ),
-      tags$ul(
-        class = "dropdown-menu",
-        tags$li(
-          textOutput(ns("polish__user")),
-          style='padding: 3px 20px;'
-        ),
-        tags$li(
-          actionLink(
-            "polish__sign_out",
-            "Sign Out",
-            icon("sign-out")
-          )
-        )
-      )
-    )
+    profile_module_ui(ns("polish__profile"))
   )
 
   sidebar <- shinydashboard::dashboardSidebar(
@@ -129,9 +105,10 @@ admin_module_ui <- function(id, firebase_config) {
 admin_module <- function(input, output, session) {
   ns <- session$ns
 
-  output$polish__user <- renderText({
-    session$userData$current_user()$email
-  })
+  callModule(
+    profile_module,
+    "polish__profile"
+  )
 
   observeEvent(input$go_to_shiny_app, {
 
