@@ -71,7 +71,8 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
         # go to default sign in page
         page_out <- tagList(
           tags$head(
-            tags$script(paste0("var app_name = '", app_name, "'"))
+            tags$script(paste0("var app_name = '", app_name, "'")),
+            tags$link(rel = "stylesheet", href = "polish/css/all.css")
           ),
           sign_in_ui_default(firebase_config)
         )
@@ -80,7 +81,8 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
         # go to custom sign in page
         page_out <- tagList(
           tags$head(
-            tags$script(paste0("var app_name = '", app_name, "'"))
+            tags$script(paste0("var app_name = '", app_name, "'")),
+            tags$link(rel = "stylesheet", href = "polish/css/all.css")
           ),
           sign_in_page_ui
         )
@@ -104,7 +106,8 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
             # go to Admin Panel
             page_out <- tagList(
               tags$head(
-                tags$script(paste0("var app_name = '", app_name, "'"))
+                tags$script(paste0("var app_name = '", app_name, "'")),
+                tags$link(rel = "stylesheet", href = "polish/css/all.css")
               ),
               admin_module_ui("admin", firebase_config)
             )
@@ -112,7 +115,8 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
 
             page_out <- tagList(
               tags$head(
-                tags$script(paste0("var app_name = '", app_name, "'"))
+                tags$script(paste0("var app_name = '", app_name, "'")),
+                tags$link(rel = "stylesheet", href = "polish/css/all.css")
               ),
               ui,
               actionButton(
@@ -137,7 +141,8 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
             # go to Shiny app
             page_out <- tagList(
               tags$head(
-                tags$script(paste0("var app_name = '", app_name, "'"))
+                tags$script(paste0("var app_name = '", app_name, "'")),
+                tags$link(rel = "stylesheet", href = "polish/css/all.css")
               ),
               ui,
               firebase_dependencies(),

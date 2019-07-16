@@ -6,6 +6,9 @@ var loading_options = {
   text: "Authenticating..."
 }
 
+if (toastr !== undefined) {
+  toastr.options.positionClass = 'toast_bottom_center'
+}
 
 
 Shiny.addCustomMessageHandler(
