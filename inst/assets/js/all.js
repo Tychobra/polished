@@ -1,6 +1,7 @@
 
 
 var loading_options = {
+  fade: false,
   background: "rgba(255, 255, 255, 1.0)",
   text: "Authenticating..."
 }
@@ -17,10 +18,7 @@ Shiny.addCustomMessageHandler(
 Shiny.addCustomMessageHandler(
   "polish__show_loading",
   function(message) {
-    $.LoadingOverlay("show", {
-      text: message.text,
-      background: "rgba(255, 255, 255, 1.0)"
-    })
+    $.LoadingOverlay("show", loading_options)
   }
 )
 
