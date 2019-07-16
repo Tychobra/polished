@@ -4,7 +4,7 @@
 \alias{generate_firebase_hosting_html}
 \title{html for iframe for hosting the Shiny app}
 \usage{
-generate_firebase_hosting_html(app_name)
+generate_firebase_hosting_html(app_name, title = NULL)
 }
 \arguments{
 \item{app_name}{the name of a single Shiny app}
