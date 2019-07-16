@@ -118,11 +118,11 @@ user_access_module <- function(input, output, session) {
   observeEvent(input$polish__users, {
     out <- input$polish__users %>%
       dplyr::mutate(
-        time_created = as.POSIXct(time_created, format="%Y-%m-%dT%H:%M:%S", tz = "America/New_York"),
-        time_last_signed_in = as.POSIXct(time_last_signed_in, format="%Y-%m-%dT%H:%M:%S", tz = "America/New_York"),
+        time_last_signed_in_r = as.POSIXct(time_last_signed_in_r, format="%Y-%m-%dT%H:%M:%S", tz = "America/New_York"),
         is_admin = as.logical(is_admin)
       ) %>%
-      dplyr::arrange(desc(time_created))
+      dplyr::arrange(desc(time_last_signed_in_r)) %>%
+      dplyr::select(-time_last_signed_in_r)
 
     users(out)
   })
@@ -131,19 +131,7 @@ user_access_module <- function(input, output, session) {
   users_table_prep <- reactiveVal(NULL)
   observeEvent(users(), {
 
-    out <- users() %>%
-      dplyr::mutate(
-        time_created = ifelse(
-          as.Date(time_created, tz = "America/New_York") == Sys.Date(),
-          strftime(time_created, format="%H:%M"),
-          as.character(as.Date(time_created, tz = "America/New_York"))
-        ),
-        time_last_signed_in = ifelse(
-          as.Date(time_last_signed_in, tz = "America/New_York") == Sys.Date(),
-          strftime(time_last_signed_in, format="%H:%M"),
-          as.character(as.Date(time_last_signed_in, tz = "America/New_York"))
-        )
-      )
+    out <- users()
 
     if (nrow(out) == 0) {
       actions <- character(0)
@@ -203,7 +191,7 @@ user_access_module <- function(input, output, session) {
         "Invite Status",
         "Is Admin?",
         "Role",
-        "Time Invited",
+        "Date Invited",
         "Time Last Sign In"
       ),
       escape = -1,
