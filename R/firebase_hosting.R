@@ -73,6 +73,6 @@ write_firebase_hosting <- function(app_names, file_path = "firebase.json") {
 
   writeLines(
     hosting_text,
-    file_conn,
+    file_conn
   )
 }
