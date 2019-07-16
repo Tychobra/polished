@@ -22,7 +22,7 @@ $(document).on("shiny:sessioninitialized", function() {
         session = "p_" + Math.random()
         Cookies.set('polish__session', session)
       }
-      debugger
+
       Shiny.setInputValue('polish__sign_in', {
         token: idToken,
         uid: firebase_user.uid,
