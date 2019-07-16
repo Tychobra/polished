@@ -10,13 +10,25 @@ $(document).on("shiny:sessioninitialized", function() {
   } else {
 
     firebase_user.getIdToken(/*forceRefresh*/ true).then(function(idToken) {
-      //console.log("getIdToken: ", idToken)
-      //console.log("firebase_user: ", firebase_user)
+
+
 
       Cookies.set('polish__uid', firebase_user.uid)
-      Shiny.setInputValue('polish__sign_in', { token: idToken, uid: firebase_user.uid }, { priority: 'event' })
 
-      console.log("getIdToken state: ", idToken)
+      let session = Cookies.get('polish__session')
+      console.log("session: ", session)
+
+      if (typeof session === "undefined") {
+        session = "p_" + Math.random()
+        Cookies.set('polish__session', session)
+      }
+      debugger
+      Shiny.setInputValue('polish__sign_in', {
+        token: idToken,
+        uid: firebase_user.uid,
+        session: session
+      }, { priority: 'event' })
+
     }).catch(function(error) {
       console.log('error getting token')
       console.log(error)
@@ -45,6 +57,7 @@ Shiny.addCustomMessageHandler(
   function(message) {
 
     Cookies.remove('polish__uid');
+    Cookies.remove('polish__session');
 
     auth.signOut().catch(error => {
       console.error("sign out error: ", error)

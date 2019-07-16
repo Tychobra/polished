@@ -13,13 +13,16 @@
 #'
 secure_server <- function(input, session, firebase_functions_url, app_name) {
 
+
+  print(list("users" = .global_users$users))
   session$userData$current_user <- reactiveVal(NULL)
 
   shiny::observeEvent(input$polish__sign_in, {
     token <- input$polish__sign_in$token
     uid <- input$polish__sign_in$uid
-
-    global_user <- .global_users$find_user_by_uid(uid)
+    polished_session <- input$polish__sign_in$session
+    print(list(polished_session = polished_session))
+    global_user <- .global_users$find_user_by_uid(uid, polished_session)
 
 
 
@@ -40,7 +43,8 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
         new_user <- User$new(
           firebase_functions_url = firebase_functions_url,
           firebase_auth_token = token,
-          app_name = app_name
+          app_name = app_name,
+          polished_session = polished_session
         )
 
       }, error = function(error) {
@@ -105,6 +109,7 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
         }
 
         user_out$uid <- uid
+        user_out$polished_session <- polished_session
 
         session$userData$current_user(user_out)
 
@@ -131,15 +136,7 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
     }
   }, ignoreInit = TRUE)
 
-  # shiny::observeEvent(input$polish__token, {
-  #   token <- input$polish__token
-  #
-  #
-  #   #user <- .global_users$find_user_by_token(token)
-  #   user <- .global_users$find_user_by_id(token)
-  #
-  #
-  # }, ignoreInit = TRUE)
+
 
 
   observeEvent(input$polish__sign_out, {

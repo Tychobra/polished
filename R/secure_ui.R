@@ -49,12 +49,13 @@ secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
     uid <- NULL
     if (!is.null(cookie_string)) {
       uid <- get_cookie(cookie_string, "polish__uid")
+      polished_session <- get_cookie(cookie_string, "polish__session")
     }
 
     user <- NULL
     if (!is.null(uid)) {
       tryCatch({
-        user <- .global_users$find_user_by_uid(uid)
+        user <- .global_users$find_user_by_uid(uid, polished_session)
       }, error = function(error) {
         print("sign_in_ui_1")
         print(error)
