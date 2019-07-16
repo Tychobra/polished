@@ -11,11 +11,10 @@ dashboard_module_ui <- function(id) {
   tabItem(
     tabName = "dashboard",
     shiny::fluidRow(
-      shinydashboard::valueBox(
-        value = NA,
-        subtitle = "Total Users",
+      tychobratools::value_box_module_ui(
+        ns("active_sessions"),
         icon = icon("users"),
-        color = "blue",
+        backgroundColor = "#0073b7",
         width = 3
       ),
       tychobratools::value_box_module_ui(
@@ -77,14 +76,25 @@ dashboard_module <- function(input, output, session) {
   )
 
 
+  active_session_number_prep <- reactive({
+    length(global_users_prep())
+  })
+  
+  shiny::callModule(
+    tychobratools::value_box_module,
+    "active_sessions",
+    active_session_number_prep,
+    reactive("Active Sessions")
+  )
+  
   active_users_number_prep <- reactive({
     users_list <- global_users_prep()
     users <- unique(lapply(users_list, function(user) user$get_email()))
-
+    
     length(users)
   })
 
-  callModule(
+  shiny::callModule(
     tychobratools::value_box_module,
     "active_users",
     active_users_number_prep,
