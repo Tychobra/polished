@@ -6,6 +6,8 @@ admin.initializeApp();
 
 const db = admin.firestore();
 
+
+
 exports.signInWithToken = functions.https.onRequest(async (req, res) => {
 
   const auth_token = req.query.token
@@ -18,7 +20,7 @@ exports.signInWithToken = functions.https.onRequest(async (req, res) => {
   try {
     // verify the auth_token to sign the user into Shiny
     user = await admin.auth().verifyIdToken(auth_token)
-    console.log("user: ", user)
+
     const user_ref = db.collection("apps")
       .doc(app_name)
       .collection("users")
@@ -56,12 +58,23 @@ exports.signInWithToken = functions.https.onRequest(async (req, res) => {
     user_out.email_verified = user.email_verified
     user_out.uid = user.uid
 
+    db.collction("apps")
+    .doc(app_name)
+    .collection("sessions")
+    .add({
+      email: app_user.email,
+      app_name: app_name,
+      time_created: timestamp
+    })
+
+
   } catch(error) {
     user_out = null
     console.log("auth_error: ", error)
   }
 
   res.send(JSON.stringify(user_out))
+
 })
 
 /* used to recheck email verification

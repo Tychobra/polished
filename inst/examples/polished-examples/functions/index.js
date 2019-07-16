@@ -18,7 +18,7 @@ exports.signInWithToken = functions.https.onRequest(async (req, res) => {
   try {
     // verify the auth_token to sign the user into Shiny
     user = await admin.auth().verifyIdToken(auth_token)
-    console.log("user: ", user)
+
     const user_ref = db.collection("apps")
       .doc(app_name)
       .collection("users")
@@ -46,22 +46,33 @@ exports.signInWithToken = functions.https.onRequest(async (req, res) => {
 
       }
 
-    } else {
+      user_out.email_verified = user.email_verified
+      user_out.uid = user.uid
 
-      res.send("Not Invited")
+      const new_session = {
+        email: user_out.email,
+        app_name: app_name,
+        time_created: timestamp
+      }
+
+      console.log("session: ", new_session)
+
+      db.collection("apps")
+      .doc(app_name)
+      .collection("sessions")
+      .add(new_session)
+
+      res.send(JSON.stringify(user_out))
+
+    } else {
+      res.send(JSON.stringify(user_out))
     }
 
-
-
-    user_out.email_verified = user.email_verified
-    user_out.uid = user.uid
-
   } catch(error) {
-    user_out = null
-    console.log("auth_error: ", error)
+    res.send(JSON.stringify(user_out))
+    console.error("auth_error: ", error)
   }
 
-  res.send(JSON.stringify(user_out))
 })
 
 // used to recheck the email verification

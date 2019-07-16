@@ -5,17 +5,8 @@
   },
   "hosting": [
     {
-      "target": "auth_basic",
-      "public": "auth_basic/firebase_hosting",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ]
-    },
-    {
       "target": "auth_custom",
-      "public": "auth_custom/firebase_hosting",
+      "public": "hosting/auth_custom",
       "ignore": [
         "firebase.json",
         "**/.*",
