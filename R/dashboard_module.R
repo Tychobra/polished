@@ -127,7 +127,8 @@ dashboard_module <- function(input, output, session) {
           tools = list(
             selection = FALSE,
             zoomin = FALSE,
-            zoomout = FALSE
+            zoomout = FALSE,
+            pan = FALSE
           )
         )
       ) %>%
