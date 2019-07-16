@@ -11,7 +11,14 @@
 #'
 #' write_firebase_hosting_html("shiny_app_1")
 #'
-generate_firebase_hosting_html <- function(app_name) {
+generate_firebase_hosting_html <- function(app_name, title = NULL) {
+
+  # use title case version of `app_name` for title if title is NULL
+  if (is.null(title)) {
+    title <- gsub("_", " ", app_name, fixed = TRUE)
+    title <- tools::toTitleCase(title)
+  }
+
   c(
     '<!DOCTYPE html>',
     '<html lang="en">',
@@ -19,11 +26,11 @@ generate_firebase_hosting_html <- function(app_name) {
     '    <meta charset="UTF-8">',
     '    <meta name="viewport" content="width=device-width, initial-scale=1.0">',
     '    <meta http-equiv="X-UA-Compatible" content="ie=edge">',
-    '    <title>Auth Custom</title>',
+    '    <title>', title, '</title>',
     '  </head>',
     '  <body style="margin:0px; padding:0px; overflow:hidden">',
-    '    <iframe',
-    paste0('       src="https://tychobra.shinyapps.io/', app_name, '" '),
+    '    <iframe ',
+    paste0('src="https://tychobra.shinyapps.io/', app_name, '" '),
     '       width="100%" ',
     '       height="100%" ',
     '       style="height: 100%; overflow: hidden; position: fixed; width:100%;"',
