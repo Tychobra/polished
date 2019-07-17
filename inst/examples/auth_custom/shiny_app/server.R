@@ -13,9 +13,5 @@ function(input, output, session) {
       session$userData$current_user()
     })
 
-
-    onStop(function() {
-      print(list("session" = session))
-    })
   })
 }
