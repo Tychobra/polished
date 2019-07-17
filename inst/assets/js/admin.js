@@ -175,13 +175,34 @@ $(document).on("shiny:sessioninitialized", function() {
             users.push(doc.data())
           })
 
+          let todays_date = new Date()
+          todays_date = todays_date.setHours(0, 0, 0, 0)
+
           users.forEach(user => {
             Object.keys(user).forEach((name) => {
 
-            if (name === "time_created" | name == "time_last_signed_in") {
+            if (name === "time_created" | name === "time_last_signed_in") {
               // "time_last_signed_in" will be undefined if the user has not yet signed in
+              console.log("timestamp: ", user[name])
               if (user[name] !== undefined) {
-                user[name] = user[name].toDate().toJSON()
+
+                if (name === "time_last_signed_in") {
+                  user.time_last_signed_in_r = user[name].toDate().toJSON()
+
+                }
+
+                let last_in_day = user[name].toDate().setHours(0, 0, 0, 0)
+                if (last_in_day === todays_date) {
+                  user[name] = user[name].toDate().toLocaleTimeString(
+                    navigator.language,
+                    { hour: 'numeric', minute: '2-digit' }
+                  )
+                } else {
+                  user[name] = user[name].toDate().toLocaleDateString(
+                    navigator.language
+                  )
+                }
+
               }
 
             }

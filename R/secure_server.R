@@ -14,14 +14,14 @@
 secure_server <- function(input, session, firebase_functions_url, app_name) {
 
 
-  print(list("users" = .global_users$users))
+
   session$userData$current_user <- reactiveVal(NULL)
 
   shiny::observeEvent(input$polish__sign_in, {
     token <- input$polish__sign_in$token
     uid <- input$polish__sign_in$uid
     polished_session <- input$polish__sign_in$session
-    print(list(polished_session = polished_session))
+
     global_user <- .global_users$find_user_by_uid(uid, polished_session)
 
 

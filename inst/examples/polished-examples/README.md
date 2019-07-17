@@ -34,9 +34,22 @@ Go to the Shiny app and copy the Firebase configuration into the "config.yml"
 
 ### deploy iframe to Firebase hosting
 
-1. update "firebase.json" for the iframe you are going to host.  See "firebase.json" in this
-directory for an example.
-2. If this is the first site for this firebase project, set up your new hosting name with the
+1. update "firebase.json" hosting configuration:
+```
+# R
+polished::write_firebase_hosting("auth_custom")
+```
+
+2. create the iframe for the new site
+
+```
+# R
+
+polished::write_firebase_hosting_html("auth_custom")
+```
+
+
+3. If this is the first site for this firebase project, set up your new hosting name with the
 defualt firebase hosting site.  e.g.
 
 ```
