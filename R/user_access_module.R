@@ -178,6 +178,7 @@ user_access_module <- function(input, output, session) {
       out,
       rownames = FALSE,
       colnames = c(
+        "",
         "Email",
         "Invite Status",
         "Is Admin?",
@@ -189,7 +190,12 @@ user_access_module <- function(input, output, session) {
       selection = "none",
       options = list(
         dom = dom_out,
-        scrollX = TRUE
+        scrollX = TRUE,
+        columnDefs = list(
+          list(targets = 0, orderable = FALSE),
+          list(targets = 0, class = "dt-center"),
+          list(targets = 0, width = "105px")
+        )
       )
     )
   })
