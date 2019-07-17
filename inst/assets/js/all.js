@@ -21,7 +21,11 @@ Shiny.addCustomMessageHandler(
 Shiny.addCustomMessageHandler(
   "polish__show_loading",
   function(message) {
-    $.LoadingOverlay("show", loading_options)
+    $.LoadingOverlay("show", {
+      fade: false,
+      background: "rgba(255, 255, 255, 1.0)",
+      text: message.text
+    })
   }
 )
 

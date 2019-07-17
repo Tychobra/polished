@@ -57,7 +57,6 @@ $(document).on("shiny:sessioninitialized", function() {
       }).then(user => {
 
         toastr.success("User Successfully Invited")
-        Shiny.setInputValue(message.ns + "polish__user_add_complete", 1, {priority: "event"})
         return null
 
       }).catch(error => {
@@ -108,7 +107,6 @@ $(document).on("shiny:sessioninitialized", function() {
       }, { merge: true }).then(user => {
 
         toastr.success("User Successfully Edited")
-        Shiny.setInputValue(message.ns + "polish__user_edit_complete", 1, {priority: "event"})
         return null
 
       }).catch(error => {
@@ -144,7 +142,6 @@ $(document).on("shiny:sessioninitialized", function() {
       .delete().then(() => {
 
         toastr.success("User Successfully Deleted")
-        Shiny.setInputValue(message.ns + "polish__user_delete_complete", 1, {priority: "event"})
         return null
 
       }).catch(error => {
@@ -158,93 +155,59 @@ $(document).on("shiny:sessioninitialized", function() {
   )
 
 
-  Shiny.addCustomMessageHandler(
-    "polish__get_users",
-    function(message) {
 
-      console.log("polish__get_users ran")
 
-      db.collection("apps")
-        .doc(app_name)
-        .collection("users")
-        .get().then((query_snapshot) => {
+  const unsubscribe_users = db.collection("apps")
+  .doc(app_name)
+  .collection("users")
+  .onSnapshot((query_snapshot) => {
+     let users = []
 
-          let users = []
+     query_snapshot.forEach((doc) => {
+       users.push(doc.data())
+     })
 
-          query_snapshot.forEach((doc) => {
-            users.push(doc.data())
-          })
+     let todays_date = new Date()
+       todays_date = todays_date.setHours(0, 0, 0, 0)
 
-          let todays_date = new Date()
-          todays_date = todays_date.setHours(0, 0, 0, 0)
+       users.forEach(user => {
+         Object.keys(user).forEach((name) => {
 
-          users.forEach(user => {
-            Object.keys(user).forEach((name) => {
+         if (name === "time_created" | name === "time_last_signed_in") {
 
-            if (name === "time_created" | name === "time_last_signed_in") {
-              // "time_last_signed_in" will be undefined if the user has not yet signed in
-              console.log("timestamp: ", user[name])
-              if (user[name] !== undefined) {
+           // "time_last_signed_in" will be undefined if the user has not yet signed in
+           if (user[name] !== undefined) {
 
-                if (name === "time_last_signed_in") {
-                  user.time_last_signed_in_r = user[name].toDate().toJSON()
+             if (name === "time_last_signed_in") {
+               user.time_last_signed_in_r = user[name].toDate().toJSON()
+             }
 
-                }
-
-                let last_in_day = user[name].toDate().setHours(0, 0, 0, 0)
-                if (last_in_day === todays_date) {
-                  user[name] = user[name].toDate().toLocaleTimeString(
-                    navigator.language,
-                    { hour: 'numeric', minute: '2-digit' }
-                  )
-                } else {
-                  user[name] = user[name].toDate().toLocaleDateString(
-                    navigator.language
-                  )
-                }
-
-              }
-
+             let last_in_day = user[name].toDate().setHours(0, 0, 0, 0)
+             if (last_in_day === todays_date) {
+               user[name] = user[name].toDate().toLocaleTimeString(
+                 navigator.language,
+                 { hour: 'numeric', minute: '2-digit' }
+               )
+             } else {
+              user[name] = user[name].toDate().toLocaleDateString(
+                navigator.language
+              )
             }
-          });
 
-        })
+          }
 
-        // TODO: use actual ns from Shiny
-        Shiny.setInputValue("admin-user_access-polish__users:firestore_data_frame", users)
+        }
+      });
 
-        return users
-      }).catch(error => {
-        console.error("error getting users", error)
-      })
-    }
-  )
+    })
 
+    // TODO: use actual ns from Shiny
+    Shiny.setInputValue("admin-user_access-polish__users:firestore_data_frame", users)
 
-  //Shiny.addCustomMessageHandler(
-  //  "polish__get_roles",
-  //  function(message) {
-  //
-  //    db.collection("apps")
-  //    .doc(app_name)
-  //    .collection("roles")
-  //    .get().then((query_snapshot) => {
-  //
-  //      let roles = []
-//
-//        query_snapshot.forEach((doc) => {
-//          roles.push(doc.data())
-//        })
-//
-//        Shiny.setInputValue("admin-user_access-polish__user_roles", roles)
-//
-//        return roles
-//      }).catch(error => {
-//        console.error("error getting users", error)
-//      })
-//    }
-//  )
-
+    return users
+  }, error => {
+    console.error("error getting users", error)
+  })
 
 
   const unsubscribe_roles = db.collection("apps")
@@ -266,6 +229,13 @@ $(document).on("shiny:sessioninitialized", function() {
     console.log(error)
   })
 
+  $(document).on('shiny:disconnected', function(socket) {
+    // TODO: fire this manully whenever user goes from admin panel to Shiny app?
+    console.log('users listener about to be removed')
+
+    unsubscribe_users()
+    unsubscribe_roles()
+  })
 
   Shiny.addCustomMessageHandler(
     "polish__add_role",

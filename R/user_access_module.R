@@ -104,16 +104,7 @@ user_access_module <- function(input, output, session) {
 
   users <- shiny::reactiveVal(NULL)
 
-  shiny::observe({
-    users_trigger()
 
-    session$sendCustomMessage(
-      "polish__get_users",
-      message = list(
-        app_name = "auth_basic"
-      )
-    )
-  })
 
   observeEvent(input$polish__users, {
     out <- input$polish__users %>%
@@ -268,7 +259,7 @@ user_access_module <- function(input, output, session) {
   })
 
 
-  users_trigger <- reactiveVal(0)
+
   # the firebase function to add the user is triggered in the client side js, not in Shiny
   shiny::observeEvent(input$submit_user_add, {
     shiny::removeModal()
@@ -284,9 +275,7 @@ user_access_module <- function(input, output, session) {
     )
   }, ignoreInit = TRUE)
 
-  shiny::observeEvent(input$polish__user_add_complete, {
-    users_trigger(users_trigger() + 1)
-  })
+
 
   user_to_edit <- reactiveVal(NULL)
   observeEvent(input$user_row_to_edit, {
@@ -379,9 +368,7 @@ user_access_module <- function(input, output, session) {
     )
   })
 
-  shiny::observeEvent(input$polish__user_edit_complete, {
-    users_trigger(users_trigger() + 1)
-  })
+
 
 
   user_to_delete <- reactiveVal(NULL)
@@ -433,9 +420,7 @@ user_access_module <- function(input, output, session) {
     )
   })
 
-  shiny::observeEvent(input$polish__user_delete_complete, {
-    users_trigger(users_trigger() + 1)
-  })
+
 
 
 
