@@ -48,32 +48,31 @@ exports.signInWithToken = functions.https.onRequest(async (req, res) => {
 
       }
 
-    } else {
+      user_out.email_verified = user.email_verified
+      user_out.uid = user.uid
 
-      res.send("Not Invited")
+      const new_session = {
+        email: user_out.email,
+        app_name: app_name,
+        time_created: timestamp
+      }
+
+      // add the session document to "apps/{app_name}/sessions/"
+      db.collection("apps")
+      .doc(app_name)
+      .collection("sessions")
+      .add(new_session)
+
+      res.send(JSON.stringify(user_out))
+
+    } else {
+      res.send(JSON.stringify(user_out))
     }
 
-
-
-    user_out.email_verified = user.email_verified
-    user_out.uid = user.uid
-
-    db.collction("apps")
-    .doc(app_name)
-    .collection("sessions")
-    .add({
-      email: app_user.email,
-      app_name: app_name,
-      time_created: timestamp
-    })
-
-
   } catch(error) {
-    user_out = null
-    console.log("auth_error: ", error)
+    res.send(JSON.stringify(user_out))
+    console.error("auth_error: ", error)
   }
-
-  res.send(JSON.stringify(user_out))
 
 })
 
