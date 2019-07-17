@@ -189,24 +189,21 @@ $(document).on("shiny:sessioninitialized", function() {
                 if (name === "time_last_signed_in") {
                   user.time_last_signed_in_r = user[name].toDate().toJSON()
 
-                  let last_in_day = user[name].toDate().setHours(0, 0, 0, 0)
-                  if (last_in_day === todays_date) {
-                    user[name] = user[name].toDate().toLocaleTimeString("en-US")
-                  } else {
-                    user[name] = user[name].toDate().toLocaleString("en-US", {timeZone: "America/New_York"})
-                  }
-
-                } else {
-                  user[name] = user[name].toDate().toLocaleDateString("en-US", {timeZone: "America/New_York"})
                 }
 
-
-
-
+                let last_in_day = user[name].toDate().setHours(0, 0, 0, 0)
+                if (last_in_day === todays_date) {
+                  user[name] = user[name].toDate().toLocaleTimeString(
+                    navigator.language,
+                    { hour: 'numeric', minute: '2-digit' }
+                  )
+                } else {
+                  user[name] = user[name].toDate().toLocaleDateString(
+                    navigator.language
+                  )
+                }
 
               }
-
-
 
             }
           });

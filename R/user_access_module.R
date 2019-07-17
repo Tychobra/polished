@@ -191,8 +191,8 @@ user_access_module <- function(input, output, session) {
         "Invite Status",
         "Is Admin?",
         "Role",
-        "Date Invited",
-        "Time Last Sign In"
+        "Invite Sent",
+        "Last Sign In"
       ),
       escape = -1,
       selection = "none",
