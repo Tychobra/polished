@@ -31,7 +31,7 @@ generate_firestore_rules_text <- function(app_names) {
       "",
       paste0("    match /apps/", name, "/sessions/{session} {"),
       "",
-      paste0("      allow read: if is_admin(database, request.auth.token.email, ", name, ");"),
+      paste0('      allow read: if is_admin(database, request.auth.token.email, "', name, '");'),
       "",
       "      allow write: if false;",
       "    }",
