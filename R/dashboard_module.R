@@ -39,13 +39,11 @@ dashboard_module_ui <- function(id) {
     shiny::fluidRow(
       shinydashboard::box(
         width = 9,
-        title = "Placeholder Chart",
         apexcharter::apexchartOutput(ns("daily_users_chart")) %>%
           shinycssloaders::withSpinner(type = 8)
       ),
       shinydashboard::box(
         width = 3,
-        title = "Active Users",
         DT::DTOutput(ns("active_users_table")) %>%
           shinycssloaders::withSpinner(type = 8, proxy.height = "341.82px"),
         br()
@@ -64,17 +62,14 @@ dashboard_module_ui <- function(id) {
 dashboard_module <- function(input, output, session) {
   ns <- session$ns
 
-  global_users_prep <- shiny::reactivePoll(
-    intervalMillis = 1000 * 10, # check every 10 seconds,
-    session = session,
-    checkFunc = function() {
-      .global_users$users
-    },
-    valueFunc = function() {
-      .global_users$users
-    }
-  )
-
+  # get a data frame of user sessions from Firestore and count the
+  # sessions per user per day.  Returns a data frame with 3 columns:
+  # - "date" in the "America/New_York" time zone
+  # - "email"
+  # - "n" the number of sessions
+  #
+  # If any days have 0 sessions, a row is added with an "email" of NA and
+  # and "n" of 0. This helps for calculating daily averages.
   daily_user_sessions <- eventReactive(input$polish__user_sessions, {
     dat <- input$polish__user_sessions %>%
       dplyr::mutate(
@@ -101,7 +96,11 @@ dashboard_module <- function(input, output, session) {
       mutate(n = ifelse(is.na(n), 0, n))
   })
 
-  daily_users <- eventReactive(input$polish__user_sessions, {
+  # returns a data frame with 2 columns
+  # - "date" the date in "America/New_York" time zone
+  # - "n" the number of unique daily users
+  daily_users <- reactive({
+
     daily_user_sessions() %>%
       distinct(date, email) %>%
       group_by(date) %>%
@@ -110,40 +109,11 @@ dashboard_module <- function(input, output, session) {
 
   })
 
-  das_box_prep <- reactive({
-    daily_user_sessions() %>%
-      print() %>%
-      group_by(date) %>%
-      summarize(n_sessions = sum(n)) %>%
-      ungroup() %>%
-      pull("n_sessions") %>%
-      mean()
-  })
-
-
-  shiny::callModule(
-    tychobratools::value_box_module,
-    "das_box",
-    das_box_prep,
-    reactive("Daily Average Sessions (DAS)")
-  )
-
-  active_users_number_prep <- reactive({
-    users_list <- global_users_prep()
-    users <- unique(lapply(users_list, function(user) user$get_email()))
-
-    length(users)
-  })
-
-  shiny::callModule(
-    tychobratools::value_box_module,
-    "active_users",
-    active_users_number_prep,
-    reactive("Active Users")
-  )
-
+  # calculate an format Daily Average Users for the value box
   dau_box_prep <- reactive({
-    mean(daily_users()$n)
+    mean(daily_users()$n) %>%
+      round(1) %>%
+      format(big.mark = ",")
   })
 
   shiny::callModule(
@@ -153,6 +123,7 @@ dashboard_module <- function(input, output, session) {
     reactive("Daily Average Users (DAU)")
   )
 
+  # calculate and format the Monthly Average Users for the value box
   mau_box_prep <- reactive({
     by_month <- daily_users() %>%
       mutate(month_ = lubridate::month(date)) %>%
@@ -160,7 +131,9 @@ dashboard_module <- function(input, output, session) {
       summarize(n = n()) %>%
       ungroup()
 
-    mean(by_month$n)
+    mean(by_month$n) %>%
+      round(1) %>%
+      format(big.mark = ",")
   })
 
   shiny::callModule(
@@ -170,8 +143,57 @@ dashboard_module <- function(input, output, session) {
     reactive("Monthly Average Users (MAU)")
   )
 
+  # calculate and format the Monthly Average Sessions for the value box
+  das_box_prep <- reactive({
+    daily_user_sessions() %>%
+      print() %>%
+      group_by(date) %>%
+      summarize(n_sessions = sum(n)) %>%
+      ungroup() %>%
+      pull("n_sessions") %>%
+      mean() %>%
+      round(1) %>%
+      format(big.mark = ",")
+  })
+
+  shiny::callModule(
+    tychobratools::value_box_module,
+    "das_box",
+    das_box_prep,
+    reactive("Daily Average Sessions (DAS)")
+  )
+
+  # poll the active sessions from the `.global_users` object
+  poll_global_users <- shiny::reactivePoll(
+    intervalMillis = 1000 * 10, # check every 10 seconds,
+    session = session,
+    checkFunc = function() {
+      .global_users$users
+    },
+    valueFunc = function() {
+      .global_users$users
+    }
+  )
+
+  # calculate the unique active users from the active sessions.  Note: a user
+  # can have more than 1 active session
+  active_users_number_prep <- reactive({
+    users_list <- poll_global_users()
+    users <- unique(lapply(users_list, function(user) user$get_email()))
+
+    length(users) %>%
+      format(big.mark = ",")
+  })
+
+  shiny::callModule(
+    tychobratools::value_box_module,
+    "active_users",
+    active_users_number_prep,
+    reactive("Active Users")
+  )
 
 
+  # prepare daily average users for the chart.
   daily_users_chart_prep <- reactive({
     daily_users() %>%
       mutate(
@@ -233,24 +255,23 @@ dashboard_module <- function(input, output, session) {
   })
 
 
-  active_users_prep <- reactive({
-    users_list <- global_users_prep()
+  active_users_table_prep <- reactive({
+    users_list <- poll_global_users()
 
     user_emails <- unlist(lapply(users_list, function(user) user$get_email()))
 
     dplyr::tibble(
-      email = unique(user_emails),
-      time = "13:09:00"
+      email = unique(user_emails)
     )
   })
 
   output$active_users_table <- DT::renderDataTable({
-    out <- active_users_prep()
+    out <- active_users_table_prep()
 
     DT::datatable(
       out,
       rownames = FALSE,
-      colnames = c("Email", "Signed In"),
+      colnames = c("Active Users"),
       options = list(
         dom = "t",
         scrollX = TRUE
