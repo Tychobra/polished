@@ -36,5 +36,14 @@ service cloud.firestore {
       allow write: if request.auth.uid != null && is_admin(database, request.auth.token.email, "auth_custom")
 
     }
+
+
+    match /apps/auth_custom/sessions/{session} {
+
+      allow read: if is_admin(database, request.auth.token.email, "auth_custom");
+
+      allow write: if false;
+    }
+
   }
 }

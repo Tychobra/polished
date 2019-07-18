@@ -47,7 +47,9 @@ admin_module_ui <- function(id, firebase_config) {
     shiny::tags$head(
       tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
       #tags$link(rel = "stylesheet", href = "styles.css"),
-      tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css")
+      tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"),
+      firebase_dependencies(),
+      firebase_init(firebase_config)
     ),
     shinyjs::useShinyjs(),
 
@@ -71,10 +73,9 @@ admin_module_ui <- function(id, firebase_config) {
       dashboard_module_ui(ns("dashboard")),
       user_access_module_ui(ns("user_access"))
     ),
-    firebase_dependencies(),
+
     tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
     tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"),
-    firebase_init(firebase_config),
     tags$script(src = "polish/js/all.js"),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
     tags$script(src = "polish/js/auth-state.js"),

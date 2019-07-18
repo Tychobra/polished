@@ -2,7 +2,7 @@
 #'
 #' @param id the module id
 #'
-#' @import shiny shinydashboard apexcharter xts dplyr DT shinycssloaders
+#' @import shiny shinydashboard apexcharter xts dplyr DT shinycssloaders lubridate
 #'
 #' @export
 dashboard_module_ui <- function(id) {
@@ -12,29 +12,27 @@ dashboard_module_ui <- function(id) {
     tabName = "dashboard",
     shiny::fluidRow(
       tychobratools::value_box_module_ui(
-        ns("active_sessions"),
+        ns("dau_box"),
         icon = icon("users"),
-        backgroundColor = "#0073b7",
+        backgroundColor = "#0277BD",
+        width = 3
+      ),
+      tychobratools::value_box_module_ui(
+        ns("mau_box"),
+        icon = icon("users"),
+        backgroundColor = "#2b908f",
+        width = 3
+      ),
+      tychobratools::value_box_module_ui(
+        ns("das_box"),
+        icon = icon("users"),
+        backgroundColor = "#434348",
         width = 3
       ),
       tychobratools::value_box_module_ui(
         ns("active_users"),
         icon = icon("users"),
-        backgroundColor = "#81aef7",
-        width = 3
-      ),
-      shinydashboard::valueBox(
-        value = NA,
-        subtitle = "DAU",
-        icon = icon("users"),
-        color = "teal",
-        width = 3
-      ),
-      shinydashboard::valueBox(
-        value = NA,
-        subtitle = "MAU",
-        icon = icon("users"),
-        color = "green",
+        backgroundColor = "#f7a35c",
         width = 3
       )
     ),
@@ -42,7 +40,7 @@ dashboard_module_ui <- function(id) {
       shinydashboard::box(
         width = 9,
         title = "Placeholder Chart",
-        apexcharter::apexchartOutput(ns("dau_chart")) %>%
+        apexcharter::apexchartOutput(ns("daily_users_chart")) %>%
           shinycssloaders::withSpinner(type = 8)
       ),
       shinydashboard::box(
@@ -52,7 +50,9 @@ dashboard_module_ui <- function(id) {
           shinycssloaders::withSpinner(type = 8, proxy.height = "341.82px"),
         br()
       )
-    )
+    ),
+    tags$script(src = "polish/js/admin_dashboard.js"),
+    tags$script(paste0("dashboard_js('", ns(''), "')"))
   )
 }
 
@@ -75,22 +75,63 @@ dashboard_module <- function(input, output, session) {
     }
   )
 
+  daily_user_sessions <- eventReactive(input$polish__user_sessions, {
+    dat <- input$polish__user_sessions %>%
+      dplyr::mutate(
+        time_created = convert_timestamp(time_created),
+        date = as.Date(time_created, tz = "America/New_York")
+      ) %>%
+      dplyr::group_by(date, email) %>%
+      dplyr::summarize(n = n()) %>%
+      dplyr::ungroup()
 
-  active_session_number_prep <- reactive({
-    length(global_users_prep())
+    # make sure all days are included even if zero sessions in a day
+    first_day <- min(dat$date)
+
+    out <- tibble(
+      date = seq.Date(
+        from = first_day,
+        to = lubridate::today(tzone = "America/New_York"),
+        by = "day"
+      )
+    )
+
+    out %>%
+      left_join(dat, by = "date") %>%
+      mutate(n = ifelse(is.na(n), 0, n))
   })
-  
+
+  daily_users <- eventReactive(input$polish__user_sessions, {
+    daily_user_sessions() %>%
+      distinct(date, email) %>%
+      group_by(date) %>%
+      summarize(n = n()) %>%
+      ungroup()
+
+  })
+
+  das_box_prep <- reactive({
+    daily_user_sessions() %>%
+      print() %>%
+      group_by(date) %>%
+      summarize(n_sessions = sum(n)) %>%
+      ungroup() %>%
+      pull("n_sessions") %>%
+      mean()
+  })
+
+
   shiny::callModule(
     tychobratools::value_box_module,
-    "active_sessions",
-    active_session_number_prep,
-    reactive("Active Sessions")
+    "das_box",
+    das_box_prep,
+    reactive("Daily Average Sessions (DAS)")
   )
-  
+
   active_users_number_prep <- reactive({
     users_list <- global_users_prep()
     users <- unique(lapply(users_list, function(user) user$get_email()))
-    
+
     length(users)
   })
 
@@ -101,26 +142,52 @@ dashboard_module <- function(input, output, session) {
     reactive("Active Users")
   )
 
-
-  dau_chart_prep <- reactive({
-    date_strings <- c("2019-07-01", "2019-07-02", "2019-07-03", "2019-07-04", "2019-07-05",
-                      "2019-07-06", "2019-07-07", "2019-07-08", "2019-07-09", "2019-07-10",
-                      "2019-07-11", "2019-07-12", "2019-07-13", "2019-07-14")
-
-    dates <- as.POSIXct(date_strings)
-
-    dplyr::tibble(
-      input = c(3,2,2,3,1,4,2,5,7,6,9,15,16,16),
-      date = dates
-    )
+  dau_box_prep <- reactive({
+    mean(daily_users()$n)
   })
 
-  output$dau_chart <- apexcharter::renderApexchart({
-    dat <- dau_chart_prep()
+  shiny::callModule(
+    tychobratools::value_box_module,
+    "dau_box",
+    dau_box_prep,
+    reactive("Daily Average Users (DAU)")
+  )
+
+  mau_box_prep <- reactive({
+    by_month <- daily_users() %>%
+      mutate(month_ = lubridate::month(date)) %>%
+      group_by(month_) %>%
+      summarize(n = n()) %>%
+      ungroup()
+
+    mean(by_month$n)
+  })
+
+  shiny::callModule(
+    tychobratools::value_box_module,
+    "mau_box",
+    mau_box_prep,
+    reactive("Monthly Average Users (MAU)")
+  )
+
+
+
+  daily_users_chart_prep <- reactive({
+    daily_users() %>%
+      mutate(
+        month_ = as.character(lubridate::month(date, label = TRUE)),
+        day_ = lubridate::day(date),
+        date_out = paste0(month_, " ", day_)
+      )
+  })
+
+
+  output$daily_users_chart <- apexcharter::renderApexchart({
+    dat <- daily_users_chart_prep()
 
     apexcharter::apexchart() %>%
       apexcharter::ax_title(
-        "Daily Active Users",
+        "Unique Daily Users",
         align = "center",
         style = list(
           fontSize = 18
@@ -143,8 +210,10 @@ dashboard_module <- function(input, output, session) {
         )
       ) %>%
       apexcharter::ax_xaxis(
-        type = "datetime",
-        categories = dat$date
+        categories = dat$date_out
+      ) %>%
+      apexcharter::ax_yaxis(
+        min = 0
       ) %>%
       apexcharter::ax_stroke(show = TRUE, curve = "straight") %>%
       apexcharter::ax_dataLabels(enabled = FALSE) %>%
@@ -157,7 +226,10 @@ dashboard_module <- function(input, output, session) {
           stops = list(0, 100)
         )
       ) %>%
-      apexcharter::ax_series(list(data = dat$input, name = "DAU"))
+      apexcharter::ax_series(list(
+        data = dat$n,
+        name = "Unique Users"
+      ))
   })
 
 
