@@ -1,12 +1,3 @@
-// work around so IE can get the .constructor.name
-let getClassName = obj => {
-  if (obj.constructor.name) {
-    return obj.constructor.name;
-  }
-  const regex = new RegExp(/^\s*function\s*(\S*)\s*\(/);
-  getClassName = obj => obj.constructor.toString().match(regex)[1];
-  return getClassName(obj);
-};
 
 
 const dashboard_js = (ns) => {
@@ -26,19 +17,11 @@ const dashboard_js = (ns) => {
     //console.log("sessions: ", sessions)
 
     sessions.forEach(session => {
-
-      Object.keys(session).forEach((name) => {
-        // check if property is an instance of a Firestore Timestamp
-        if (getClassName(session[name]) === "n") {
-          session[name] = session[name].toDate().toJSON()
-        }
-      })
-
+      session["time_created"] = session["time_created"].toDate().toJSON()
     })
 
 
     const shiny_id = ns + "polish__user_sessions:firestore_data_frame"
-    console.log("shiny_id: ", shiny_id)
     Shiny.setInputValue(shiny_id, sessions)
 
   }, error => {
