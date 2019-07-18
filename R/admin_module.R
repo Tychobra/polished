@@ -115,14 +115,7 @@ admin_module <- function(input, output, session) {
       )
     )
 
-    polished_user <- session$userData$current_user()
-
-
-    global_user <- .global_users$find_user_by_uid(polished_user$uid, polished_user$polished_session)
-    global_user$clear_signed_in_as()
-
     # to to the Shiny app
-
     remove_query_string(session)
 
     session$reload()
