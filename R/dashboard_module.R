@@ -237,7 +237,9 @@ dashboard_module <- function(input, output, session) {
             selection = FALSE,
             zoomin = FALSE,
             zoomout = FALSE,
-            pan = FALSE
+            pan = FALSE,
+            reset = FALSE,
+            zoom = FALSE
           )
         )
       ) %>%
