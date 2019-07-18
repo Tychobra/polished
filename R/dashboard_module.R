@@ -205,7 +205,21 @@ dashboard_module <- function(input, output, session) {
 
   # prepare daily average users for the chart.
   daily_users_chart_prep <- reactive({
-    daily_users() %>%
+    daily_users <- daily_users()
+    days <- nrow(daily_users)
+    
+    if (days < 7) {
+      current_date <- daily_users$date[[days]]
+      past_week <- dplyr::tibble(
+        date = current_date - c(6, 5, 4, 3, 2, 1, 0)
+      )
+      
+      daily_users <- past_week %>% 
+        left_join(daily_users, by = "date") %>% 
+        mutate(n = ifelse(is.na(n), 0, n))
+    }
+    
+    daily_users %>%
       mutate(
         month_ = as.character(lubridate::month(date, label = TRUE)),
         day_ = lubridate::day(date),
