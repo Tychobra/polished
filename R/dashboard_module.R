@@ -125,8 +125,9 @@ dashboard_module <- function(input, output, session) {
 
   # calculate and format the Monthly Average Users for the value box
   mau_box_prep <- reactive({
-    by_month <- daily_users() %>%
+    by_month <- daily_user_sessions() %>%
       mutate(month_ = lubridate::month(date)) %>%
+      distinct(month_, email) %>%
       group_by(month_) %>%
       summarize(n = n()) %>%
       ungroup()
