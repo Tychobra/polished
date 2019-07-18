@@ -311,7 +311,7 @@ user_access_module <- function(input, output, session) {
 
     shiny::showModal(
       shiny::modalDialog(
-        title = "Edit User",
+        title = paste0("Edit ", hold_user$email),
         footer = list(
           modalButton("Cancel"),
           actionButton(
