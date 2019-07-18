@@ -146,7 +146,6 @@ dashboard_module <- function(input, output, session) {
   # calculate and format the Monthly Average Sessions for the value box
   das_box_prep <- reactive({
     daily_user_sessions() %>%
-      print() %>%
       group_by(date) %>%
       summarize(n_sessions = sum(n)) %>%
       ungroup() %>%
