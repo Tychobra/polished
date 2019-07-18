@@ -10,7 +10,7 @@ function(input, output, session) {
   observeEvent(session$userData$current_user(), {
 
     output$secure_content <- renderPrint({
-      session$userData$current_user()
+      session$userData$current_user()$email
     })
 
   })
