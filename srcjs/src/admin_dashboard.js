@@ -1,5 +1,5 @@
 // work around so IE can get the .constructor.name
-const getClassName = obj => {
+let getClassName = obj => {
   if (obj.constructor.name) {
     return obj.constructor.name;
   }

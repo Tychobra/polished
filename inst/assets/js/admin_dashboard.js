@@ -1,7 +1,5 @@
 "use strict";
 
-function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
-
 // work around so IE can get the .constructor.name
 var _getClassName = function getClassName(obj) {
   if (obj.constructor.name) {
@@ -9,9 +7,11 @@ var _getClassName = function getClassName(obj) {
   }
 
   var regex = new RegExp(/^\s*function\s*(\S*)\s*\(/);
-  _getClassName = (_readOnlyError("getClassName"), function (obj) {
+
+  _getClassName = function getClassName(obj) {
     return obj.constructor.toString().match(regex)[1];
-  });
+  };
+
   return _getClassName(obj);
 };
 
