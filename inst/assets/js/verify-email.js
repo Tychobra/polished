@@ -1,15 +1,10 @@
+"use strict";
 
-
-$(document).on("click", "#resend_verification_email", () => {
-
-  const user = auth.currentUser
-
-  user.sendEmailVerification()
-  .then(() => {
-    // TODO: add toast
-  })
-  .catch((error) => {
+$(document).on("click", "#resend_verification_email", function () {
+  var user = auth.currentUser;
+  user.sendEmailVerification().then(function () {// TODO: add toast
+  })["catch"](function (error) {
     // TODO: toast
-    console.error('error sending email verification', error)
-  })
-})
+    console.error('error sending email verification', error);
+  });
+});

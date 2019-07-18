@@ -1,0 +1,16 @@
+{
+  "name": "srcjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src -d ../inst/assets/js"
+  },
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5"
+  }
+}
