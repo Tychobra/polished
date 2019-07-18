@@ -222,8 +222,7 @@ dashboard_module <- function(input, output, session) {
         "Unique Daily Users",
         align = "center",
         style = list(
-          fontSize = 18,
-
+          fontSize = 18
         )
       ) %>%
       apexcharter::ax_chart(
