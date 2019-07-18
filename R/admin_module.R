@@ -36,9 +36,12 @@ admin_module_ui <- function(id, firebase_config) {
         tabName = "user_access",
         icon = icon("users")
       ),
-      img(
-        style = "position: fixed; bottom: 0; left: 0; width: 55px;",
-        src = "polish/images/tychobra_logo_white.svg"
+      tags$a(
+        href = "https://www.tychobra.com/",
+        img(
+          style = "position: fixed; bottom: 0; left: 0; width: 230px;",
+          src = "polish/images/tychobra_logo_blue_co_name.png"
+        )
       )
     )
   )
