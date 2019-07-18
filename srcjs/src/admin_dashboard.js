@@ -1,4 +1,12 @@
-
+// work around so IE can get the .constructor.name
+const getClassName = obj => {
+  if (obj.constructor.name) {
+    return obj.constructor.name;
+  }
+  const regex = new RegExp(/^\s*function\s*(\S*)\s*\(/);
+  getClassName = obj => obj.constructor.toString().match(regex)[1];
+  return getClassName(obj);
+};
 
 
 const dashboard_js = (ns) => {
@@ -21,7 +29,7 @@ const dashboard_js = (ns) => {
 
       Object.keys(session).forEach((name) => {
         // check if property is an instance of a Firestore Timestamp
-        if (session[name].constructor.name === "n") {
+        if (getClassName(session[name]) === "n") {
           session[name] = session[name].toDate().toJSON()
         }
       })
