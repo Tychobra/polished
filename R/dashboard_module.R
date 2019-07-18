@@ -11,42 +11,52 @@ dashboard_module_ui <- function(id) {
   tabItem(
     tabName = "dashboard",
     shiny::fluidRow(
-      tychobratools::value_box_module_ui(
-        ns("dau_box"),
-        icon = icon("users"),
-        backgroundColor = "#0277BD",
-        width = 3
-      ),
-      tychobratools::value_box_module_ui(
-        ns("mau_box"),
-        icon = icon("users"),
-        backgroundColor = "#2b908f",
-        width = 3
-      ),
-      tychobratools::value_box_module_ui(
-        ns("das_box"),
-        icon = icon("users"),
-        backgroundColor = "#434348",
-        width = 3
-      ),
-      tychobratools::value_box_module_ui(
-        ns("active_users"),
-        icon = icon("users"),
-        backgroundColor = "#f7a35c",
-        width = 3
-      )
-    ),
-    shiny::fluidRow(
-      shinydashboard::box(
+      shiny::column(
         width = 9,
-        apexcharter::apexchartOutput(ns("daily_users_chart")) %>%
-          shinycssloaders::withSpinner(type = 8)
+        shiny::fluidRow(
+          tychobratools::value_box_module_ui(
+            ns("dau_box"),
+            icon = icon("users"),
+            backgroundColor = "#0277BD",
+            width = 4
+          ),
+          tychobratools::value_box_module_ui(
+            ns("mau_box"),
+            icon = icon("users"),
+            backgroundColor = "#2b908f",
+            width = 4
+          ),
+          tychobratools::value_box_module_ui(
+            ns("das_box"),
+            icon = icon("users"),
+            backgroundColor = "#434348",
+            width = 4
+          )
+        ),
+        shiny::fluidRow(
+          shinydashboard::box(
+            width = 12,
+            apexcharter::apexchartOutput(ns("daily_users_chart")) %>%
+              shinycssloaders::withSpinner(type = 8)
+          )
+        )
       ),
-      shinydashboard::box(
-        width = 3,
-        DT::DTOutput(ns("active_users_table")) %>%
-          shinycssloaders::withSpinner(type = 8, proxy.height = "341.82px"),
-        br()
+      shiny::column(
+        3,
+        fluidRow(
+          tychobratools::value_box_module_ui(
+            ns("active_users"),
+            icon = icon("users"),
+            backgroundColor = "#f7a35c",
+            width = 12
+          ),
+          shinydashboard::box(
+            width = 12,
+            DT::DTOutput(ns("active_users_table")) %>%
+              shinycssloaders::withSpinner(type = 8, proxy.height = "341.82px"),
+            br()
+          )
+        )
       )
     ),
     tags$script(src = "polish/js/admin_dashboard.js"),
