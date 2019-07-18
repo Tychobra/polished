@@ -222,7 +222,8 @@ dashboard_module <- function(input, output, session) {
         "Unique Daily Users",
         align = "center",
         style = list(
-          fontSize = 18
+          fontSize = 18,
+
         )
       ) %>%
       apexcharter::ax_chart(
@@ -277,13 +278,21 @@ dashboard_module <- function(input, output, session) {
     )
   })
 
+  container <- htmltools::withTags(table(
+    thead(
+      tr(
+        th("Active Users", style = "font-size: 18px; font-weight: 500;")
+      )
+    )
+  ))
+
   output$active_users_table <- DT::renderDataTable({
     out <- active_users_table_prep()
 
     DT::datatable(
       out,
       rownames = FALSE,
-      colnames = c("Active Users"),
+      container = container,
       options = list(
         dom = "t",
         scrollX = TRUE
