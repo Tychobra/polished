@@ -32,7 +32,7 @@ $(document).on("click", "#submit_register", function () {
     if (doc.exists) {
       return auth.createUserWithEmailAndPassword(email, password).then(function (userCredential) {
         // set authorization for this user for this Shiny app
-        return db.collection("apps").doc(app_name).collection("users").doc(email).set({
+        db.collection("apps").doc(app_name).collection("users").doc(email).set({
           invite_status: "accepted"
         }, {
           merge: true
@@ -40,7 +40,9 @@ $(document).on("click", "#submit_register", function () {
         return userCredential;
       }).then(function (userCredential) {
         // send verification email
-        return userCredential.user.sendEmailVerification();
+        return userCredential.user.sendEmailVerification()["catch"](function (error) {
+          console.error("Error sending email verification", error);
+        });
       });
     } else {
       throw "You must have an invite to access this app";

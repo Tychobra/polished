@@ -2,9 +2,10 @@
 
 $(document).on("click", "#resend_verification_email", function () {
   var user = auth.currentUser;
-  user.sendEmailVerification().then(function () {// TODO: add toast
+  user.sendEmailVerification().then(function () {
+    toastr.success("Error sending email verification");
   })["catch"](function (error) {
-    // TODO: toast
-    console.error('error sending email verification', error);
+    toastr.error("Error sending email verification");
+    console.error("Error sending email verification", error);
   });
 });

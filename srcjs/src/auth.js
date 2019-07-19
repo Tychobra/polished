@@ -43,7 +43,7 @@ $(document).on("click", "#submit_register", () => {
       return auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
 
         // set authorization for this user for this Shiny app
-        return db.collection("apps")
+        db.collection("apps")
         .doc(app_name)
         .collection("users")
         .doc(email)
@@ -58,7 +58,9 @@ $(document).on("click", "#submit_register", () => {
       }).then((userCredential) => {
 
         // send verification email
-        return userCredential.user.sendEmailVerification()
+        return userCredential.user.sendEmailVerification().catch(error => {
+          console.error("Error sending email verification", error)
+        })
 
       })
 
