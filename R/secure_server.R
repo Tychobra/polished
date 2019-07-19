@@ -61,15 +61,24 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
           message = list()
         )
 
-        # some type of error occured with sign in, so sign out,
-        # and go to sign in page.
-        tryCatch({
-          sign_out_from_shiny(session, uid)
-        }, error = function(error) {
-          print("secure_server sign out error")
-          print(error)
-        })
+        # sign out from Firebase on client side
+        session$sendCustomMessage(
+          "polish__sign_out",
+          message = list()
+        )
 
+        session$sendCustomMessage(
+          "polish__show_toast",
+          message = list(
+            type = "error",
+            title = "Error signing into polished server",
+            message = NULL
+          )
+        )
+        print("show toast")
+        # some type of error occured with sign in, so sign out,
+        # and go to sign in page
+        return()
 
       } else {
         print("Conditional Option 2")
@@ -141,7 +150,7 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
 
   observeEvent(input$polish__sign_out, {
     req(session$userData$current_user())
-    sign_out_from_shiny(session, session$userData$current_user()$uid)
+    sign_out_from_shiny(session)
   })
 
   # if the user is signed in, set up the polish firebase functions
