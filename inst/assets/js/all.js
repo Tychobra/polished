@@ -15,7 +15,6 @@ if (typeof toastr !== "undefined") {
 }
 
 Shiny.addCustomMessageHandler("polish__remove_loading", function (message) {
-  console.log("remove loading js");
   $.LoadingOverlay("hide",
   /* force = */
   true);
