@@ -5,7 +5,17 @@ ui <- fluidPage(
     style = "color: white; background-color: black; height: 100vh;",
     column(
       12,
-      h1("Shiny App"),
+      fluidRow(
+        column(
+          9,
+          h1("Shiny App")
+        ),
+        column(
+          3,
+          class = "pull-right",
+          verbatimTextOutput("secure_content")
+        )
+      ),
       br()
     ),
     column(
@@ -21,12 +31,6 @@ ui <- fluidPage(
       ),
       br(),
       br()
-    ),
-    column(
-      6,
-      wellPanel(
-        verbatimTextOutput("secure_content")
-      )
     )
   ),
   tags$script(src="https://unpkg.com/pts/dist/pts.min.js"),
