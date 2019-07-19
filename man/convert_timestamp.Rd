@@ -4,7 +4,7 @@
 \alias{convert_timestamp}
 \title{convert_timestamp}
 \usage{
-convert_timestamp(timestamp, tz = "America/New_york")
+convert_timestamp(timestamp, tz = "America/New_York")
 }
 \arguments{
 \item{timestamp}{the JSON UTC date(s)}

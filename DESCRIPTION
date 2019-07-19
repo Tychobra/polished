@@ -22,5 +22,6 @@ Imports:
     apexcharter, 
     xts,
     htmltools,
-    lubridate
+    lubridate,
+    tychobratools
 RoxygenNote: 6.1.1

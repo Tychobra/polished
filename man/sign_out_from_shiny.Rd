@@ -4,12 +4,10 @@
 \alias{sign_out_from_shiny}
 \title{sign_out_from_shiny}
 \usage{
-sign_out_from_shiny(session, uid)
+sign_out_from_shiny(session)
 }
 \arguments{
 \item{session}{the Shiny session}
-
-\item{token}{the user's JWT}
 }
 \description{
 sign_out_from_shiny
