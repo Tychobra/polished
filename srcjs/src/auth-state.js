@@ -1,12 +1,14 @@
-// js that needs to be loaded on all tychobraauth views
+
 var auth = firebase.auth()
 
 
-$(document).on("shiny:sessioninitialized", function() {
+$(document).on("shiny:sessioninitialized", () => {
   auth.onAuthStateChanged(firebase_user => {
 
+
   if (firebase_user === null) {
-    //Shiny.setInputValue('polish__token', null, { priority: 'event' })
+    // sign out
+    Shiny.setInputValue('polish__sign_out', 1, { priority: 'event' })
   } else {
 
     firebase_user.getIdToken(/*forceRefresh*/ true).then(function(idToken) {

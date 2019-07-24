@@ -54,7 +54,7 @@ profile_module <- function(input, output, session) {
   shiny::observeEvent(input$polish__sign_out, {
     req(session$userData$current_user()$email)
 
-    sign_out_from_shiny(session, session$userData$current_user()$uid)
+    sign_out_from_shiny(session)
   })
 
 }

@@ -3,9 +3,7 @@
 var db = firebase.firestore();
 
 var sign_in = function sign_in(email, password) {
-  return auth.signInWithEmailAndPassword(email, password).then(function (user_all) {
-    console.log("user", user_all.user); // send firebase token to shiny server.R
-  })["catch"](function (error) {
+  return auth.signInWithEmailAndPassword(email, password)["catch"](function (error) {
     toastr.error("Sign in Error: " + error.message);
     $.LoadingOverlay("hide");
     console.log('sign in error: ', error);
@@ -38,30 +36,16 @@ $(document).on("click", "#submit_register", function () {
           invite_status: "accepted"
         }, {
           merge: true
-        })["catch"](function (error) {
-          console.log("error setting invite status on register");
-          console.log(error);
         });
         return userCredential;
       }).then(function (userCredential) {
         // send verification email
-        userCredential.user.sendEmailVerification()["catch"](function (error) {
-          toastr.error("error sending verification email");
-          toastr.error("" + error);
-          console.error("error sending email verification: ", error);
+        return userCredential.user.sendEmailVerification()["catch"](function (error) {
+          console.error("Error sending email verification", error);
         });
-        return null;
-      })["catch"](function (error) {
-        console.log("error registering");
-        console.log(error);
       });
     } else {
-      swal({
-        title: "Not Authorized",
-        text: "You must have an invite to access this app.  Please contact the app owner to get an invite.",
-        icon: "error"
-      });
-      return null;
+      throw "You must have an invite to access this app";
     }
   }).then(function (obj) {
     $.LoadingOverlay("hide", loading_options);
@@ -104,13 +88,10 @@ $(document).on("click", "#submit_continue_register", function () {
       $("#continue_registation").hide();
       $("#register_passwords").slideDown();
     } else {
-      swal({
-        title: "Not Authorized",
-        text: "You must have an invite to access this app.  Please contact the app owner to get an invite.",
-        icon: "error"
-      });
+      throw "You must have an invite to access this app";
     }
   })["catch"](function (error) {
+    toastr.error("" + error);
     console.log("error checking app 'users'");
     console.log(error);
   });

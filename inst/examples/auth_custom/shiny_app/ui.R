@@ -1,18 +1,40 @@
 
 
 ui <- fluidPage(
-  useShinyjs(),
   fluidRow(
+    style = "color: white; background-color: black; height: 100vh;",
     column(
       12,
-      h1("Title"),
+      fluidRow(
+        column(
+          9,
+          h1("Shiny App")
+        ),
+        column(
+          3,
+          class = "pull-right",
+          verbatimTextOutput("secure_content")
+        )
+      ),
       br()
     ),
     column(
       12,
-      verbatimTextOutput("secure_content")
+      class = "text-center",
+      h1(
+        style = "font-size: 90px;",
+        "Your Custom"
+      ),
+      h1(
+        style = "font-size: 90px;",
+        "Shiny App"
+      ),
+      br(),
+      br()
     )
-  )
+  ),
+  tags$script(src="https://unpkg.com/pts/dist/pts.min.js"),
+  tags$script(src = "pt_bezier.js")
 )
 
 

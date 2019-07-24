@@ -1,12 +1,8 @@
 var db = firebase.firestore()
 
 
-const sign_in = function(email, password) {
-  return auth.signInWithEmailAndPassword(email, password).then(function(user_all) {
-    console.log("user", user_all.user)
-    // send firebase token to shiny server.R
-
-  }).catch(function(error) {
+const sign_in = (email, password) => {
+  return auth.signInWithEmailAndPassword(email, password).catch(error => {
     toastr.error("Sign in Error: " + error.message)
     $.LoadingOverlay("hide")
     console.log('sign in error: ', error)
@@ -54,10 +50,7 @@ $(document).on("click", "#submit_register", () => {
         .set({
           invite_status: "accepted"
         }, { merge: true })
-        .catch(error => {
-          console.log("error setting invite status on register")
-          console.log(error)
-        })
+
 
 
         return userCredential
@@ -65,28 +58,15 @@ $(document).on("click", "#submit_register", () => {
       }).then((userCredential) => {
 
         // send verification email
-        userCredential.user.sendEmailVerification().catch((error) => {
-          toastr.error("error sending verification email")
-          toastr.error("" + error)
-          console.error("error sending email verification: ", error)
+        return userCredential.user.sendEmailVerification().catch(error => {
+          console.error("Error sending email verification", error)
         })
 
-        return null
-      }).catch(error => {
-
-        console.log("error registering")
-        console.log(error)
       })
 
     } else {
 
-      swal({
-        title: "Not Authorized",
-        text: "You must have an invite to access this app.  Please contact the app owner to get an invite.",
-        icon: "error"
-      })
-
-      return null
+      throw "You must have an invite to access this app"
     }
 
 
@@ -153,14 +133,12 @@ $(document).on("click", "#submit_continue_register", () => {
 
 
     } else {
-      swal({
-        title: "Not Authorized",
-        text: "You must have an invite to access this app.  Please contact the app owner to get an invite.",
-        icon: "error"
-      })
+
+      throw "You must have an invite to access this app"
     }
 
   }).catch(error => {
+    toastr.error("" + error)
     console.log("error checking app 'users'")
     console.log(error)
   })

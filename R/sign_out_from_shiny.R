@@ -1,16 +1,17 @@
 #' sign_out_from_shiny
 #'
 #' @param session the Shiny session
-#' @param token the user's JWT
 #'
 #' @import shiny
 #'
 #' @export
 #'
-sign_out_from_shiny <- function(session, uid) {
+sign_out_from_shiny <- function(session) {
+
+  user <- session$userData$current_user()
 
   # remove the user from `global_users`
-  .global_users$remove_user_by_uid(uid)
+  .global_users$remove_user_by_uid(user$uid, user$polished_session)
 
   # remove any existing query string
   remove_query_string(session)
@@ -20,6 +21,7 @@ sign_out_from_shiny <- function(session, uid) {
     "polish__sign_out",
     message = list()
   )
+
 
   session$reload()
 }

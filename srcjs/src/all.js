@@ -8,13 +8,25 @@ var loading_options = {
 
 if (typeof toastr !== "undefined") {
   toastr.options.positionClass = "toast_bottom_center"
+
+  // event handler to display a toast message
+  Shiny.addCustomMessageHandler(
+    "polish__show_toast",
+    function(message) {
+
+      toastr[message.type](
+        message.title,
+        message.message
+      )
+    }
+  )
 }
 
 
 Shiny.addCustomMessageHandler(
   "polish__remove_loading",
   function(message) {
-    $.LoadingOverlay("hide")
+    $.LoadingOverlay("hide", /* force = */ true)
   }
 )
 

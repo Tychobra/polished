@@ -9,7 +9,9 @@ verify_email_ui <- function(id, firebase_config) {
   fluidPage(
     tags$head(
       tags$link(rel = "stylesheet", href = "polish/css/all.css"),
-      tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png")
+      tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
+      tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"),
+      tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css")
     ),
     fluidRow(
       column(

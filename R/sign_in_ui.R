@@ -11,9 +11,7 @@ sign_in_ui <- function(firebase_config) {
       tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
       # load toastr assets
       tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"),
-      tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"),
-      # sweetalert assets
-      tags$script(src="https://unpkg.com/sweetalert/dist/sweetalert.min.js")
+      tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css")
     ),
     div(
       id = "sign_in_panel",
