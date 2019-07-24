@@ -257,6 +257,12 @@ dashboard_module <- function(input, output, session) {
           )
         )
       ) %>%
+      apexcharter::ax_tooltip(
+        enabled = TRUE,
+        y = list(
+          formatter = htmlwidgets::JS("function (val) {return val.toFixed(0)}")
+        )
+      ) %>%
       apexcharter::ax_xaxis(
         categories = dat$date_out
       ) %>%
