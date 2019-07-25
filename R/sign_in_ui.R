@@ -38,32 +38,45 @@ sign_in_ui <- function(firebase_config) {
       ),
       br(),
       div(
-        class = "form-group",
-        style = "width: 100%",
-        tags$label(
-          tagList(icon("unlock-alt"), "password"),
-          `for` = "password"
+        id = "sign_in_password",
+        style = "display: none;",
+        div(
+          class = "form-group",
+          style = "width: 100%;",
+          tags$label(
+            tagList(icon("unlock-alt"), "password"),
+            `for` = "password"
+          ),
+          tags$input(
+            id = "password",
+            type = "password",
+            class = "form-control",
+            value = "",
+            placeholder = "**********"
+          )
         ),
-        tags$input(
-          id = "password",
-          type = "password",
-          class = "form-control",
-          value = "",
-          placeholder = "**********"
-        )
-      ),
-      br(),
-      br(),
-      div(
-        style = "text-align: center;",
+        br(),
         tags$button(
           id = "submit_sign_in",
+          class = "text-center",
           style = "color: white; width: 100%;",
           type = "button",
           class = "btn btn-primary btn-lg",
           "Sign In"
-        ),
-        br(),
+        )
+      ),
+      div(
+        id = "continue_sign_in",
+        tags$button(
+          id = "submit_continue_sign_in",
+          style = "color: white; width: 100%;",
+          type = "button",
+          class = "btn btn-primary btn-lg",
+          "Continue"
+        )
+      ),
+      div(
+        style = "text-align: center;",
         hr(),
         br(),
         tags$a(

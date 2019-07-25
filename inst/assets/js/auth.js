@@ -10,11 +10,56 @@ var sign_in = function sign_in(email, password) {
   });
 };
 
+var does_email_exist = function does_email_exist(email) {
+  return db.collection("apps").doc(app_name).collection("users").doc(email).get().then(function (doc) {
+    if (doc.exists) {
+      return true;
+    } else {
+      return false;
+    }
+  })["catch"](function (error) {
+    console.log("error checking if email exists");
+    console.log(error);
+    toastr.error("Error checking email");
+  });
+};
+
+$(document).on('click', '#submit_continue_sign_in', function () {
+  var email = $('#email').val();
+  does_email_exist(email).then(function (t_f) {
+    if (t_f === true) {
+      // TODO: could check invite or registration status here to see if the user is already
+      // registered.  probably not worth it at the moment since it may get out of sync with actual
+      // firebase auth registered users
+      // the user has been invited so allow the user to set their password and register
+      $("#continue_sign_in").hide();
+      $("#sign_in_password").slideDown();
+    } else {
+      toastr.error("You must have an invite to access this app");
+    }
+
+    return null;
+  })["catch"](function (error) {
+    toastr.error("" + error);
+    console.log("error checking app 'users'");
+    console.log(error);
+  });
+});
 $(document).on('click', '#submit_sign_in', function () {
   $.LoadingOverlay("show", loading_options);
   var email = $('#email').val();
-  var password = $('#password').val();
-  sign_in(email, password);
+  var password = $('#password').val(); // check that user has an invite
+
+  does_email_exist(email).then(function (t_f) {
+    if (t_f === true) {
+      sign_in(email, password);
+    } else {
+      toastr.error("You must have an invite to access this app");
+    }
+  })["catch"](function (error) {
+    console.log(error);
+    toastr.error("" + error);
+  });
 });
 $(document).on("click", "#submit_register", function () {
   var email = $("#register_email").val();
@@ -76,20 +121,19 @@ $(document).on("click", "#go_to_sign_in", function () {
 });
 $(document).on("click", "#submit_continue_register", function () {
   var email = $("#register_email").val();
-  db.collection("apps").doc(app_name).collection("users").doc(email).get().then(function (doc) {
-    console.log("check user invited");
-
-    if (doc.exists) {
+  does_email_exist(email).then(function (t_f) {
+    if (t_f === true) {
       // TODO: could check invite or registration status here to see if the user is already
       // registered.  probably not worth it at the moment since it may get out of sync with actual
       // firebase auth registered users
-      console.log("i ran too"); // the user has been invited so allow the user to set their password and register
-
+      // the user has been invited so allow the user to set their password and register
       $("#continue_registation").hide();
       $("#register_passwords").slideDown();
     } else {
-      throw "You must have an invite to access this app";
+      toastr.error("You must have an invite to access this app");
     }
+
+    return null;
   })["catch"](function (error) {
     toastr.error("" + error);
     console.log("error checking app 'users'");
