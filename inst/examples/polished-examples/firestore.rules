@@ -1,3 +1,4 @@
+rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -16,11 +17,15 @@ service cloud.firestore {
 
       allow read: if request.auth.uid != null;
 
-      allow write: if request.auth.uid != null && is_admin(database, request.auth.token.email, "auth_basic")
-
+      allow write: if request.auth.uid != null && is_admin(database, request.auth.token.email, "auth_basic");
     }
 
+    match /apps/auth_basic/sessions/{session} {
 
+      allow read: if is_admin(database, request.auth.token.email, "auth_basic");
+
+      allow write: if false;
+    }
 
     match /apps/auth_custom/users/{email} {
 
@@ -33,10 +38,8 @@ service cloud.firestore {
 
       allow read: if request.auth.uid != null;
 
-      allow write: if request.auth.uid != null && is_admin(database, request.auth.token.email, "auth_custom")
-
+      allow write: if request.auth.uid != null && is_admin(database, request.auth.token.email, "auth_custom");
     }
-
 
     match /apps/auth_custom/sessions/{session} {
 
@@ -44,6 +47,7 @@ service cloud.firestore {
 
       allow write: if false;
     }
+
 
   }
 }

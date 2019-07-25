@@ -1,3 +1,11 @@
+/*
+*
+* version 0.0.1
+* last updated 2019-07-23
+* bump the above version and change the last updated date whenever a change
+* is made to this file
+*
+*/
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 
@@ -5,6 +13,8 @@ const admin = require('firebase-admin')
 admin.initializeApp();
 
 const db = admin.firestore();
+
+
 
 exports.signInWithToken = functions.https.onRequest(async (req, res) => {
 
@@ -55,8 +65,7 @@ exports.signInWithToken = functions.https.onRequest(async (req, res) => {
         time_created: timestamp
       }
 
-      console.log("session: ", new_session)
-
+      // add the session document to "apps/{app_name}/sessions/"
       db.collection("apps")
       .doc(app_name)
       .collection("sessions")
@@ -75,7 +84,13 @@ exports.signInWithToken = functions.https.onRequest(async (req, res) => {
 
 })
 
-// used to recheck the email verification
+/* used to recheck email verification
+*
+* When user originally registers, they are taken to the email verification page.
+* When they refresh that page, this function runs, rechecking if their email
+* has been verified yet.  If it has been verified, they move on to the app + admin
+* pages
+*/
 exports.getUser = functions.https.onRequest(async (req, res) => {
 
   const uid = req.query.uid
@@ -98,6 +113,7 @@ exports.getUser = functions.https.onRequest(async (req, res) => {
   res.send(JSON.stringify(user))
 })
 
+
 // used to enable signed_in_as
 exports.getUserData = functions.https.onRequest(async (req, res) => {
 
@@ -105,19 +121,42 @@ exports.getUserData = functions.https.onRequest(async (req, res) => {
   const signed_in_as_email = req.query.signed_in_as_email
   const app_name = req.query.app_name
 
-  // TODO: user email to fist check that the user attempting to sign in as another user
-  // is an admin
-
-  db.collection("apps")
+  // check that the user requesting to sign in as another user is an admin
+  const req_user = db.collection("apps")
   .doc(app_name)
   .collection("users")
-  .doc(signed_in_as_email).get().then(user_doc => {
+  .doc(email)
 
-    res.send(JSON.stringify(user_doc.data()))
+
+  req_user.get().then(user_doc => {
+
+    if (!user_doc.exists) {
+      throw "User does not exists!"
+    }
+
+    // user is an admin
+    return user_doc.data().is_admin
+
+  }).then((is_admin) => {
+
+    if (is_admin === true) {
+      return db.collection("apps")
+        .doc(app_name)
+        .collection("users")
+        .doc(signed_in_as_email).get().then(user_doc => {
+
+        res.send(JSON.stringify(user_doc.data()))
+        return null
+      })
+    } else {
+      throw "User is not an admin!"
+    }
 
   }).catch(error => {
     console.error("error getting user data")
     console.error(error)
   })
+
+
 
 })
