@@ -13,7 +13,14 @@ ui <- fluidPage(
         column(
           3,
           class = "pull-right",
-          verbatimTextOutput("secure_content")
+          style = "background-color: #0277BD; color: black;",
+          h3(
+            class = "text-center",
+            style = "color: white; margin-bottom: 0",
+            "Signed In As"
+          ),
+          DTOutput("user_table"),
+          br()
         )
       ),
       br()
