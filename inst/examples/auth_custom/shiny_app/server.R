@@ -21,11 +21,6 @@ function(input, output, session) {
       )
     })
 
-    observe({
-      print(list(
-        user_table_prep = user_table_prep()
-      ))
-    })
 
     output$user_table <- renderDT({
 

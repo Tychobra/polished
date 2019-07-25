@@ -13,7 +13,7 @@ ui <- fluidPage(
         column(
           3,
           class = "pull-right",
-          style = "background-color: #0277BD; color: black;",
+          style = "background-color: #0277BD; color: black; height: 198px;",
           h3(
             class = "text-center",
             style = "color: white; margin-bottom: 0",
