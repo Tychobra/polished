@@ -2,24 +2,29 @@
 % Please edit documentation in R/write_firebase_functions.R
 \name{write_firebase_functions}
 \alias{write_firebase_functions}
-\title{write the index.js file}
+\title{write js file for polished Firebase Functions}
 \usage{
 write_firebase_functions(path = "functions/index.js", overwrite = TRUE)
 }
 \arguments{
 \item{path}{"functions/index.js" by default. The file path of the created file.}
 
-\item{overwrite}{TRUE by default.  Should the existing file
-be overwritted}
+\item{overwrite}{TRUE by default.  Should the existing file be overwritted.}
 }
 \description{
-write the index.js file
+write js file for polished Firebase Functions
+}
+\details{
+By default this function will create a "functions/index.js" file which
+contains the Polished Firebase Functions.  If you are using custom Firebase functions,
+then change the `path` argument to something like "functions/polished.js", and make sure
+to add `require(./polished)` in your "functions/index.js" file.
 }
 \examples{
 
 # must make functions folder
 write_firebase_functions()
 
-write_firebase_functions("inst")
+write_firebase_functions("functions/my_file.js")
 
 }

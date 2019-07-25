@@ -1,3 +1,11 @@
+/*
+*
+* version 0.0.1
+* last updated 2019-07-23
+* bump the above version and change the last updated date whenever a change
+* is made to this file
+*
+*/
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 
