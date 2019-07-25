@@ -10,6 +10,8 @@
   shiny::addResourcePath("polish", system.file("assets", package = "polished"))
 
   shiny::registerInputHandler("firestore_data_frame", function(data, ...) {
+    if (length(data) == 0) return(NULL)
+
     # when a collection of documents is sent from firebase to Shiny, it comes
     # as an unnamed list where each list element is a firebase document containing
     # a named list of all fields in the document.  This handler converts the Firebase
