@@ -231,7 +231,7 @@ dashboard_module <- function(input, output, session) {
   output$daily_users_chart <- apexcharter::renderApexchart({
     dat <- daily_users_chart_prep()
 
-    apexcharter::apexchart() %>%
+    ax_out <- apexcharter::apexchart() %>%
       apexcharter::ax_title(
         "Unique Daily Users",
         align = "center",
@@ -266,9 +266,6 @@ dashboard_module <- function(input, output, session) {
       apexcharter::ax_xaxis(
         categories = dat$date_out
       ) %>%
-      apexcharter::ax_yaxis(
-        min = 0
-      ) %>%
       apexcharter::ax_stroke(show = TRUE, curve = "straight") %>%
       apexcharter::ax_dataLabels(enabled = FALSE) %>%
       apexcharter::ax_fill(
@@ -284,6 +281,25 @@ dashboard_module <- function(input, output, session) {
         data = dat$n,
         name = "Unique Users"
       ))
+
+
+    if (max(dat$n) <= 10) {
+      ax_out <- ax_out %>%
+        apexcharter::ax_yaxis(
+          min = 0,
+          tickAmount = max(dat$n),
+          labels = list(
+            formatter = htmlwidgets::JS("function (val) {return val.toFixed(0)}")
+          )
+        )
+    } else {
+      ax_out <- ax_out %>%
+        apexcharter::ax_yaxis(
+          min = 0
+        )
+    }
+
+    ax_out
   })
 
 
