@@ -249,7 +249,7 @@ user_access_module <- function(input, output, session) {
         shiny::selectizeInput(
           ns("user_custom_role"),
           "Role",
-          choices = c("<NA>", roles()$role)
+          choices = roles()$role
         ) %>% shinyjs::hidden()
       )
     )
@@ -299,7 +299,7 @@ user_access_module <- function(input, output, session) {
     role_ui <- shiny::selectizeInput(
       ns("user_custom_role_edit"),
       "Role",
-      choices = c("<NA>", roles()$role),
+      choices = roles()$role,
       selected = hold_user$role
     )
 
