@@ -36,11 +36,11 @@ user_access_module_ui <- function(id) {
           shiny::column(
             12,
             style = "z-index: 10",
-            DT::DTOutput(ns("users_table")) #%>%
-            #shinycssloaders::withSpinner(
-            #  type = 8,
-            #  proxy.height = "500px"
-            #)
+            DT::DTOutput(ns("users_table")) %>%
+              shinycssloaders::withSpinner(
+                type = 8,
+                proxy.height = "300px"
+              )
           )
         )
       )
@@ -58,7 +58,11 @@ user_access_module_ui <- function(id) {
           style = "color: #fff;",
           icon = icon("plus")
         ),
-        DT::DTOutput(ns("roles_table"))
+        DT::DTOutput(ns("roles_table")) %>%
+          shinycssloaders::withSpinner(
+            type = 8,
+            proxy.height = "500px"
+          )
       )
     ),
 
