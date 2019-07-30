@@ -272,17 +272,34 @@ user_access_module <- function(input, output, session) {
 
   # the firebase function to add the user is triggered in the client side js, not in Shiny
   shiny::observeEvent(input$submit_user_add, {
-    shiny::removeModal()
     req(input$user_email)
-    session$sendCustomMessage(
-      "polish__add_user",
-      message = list(
-        email = input$user_email,
-        is_admin = input$user_is_admin,
-        role = if (isTRUE(input$user_include_custom_role)) input$user_custom_role else "",
-        ns = ns("")
+
+    if (input$user_email %in% users()$email) {
+
+      session$sendCustomMessage(
+        "polish__show_toast",
+        message = list(
+          type = "error",
+          title = "Error: User Already Exists",
+          message = NULL
+        )
       )
-    )
+
+    } else {
+      shiny::removeModal()
+
+      session$sendCustomMessage(
+        "polish__add_user",
+        message = list(
+          email = input$user_email,
+          is_admin = input$user_is_admin,
+          role = if (isTRUE(input$user_include_custom_role)) input$user_custom_role else "",
+          ns = ns("")
+        )
+      )
+    }
+
+
   }, ignoreInit = TRUE)
 
 

@@ -23,37 +23,20 @@ $(document).on("shiny:sessioninitialized", function() {
         role: message.role
       }
 
+
+      // the user does not exist, so add the user doc to the "apps/{app_name}/users/" collection
+      const timestamp = firebase.firestore.Timestamp.now()
+
       const users_ref = db.collection("apps")
       .doc(app_name)
       .collection("users")
-
-      users_ref.doc(new_user.email).get().then(user_doc => {
-
-
-        if (user_doc.exists) {
-
-          throw "user_already_exists"
-          //return {type: "error", message: "the user already exists"}
-
-        } else {
-
-          // the user does not exist, so add the user doc to the "apps/{app_name}/users/" collection
-          const timestamp = firebase.firestore.Timestamp.now()
-
-          const is_admin_out = new_user.is_admin === "Yes" ? true : false
-
-          return users_ref
-            .doc(new_user.email)
-            .set({
-              email: new_user.email,
-              is_admin: is_admin_out,
-              role: new_user.role,
-              invite_status: "pending",
-              time_created: timestamp
-            })
-
-         }
-
+      .doc(new_user.email)
+      .set({
+        email: new_user.email,
+        is_admin: new_user.is_admin,
+        role: new_user.role,
+        invite_status: "pending",
+        time_created: timestamp
       }).then(user => {
 
         toastr.success("User Successfully Invited")
@@ -61,13 +44,8 @@ $(document).on("shiny:sessioninitialized", function() {
 
       }).catch(error => {
 
-        if (error === "user_already_exists") {
-          toastr.error("Error: User Already Exists")
-        } else {
-          toastr.error("Error Inviting User")
-        }
-
-        console.log("error inviting user")
+        toastr.error("Error Inviting User")
+        console.log("Error Inviting User")
         console.log(error)
       })
 
@@ -245,34 +223,20 @@ $(document).on("shiny:sessioninitialized", function() {
       const roles_ref = db.collection("apps")
       .doc(app_name)
       .collection("roles")
-
-      roles_ref.get().then(role => {
-
-        if (role.exists) {
-          throw "role_already_exists"
-        } else {
-
-          return roles_ref.doc(message.role).set({
-            role: message.role
-          })
-
-        }
-
+      .doc(message.role)
+      .set({
+        role: message.role
+      }).then(() => {
+        toastr.success("Role Successfully Added")
       }).catch(error => {
 
-        if (error === "role_already_exists") {
-          // Shiny checks if the role exists before calling 'polish__add_role', so
-          // this error should only occur if user is directly manipulating the js.
-          // TODO: may want to log this to Sentry with user info
-          toastr.error("Error Role Already Exists")
-        } else {
-          toastr.error("Error Adding User Role")
-        }
+        toastr.error("Error Adding User Role")
 
-
-        console.log("error adding user role")
+        console.log("Error Adding User Role")
         console.log(error)
       })
+
+
 
     }
   )
