@@ -14,7 +14,6 @@ $(document).on("shiny:sessioninitialized", function () {
       true).then(function (idToken) {
         Cookies.set('polish__uid', firebase_user.uid);
         var session = Cookies.get('polish__session');
-        console.log("session: ", session);
 
         if (typeof session === "undefined") {
           session = "p_" + Math.random();
