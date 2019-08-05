@@ -19,7 +19,7 @@ generate_firestore_rules_text <- function(app_names) {
       "",
       "      allow read: if request.auth.uid != null && is_users_doc(database, request.auth.token.email, ", name, ");",
       "",
-      paste0('      allow write: if request.auth.token.email == email || is_admin(database, request.auth.token.email, "', name, '");'),
+      paste0('      allow read, write: if request.auth.token.email == email || is_admin(database, request.auth.token.email, "', name, '");'),
       "    }",
       "",
       paste0("    match /apps/", name, "/roles/{role} {"),

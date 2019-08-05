@@ -51,9 +51,8 @@ $(document).on("shiny:sessioninitialized", function () {
     };
     var users_ref = db.collection("apps").doc(app_name) // TODO: update this to use app_name in config.yml
     .collection("users");
-    var is_admin_out = new_user.is_admin === "Yes" ? true : false;
     users_ref.doc(new_user.email).set({
-      is_admin: is_admin_out,
+      is_admin: new_user.is_admin,
       role: new_user.role
     }, {
       merge: true
@@ -157,25 +156,5 @@ $(document).on("shiny:sessioninitialized", function () {
     if (_typeof(unsubscribe_roles) !== undefined) {
       unsubscribe_roles();
     }
-  });
-  Shiny.addCustomMessageHandler("polish__delete_role",
-  /*
-  * @param messgae an object with the following properties
-  * - email the users email address
-  * - is_admin boolean whether or not the user is an admin
-  * - role character string for a custom user group
-  * - ns the namespace of the Shiny module
-  */
-  function (message) {
-    var roles_ref = db.collection("apps").doc(app_name).collection("roles");
-    roles_ref.doc(message.role)["delete"]().then(function () {
-      // TODO: need to delete role from each user with the role.  This needs to be done in a Firebase function
-      toastr.success("Role Successfully Deleted");
-      return null;
-    })["catch"](function (error) {
-      toastr.error("Error Deleting Role");
-      console.log("error deleting role");
-      console.log(error);
-    });
   });
 });

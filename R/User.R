@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @importFrom R6 R6Class
-#' @importFrom httr GET content
+#' @importFrom httr GET content stop_for_status
 #' @importFrom jsonlite fromJSON
 #'
 #'
@@ -98,6 +98,46 @@ User <-  R6::R6Class(
       private$email_verified <- user$emailVerified
 
       invisible(self)
+    },
+    deleteRole = function(role) {
+
+      if (!isTRUE(self$get_is_admin())) {
+
+        return(list(
+          "status" = 500,
+          "message" = "error: user not authorized"
+        ))
+
+      } else {
+        tryCatch({
+          url_out <- paste0(self$firebase_functions_url, "deleteUserRole")
+          r <- httr::GET(
+            url_out,
+            query = list(
+              app_name = self$app_name,
+              role = role
+            )
+          )
+          httr::stop_for_status(r)
+          role_delete_text <- httr::content(r, "text")
+          role_delete_text <- jsonlite::fromJSON(role_delete_text)
+
+          return(list(
+            "status" = 200,
+            "message" = "role successfully deleted"
+          ))
+        }, error = function(e) {
+          print("error in 'deleteUserRole'")
+          print(e)
+
+          return(list(
+            "status" = 500,
+            "message" = e
+          ))
+        })
+
+      }
+
     },
     get_token = function() {
       self$token

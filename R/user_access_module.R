@@ -685,20 +685,53 @@ user_access_module <- function(input, output, session) {
 
   })
 
-
+  # TODO: should we move `app_name` and `firebase_functions_url` to `Users`
   shiny::observeEvent(input$submit_role_delete, {
     shiny::removeModal()
 
+
     session$sendCustomMessage(
-      "polish__delete_role",
+      "polish__show_toast",
       message = list(
-        role = role_to_delete()
+        type = "info",
+        title = "Role Deletion Started",
+        message = NULL
       )
     )
+    polished_user <- session$userData$current_user()
+
+    global_user <- .global_users$find_user_by_uid(polished_user$uid, polished_user$polished_session)
+    #app_name <- global_user$app_name
+    del_res <- global_user$deleteRole(role_to_delete())
+    print(list(
+      "del_res" = del_res
+    ))
+    if (del_res.status == 200) {
+      session$sendCustomMessage(
+        "polish__show_toast",
+        message = list(
+          type = "success",
+          title = "Role Successfully Deleted",
+          message = NULL
+        )
+      )
+    } else {
+      print("error deleting role")
+      print(del_res.message)
+
+      session$sendCustomMessage(
+        "polish__show_toast",
+        message = list(
+          type = "error",
+          title = "Error Deleting Role",
+          message = NULL
+        )
+      )
+    }
+
   })
 
-  # TODO: probably need to add a "signed_in_as" property to the User R6 class.
-  # only admins should have this property... best way to implement?
+
   observeEvent(input$sign_in_as_btn_row, {
     email <- users()[as.numeric(input$sign_in_as_btn_row), ]$email
 

@@ -202,3 +202,52 @@ exports.isUserInvited = functions.https.onCall(async (data, context) => {
 
 
 })
+
+
+/*
+* when a role is deleted, we need to remove that role from any users that
+* have the role
+*
+*
+*/
+exports.deleteUserRole = functions.https.onRequest(async (req, res) => {
+
+  console.log("query: ", req.query)
+  const app_name = req.query.app_name
+  const role = req.query.role
+
+  const users_ref = db.collection("apps")
+  .doc(app_name)
+  .collection("users")
+  .where("role", "==", role)
+
+  const roles_ref = db.collection("apps")
+  .doc(app_name)
+  .collection("roles")
+  .doc(role)
+
+  return db.runTransaction(transaction => {
+
+    return transaction.get(users_ref).then(query_snapshot => {
+
+      // delete the role from each user that has the role
+      query_snapshot.forEach(doc => {
+        console.log("doc_data: ", doc.data())
+        transaction.update(doc.ref, {
+          role: ""
+        })
+
+      })
+
+      // delete the role from the "roles" collection
+      transaction.delete(roles_ref)
+    })
+
+  }).then(() => {
+    console.log("success: role deleted from users: ");
+    res.send(JSON.stringify({status: 200, message: 'success: role deleted from users'}))
+  }).catch(error => {
+    console.log("error: error deleting role from users: ", error);
+    res.send(JSON.stringify({status: 500, message: 'error: error deleting role from users'}))
+  })
+})

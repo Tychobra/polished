@@ -16,7 +16,7 @@ service cloud.firestore {
 auth_basic
 );
 
-      allow write: if request.auth.token.email == email || is_admin(database, request.auth.token.email, "auth_basic");
+      allow read, write: if request.auth.token.email == email || is_admin(database, request.auth.token.email, "auth_basic");
     }
 
     match /apps/auth_basic/roles/{role} {
@@ -39,7 +39,7 @@ auth_basic
 auth_custom
 );
 
-      allow write: if request.auth.token.email == email || is_admin(database, request.auth.token.email, "auth_custom");
+      allow read, write: if request.auth.token.email == email || is_admin(database, request.auth.token.email, "auth_custom");
     }
 
     match /apps/auth_custom/roles/{role} {
