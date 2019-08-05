@@ -18,7 +18,7 @@ $(document).on("shiny:sessioninitialized", function() {
     function(message) {
 
       var new_user = {
-        email: message.email,
+        email: message.email.toLowerCase(),
         is_admin: message.is_admin,
         role: message.role
       }
@@ -65,7 +65,7 @@ $(document).on("shiny:sessioninitialized", function() {
     function(message) {
 
       var new_user = {
-        email: message.email,
+        email: message.email.toLowerCase(),
         is_admin: message.is_admin,
         role: message.role
       }
@@ -109,6 +109,7 @@ $(document).on("shiny:sessioninitialized", function() {
     */
     function(message) {
 
+      const email = message.email.toLowerCase()
 
       const users_ref = db.collection("apps")
       .doc(app_name) // TODO: update this to use app_name in config.yml
@@ -116,7 +117,7 @@ $(document).on("shiny:sessioninitialized", function() {
 
 
       users_ref
-      .doc(message.email)
+      .doc(email)
       .delete().then(() => {
 
         toastr.success("User Successfully Deleted")

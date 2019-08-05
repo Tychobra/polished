@@ -25,7 +25,7 @@ var does_email_exist = function does_email_exist(email) {
 };
 
 $(document).on('click', '#submit_continue_sign_in', function () {
-  var email = $('#email').val();
+  var email = $('#email').val().toLowerCase();
   does_email_exist(email).then(function (t_f) {
     if (t_f === true) {
       // TODO: could check invite or registration status here to see if the user is already
@@ -47,7 +47,7 @@ $(document).on('click', '#submit_continue_sign_in', function () {
 });
 $(document).on('click', '#submit_sign_in', function () {
   $.LoadingOverlay("show", loading_options);
-  var email = $('#email').val();
+  var email = $('#email').val().toLowerCase();
   var password = $('#password').val(); // check that user has an invite
 
   does_email_exist(email).then(function (t_f) {
@@ -62,7 +62,7 @@ $(document).on('click', '#submit_sign_in', function () {
   });
 });
 $(document).on("click", "#submit_register", function () {
-  var email = $("#register_email").val();
+  var email = $("#register_email").val().toLowerCase();
   var password = $("#register_password").val();
   var password_2 = $("#register_password_verify").val();
 
@@ -102,7 +102,7 @@ $(document).on("click", "#submit_register", function () {
   });
 });
 $(document).on("click", "#reset_password", function () {
-  var email = $("#email").val();
+  var email = $("#email").val().toLowerCase();
   auth.sendPasswordResetEmail(email).then(function () {
     toastr.success("Password reset email sent to " + email);
   })["catch"](function (error) {
@@ -120,7 +120,7 @@ $(document).on("click", "#go_to_sign_in", function () {
   $("#sign_in_panel").show();
 });
 $(document).on("click", "#submit_continue_register", function () {
-  var email = $("#register_email").val();
+  var email = $("#register_email").val().toLowerCase();
   does_email_exist(email).then(function (t_f) {
     if (t_f === true) {
       // TODO: could check invite or registration status here to see if the user is already

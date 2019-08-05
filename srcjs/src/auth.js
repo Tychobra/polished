@@ -29,7 +29,7 @@ const does_email_exist = (email) => {
 
 $(document).on('click', '#submit_continue_sign_in', () => {
 
-  const email = $('#email').val()
+  const email = $('#email').val().toLowerCase()
 
   does_email_exist(email).then(t_f => {
 
@@ -58,7 +58,7 @@ $(document).on('click', '#submit_continue_sign_in', () => {
 $(document).on('click', '#submit_sign_in', () => {
   $.LoadingOverlay("show", loading_options)
 
-  const email = $('#email').val()
+  const email = $('#email').val().toLowerCase()
   const password = $('#password').val()
 
 
@@ -79,7 +79,7 @@ $(document).on('click', '#submit_sign_in', () => {
 
 
 $(document).on("click", "#submit_register", () => {
-  const email = $("#register_email").val()
+  const email = $("#register_email").val().toLowerCase()
   const password = $("#register_password").val()
   const password_2 = $("#register_password_verify").val()
 
@@ -141,7 +141,7 @@ $(document).on("click", "#submit_register", () => {
 
 
 $(document).on("click", "#reset_password", () => {
-  const email = $("#email").val()
+  const email = $("#email").val().toLowerCase()
 
   auth.sendPasswordResetEmail(email).then(() => {
     toastr.success("Password reset email sent to " + email)
@@ -170,7 +170,7 @@ $(document).on("click", "#go_to_sign_in", () => {
 
 $(document).on("click", "#submit_continue_register", () => {
 
-  const email = $("#register_email").val()
+  const email = $("#register_email").val().toLowerCase()
 
   does_email_exist(email).then(t_f => {
 

@@ -274,7 +274,9 @@ user_access_module <- function(input, output, session) {
   shiny::observeEvent(input$submit_user_add, {
     req(input$user_email)
 
-    if (input$user_email %in% users()$email) {
+    user_email <- tolower(input$user_email)
+
+    if (user_email %in% users()$email) {
 
       session$sendCustomMessage(
         "polish__show_toast",

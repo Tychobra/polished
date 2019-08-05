@@ -14,7 +14,7 @@ $(document).on("shiny:sessioninitialized", function () {
   */
   function (message) {
     var new_user = {
-      email: message.email,
+      email: message.email.toLowerCase(),
       is_admin: message.is_admin,
       role: message.role // the user does not exist, so add the user doc to the "apps/{app_name}/users/" collection
 
@@ -45,7 +45,7 @@ $(document).on("shiny:sessioninitialized", function () {
   */
   function (message) {
     var new_user = {
-      email: message.email,
+      email: message.email.toLowerCase(),
       is_admin: message.is_admin,
       role: message.role
     };
@@ -75,9 +75,10 @@ $(document).on("shiny:sessioninitialized", function () {
   * - ns the namespace of the Shiny module
   */
   function (message) {
+    var email = message.email.toLowerCase();
     var users_ref = db.collection("apps").doc(app_name) // TODO: update this to use app_name in config.yml
     .collection("users");
-    users_ref.doc(message.email)["delete"]().then(function () {
+    users_ref.doc(email)["delete"]().then(function () {
       toastr.success("User Successfully Deleted");
       return null;
     })["catch"](function (error) {
