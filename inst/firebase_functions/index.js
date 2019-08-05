@@ -1,7 +1,7 @@
 /*
 *
-* version 0.0.1
-* last updated 2019-07-23
+* version 0.0.2
+* last updated 2019-08-05
 * bump the above version and change the last updated date whenever a change
 * is made to this file
 *
@@ -155,6 +155,48 @@ exports.getUserData = functions.https.onRequest(async (req, res) => {
   }).catch(error => {
     console.error("error getting user data")
     console.error(error)
+  })
+
+
+
+})
+
+
+const check_string = (string) => {
+  if (!(typeof string === 'string') || string.length === 0) {
+    throw new functions.https.HttpsError('invalid-argument', 'Invalid Argument');
+  }
+}
+// check whether or not the user is invited
+// return `true` if the user is invited and `false` if not
+exports.isUserInvited = functions.https.onCall(async (data, context) => {
+
+  const email = data.email
+  const app_name = data.app_name
+
+  check_string(email)
+  check_string(app_name)
+
+  // check that the user requesting to sign in as another user is an admin
+  const req_user = db.collection("apps")
+  .doc(app_name)
+  .collection("users")
+  .doc(email)
+
+
+
+  return req_user.get().then(user_doc => {
+    let is_invited = null
+    if (user_doc.exists) {
+      is_invited = true
+    } else {
+      is_invited = false
+    }
+
+    // user is an admin
+    return {
+      is_invited
+    }
   })
 
 

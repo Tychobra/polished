@@ -6,8 +6,7 @@ var dashboard_js = function dashboard_js(ns) {
     var sessions = [];
     query_snapshot.forEach(function (doc) {
       sessions.push(doc.data());
-    }); //console.log("sessions: ", sessions)
-
+    });
     sessions.forEach(function (session) {
       session["time_created"] = session["time_created"].toDate().toJSON();
     });

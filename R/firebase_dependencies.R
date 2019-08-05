@@ -12,7 +12,7 @@
 #'
 #' firebase_dependencies()
 #'
-firebase_dependencies <- function(services = c("auth", "firestore")) {
+firebase_dependencies <- function(services = c("auth", "firestore", "functions")) {
 
   services <- unique(services)
 

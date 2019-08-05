@@ -14,8 +14,6 @@ const dashboard_js = (ns) => {
       sessions.push(doc.data())
     })
 
-    //console.log("sessions: ", sessions)
-
     sessions.forEach(session => {
       session["time_created"] = session["time_created"].toDate().toJSON()
     })

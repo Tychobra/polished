@@ -1,10 +1,15 @@
 
 
-var loading_options = {
-  fade: false,
-  background: "rgba(255, 255, 255, 1.0)",
-  text: "Authenticating..."
+const loading_text = (text) => {
+
+  return {
+    fade: false,
+    background: "rgba(255, 255, 255, 1.0)",
+    text: text
+  }
 }
+
+var loading_options = loading_text("Authenticating...")
 
 if (typeof toastr !== "undefined") {
   toastr.options.positionClass = "toast_bottom_center"
