@@ -294,7 +294,7 @@ user_access_module <- function(input, output, session) {
         "polish__add_user",
         message = list(
           email = input$user_email,
-          is_admin = input$user_is_admin,
+          is_admin = if (input$user_is_admin == "Yes") TRUE else FALSE,
           role = if (isTRUE(input$user_include_custom_role)) input$user_custom_role else "",
           ns = ns("")
         )
@@ -390,7 +390,7 @@ user_access_module <- function(input, output, session) {
       "polish__edit_user",
       message = list(
         email = user_to_edit()$email,
-        is_admin = input$user_is_admin_edit,
+        is_admin = if (input$user_is_admin_edit == "Yes") TRUE else FALSE,
         role = if (isTRUE(input$user_include_custom_role_edit)) input$user_custom_role_edit else "",
         ns = ns("")
       )
