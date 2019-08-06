@@ -386,15 +386,22 @@ user_access_module <- function(input, output, session) {
   shiny::observeEvent(input$submit_user_edit, {
     shiny::removeModal()
 
+    is_admin <- if (input$user_is_admin_edit == "Yes") TRUE else FALSE
+
     session$sendCustomMessage(
       "polish__edit_user",
       message = list(
         email = user_to_edit()$email,
-        is_admin = if (input$user_is_admin_edit == "Yes") TRUE else FALSE,
-        role = if (isTRUE(input$user_include_custom_role_edit)) input$user_custom_role_edit else "",
+        is_admin = is_admin,
+        role = is_admin,
         ns = ns("")
       )
     )
+
+    # if user just set themself as a non-admin, then sign them out
+    if (user_to_edit()$email == session$userData$current_user()$email && isFALSE(is_admin)) {
+      sign_out_from_shiny(session)
+    }
   })
 
 
