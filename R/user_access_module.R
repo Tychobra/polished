@@ -393,7 +393,7 @@ user_access_module <- function(input, output, session) {
       message = list(
         email = user_to_edit()$email,
         is_admin = is_admin,
-        role = is_admin,
+        role = if (isTRUE(input$user_include_custom_role_edit)) input$user_custom_role_edit else "",
         ns = ns("")
       )
     )
