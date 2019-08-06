@@ -54,7 +54,6 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
       if (is.null(new_user)) {
 
         # user sign in failed.
-        print("Conditional Option 1")
 
         session$sendCustomMessage(
           "polish__remove_loading",
@@ -75,13 +74,13 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
             message = NULL
           )
         )
-        print("show toast")
+
         # some type of error occured with sign in, so sign out,
         # and go to sign in page
         return()
 
       } else {
-        print("Conditional Option 2")
+
         # go to app.  If user is admin, then they will have the blue "Admin Panel" button
         # in the bottom right
         .global_users$add_user(new_user)
@@ -97,7 +96,7 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
 
       if (isTRUE(global_user$get_email_verified())) {
 
-        print("conditional option 3")
+
         session$sendCustomMessage(
           "polish__remove_loading",
           message = list()
@@ -123,10 +122,9 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
         session$userData$current_user(user_out)
 
       } else {
-        print("conditional option 4")
+
         # go to email verification view.
         # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
-        #print("email verification sign_in_with_token")
 
         global_user$refreshEmailVerification()
 
