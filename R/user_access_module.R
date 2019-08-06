@@ -322,7 +322,7 @@ user_access_module <- function(input, output, session) {
     role_ui <- shiny::selectizeInput(
       ns("user_custom_role_edit"),
       "Role",
-      choices = roles()$role,
+      choices = sort(roles()$role),
       selected = hold_user$role
     )
 
