@@ -710,10 +710,8 @@ user_access_module <- function(input, output, session) {
     global_user <- .global_users$find_user_by_uid(polished_user$uid, polished_user$polished_session)
     #app_name <- global_user$app_name
     del_res <- global_user$deleteRole(role_to_delete())
-    print(list(
-      "del_res" = del_res
-    ))
-    if (del_res.status == 200) {
+
+    if (del_res$status == 200) {
       session$sendCustomMessage(
         "polish__show_toast",
         message = list(
@@ -724,7 +722,7 @@ user_access_module <- function(input, output, session) {
       )
     } else {
       print("error deleting role")
-      print(del_res.message)
+      print(del_res$message)
 
       session$sendCustomMessage(
         "polish__show_toast",
