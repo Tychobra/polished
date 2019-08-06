@@ -1,7 +1,6 @@
 
 
 ui <- fluidPage(
-  useShinyjs(),
   fluidRow(
     column(
       12,

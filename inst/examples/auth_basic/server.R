@@ -7,15 +7,6 @@ function(input, output, session) {
   )
 
 
-
-  #source("server_admin.R", local = TRUE)
-
-  # observe({
-  #   print(list(
-  #     "current_user" = session$userData$current_user()
-  #   ))
-  # })
-
   observeEvent(session$userData$current_user(), {
 
     output$secure_content <- renderPrint({
