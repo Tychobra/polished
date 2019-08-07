@@ -6,15 +6,7 @@ service cloud.firestore {
       return get(path('/databases/' + database + '/documents/apps/' + app_name + '/users/' + email)).data.is_admin;
     }
 
-    function is_users_doc (database, email, app_name) {
-      return get(path('/databases/' + database + '/documents/apps/' + app_name + '/users/' + email)).data.email == email;
-    }
-
     match /apps/auth_basic/users/{email} {
-
-      allow read: if request.auth.uid != null && is_users_doc(database, request.auth.token.email, 
-auth_basic
-);
 
       allow read, write: if request.auth.token.email == email || is_admin(database, request.auth.token.email, "auth_basic");
     }
@@ -34,10 +26,6 @@ auth_basic
     }
 
     match /apps/auth_custom/users/{email} {
-
-      allow read: if request.auth.uid != null && is_users_doc(database, request.auth.token.email, 
-auth_custom
-);
 
       allow read, write: if request.auth.token.email == email || is_admin(database, request.auth.token.email, "auth_custom");
     }
