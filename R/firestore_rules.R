@@ -17,7 +17,7 @@ generate_firestore_rules_text <- function(app_names) {
     c(
       paste0("    match /apps/", name, "/users/{email} {"),
       "",
-      "      allow read: if request.auth.uid != null && is_users_doc(database, request.auth.token.email, ", name, ");",
+      paste0('      allow read: if request.auth.uid != null && is_users_doc(database, request.auth.token.email, "', name, '");'),
       "",
       paste0('      allow read, write: if request.auth.token.email == email || is_admin(database, request.auth.token.email, "', name, '");'),
       "    }",
@@ -87,4 +87,3 @@ write_firestore_rules <- function(app_names, dir = ".", file_name = "firestore.r
     file_conn
   )
 }
-
