@@ -6,13 +6,13 @@ Authentication and administration for Shiny apps.  Polished provides a way to se
 
 We recommend the following folder structure:
 
-- <project_name>
-   - polished-<project_name>
-   - <shiny_app_1>
-   - <shiny_app_2>
+- <project_name>/
+   - polished-<project_name>/
+   - <shiny_app_1>/
+   - <shiny_app_2>/
    - ...
 
-The "polished-<project_name>" folder contains all the `polished` project configuration.  "<shiny_app_1>", "<shiny_app_2>", and "..." (other Shiny apps) are the Shiny apps that use this polished project.
+The "polished-<project_name>" folder contains all the `polished` project configuration.  "<shiny_app_1>", "<shiny_app_2>", and "..." (other Shiny apps) are the Shiny apps that use the polished configuration set in "polished-<project>".
 
 The Shiny apps all use the same email/password for authentication.  e.g. if user `A` is authorized to sign into "<shiny_app_1>" and "<shiny_app_2>", user `A` would use the same email and password to sign into both Shiny apps 1 and 2.  User authorization is then set at a per Shiny app level.  So, for example, an admin could change user `A`s authorization such that user `A` could only access "<shiny_app_1>". 
 
@@ -22,15 +22,16 @@ You can have as many Shiny apps in the "<project_name>" folder as you want.  At 
 
 - R
 - one or more Shiny app(s)
-- `polished`
-
-```
-# install polished
-remotes::install_github("tychobra/polished")
-```
-
 - [nodejs](https://nodejs.org/en/)
 - a [Firebase](https://firebase.google.com/) account
+
+### `polished` installation
+
+```
+# R
+
+remotes::install_github("tychobra/polished")
+```
 
 ### Initial Set Up
 
@@ -38,9 +39,9 @@ remotes::install_github("tychobra/polished")
 
 Go to [https://firebase.google.com/](https://firebase.google.com/) and create a firebase project named "polished-<project_name>".
 
-Open your new Firebase project and
+Open your new Firebase project
  - go to the "Authentication" page "Sign-in method" tab and enable "Email/Password" sign in.
- - go to the "Database" tab, and enable Firestore.  Make sure the Firestore rules allow all read writes during this initial set up.
+ - go to the "Database" tab, and click "Create Database" to create a Firestore database.  Start the database in "test mode".  This will allow unrestricted read and write access during this initial set up.  We will secure the database in a later step.
 
 2. Organize your Shiny app(s) in accordance with the folder structure from the "Getting Started" section
 
@@ -90,7 +91,7 @@ npm install --save firebase-admin firebase-functions
 
 Publish Firestore rules:
 
-Open R and set your working directory set to the "polished-<project_name>" folder.
+Open R and set your working directory to the "polished-<project_name>" folder.
 
 ```
 # R
