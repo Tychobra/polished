@@ -6,8 +6,7 @@ $(document).on("click", "#resend_verification_email", () => {
 
   user.sendEmailVerification().then(() => {
 
-    toastr.success("Error sending email verification")
-
+    toastr.success("Verification Email Send to " + user.email)
 
   }).catch((error) => {
 
