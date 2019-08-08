@@ -46,7 +46,14 @@ $(document).on("shiny:sessioninitialized", function () {
   Shiny.addCustomMessageHandler("polish__sign_out", function (message) {
     Cookies.remove('polish__uid');
     Cookies.remove('polish__session');
-    auth.signOut()["catch"](function (error) {
+    auth.signOut().then(function () {
+      Shiny.setInputValue("polish__reload", 1, {
+        priority: 'event'
+      });
+    })["catch"](function (error) {
+      Shiny.setInputValue("polish__reload", 1, {
+        priority: 'event'
+      });
       console.error("sign out error: ", error);
     });
   });

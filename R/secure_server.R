@@ -151,6 +151,11 @@ secure_server <- function(input, session, firebase_functions_url, app_name) {
     sign_out_from_shiny(session)
   })
 
+  observeEvent(input$polish__reload, {
+    print("polish__reload ran")
+    session$reload()
+  })
+
   # if the user is signed in, set up the polish firebase functions
   observeEvent(session$userData$current_user(), {
 
