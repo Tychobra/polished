@@ -7,8 +7,8 @@
 set_config_env(session, override = NULL)
 }
 \arguments{
-\item{override}{Set the environment to "default" or "production" instead of 
-the value found through session$clientData$hostname}
+\item{override}{Set the environment to "default" or "production" instead of
+the value found through session$clientData$url_hostname}
 }
 \description{
 Determines if the app is deployed or running locally and adjusts the
