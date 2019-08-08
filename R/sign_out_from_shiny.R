@@ -22,4 +22,5 @@ sign_out_from_shiny <- function(session) {
     message = list()
   )
 
+  session$reload()
 }
