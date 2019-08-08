@@ -1,4 +1,4 @@
-import "whatwg-fetch" // fetch polyfill so we can use httpsCallable Firebase functions with IE
+
 
 const loading_text = (text) => {
 

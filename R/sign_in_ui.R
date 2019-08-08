@@ -199,6 +199,7 @@ sign_in_ui <- function(firebase_config) {
     tags$script(src = "polish/js/all.js"),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
     tags$script(src = "polish/js/auth-state.js"),
+    tags$script(src = "polish/js/fetch.umd.js"), # polyfill for IE
     tags$script(src = "polish/js/auth.js")
   )
 }
