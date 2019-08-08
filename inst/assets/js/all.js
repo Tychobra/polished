@@ -1,5 +1,8 @@
 "use strict";
 
+require("whatwg-fetch");
+
+// fetch polyfill so we can use httpsCallable Firebase functions with IE
 var loading_text = function loading_text(text) {
   return {
     fade: false,
