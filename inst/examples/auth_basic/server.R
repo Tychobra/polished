@@ -1,10 +1,5 @@
-function(input, output, session) {
-  session <- secure_server(
-    input,
-    session,
-    firebase_functions_url = my_config$firebase_functions_url,
-    app_name = my_config$app_name
-  )
+server <- function(input, output, session) {
+
 
 
   observeEvent(session$userData$current_user(), {
@@ -15,3 +10,9 @@ function(input, output, session) {
 
   })
 }
+
+secure_server(
+  server,
+  firebase_functions_url = my_config$firebase_functions_url,
+  app_name = my_config$app_name
+)

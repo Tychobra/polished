@@ -4,14 +4,14 @@
 \alias{secure_server}
 \title{secure_server}
 \usage{
-secure_server(input, session, firebase_functions_url, app_name)
+secure_server(server, firebase_functions_url, app_name)
 }
 \arguments{
-\item{input}{input argument from shiny server}
+\item{server}{A Shiny server function. e.g `function(input, output, session) {}`}
 
-\item{session}{session argument from shiny server}
+\item{firebase_functions_url}{url for the firebase functions}
 
-\item{firebase_functions_url}{url for the firebase function to sign in}
+\item{app_name}{the name of the app}
 }
 \value{
 session session object with new reactive session$userData$current_user which
