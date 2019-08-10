@@ -118,9 +118,35 @@ polished::write_firebase_functions()
 firebase deploy --only functions
 ```
 
+## Secure Your Shiny App
 
+To secure your Shiny app you simply pass your Shiny ui to `secure_ui()` and your Shiny server to `secure_server()`.  Additionally you need to pass the firebase configuration and the app name to `secure_ui()` and `secure_server()`.    
 
-# Optional
+e.g. here is a complete secure Shiny app less the correct Firebase configuation.
+
+```
+ui <- h1("Hellow World")
+
+server <- function(input, output, session) {}
+
+your_secure_ui <- secure_ui(
+  ui,
+  firebase_config = <your config goes here>,
+  app_name = "your_app_name"
+)
+
+your_secure_server <- secure_server(
+  server,
+  firebase_functions_url = <your Firebase functions URL>,
+  app_name = "your_app_name"
+)
+
+shinyApp(your_secure_ui, your_secure_server)
+```
+
+You can find full working examples with properly configured "config.yml" files in the "inst/examples/" directory in this package.
+
+### Additional Options
 
 3. deploy iframe to Firebase hosting
 
