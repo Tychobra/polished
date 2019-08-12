@@ -38,15 +38,11 @@ remotes::install_github("tychobra/polished")
 
 ### Initial Set Up
 
-1. Set up your Firebase project
+1. Set up your Firebase project. Go to [https://firebase.google.com/](https://firebase.google.com/) and create a firebase project named "polished-<project_name>".  Open your new Firebase project and:
+   - go to the "Authentication" page "Sign-in method" tab and enable "Email/Password" sign in.
+   - go to the "Database" tab, and click "Create Database" to create a Firestore database.  Start the database in "test mode".  This will allow unrestricted read and write access during this initial set up.  We will secure the database in a later step.
 
-Go to [https://firebase.google.com/](https://firebase.google.com/) and create a firebase project named "polished-<project_name>".
-
-Open your new Firebase project
- - go to the "Authentication" page "Sign-in method" tab and enable "Email/Password" sign in.
- - go to the "Database" tab, and click "Create Database" to create a Firestore database.  Start the database in "test mode".  This will allow unrestricted read and write access during this initial set up.  We will secure the database in a later step.
-
-2. Set up initial user in firestore
+2. Set up initial user in Firestore.
 TODO: create function to somehow automate this process.  Probably can do this with a new Firebase function??
 For now, In the Firebase web UI of your Firebase project, go the the "Database" tab and create a new "apps/{your Shiny app name}/users/{your email address} document with the following fields:
    - email: string - "your email address"
