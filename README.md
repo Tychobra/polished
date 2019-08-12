@@ -33,10 +33,6 @@ You can have as many Shiny apps in the "<project_name>" folder as you want.  At 
 # install remotes if needed
 install.packages("remotes") 
 
-# get (from GH) and set a personal access token before trying to pull down a private repo
-install.packages("credentials")
-credentials::set_github_pat()
-
 remotes::install_github("tychobra/polished")
 ```
 
@@ -50,9 +46,18 @@ Open your new Firebase project
  - go to the "Authentication" page "Sign-in method" tab and enable "Email/Password" sign in.
  - go to the "Database" tab, and click "Create Database" to create a Firestore database.  Start the database in "test mode".  This will allow unrestricted read and write access during this initial set up.  We will secure the database in a later step.
 
-2. Organize your Shiny app(s) in accordance with the folder structure from the "Getting Started" section
+2. Set up initial user in firestore
+TODO: create function to somehow automate this process.  Probably can do this with a new Firebase function??
+For now, In the Firebase web UI of your Firebase project, go the the "Database" tab and create a new "apps/{your Shiny app name}/users/{your email address} document with the following fields:
+   - email: string - "your email address"
+   - app_name: string - "your Shiny app name"
+   - time_created: timestamp - fill it in with some time today
+   - invite_status: string - "pending"
+   - is_admin: boolean - true
 
-3. Set up the "<project_name>/polished-<project_name>" folder.
+3. Organize your Shiny app(s) in accordance with the folder structure from the "Getting Started" section
+
+4. Set up the "<project_name>/polished-<project_name>" folder.
 
 Move to the "<project_name>" folder.
 
