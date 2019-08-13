@@ -210,6 +210,10 @@ exports.isUserInvited = functions.https.onCall(async (data, context) => {
 *
 */
 exports.deleteUserRole = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
+      'while authenticated.');
+  }
 
   const app_name = data.app_name
   const role = data.role

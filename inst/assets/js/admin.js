@@ -3,6 +3,7 @@
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var db = firebase.firestore();
+var functions = firebase.functions();
 $(document).on("shiny:sessioninitialized", function () {
   Shiny.addCustomMessageHandler("polish__add_user",
   /*
@@ -147,6 +148,19 @@ $(document).on("shiny:sessioninitialized", function () {
     })["catch"](function (error) {
       toastr.error("Error Adding User Role");
       console.log("Error Adding User Role");
+      console.log(error);
+    });
+  });
+  var deleteUserRole = functions.httpsCallable("deleteUserRole");
+  Shiny.addCustomMessageHandler("polish__delete_role", function (message) {
+    deleteUserRole({
+      role: message.role,
+      app_name: app_name
+    }).then(function (result) {
+      toastr.success("Role Successfully Deleted");
+    })["catch"](function (error) {
+      toastr.success("Error Deleting Role");
+      console.log("Error Deleting Role");
       console.log(error);
     });
   }); // TODO: figure out if this is properly unsubscribing from the roles listener

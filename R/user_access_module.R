@@ -705,34 +705,43 @@ user_access_module <- function(input, output, session) {
         message = NULL
       )
     )
-    polished_user <- session$userData$current_user()
 
-    global_user <- .global_users$find_user_by_uid(polished_user$uid, polished_user$polished_session)
+    session$sendCustomMessage(
+      "polish__delete_role",
+      message = list(
+        role = role_to_delete()
+      )
+    )
+
+
+    #polished_user <- session$userData$current_user()
+
+    #global_user <- .global_users$find_user_by_uid(polished_user$uid, polished_user$polished_session)
     #app_name <- global_user$app_name
-    del_res <- global_user$deleteRole(role_to_delete())
+    #del_res <- global_user$deleteRole(role_to_delete())
 
-    if (del_res$status == 200) {
-      session$sendCustomMessage(
-        "polish__show_toast",
-        message = list(
-          type = "success",
-          title = "Role Successfully Deleted",
-          message = NULL
-        )
-      )
-    } else {
-      print("error deleting role")
-      print(del_res$message)
-
-      session$sendCustomMessage(
-        "polish__show_toast",
-        message = list(
-          type = "error",
-          title = "Error Deleting Role",
-          message = NULL
-        )
-      )
-    }
+    # if (del_res$status == 200) {
+    #   session$sendCustomMessage(
+    #     "polish__show_toast",
+    #     message = list(
+    #       type = "success",
+    #       title = "Role Successfully Deleted",
+    #       message = NULL
+    #     )
+    #   )
+    # } else {
+    #   print("error deleting role")
+    #   print(del_res$message)
+    #
+    #   session$sendCustomMessage(
+    #     "polish__show_toast",
+    #     message = list(
+    #       type = "error",
+    #       title = "Error Deleting Role",
+    #       message = NULL
+    #     )
+    #   )
+    # }
 
   })
 

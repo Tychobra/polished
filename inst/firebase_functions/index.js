@@ -209,10 +209,14 @@ exports.isUserInvited = functions.https.onCall(async (data, context) => {
 *
 *
 */
-exports.deleteUserRole = functions.https.onRequest(async (req, res) => {
+exports.deleteUserRole = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
+      'while authenticated.');
+  }
 
-  const app_name = req.query.app_name
-  const role = req.query.role
+  const app_name = data.app_name
+  const role = data.role
 
   const users_ref = db.collection("apps")
   .doc(app_name)
@@ -242,18 +246,17 @@ exports.deleteUserRole = functions.https.onRequest(async (req, res) => {
     })
 
   }).then(() => {
-    console.log("success: role deleted from users: ");
-    res.status(200).send(JSON.stringify({message: 'success: role deleted from users'}))
+    console.log("success: role deleted from users: ")
+    return { message: "success" }
   }).catch(error => {
-    console.log("error: error deleting role from users: ", error);
-    res.status(500).send(JSON.stringify({message: 'error: error deleting role from users'}))
+    console.log("error: error deleting role from users: ", error)
+    return { message: "error" }
   })
 })
 
 
 
 exports.addFirstUser = functions.https.onCall(async (data, context) => {
-  console.log("auth: ", context.auth)
   if (!context.auth) {
     throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
       'while authenticated.');
@@ -279,7 +282,7 @@ exports.addFirstUser = functions.https.onCall(async (data, context) => {
     return null
   }).then(() => {
 
-    return users
+    return users_ref
     .doc(email).set({
       email: email,
       is_admin: true,

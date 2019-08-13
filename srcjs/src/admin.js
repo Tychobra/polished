@@ -1,5 +1,5 @@
 var db = firebase.firestore()
-
+var functions = firebase.functions()
 
 
 
@@ -239,6 +239,21 @@ $(document).on("shiny:sessioninitialized", function() {
     }
   )
 
+  const deleteUserRole  = functions.httpsCallable("deleteUserRole")
+  Shiny.addCustomMessageHandler(
+    "polish__delete_role",
+
+    function(message) {
+      deleteUserRole({ role: message.role, app_name: app_name }).then(result => {
+        toastr.success("Role Successfully Deleted")
+      }).catch(error => {
+        toastr.success("Error Deleting Role")
+        console.log("Error Deleting Role")
+        console.log(error)
+      })
+    }
+  )
+
   // TODO: figure out if this is properly unsubscribing from the roles listener
   $(document).on('shiny:disconnected', function(socket) {
     //console.log('Shiny Disconnected')
@@ -246,7 +261,4 @@ $(document).on("shiny:sessioninitialized", function() {
       unsubscribe_roles()
     }
   })
-
-
-
 })
