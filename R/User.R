@@ -76,9 +76,9 @@ User <-  R6::R6Class(
       )
 
       user_response <- httr::GET(url_out)
+      httr::warn_for_status(user_response)
       user_text <- httr::content(user_response, "text")
       user <- jsonlite::fromJSON(user_text)
-
 
       if (is.null(user)) {
         private$signed_in_as <- NULL
@@ -92,6 +92,7 @@ User <-  R6::R6Class(
 
       url_out <- paste0(self$firebase_functions_url, "getUser?uid=", private$uid)
       user_response <- httr::GET(url_out)
+      httr::warn_for_status(user_response)
       user_text <- httr::content(user_response, "text")
       user <- jsonlite::fromJSON(user_text)
 

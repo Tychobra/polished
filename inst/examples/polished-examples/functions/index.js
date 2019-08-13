@@ -1,7 +1,7 @@
 /*
 *
-* version 0.0.2
-* last updated 2019-08-05
+* version 0.0.3
+* last updated 2019-08-12
 * bump the above version and change the last updated date whenever a change
 * is made to this file
 *
@@ -71,15 +71,15 @@ exports.signInWithToken = functions.https.onRequest(async (req, res) => {
       .collection("sessions")
       .add(new_session)
 
-      res.send(JSON.stringify(user_out))
+      res.status(200).send(JSON.stringify(user_out))
 
     } else {
-      res.send(JSON.stringify(user_out))
+      res.status(500).send(JSON.stringify(user_out))
     }
 
   } catch(error) {
-    res.send(JSON.stringify(user_out))
     console.error("auth_error: ", error)
+    res.status(500).send(JSON.stringify(user_out))
   }
 
 })
@@ -101,16 +101,15 @@ exports.getUser = functions.https.onRequest(async (req, res) => {
   try {
     // verify the auth_token to sign the user into Shiny
     user = await admin.auth().getUser(uid)
-    console.log("user: ", user)
-
+    res.status(200).send(JSON.stringify(user))
   } catch(error) {
 
     user = null
 
     console.log("error getting user ", error)
+    res.status(500).send(JSON.stringify(user))
   }
 
-  res.send(JSON.stringify(user))
 })
 
 
@@ -145,8 +144,7 @@ exports.getUserData = functions.https.onRequest(async (req, res) => {
         .collection("users")
         .doc(signed_in_as_email).get().then(user_doc => {
 
-        res.send(JSON.stringify(user_doc.data()))
-        return null
+        res.status(200).send(JSON.stringify(user_doc.data()))
       })
     } else {
       throw "User is not an admin!"
@@ -155,6 +153,7 @@ exports.getUserData = functions.https.onRequest(async (req, res) => {
   }).catch(error => {
     console.error("error getting user data")
     console.error(error)
+    res.status(500).send(JSON.stringify({message: "error getting user data"}))
   })
 
 
@@ -212,7 +211,6 @@ exports.isUserInvited = functions.https.onCall(async (data, context) => {
 */
 exports.deleteUserRole = functions.https.onRequest(async (req, res) => {
 
-  console.log("query: ", req.query)
   const app_name = req.query.app_name
   const role = req.query.role
 
@@ -245,9 +243,9 @@ exports.deleteUserRole = functions.https.onRequest(async (req, res) => {
 
   }).then(() => {
     console.log("success: role deleted from users: ");
-    res.send(JSON.stringify({status: 200, message: 'success: role deleted from users'}))
+    res.status(200).send(JSON.stringify({message: 'success: role deleted from users'}))
   }).catch(error => {
     console.log("error: error deleting role from users: ", error);
-    res.send(JSON.stringify({status: 500, message: 'error: error deleting role from users'}))
+    res.status(500).send(JSON.stringify({message: 'error: error deleting role from users'}))
   })
 })
