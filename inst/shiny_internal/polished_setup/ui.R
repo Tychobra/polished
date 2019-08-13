@@ -161,11 +161,52 @@ ui <- fluidPage(
   ),
 
 
-
+  # TODO: switch this over to Shiny dashboard
   div(
     id = "signed_in_ui",
-    h1("You Are Signed in")
-
+    style = "display: none;",
+    class = "auth_panel",
+    h1("Add User"),
+    div(
+      class = "form-group",
+      style = "width: 100%",
+      tags$label(
+        tagList("email"),
+        `for` = "first_user_email"
+      ),
+      tags$input(
+        id = "first_user_email",
+        type = "text",
+        class = "form-control",
+        value = ""
+      )
+    ),
+    div(
+      class = "form-group",
+      style = "width: 100%",
+      tags$label(
+        tagList("App Name"),
+        `for` = "first_user_app_name"
+      ),
+      tags$input(
+        id = "first_user_app_name",
+        type = "text",
+        class = "form-control",
+        value = ""
+      )
+    ),
+    br(),
+    br(),
+    div(
+      style = "text-align: center;",
+      tags$button(
+        id = "submit_add_first_user",
+        style = "color: white; width: 100%;",
+        type = "button",
+        class = "btn btn-primary btn-lg",
+        "Add User"
+      )
+    )
   )
 
 )

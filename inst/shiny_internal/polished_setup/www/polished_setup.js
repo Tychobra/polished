@@ -72,8 +72,8 @@ $(document).on("click", "#sign_out", function(event) {
 })
 
 
-$(document).on("click", "#submit_create_first_user", function(event) {
-
+$(document).on("click", "#submit_add_first_user", function(event) {
+  console.log("I ran")
   var email = $("#first_user_email").val()
   var app_name = $("#first_user_app_name").val()
 

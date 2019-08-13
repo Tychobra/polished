@@ -254,10 +254,10 @@ exports.deleteUserRole = functions.https.onRequest(async (req, res) => {
 
 exports.addFirstUser = functions.https.onCall(async (data, context) => {
   console.log("auth: ", context.auth)
-  //if (!context.auth) {
-  //  throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
-  //    'while authenticated.');
-  //}
+  if (!context.auth) {
+    throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
+      'while authenticated.');
+  }
 
   const email = data.email
   const app_name = data.app_name
