@@ -1,14 +1,9 @@
 server <- function(input, output, session) {
 
-
-
-  observeEvent(session$userData$current_user(), {
-
-    output$secure_content <- renderPrint({
-      "this is sensitive info"
-    })
-
+  output$secure_content <- renderPrint({
+    "this is sensitive info"
   })
+
 }
 
 secure_server(
