@@ -2,6 +2,7 @@
 #'
 #' @param firebase_config list of firebase configuration
 #'
+#' @export
 #'
 #' @return a character string of JavaScript code defining firebaseConfig
 #'
