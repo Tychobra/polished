@@ -39,9 +39,7 @@ ui <- fluidPage(
       br(),
       br()
     )
-  ),
-  tags$script(src="https://unpkg.com/pts/dist/pts.min.js"),
-  tags$script(src = "pt_bezier.js")
+  )
 )
 
 
