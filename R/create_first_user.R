@@ -21,16 +21,17 @@ create_first_user <- function(
   invite_status = "pending",
   time_created = lubridate::with_tz(Sys.time(), tzone = "UTC")) {
 
-  url_out <- paste0(firebase_functions_url, "createUser")
-  r <- httr::GET(
-    url_out,
-    query = list(
-      app_name = self$app_name,
-      role = role
-    )
-  )
-  httr::stop_for_status(r)
-  role_delete_text <- httr::content(r, "text")
-  role_delete_text <- jsonlite::fromJSON(role_delete_text)
+  # TODO: how can we securly do this??
+  #url_out <- paste0(firebase_functions_url, "createUser")
+  #r <- httr::GET(
+  #  url_out,
+  #  query = list(
+  #    app_name = self$app_name,
+  #    role = role
+  #  )
+  #)
+  #httr::stop_for_status(r)
+  #role_delete_text <- httr::content(r, "text")
+  #role_delete_text <- jsonlite::fromJSON(role_delete_text)
 
 }
