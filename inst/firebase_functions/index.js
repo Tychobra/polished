@@ -249,3 +249,55 @@ exports.deleteUserRole = functions.https.onRequest(async (req, res) => {
     res.status(500).send(JSON.stringify({message: 'error: error deleting role from users'}))
   })
 })
+
+
+
+exports.addFirstUser = functions.https.onCall(async (data, context) => {
+  console.log("auth: ", context.auth)
+  //if (!context.auth) {
+  //  throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
+  //    'while authenticated.');
+  //}
+
+  const email = data.email
+  const app_name = data.app_name
+
+
+  // check to make sure that this is in fact the first user
+  const users_ref = db.collection("apps")
+  .doc(app_name)
+  .collection("users")
+
+  return users_ref
+  .get().then(snapshot => {
+
+    // if a user already exists for this app then throw an error
+    if (!snapshot.empty) {
+       throw new functions.https.HttpsError('failed-precondition', 'This must be the first user');
+    }
+
+    return null
+  }).then(() => {
+
+    return users
+    .doc(email).set({
+      email: email,
+      is_admin: true,
+      time_created: admin.firestore.FieldValue.serverTimestamp(),
+      invite_status: "accepted",
+      app_name: app_name
+    })
+
+  }).then(() => {
+    return {
+      message: "success"
+    }
+  })
+  .catch(error => {
+    console.log("error creating first user: ", error)
+    return {
+      message: "error"
+    }
+  })
+
+})
