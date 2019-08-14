@@ -1,7 +1,7 @@
 /*
 *
-* version 0.0.3
-* last updated 2019-08-12
+* version 0.0.4
+* last updated 2019-08-13
 * bump the above version and change the last updated date whenever a change
 * is made to this file
 *
