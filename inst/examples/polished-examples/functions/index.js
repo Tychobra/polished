@@ -92,73 +92,33 @@ exports.signInWithToken = functions.https.onRequest(async (req, res) => {
 * pages
 */
 exports.getUser = functions.https.onRequest(async (req, res) => {
-
+  // TODO: this needs to require a JWT
   const uid = req.query.uid
+  const auth_token = req.query.token
 
   // the firebase user
   let user = null
 
   try {
+    user = await admin.auth().verifyIdToken(auth_token)
     // verify the auth_token to sign the user into Shiny
-    user = await admin.auth().getUser(uid)
-    res.status(200).send(JSON.stringify(user))
+    if (user) {
+      const user_out = await admin.auth().getUser(uid)
+      res.status(200).send(JSON.stringify(user_out))
+    } else {
+      throw new functions.https.HttpsError('failed-precondition', 'The function must be called while authenticated.');
+    }
+
   } catch(error) {
 
-    user = null
-
     console.log("error getting user ", error)
-    res.status(500).send(JSON.stringify(user))
+    res.status(500).send(JSON.stringify(null))
   }
 
 })
 
 
-// used to enable signed_in_as
-exports.getUserData = functions.https.onRequest(async (req, res) => {
 
-  const email = req.query.email
-  const signed_in_as_email = req.query.signed_in_as_email
-  const app_name = req.query.app_name
-
-  // check that the user requesting to sign in as another user is an admin
-  const req_user = db.collection("apps")
-  .doc(app_name)
-  .collection("users")
-  .doc(email)
-
-
-  req_user.get().then(user_doc => {
-
-    if (!user_doc.exists) {
-      throw "User does not exists!"
-    }
-
-    // user is an admin
-    return user_doc.data().is_admin
-
-  }).then((is_admin) => {
-
-    if (is_admin === true) {
-      return db.collection("apps")
-        .doc(app_name)
-        .collection("users")
-        .doc(signed_in_as_email).get().then(user_doc => {
-
-        res.status(200).send(JSON.stringify(user_doc.data()))
-      })
-    } else {
-      throw "User is not an admin!"
-    }
-
-  }).catch(error => {
-    console.error("error getting user data")
-    console.error(error)
-    res.status(500).send(JSON.stringify({message: "error getting user data"}))
-  })
-
-
-
-})
 
 
 const check_string = (string) => {
@@ -214,6 +174,7 @@ exports.deleteUserRole = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
       'while authenticated.');
   }
+  // TODO: also check if user is an admin here
 
   const app_name = data.app_name
   const role = data.role

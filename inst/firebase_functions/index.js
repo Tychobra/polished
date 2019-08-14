@@ -92,22 +92,27 @@ exports.signInWithToken = functions.https.onRequest(async (req, res) => {
 * pages
 */
 exports.getUser = functions.https.onRequest(async (req, res) => {
-  // TODO: this needs to require a JWT
+
   const uid = req.query.uid
+  const auth_token = req.query.token
 
   // the firebase user
   let user = null
 
   try {
+    user = await admin.auth().verifyIdToken(auth_token)
     // verify the auth_token to sign the user into Shiny
-    user = await admin.auth().getUser(uid)
-    res.status(200).send(JSON.stringify(user))
+    if (user) {
+      const user_out = await admin.auth().getUser(uid)
+      res.status(200).send(JSON.stringify(user_out))
+    } else {
+      throw new functions.https.HttpsError('failed-precondition', 'The function must be called while authenticated.');
+    }
+
   } catch(error) {
 
-    user = null
-
     console.log("error getting user ", error)
-    res.status(500).send(JSON.stringify(user))
+    res.status(500).send(JSON.stringify(null))
   }
 
 })

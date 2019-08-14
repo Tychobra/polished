@@ -127,7 +127,7 @@ secure_server <- function(server, firebase_functions_url, app_name) {
           # go to email verification view.
           # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
 
-          global_user$refreshEmailVerification()
+          global_user$refreshEmailVerification(token)
 
 
           # if refreshing the email verification causes it to switch from FALSE to TRUE
