@@ -168,7 +168,11 @@ You can find full working examples with properly configured "config.yml" files i
 
 ### Additional Options
 
-deploy iframe to Firebase hosting
+#### 1. Customize the Sign In / Register UI
+
+Companies often want to add their logos and branding to the sign in and register pages.  With polished, you can easily customize these pages.  Just pass your custom UI to the `sign_in_page_ui` argument of `secure_ui()`.  You can find an example of a customized sing in and register UI in the "inst/examples/auth_custom" Shiny app that is shipped with `polished`.
+
+#### 2. deploy iframe to Firebase hosting
 
 1. update "firebase.json" for the iframe you are going to host.  See "firebase.json" in this
 directory for an example. 
