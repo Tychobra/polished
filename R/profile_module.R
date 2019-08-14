@@ -1,12 +1,10 @@
 #' verify email page ui
 #'
-#' @param firebase_config Firebase configuration
-#'
 #' @importFrom htmltools tags
 #' @importFrom shiny textOutput actionLink
 #'
 #' @export
-profile_module_ui <- function(id, firebase_config) {
+profile_module_ui <- function(id) {
   ns <- NS(id)
 
   htmltools::tags$li(

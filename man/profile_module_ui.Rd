@@ -4,10 +4,7 @@
 \alias{profile_module_ui}
 \title{verify email page ui}
 \usage{
-profile_module_ui(id, firebase_config)
-}
-\arguments{
-\item{firebase_config}{Firebase configuration}
+profile_module_ui(id)
 }
 \description{
 verify email page ui
