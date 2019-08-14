@@ -7,7 +7,7 @@ app_names <- c(
 
 write_firestore_rules(app_names)
 
-write_firebase_functions()
+polished::write_firebase_functions()
 
 
 # TODO: make polished `firebase_deploy()` to handle deployment

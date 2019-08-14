@@ -571,14 +571,6 @@ user_access_module <- function(input, output, session) {
   roles <- reactiveVal(NULL)
 
 
-  # this might be a good way to create the listener for the specific app
-  #session$sendCustomMessage(
-  #  "polish__create_roles_listeneer",
-  #  message = list(
-  #    app_name =
-  #  )
-  #)
-
 
   observeEvent(input$polish__user_roles, {
     if (is.null(input$polish__user_roles)) {
@@ -705,40 +697,19 @@ user_access_module <- function(input, output, session) {
         message = NULL
       )
     )
-    polished_user <- session$userData$current_user()
 
-    global_user <- .global_users$find_user_by_uid(polished_user$uid, polished_user$polished_session)
-    #app_name <- global_user$app_name
-    del_res <- global_user$deleteRole(role_to_delete())
-
-    if (del_res$status == 200) {
-      session$sendCustomMessage(
-        "polish__show_toast",
-        message = list(
-          type = "success",
-          title = "Role Successfully Deleted",
-          message = NULL
-        )
+    session$sendCustomMessage(
+      "polish__delete_role",
+      message = list(
+        role = role_to_delete()
       )
-    } else {
-      print("error deleting role")
-      print(del_res$message)
-
-      session$sendCustomMessage(
-        "polish__show_toast",
-        message = list(
-          type = "error",
-          title = "Error Deleting Role",
-          message = NULL
-        )
-      )
-    }
+    )
 
   })
 
 
   observeEvent(input$sign_in_as_btn_row, {
-    email <- users()[as.numeric(input$sign_in_as_btn_row), ]$email
+    user_to_sign_in_as <- as.list(users()[as.numeric(input$sign_in_as_btn_row), c("email", "is_admin", "role")])
 
     session$sendCustomMessage(
       "polish__show_loading",
@@ -750,7 +721,9 @@ user_access_module <- function(input, output, session) {
     polished_user <- session$userData$current_user()
 
     global_user <- .global_users$find_user_by_uid(polished_user$uid, polished_user$polished_session)
-    global_user$set_signed_in_as(email)
+    global_user$set_signed_in_as(
+      user_to_sign_in_as
+    )
 
     # to to the Shiny app
     remove_query_string(session)

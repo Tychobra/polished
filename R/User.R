@@ -41,9 +41,16 @@ User <-  R6::R6Class(
     sign_in_with_token = function(firebase_auth_token) {
 
       # firebase function callable via url
-      url_out <- paste0(self$firebase_functions_url, "signInWithToken?token=", firebase_auth_token, "&app_name=", self$app_name)
-      user_response <- httr::GET(url_out)
-      user_text <- httr::content(user_response, "text")
+      url_out <- paste0(self$firebase_functions_url, "signInWithToken")
+      response <- httr::GET(
+        url_out,
+        query = list(
+          token = firebase_auth_token,
+          app_name = self$app_name
+        )
+      )
+      httr::warn_for_status(response)
+      user_text <- httr::content(response, "text")
       user <- jsonlite::fromJSON(user_text)
 
 
@@ -65,80 +72,31 @@ User <-  R6::R6Class(
 
       invisible(self)
     },
-    set_signed_in_as = function(email) {
+    set_signed_in_as = function(user_to_sign_in_as) {
 
-      # firebase function callable via url
-      url_out <- paste0(
-        self$firebase_functions_url,
-        "getUserData?email=", private$email,
-        "&signed_in_as_email=", email,
-        "&app_name=", self$app_name
-      )
-
-      user_response <- httr::GET(url_out)
-      httr::warn_for_status(user_response)
-      user_text <- httr::content(user_response, "text")
-      user <- jsonlite::fromJSON(user_text)
-
-      if (is.null(user)) {
-        private$signed_in_as <- NULL
-      } else {
-        private$signed_in_as <- user
+      if (private$is_admin) {
+        private$signed_in_as <- user_to_sign_in_as
       }
 
       invisible(self)
     },
-    refreshEmailVerification = function() {
+    refreshEmailVerification = function(firebase_auth_token) {
 
-      url_out <- paste0(self$firebase_functions_url, "getUser?uid=", private$uid)
-      user_response <- httr::GET(url_out)
-      httr::warn_for_status(user_response)
-      user_text <- httr::content(user_response, "text")
+      url_out <- paste0(self$firebase_functions_url, "getUser")
+      response <- httr::GET(
+        url_out,
+        query = list(
+          uid = private$uid,
+          token = firebase_auth_token
+        )
+      )
+      httr::warn_for_status(response)
+      user_text <- httr::content(response, "text")
       user <- jsonlite::fromJSON(user_text)
 
       private$email_verified <- user$emailVerified
 
       invisible(self)
-    },
-    deleteRole = function(role) {
-
-      if (!isTRUE(self$get_is_admin())) {
-
-        return(list(
-          "status" = 500,
-          "message" = "error: user not authorized"
-        ))
-
-      } else {
-        tryCatch({
-          url_out <- paste0(self$firebase_functions_url, "deleteUserRole")
-          r <- httr::GET(
-            url_out,
-            query = list(
-              app_name = self$app_name,
-              role = role
-            )
-          )
-          httr::stop_for_status(r)
-          role_delete_text <- httr::content(r, "text")
-          role_delete_text <- jsonlite::fromJSON(role_delete_text)
-
-          return(list(
-            "status" = 200,
-            "message" = "role successfully deleted"
-          ))
-        }, error = function(e) {
-          print("error in 'deleteUserRole'")
-          print(e)
-
-          return(list(
-            "status" = 500,
-            "message" = e
-          ))
-        })
-
-      }
-
     },
     get_token = function() {
       self$token
