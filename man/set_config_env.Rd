@@ -4,13 +4,14 @@
 \alias{set_config_env}
 \title{set_config_env}
 \usage{
-set_config_env(session, override = NULL)
+set_config_env(override = NULL)
 }
 \arguments{
-\item{override}{Set the environment to "default" or "production" instead of
-the value found through session$clientData$url_hostname}
+\item{override}{Set the environment to "default" or "production" manully. \strong{CAUTION:}
+Be sure you know the difference between "default" & "production" configuration environments.
+Using the "production" environment will affect the database of the deployed application.}
 }
 \description{
-Determines if the app is deployed or running locally and adjusts the
-config environment accordingly
+Determines if the app is deployed on shinyapps.io, where the environment variable USER is 'shiny', 
+or running locally and adjusts the config environment accordingly
 }
