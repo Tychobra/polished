@@ -12,7 +12,7 @@ polished::write_firebase_functions()
 
 # TODO: make polished `firebase_deploy()` to handle deployment
 system("firebase deploy --only firestore:rules")
-system("firebase deploy --only functions:deleteUserRole")
+system("firebase deploy --only functions")
 
 # write firebase hosting configuration
 #write_firebase_hosting(app_names)

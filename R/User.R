@@ -67,22 +67,9 @@ User <-  R6::R6Class(
     },
     set_signed_in_as = function(user_to_sign_in_as) {
 
-      # firebase function callable via url
-      #url_out <- paste0(
-      #  self$firebase_functions_url,
-      #  "getUserData?email=", private$email,
-      #  "&signed_in_as_email=", email,
-      #  "&app_name=", self$app_name
-      #)
-
-      #user_response <- httr::GET(url_out)
-      #httr::warn_for_status(user_response)
-      #user_text <- httr::content(user_response, "text")
-      #user <- jsonlite::fromJSON(user_text)
       if (private$is_admin) {
         private$signed_in_as <- user_to_sign_in_as
       }
-
 
       invisible(self)
     },
