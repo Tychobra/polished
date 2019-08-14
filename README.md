@@ -45,7 +45,7 @@ remotes::install_github("tychobra/polished")
 
 1. Set up your Firebase project. Go to [https://firebase.google.com/](https://firebase.google.com/) and create a firebase project named "polished-<project_name>".  Open your new Firebase project and:
    - go to the "Authentication" page "Sign-in method" tab and enable "Email/Password" sign in.
-   - go to the "Database" tab, and click "Create Database" to create a Firestore database.  Start the database in "test mode".  This will allow unrestricted read and write access during this initial set up.  We will secure the database in a later step.
+   - go to the "Database" tab, and click "Create Database" to create a Firestore database.  Start the database in "test mode".  We will secure the database in a later step.
 
 2. Set up initial user in Firestore.
 TODO: create function to somehow automate this process.  Probably can do this with a new Firebase function??
