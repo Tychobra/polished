@@ -130,7 +130,7 @@ dashboard_module <- function(input, output, session) {
     tychobratools::value_box_module,
     "dau_box",
     dau_box_prep,
-    reactive("Daily Average Users (DAU)")
+    reactive("Average Daily Users")
   )
 
   # calculate and format the Monthly Average Users for the value box
@@ -151,7 +151,7 @@ dashboard_module <- function(input, output, session) {
     tychobratools::value_box_module,
     "mau_box",
     mau_box_prep,
-    reactive("Monthly Average Users (MAU)")
+    reactive("Average Monthly Users")
   )
 
   # calculate and format the Monthly Average Sessions for the value box
@@ -170,7 +170,7 @@ dashboard_module <- function(input, output, session) {
     tychobratools::value_box_module,
     "das_box",
     das_box_prep,
-    reactive("Daily Average Sessions (DAS)")
+    reactive("Average Daily Sessions")
   )
 
   # poll the active sessions from the `.global_users` object
@@ -199,7 +199,7 @@ dashboard_module <- function(input, output, session) {
     tychobratools::value_box_module,
     "active_users",
     active_users_number_prep,
-    reactive("Active Users")
+    reactive("Current Active Users")
   )
 
 
