@@ -159,7 +159,7 @@ $(document).on("shiny:sessioninitialized", function () {
     }).then(function (result) {
       toastr.success("Role Successfully Deleted");
     })["catch"](function (error) {
-      toastr.success("Error Deleting Role");
+      toastr.error("Error Deleting Role");
       console.log("Error Deleting Role");
       console.log(error);
     });

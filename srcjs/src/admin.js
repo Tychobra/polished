@@ -247,7 +247,7 @@ $(document).on("shiny:sessioninitialized", function() {
       deleteUserRole({ role: message.role, app_name: app_name }).then(result => {
         toastr.success("Role Successfully Deleted")
       }).catch(error => {
-        toastr.success("Error Deleting Role")
+        toastr.error("Error Deleting Role")
         console.log("Error Deleting Role")
         console.log(error)
       })
