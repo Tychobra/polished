@@ -1,7 +1,7 @@
 /*
 *
-* version 0.0.3
-* last updated 2019-08-12
+* version 0.0.5
+* last updated 2019-08-15
 * bump the above version and change the last updated date whenever a change
 * is made to this file
 *
@@ -92,7 +92,7 @@ exports.signInWithToken = functions.https.onRequest(async (req, res) => {
 * pages
 */
 exports.getUser = functions.https.onRequest(async (req, res) => {
-  // TODO: this needs to require a JWT
+
   const uid = req.query.uid
   const auth_token = req.query.token
 
@@ -174,7 +174,9 @@ exports.deleteUserRole = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
       'while authenticated.');
   }
-  // TODO: also check if user is an admin here
+
+  // check if user is an admin here
+  const email = context.auth.token.email
 
   const app_name = data.app_name
   const role = data.role
@@ -182,37 +184,56 @@ exports.deleteUserRole = functions.https.onCall(async (data, context) => {
   const users_ref = db.collection("apps")
   .doc(app_name)
   .collection("users")
-  .where("role", "==", role)
 
-  const roles_ref = db.collection("apps")
-  .doc(app_name)
-  .collection("roles")
-  .doc(role)
 
-  return db.runTransaction(transaction => {
+  return users_ref.doc(email).get().then(user_doc => {
 
-    return transaction.get(users_ref).then(query_snapshot => {
+    const is_admin = user_doc.data().is_admin
 
-      // delete the role from each user that has the role
-      query_snapshot.forEach(doc => {
-        console.log("doc_data: ", doc.data())
-        transaction.update(doc.ref, {
-          role: ""
+    if (is_admin === true) {
+      return null
+    } else {
+      throw new functions.https.HttpsError('failed-precondition', 'The function can only be called by an admin.');
+    }
+
+
+  }).then(is_admin => {
+
+    const users_role_ref = users_ref
+    .where("role", "==", role)
+
+    const roles_ref = db.collection("apps")
+    .doc(app_name)
+    .collection("roles")
+    .doc(role)
+
+    return db.runTransaction(transaction => {
+
+      return transaction.get(users_role_ref).then(query_snapshot => {
+
+        // delete the role from each user that has the role
+        query_snapshot.forEach(doc => {
+          console.log("doc_data: ", doc.data())
+          transaction.update(doc.ref, {
+            role: ""
+          })
+
         })
 
+        // delete the role from the "roles" collection
+        transaction.delete(roles_ref)
       })
 
-      // delete the role from the "roles" collection
-      transaction.delete(roles_ref)
+    }).then(() => {
+      console.log("success: role deleted from users: ")
+      return { message: "success" }
     })
-
-  }).then(() => {
-    console.log("success: role deleted from users: ")
-    return { message: "success" }
   }).catch(error => {
     console.log("error: error deleting role from users: ", error)
     return { message: "error" }
   })
+
+
 })
 
 
@@ -243,7 +264,7 @@ exports.addFirstUser = functions.https.onCall(async (data, context) => {
     return null
   }).then(() => {
 
-    return users_ref
+    return users_role_ref
     .doc(email).set({
       email: email,
       is_admin: true,
