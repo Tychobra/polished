@@ -5,6 +5,8 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www
 
 Authentication and administration for Shiny apps.  Polished provides a way to secure your Shiny application behind an authentication layer.  It also provides a UI for controlling user access and monitoring user activitiy. 
 
+Warning: there will be many breaking changes before this package matures to version 1.0.0
+
 ## Getting Started
 
 We recommend the following folder structure:
@@ -47,9 +49,7 @@ remotes::install_github("tychobra/polished")
    - go to the "Authentication" page "Sign-in method" tab and enable "Email/Password" sign in.
    - go to the "Database" tab, and click "Create Database" to create a Firestore database.  Start the database in "test mode".  We will secure the database in a later step.
 
-2. Set up initial user in Firestore.
-TODO: create function to somehow automate this process.  Probably can do this with a new Firebase function??
-For now, In the Firebase web UI of your Firebase project, go the the "Database" tab and create a new "apps/{your Shiny app name}/users/{your email address} document with the following fields:
+2. Set up initial user in Firestore.  In the Firebase web UI of your Firebase project, go the the "Database" tab and create a new "apps/{your Shiny app name}/users/{your email address} document with the following fields:
    - email: string - "<your_email_address>"
    - app_name: string - "<your_shiny_app_name>"
    - time_created: timestamp - fill it in with some time today
