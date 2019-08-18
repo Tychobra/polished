@@ -14,7 +14,8 @@ fluidPage(
   ),
   fluidRow(
     column(
-      12,
+      width = 12,
+      style = " margin-bottom: 50px;",
       img(
         width = "300px",
         src = "https://res.cloudinary.com/dxqnb8xjb/image/upload/v1533565833/tychobra_logo_blue_co_name_jekv4a.png"
@@ -22,11 +23,11 @@ fluidPage(
     )
   ),
   fluidRow(
-    style = "margin-bottom: 150px;",
+    style = "margin-bottom: 100px;",
     column(
-      width = 5,
-      offset = 2,
-      style = "background-image: url('polish/images/workchat.svg');  background-repeat: no-repeat; background-size: contain; height: 550px",
+      width = 6,
+      offset = 1,
+      style = "background-image: url('polish/images/workchat.svg');  background-repeat: no-repeat; background-size: contain; height: 550px;",
       br(),
       br(),
       h1(
