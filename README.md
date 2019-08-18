@@ -3,13 +3,13 @@
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
-Authentication and administration for Shiny apps.  Polished provides a way to secure your Shiny application behind an authentication layer.  It also provides a UI for controlling user access and monitoring user activitiy. 
+Authentication and administration for Shiny apps.  `polished` provides a way to secure your Shiny application behind an authentication layer.  It also provides a UI for controlling user access and monitoring user activitiy. 
 
 Warning: there will be many breaking changes before this package matures to version 1.0.0
 
 ## Getting Started
 
-We recommend the following folder structure:
+To add `polished` to your Shiny apps you will need to create a new folder for your `polished` configuration.  To keep things organized we recommend the following folder structure:
 
 - <project_name>/
    - polished-<project_name>/
@@ -17,11 +17,11 @@ We recommend the following folder structure:
    - <shiny_app_2>/
    - ...
 
-The "polished-<project_name>" folder contains all the `polished` project configuration.  "<shiny_app_1>", "<shiny_app_2>", and "..." (other Shiny apps) are the Shiny apps that use the polished configuration set in "polished-<project_name>".
+The "polished-<project_name>" folder contains all the `polished` configuration.  "<shiny_app_1>", "<shiny_app_2>", and "..." (other Shiny apps) are the Shiny apps that use the `polished` configuration set in "polished-<project_name>".
 
-The Shiny apps all use the same email/password for authentication.  e.g. if user `A` is authorized to sign into "<shiny_app_1>" and "<shiny_app_2>", user `A` would use the same email and password to sign into both Shiny apps 1 and 2.  User authorization is then set at a per Shiny app level.  So, for example, an admin could change user `A`s authorization such that user `A` could only access "<shiny_app_1>". 
+Each user will use the same email/password to authenticate with all of the Shiny apps. Authorization is set at a per Shiny app level.  So, as an admin, you can control which users have access to which apps, and your users can use single sign on authentication.
 
-You can have as many Shiny apps in the "<project_name>" folder as you want.  At Tychobra, we build Shiny apps for many different companies, so in our work, each client company usually gets their own separate "<project_name>" directory containing one or more Shiny apps.  
+You can have as many Shiny apps in the "<project_name>" folder as you want.  At Tychobra, we build Shiny apps for many different companies, so in our work, each client company usually gets their own separate "<project_name>" folder containing one or more Shiny apps.  
 
 ### Requirements
 
@@ -59,8 +59,6 @@ remotes::install_github("tychobra/polished")
 3. Organize your Shiny app(s) in accordance with the folder structure from the "Getting Started" section
 
 4. Set up the "<project_name>/polished-<project_name>" folder.
-
-Move to the "<project_name>" folder.
 
 ```
 # terminal
@@ -164,13 +162,13 @@ your_secure_server <- secure_server(
 shinyApp(your_secure_ui, your_secure_server, onStart = global())```
 ```
 
-You can find full working examples with properly configured "config.yml" files in the "inst/examples/" directory in this package.  The examples in "inst/examples/" use our preferred file + directory structure for organizaing Shiny apps.
+You can find full working examples with properly configured "config.yml" files in the "inst/examples/" directory in this package.  The examples in "inst/examples/" use our preferred file and folder structure for organizaing Shiny apps.
 
 ### Additional Options
 
 #### 1. Customize the Sign In / Register UI
 
-Companies often want to add their logos and branding to the sign in and register pages.  With polished, you can easily customize these pages.  Just pass your custom UI to the `sign_in_page_ui` argument of `secure_ui()`.  You can find an example of a customized sing in and register UI in the "inst/examples/auth_custom" Shiny app that is shipped with `polished`.
+Companies often want to add their logos and branding to the sign in and register pages.  With polished, you can easily customize these pages.  Just pass your custom UI to the `sign_in_page_ui` argument of `secure_ui()`.  You can find an example of a customized sign in and register UI in the "inst/examples/auth_custom" Shiny app that is shipped with `polished`.
 
 #### 2. deploy iframe to Firebase hosting
 
