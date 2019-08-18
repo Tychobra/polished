@@ -3,13 +3,13 @@
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
-Authentication and administration for Shiny apps.  Polished provides a way to secure your Shiny application behind an authentication layer.  It also provides a UI for controlling user access and monitoring user activitiy. 
+Authentication and administration for Shiny apps.  `polished` provides a way to secure your Shiny application behind an authentication layer.  It also provides a UI for controlling user access and monitoring user activitiy. 
 
 Warning: there will be many breaking changes before this package matures to version 1.0.0
 
 ## Getting Started
 
-To add polished to your Shiny apps you will need to create a new folder for your polished configuration.  To keep things organized we recommend the following folder structure:
+To add `polished` to your Shiny apps you will need to create a new folder for your `polished` configuration.  To keep things organized we recommend the following folder structure:
 
 - <project_name>/
    - polished-<project_name>/
@@ -17,7 +17,7 @@ To add polished to your Shiny apps you will need to create a new folder for your
    - <shiny_app_2>/
    - ...
 
-The "polished-<project_name>" folder contains all the `polished` configuration.  "<shiny_app_1>", "<shiny_app_2>", and "..." (other Shiny apps) are the Shiny apps that use the polished configuration set in "polished-<project_name>".
+The "polished-<project_name>" folder contains all the `polished` configuration.  "<shiny_app_1>", "<shiny_app_2>", and "..." (other Shiny apps) are the Shiny apps that use the `polished` configuration set in "polished-<project_name>".
 
 Each user will use the same email/password to authenticate with all of the Shiny apps. Authorization is set at a per Shiny app level.  So, as an admin, you can control which users have access to which apps, and your users can use single sign on authentication.
 
