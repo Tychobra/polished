@@ -9,7 +9,7 @@ Warning: there will be many breaking changes before this package matures to vers
 
 ## Getting Started
 
-To add polished to your Shiny apps you will need to create a new directory for your polished configuration.  To keep things organized we recommend the following folder structure:
+To add polished to your Shiny apps you will need to create a new folder for your polished configuration.  To keep things organized we recommend the following folder structure:
 
 - <project_name>/
    - polished-<project_name>/
@@ -21,7 +21,7 @@ The "polished-<project_name>" folder contains all the `polished` project configu
 
 The Shiny apps all use the same email/password for authentication.  e.g. if user `A` is authorized to sign into "<shiny_app_1>" and "<shiny_app_2>", user `A` would use the same email and password to sign into both Shiny apps 1 and 2.  User authorization is then set at a per Shiny app level.  So, for example, an admin could change user `A`s authorization such that user `A` could only access "<shiny_app_1>". 
 
-You can have as many Shiny apps in the "<project_name>" folder as you want.  At Tychobra, we build Shiny apps for many different companies, so in our work, each client company usually gets their own separate "<project_name>" directory containing one or more Shiny apps.  
+You can have as many Shiny apps in the "<project_name>" folder as you want.  At Tychobra, we build Shiny apps for many different companies, so in our work, each client company usually gets their own separate "<project_name>" folder containing one or more Shiny apps.  
 
 ### Requirements
 
