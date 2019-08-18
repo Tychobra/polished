@@ -9,7 +9,7 @@ Warning: there will be many breaking changes before this package matures to vers
 
 ## Getting Started
 
-We recommend the following folder structure:
+To add polished to your Shiny apps, you will need to create a new directory for your polished configuration.  To keep things organized we recommend the following folder structure:
 
 - <project_name>/
    - polished-<project_name>/
