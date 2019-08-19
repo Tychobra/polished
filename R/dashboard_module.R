@@ -299,7 +299,8 @@ dashboard_module <- function(input, output, session) {
         )
     }
 
-    ax_out
+    ax_out %>%
+      ax_chart(parentHeightOffset = 0)
   })
 
 
