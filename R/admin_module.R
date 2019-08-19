@@ -11,6 +11,7 @@ library(shinycssloaders)
 #' @import DT
 #' @import shinyjs
 #' @import shinydashboard
+#' @import htmltools
 #'
 #' @export
 #'
@@ -19,7 +20,23 @@ admin_module_ui <- function(id, firebase_config) {
 
 
   head <- shinydashboard::dashboardHeader(
-    title = "Polished Admin",
+    title = shiny::titlePanel(
+      htmltools::HTML(
+        paste0(
+          htmltools::tags$a(
+            href = "https://polished.tychobra.com",
+            htmltools::tags$img(
+              src="polish/images/polished_hex.png",
+              height = "50px",
+              alt = "Polished Logo",
+              style = "margin-top: -20px; float: left;"
+            )
+          ),
+          htmltools::tags$span("Polished", style='float: left; font-size: 37px !important; margin-top: -14px !important; margin-left: 10px; padding-top: 0 !important;')
+        )
+      ),
+      windowTitle = "Polished"
+    ),
     profile_module_ui(ns("polish__profile"))
   )
 
@@ -48,8 +65,7 @@ admin_module_ui <- function(id, firebase_config) {
 
   body <- shinydashboard::dashboardBody(
     shiny::tags$head(
-      tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
-      #tags$link(rel = "stylesheet", href = "styles.css"),
+      tags$link(rel = "shortcut icon", href = "polish/images/polished_hex.png"),
       tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"),
       firebase_dependencies(),
       firebase_init(firebase_config)
