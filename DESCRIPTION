@@ -5,7 +5,7 @@ Version: 0.0.1.9004
 Author: person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre"))
 Maintainer: Andy Merlino <andy.merlino@tychobra.com>
 Description: Authentication and Administration for Shiny apps
-License: MIT | file LICENSE
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
