@@ -684,7 +684,7 @@ user_access_module <- function(input, output, session) {
 
   })
 
-  # TODO: should we move `app_name` and `firebase_functions_url` to `Users`
+
   shiny::observeEvent(input$submit_role_delete, {
     shiny::removeModal()
 
