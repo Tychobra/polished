@@ -18,10 +18,10 @@ firebase_init
 \examples{
 
 my_config <- list(
-  apiKey = "AIzaSyCTrjysW7-roaUOhGmJwvswh0KE4IYM3qk",
-  authDomain = "polish-template.firebaseapp.com",
-  databaseURL = "https://polish-template.firebaseio.com",
-  projectId = "polish-template"
+  apiKey = "your Firebase API key",
+  authDomain = "your Firebase auth domain",
+  databaseURL = "your Firebase database URL",
+  projectId = "your Firebase Project ID"
 )
 
 firebase_config(my_config)
