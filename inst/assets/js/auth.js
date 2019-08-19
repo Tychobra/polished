@@ -40,9 +40,6 @@ $(document).on('click', '#submit_continue_sign_in', function () {
     var is_invited = result.data.is_invited;
 
     if (is_invited === true) {
-      // TODO: could check invite or registration status here to see if the user is already
-      // registered.  probably not worth it at the moment since it may get out of sync with actual
-      // firebase auth registered users
       // the user has been invited so allow the user to set their password and register
       $("#continue_sign_in").hide();
       $("#sign_in_password").slideDown();
@@ -157,9 +154,6 @@ $(document).on("click", "#submit_continue_register", function () {
     app_name: app_name
   }).then(function (result) {
     if (result.data.is_invited === true) {
-      // TODO: could check invite or registration status here to see if the user is already
-      // registered.  probably not worth it at the moment since it may get out of sync with actual
-      // firebase auth registered users
       // the user has been invited so allow the user to set their password and register
       $("#continue_registation").hide();
       $("#register_passwords").slideDown();

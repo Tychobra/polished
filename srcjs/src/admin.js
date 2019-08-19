@@ -71,7 +71,7 @@ $(document).on("shiny:sessioninitialized", function() {
       }
 
       const users_ref = db.collection("apps")
-      .doc(app_name) // TODO: update this to use app_name in config.yml
+      .doc(app_name)
       .collection("users")
 
       users_ref
@@ -109,7 +109,7 @@ $(document).on("shiny:sessioninitialized", function() {
       const email = message.email.toLowerCase()
 
       const users_ref = db.collection("apps")
-      .doc(app_name) // TODO: update this to use app_name in config.yml
+      .doc(app_name)
       .collection("users")
 
 
@@ -177,7 +177,7 @@ $(document).on("shiny:sessioninitialized", function() {
 
     })
 
-    // TODO: use actual ns from Shiny
+
     Shiny.setInputValue("admin-user_access-polish__users:firestore_data_frame", users)
 
     return users
@@ -206,8 +206,6 @@ $(document).on("shiny:sessioninitialized", function() {
   })
 
   $(document).on('shiny:disconnected', function(socket) {
-    // TODO: fire this manully whenever user goes from admin panel to Shiny app?
-    console.log('users listener about to be removed')
 
     unsubscribe_users()
     unsubscribe_roles()
@@ -254,9 +252,8 @@ $(document).on("shiny:sessioninitialized", function() {
     }
   )
 
-  // TODO: figure out if this is properly unsubscribing from the roles listener
   $(document).on('shiny:disconnected', function(socket) {
-    //console.log('Shiny Disconnected')
+
     if (typeof unsubscribe_roles !== undefined) {
       unsubscribe_roles()
     }

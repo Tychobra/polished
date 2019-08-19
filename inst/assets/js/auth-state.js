@@ -30,17 +30,7 @@ $(document).on("shiny:sessioninitialized", function () {
       })["catch"](function (error) {
         console.log('error getting token');
         console.log(error);
-      }); //var current_user = auth.currentUser
-      //$.LoadingOverlay("show", loading_options)
-      //current_user.getIdToken(/* forceRefresh true*/).then(function(idToken) {
-      //  console.log("getIdToken: ", idToken)
-      //
-      //  Cookies.set('polish__token', idToken)
-      //  Shiny.setInputValue('polish__token', { token: idToken, uid: auth.c }, { priority: 'event' })
-      //}).catch(function(error) {
-      //   console.log('error getting token')
-      //   console.log(error)
-      //})
+      });
     }
   });
   Shiny.addCustomMessageHandler("polish__sign_out", function (message) {

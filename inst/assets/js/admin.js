@@ -50,8 +50,7 @@ $(document).on("shiny:sessioninitialized", function () {
       is_admin: message.is_admin,
       role: message.role
     };
-    var users_ref = db.collection("apps").doc(app_name) // TODO: update this to use app_name in config.yml
-    .collection("users");
+    var users_ref = db.collection("apps").doc(app_name).collection("users");
     users_ref.doc(new_user.email).set({
       is_admin: new_user.is_admin,
       role: new_user.role
@@ -76,8 +75,7 @@ $(document).on("shiny:sessioninitialized", function () {
   */
   function (message) {
     var email = message.email.toLowerCase();
-    var users_ref = db.collection("apps").doc(app_name) // TODO: update this to use app_name in config.yml
-    .collection("users");
+    var users_ref = db.collection("apps").doc(app_name).collection("users");
     users_ref.doc(email)["delete"]().then(function () {
       toastr.success("User Successfully Deleted");
       return null;
@@ -116,8 +114,7 @@ $(document).on("shiny:sessioninitialized", function () {
           }
         }
       });
-    }); // TODO: use actual ns from Shiny
-
+    });
     Shiny.setInputValue("admin-user_access-polish__users:firestore_data_frame", users);
     return users;
   }, function (error) {
@@ -135,8 +132,6 @@ $(document).on("shiny:sessioninitialized", function () {
     console.log(error);
   });
   $(document).on('shiny:disconnected', function (socket) {
-    // TODO: fire this manully whenever user goes from admin panel to Shiny app?
-    console.log('users listener about to be removed');
     unsubscribe_users();
     unsubscribe_roles();
   });
@@ -163,10 +158,8 @@ $(document).on("shiny:sessioninitialized", function () {
       console.log("Error Deleting Role");
       console.log(error);
     });
-  }); // TODO: figure out if this is properly unsubscribing from the roles listener
-
+  });
   $(document).on('shiny:disconnected', function (socket) {
-    //console.log('Shiny Disconnected')
     if (_typeof(unsubscribe_roles) !== undefined) {
       unsubscribe_roles();
     }

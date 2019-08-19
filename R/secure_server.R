@@ -153,7 +153,7 @@ secure_server <- function(server, firebase_functions_url, app_name) {
     })
 
     observeEvent(input$polish__reload, {
-      print("polish__reload ran")
+
       session$reload()
     })
 
