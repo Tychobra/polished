@@ -26,9 +26,11 @@ remove_query_string <- function(session = shiny::getDefaultReactiveDomain()) {
 #' @import tidyr
 #'
 #' @examples
-#' cookies <- "_ga=GA1.1.768093326.1554508951; PGADMIN_KEY=a20922d4-e598-42e8-b62c-a9c9f833d249; PGADMIN_LANGUAGE=en"
+#' cookies <- "cookie_name=cookie-value; cookie_name_2=cookie-value-2; cookie_name_3=cookie-with=sign"
 #'
-#' get_cookie(cookies, "_ga")
+#' get_cookie(cookies, "cookie_name")
+#' get_cookie(cookies, "cookie_name_2")
+#' get_cookie(cookies, "cookie_name_3")
 #'
 get_cookie <- function(cookie_string, name) {
 
