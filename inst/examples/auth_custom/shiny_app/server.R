@@ -2,11 +2,6 @@
 server <- function(input, output, session) {
 
 
-
-  output$secure_content <- renderPrint({
-    session$userData$current_user()[c("email", "is_admin", "role")]
-  })
-
   user_table_prep <- reactive({
 
     data.frame(
