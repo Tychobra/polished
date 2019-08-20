@@ -2,3 +2,4 @@ node_modules/
 ^.*\.Rproj$
 ^\.Rproj\.user$
 srcjs/
+.travis.yml
