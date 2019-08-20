@@ -22,6 +22,6 @@ Imports:
     apexcharter, 
     xts,
     htmltools,
-    lubridate,
-    tychobratools
+    lubridate
+Remotes: github::tychobra/tychobratools
 RoxygenNote: 6.1.1
