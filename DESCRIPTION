@@ -23,8 +23,7 @@ Imports:
     xts,
     htmltools,
     lubridate,
-    tibble
-Suggests: 
+    tibble,
     tychobratools
 Remotes: 
     github::tychobra/tychobratools
