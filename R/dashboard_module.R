@@ -3,6 +3,7 @@
 #' @param id the module id
 #'
 #' @import shiny shinydashboard apexcharter xts dplyr DT shinycssloaders lubridate tychobratools
+#' @importFrom htmlwidgets JS
 #'
 #' @export
 dashboard_module_ui <- function(id) {
@@ -66,6 +67,10 @@ dashboard_module_ui <- function(id) {
 
 #' dashboard_module
 #'
+#' @param input the Shiny server input
+#' @param output the Shiny server output
+#' @param session the Shiny server session
+#'
 #' @import shiny
 #'
 #' @export
@@ -83,10 +88,10 @@ dashboard_module <- function(input, output, session) {
   daily_user_sessions <- eventReactive(input$polish__user_sessions, {
     dat <- input$polish__user_sessions %>%
       dplyr::mutate(
-        time_created = convert_timestamp(time_created),
-        date = as.Date(time_created, tz = "America/New_York")
+        time_created = convert_timestamp(.data$time_created),
+        date = as.Date(.data$time_created, tz = "America/New_York")
       ) %>%
-      dplyr::group_by(date, email) %>%
+      dplyr::group_by(.data$date, .data$email) %>%
       dplyr::summarize(n = n()) %>%
       dplyr::ungroup()
 
@@ -112,8 +117,8 @@ dashboard_module <- function(input, output, session) {
   daily_users <- reactive({
 
     daily_user_sessions() %>%
-      distinct(date, email) %>%
-      group_by(date) %>%
+      distinct(.data$date, .data$email) %>%
+      group_by(.data$date) %>%
       summarize(n = n()) %>%
       ungroup()
 
@@ -136,9 +141,9 @@ dashboard_module <- function(input, output, session) {
   # calculate and format the Monthly Average Users for the value box
   mau_box_prep <- reactive({
     by_month <- daily_user_sessions() %>%
-      mutate(month_ = lubridate::month(date)) %>%
-      distinct(month_, email) %>%
-      group_by(month_) %>%
+      mutate(month_ = lubridate::month(.data$date)) %>%
+      distinct(.data$month_, .data$email) %>%
+      group_by(.data$month_) %>%
       summarize(n = n()) %>%
       ungroup()
 
@@ -157,7 +162,7 @@ dashboard_module <- function(input, output, session) {
   # calculate and format the Monthly Average Sessions for the value box
   das_box_prep <- reactive({
     daily_user_sessions() %>%
-      group_by(date) %>%
+      group_by(.data$date) %>%
       summarize(n_sessions = sum(n)) %>%
       ungroup() %>%
       pull("n_sessions") %>%
@@ -221,9 +226,9 @@ dashboard_module <- function(input, output, session) {
 
     daily_users %>%
       mutate(
-        month_ = as.character(lubridate::month(date, label = TRUE)),
-        day_ = lubridate::day(date),
-        date_out = paste0(month_, " ", day_)
+        month_ = as.character(lubridate::month(.data$date, label = TRUE)),
+        day_ = lubridate::day(.data$date),
+        date_out = paste0(.data$month_, " ", .data$day_)
       )
   })
 
@@ -314,13 +319,16 @@ dashboard_module <- function(input, output, session) {
     )
   })
 
-  container <- htmltools::withTags(table(
-    thead(
-      tr(
-        th("Active Users", style = "font-size: 18px; font-weight: 500;")
+  container <- htmltools::tags$table(
+    htmltools::tags$thead(
+      htmltools::tags$tr(
+        htmltools::tags$th(
+          style = "font-size: 18px; font-weight: 500;",
+          "Active Users"
+        )
       )
     )
-  ))
+  )
 
   output$active_users_table <- DT::renderDataTable({
     out <- active_users_table_prep()

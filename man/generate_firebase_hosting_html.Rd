@@ -9,7 +9,8 @@ generate_firebase_hosting_html(app_name, title = NULL)
 \arguments{
 \item{app_name}{the name of a single Shiny app}
 
-\item{file_name}{default to "hosting/index.html".  The file name of the generated html.}
+\item{title}{Defaults to `NULL`.  The window title to display in the Browser tab. If
+left as `NULL`, the broser tab title will be the title case version of `app_name`}
 }
 \description{
 html for iframe for hosting the Shiny app

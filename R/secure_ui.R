@@ -14,30 +14,6 @@
 #' @importFrom htmltools tagList h1
 #'
 #'
-#' @examples
-#' if (interactive()) {
-#'
-#'
-#'   library(shiny)
-#'   library(tychobraauth)
-#'
-#'
-#'   server <- function(input, output, session) {
-#'
-#'     # call the server part
-#'     # check_credentials returns a function to authenticate users
-#'
-#'
-#'     output$auth_output <- renderPrint({
-#'       "HI"
-#'       #reactiveValuesToList(res_auth)
-#'     })
-#'
-#'   }
-#'
-#'   shinyApp(ui, server)
-#'
-#' }
 secure_ui <- function(ui, firebase_config, app_name, sign_in_page_ui = NULL) {
   ui <- force(ui)
 

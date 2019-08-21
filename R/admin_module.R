@@ -1,10 +1,6 @@
-library(shiny)
-library(DT)
-library(shinyjs)
-library(shinycssloaders)
-
 #' admin_ui
 #'
+#' @param id the Shiny module id
 #' @param firebase_config list of Firebase config
 #'
 #' @import shiny
@@ -114,6 +110,10 @@ admin_module_ui <- function(id, firebase_config) {
 
 
 #' admin_module
+#'
+#' @param input the Shiny server input
+#' @param output the Shiny server output
+#' @param session the Shiny server session
 #'
 #' @export
 #'

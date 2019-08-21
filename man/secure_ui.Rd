@@ -22,28 +22,3 @@ shiny app ui
 \description{
 Secure a Shiny application and manage authentication
 }
-\examples{
-if (interactive()) {
-
-
-  library(shiny)
-  library(tychobraauth)
-
-
-  server <- function(input, output, session) {
-
-    # call the server part
-    # check_credentials returns a function to authenticate users
-
-
-    output$auth_output <- renderPrint({
-      "HI"
-      #reactiveValuesToList(res_auth)
-    })
-
-  }
-
-  shinyApp(ui, server)
-
-}
-}

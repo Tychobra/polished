@@ -25,6 +25,8 @@ remove_query_string <- function(session = shiny::getDefaultReactiveDomain()) {
 #' @import dplyr
 #' @import tidyr
 #'
+#' @export
+#'
 #' @examples
 #' cookies <- "cookie_name=cookie-value; cookie_name_2=cookie-value-2; cookie_name_3=cookie-with=sign"
 #'
@@ -37,8 +39,8 @@ get_cookie <- function(cookie_string, name) {
   cookies <- strsplit(cookie_string , split = "; ", fixed = TRUE)
 
   dplyr::tibble(cookie = unlist(cookies)) %>%
-    tidyr::separate(cookie, into = c("key", "value"), sep = "=", extra = "merge") %>%
-    dplyr::filter(key == name) %>%
+    tidyr::separate(.data$cookie, into = c("key", "value"), sep = "=", extra = "merge") %>%
+    dplyr::filter(.data$key == name) %>%
     dplyr::pull("value")
 }
 

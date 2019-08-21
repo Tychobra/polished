@@ -6,6 +6,9 @@
 \usage{
 profile_module_ui(id)
 }
+\arguments{
+\item{id}{the Shiny module id}
+}
 \description{
 verify email page ui
 }

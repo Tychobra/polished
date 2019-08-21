@@ -3,7 +3,8 @@
 #' html for iframe for hosting the Shiny app
 #'
 #' @param app_name the name of a single Shiny app
-#' @param file_name default to "hosting/index.html".  The file name of the generated html.
+#' @param title Defaults to `NULL`.  The window title to display in the Browser tab. If
+#' left as `NULL`, the broser tab title will be the title case version of `app_name`
 #'
 #' @export
 #'

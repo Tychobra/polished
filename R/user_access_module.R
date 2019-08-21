@@ -7,6 +7,7 @@ library(shinycssloaders)
 #' @importFrom htmltools br
 #' @importFrom DT DTOutput
 #'
+#'
 #' @export
 user_access_module_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -96,6 +97,10 @@ user_access_module_ui <- function(id) {
 
 #' admin_user_access
 #'
+#' @param input the Shiny server input
+#' @param output the Shiny server output
+#' @param session the Shiny server session
+#'
 #' @import shiny shinyjs dplyr
 #' @importFrom htmltools br div
 #' @importFrom DT renderDT datatable
@@ -113,11 +118,11 @@ user_access_module <- function(input, output, session) {
   observeEvent(input$polish__users, {
     out <- input$polish__users %>%
       dplyr::mutate(
-        time_last_signed_in_r = as.POSIXct(time_last_signed_in_r, format="%Y-%m-%dT%H:%M:%S", tz = "America/New_York"),
-        is_admin = as.logical(is_admin)
+        time_last_signed_in_r = as.POSIXct(.data$time_last_signed_in_r, format="%Y-%m-%dT%H:%M:%S", tz = "America/New_York"),
+        is_admin = as.logical(.data$is_admin)
       ) %>%
-      dplyr::arrange(desc(time_last_signed_in_r)) %>%
-      dplyr::select(-time_last_signed_in_r)
+      dplyr::arrange(desc(.data$time_last_signed_in_r)) %>%
+      dplyr::select(-.data$time_last_signed_in_r)
 
     users(out)
   })
@@ -485,57 +490,7 @@ user_access_module <- function(input, output, session) {
     )
   })
 
-  observeEvent(input$delete_role, {
-    shiny::showModal(
-      shiny::modalDialog(
-        title = "Add Role",
-        footer = list(
-          modalButton("Cancel"),
-          actionButton(
-            ns("submit_role_add"),
-            "Delete Role",
-            class = "btn-danger",
-            style = "color: white",
-            icon = icon("times")
-          )
-        ),
-        size = "s",
-        div(
-          style = "min-height: 250px",
-          div(
-            id = "manage_roles_modal_content",
-            # modal content
-            htmltools::br(),
-            shinyWidgets::searchInput(
-              inputId = ns("new_user_role"),
-              label = "New Role",
-              btnSearch = icon("plus"),
-              width = "100%"
-            ),
-            #shiny::textInput(
-            #  ns("new_user_role"),
-            #  "New Role"
-            #),
-            htmltools::br(),
-            DT::DTOutput(ns("roles_table"))
-          ),
-          div(
-            id = "delete_role_modal_content",
-            style = "display: none;",
-            htmltools::br(),
-            h3(
-              style = "line-height: 1.3;",
-              'Are you sure you want to delete role "',
-              tags$span(
-                id = ns("role_to_delete_span")
-              ),
-              '"?  Any users with this role will lose it.'
-            )
-          )
-        )
-      )
-    )
-  })
+
 
 
   role_add_trigger <- reactiveVal(0)

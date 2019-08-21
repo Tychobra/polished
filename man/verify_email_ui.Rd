@@ -7,6 +7,8 @@
 verify_email_ui(id, firebase_config)
 }
 \arguments{
+\item{id}{the Shiny module id}
+
 \item{firebase_config}{Firebase configuration}
 }
 \description{

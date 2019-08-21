@@ -29,8 +29,8 @@
 
     data_out <- dplyr::bind_rows(data_out)
 
-    tidyr::spread(data_out, key = js_name, value = js_value) %>%
-      dplyr::select(-index_num)
+    tidyr::spread(data_out, key = .data$js_name, value = .data$js_value) %>%
+      dplyr::select(-.data$index_num)
 
   }, force = TRUE)
 }

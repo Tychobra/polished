@@ -6,6 +6,13 @@
 \usage{
 admin_module(input, output, session)
 }
+\arguments{
+\item{input}{the Shiny server input}
+
+\item{output}{the Shiny server output}
+
+\item{session}{the Shiny server session}
+}
 \description{
 admin_module
 }

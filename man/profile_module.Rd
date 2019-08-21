@@ -6,6 +6,13 @@
 \usage{
 profile_module(input, output, session)
 }
+\arguments{
+\item{input}{the Shiny server input}
+
+\item{output}{the Shiny server output}
+
+\item{session}{the Shiny server session}
+}
 \description{
 profile module server
 }

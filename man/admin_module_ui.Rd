@@ -7,6 +7,8 @@
 admin_module_ui(id, firebase_config)
 }
 \arguments{
+\item{id}{the Shiny module id}
+
 \item{firebase_config}{list of Firebase config}
 }
 \description{

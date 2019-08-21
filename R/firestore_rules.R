@@ -6,7 +6,7 @@
 #'
 #' @export
 #'
-#' @example
+#' @examples
 #'
 #' generate_firestore_rules_text("shiny_1")
 #'
@@ -65,9 +65,13 @@ generate_firestore_rules_text <- function(app_names) {
 #'
 #' @examples
 #'
-#' write_firestore_rules("project1")
+#' \dontrun{
 #'
-#' write_firestore_rules(c("project1", "project2"), "R", "file.rules")
+#'   write_firestore_rules("project1")
+#'
+#'   write_firestore_rules(c("project1", "project2"), "R", "file.rules")
+#'
+#' }
 #'
 write_firestore_rules <- function(app_names, dir = ".", file_name = "firestore.rules") {
 

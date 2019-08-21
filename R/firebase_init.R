@@ -8,6 +8,7 @@
 #'
 #' @examples
 #'
+#' \dontrun{
 #' my_config <- list(
 #'   apiKey = "your Firebase API key",
 #'   authDomain = "your Firebase auth domain",
@@ -15,8 +16,8 @@
 #'   projectId = "your Firebase Project ID"
 #' )
 #'
-#' firebase_config(my_config)
-#'
+#' firebase_init(my_config)
+#' }
 firebase_init <- function(firebase_config) {
 
   tagList(

@@ -12,3 +12,10 @@ generate_firestore_rules_text(app_names)
 \description{
 This text will be used to write the firestore.rules file
 }
+\examples{
+
+generate_firestore_rules_text("shiny_1")
+
+generate_firestore_rules_text("shiny_1, shiny_2")
+
+}

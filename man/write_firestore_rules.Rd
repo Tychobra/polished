@@ -19,8 +19,12 @@ write the firestore.rules file
 }
 \examples{
 
-write_firestore_rules("project1")
+\dontrun{
 
-write_firestore_rules(c("project1", "project2"), "R", "file.rules")
+  write_firestore_rules("project1")
+
+  write_firestore_rules(c("project1", "project2"), "R", "file.rules")
+
+}
 
 }

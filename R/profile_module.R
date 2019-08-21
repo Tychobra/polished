@@ -1,5 +1,7 @@
 #' verify email page ui
 #'
+#' @param id the Shiny module id
+#'
 #' @importFrom htmltools tags
 #' @importFrom shiny textOutput actionLink
 #'
@@ -35,6 +37,10 @@ profile_module_ui <- function(id) {
 }
 
 #' profile module server
+#'
+#' @param input the Shiny server input
+#' @param output the Shiny server output
+#' @param session the Shiny server session
 #'
 #' @export
 #'

@@ -1,5 +1,6 @@
 #' verify email page ui
 #'
+#' @param id the Shiny module id
 #' @param firebase_config Firebase configuration
 #'
 #' @export
