@@ -35,11 +35,7 @@ You can have as many Shiny apps in the "<project_name>" folder as you want.  At 
 ```
 # R
 
-# install remotes and packages if needed
-install.packages("remotes") 
-install.packages("shinydashboard")
 remotes::install_github("tychobra/tychobratools")
-
 remotes::install_github("tychobra/polished")
 ```
 
