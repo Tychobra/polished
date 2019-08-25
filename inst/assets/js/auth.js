@@ -171,3 +171,38 @@ $(document).on("click", "#submit_continue_register", function () {
     console.log(error);
   });
 });
+$("#email").on("keypress", function (e) {
+  if (e.which == 13) {
+    if ($("#submit_continue_sign_in").is(":visible")) {
+      console.log("enter clicked email");
+      $("#submit_continue_sign_in").click();
+    } else {
+      console.log("enter clicked email 2");
+      $("#submit_sign_in").click();
+    }
+  }
+});
+$("#password").on('keypress', function (e) {
+  if (e.which == 13) {
+    $("#submit_sign_in").click();
+  }
+});
+$("#register_email").on("keypress", function (e) {
+  if (e.which == 13) {
+    if ($("#submit_continue_register").is(":visible")) {
+      $("#submit_continue_register").click();
+    } else {
+      $("#submit_register").click();
+    }
+  }
+});
+$("#register_password").on('keypress', function (e) {
+  if (e.which == 13) {
+    $("#submit_register").click();
+  }
+});
+$("#register_password_verify").on('keypress', function (e) {
+  if (e.which == 13) {
+    $("#submit_register").click();
+  }
+});
