@@ -157,7 +157,7 @@ your_secure_server <- secure_server(
   app_name = "your_app_name"
 )
 
-shinyApp(your_secure_ui, your_secure_server, onStart = global())```
+shinyApp(your_secure_ui, your_secure_server, onStart = global())
 ```
 
 You can find full working examples with properly configured "config.yml" files in the "inst/examples/" directory in this package.  The examples in "inst/examples/" use our preferred file and folder structure for organizaing Shiny apps.
