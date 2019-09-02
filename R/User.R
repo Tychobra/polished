@@ -180,7 +180,7 @@ Users <-  R6::R6Class(
     remove_user_by_uid = function(uid, polished_session) {
       if (length(self$users) == 0 || is.null(uid)) return(NULL)
 
-      for (i in seq_along(self$users)) {
+      for (i in rev(seq_along(self$users))) {
 
         if (self$users[[i]]$get_uid() == uid && self$users[[i]]$get_polished_session() == polished_session) {
           self$users[[i]] <- NULL
