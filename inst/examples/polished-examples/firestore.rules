@@ -44,6 +44,25 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /apps/custom_admin_tabs/users/{email} {
+
+      allow read, write: if request.auth.token.email == email || is_admin(database, request.auth.token.email, "custom_admin_tabs");
+    }
+
+    match /apps/custom_admin_tabs/roles/{role} {
+
+      allow read: if request.auth.uid != null;
+
+      allow write: if request.auth.uid != null && is_admin(database, request.auth.token.email, "custom_admin_tabs");
+    }
+
+    match /apps/custom_admin_tabs/sessions/{session} {
+
+      allow read: if is_admin(database, request.auth.token.email, "custom_admin_tabs");
+
+      allow write: if false;
+    }
+
 
   }
 }

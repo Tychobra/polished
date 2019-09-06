@@ -4,12 +4,15 @@
 \alias{admin_module_ui}
 \title{admin_ui}
 \usage{
-admin_module_ui(id, firebase_config)
+admin_module_ui(id, firebase_config, custom_admin_ui = NULL)
 }
 \arguments{
 \item{id}{the Shiny module id}
 
 \item{firebase_config}{list of Firebase config}
+
+\item{custom_admin_ui}{Either `NULL`, the default, or a list of 2 elements containing custom
+ui to add addtional `shinydashboard` tabs to the Polished admin panel.}
 }
 \description{
 admin_ui

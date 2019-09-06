@@ -2,23 +2,28 @@
 % Please edit documentation in R/secure_ui.R
 \name{secure_ui}
 \alias{secure_ui}
-\title{Secure a Shiny application and manage authentication}
+\title{Secure the Shiny Application UI}
 \usage{
-secure_ui(ui, firebase_config, app_name, sign_in_page_ui = NULL)
+secure_ui(ui, firebase_config, app_name, sign_in_page_ui = NULL,
+  custom_admin_ui = NULL)
 }
 \arguments{
 \item{ui}{UI of the application.}
 
-\item{firebase_config}{list of firebase configuration}
+\item{firebase_config}{A list containing your Firebase project configuration.  This will
+be passed to \code{\link{firebase_init()}}.}
 
-\item{app_name}{the name of the app}
+\item{app_name}{The name of the app.}
 
-\item{sign_in_page_ui}{either NULL, the default, or the HTML, CSS, and JavaScript
-to use for the UI of the Sign In page}
+\item{sign_in_page_ui}{Either `NULL`, the default, or the HTML, CSS, and JavaScript
+to use for the UI of the Sign In page.}
+
+\item{custom_admin_ui}{Either `NULL`, the default, or a list of 2 elements containing custom
+ui to add addtional `shinydashboard` tabs to the Polished admin panel.}
 }
 \value{
-shiny app ui
+Secured Shiny app ui
 }
 \description{
-Secure a Shiny application and manage authentication
+Secure the Shiny Application UI
 }

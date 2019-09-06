@@ -2,7 +2,8 @@ library(polished)
 
 app_names <- c(
   "auth_basic",
-  "auth_custom"
+  "auth_custom",
+  "custom_admin_tabs"
 )
 
 write_firestore_rules(app_names)

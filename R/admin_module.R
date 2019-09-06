@@ -2,6 +2,8 @@
 #'
 #' @param id the Shiny module id
 #' @param firebase_config list of Firebase config
+#' @param custom_admin_ui Either `NULL`, the default, or a list of 2 elements containing custom
+#' ui to add addtional `shinydashboard` tabs to the Polished admin panel.
 #'
 #' @import shiny
 #' @import DT
@@ -11,9 +13,10 @@
 #'
 #' @export
 #'
-admin_module_ui <- function(id, firebase_config) {
+admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
   ns <- NS(id)
 
+  stopifnot(is.null(custom_admin_ui) || names(custom_admin_ui) == c("menu_items", "tab_items"))
 
   head <- shinydashboard::dashboardHeader(
     title = shiny::titlePanel(
@@ -49,6 +52,9 @@ admin_module_ui <- function(id, firebase_config) {
         tabName = "user_access",
         icon = icon("users")
       ),
+
+      custom_admin_ui$menu_items,
+
       tags$a(
         href = "https://www.tychobra.com/",
         img(
@@ -80,13 +86,9 @@ admin_module_ui <- function(id, firebase_config) {
     ),
 
     tabItems(
-      # shinydashboard::tabItem(
-      #   tabName = "dashboard",
-      #   h1("Dashboard"),
-      #   verbatimTextOutput(ns("global_users_out"))
-      # ),
       dashboard_module_ui(ns("dashboard")),
-      user_access_module_ui(ns("user_access"))
+      user_access_module_ui(ns("user_access")),
+      custom_admin_ui$tab_items
     ),
 
     tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),

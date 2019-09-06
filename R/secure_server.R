@@ -1,9 +1,10 @@
 #' secure_server
 #'
-#' @param server A Shiny server function. e.g `function(input, output, session) {}`
-#' @param firebase_functions_url url for the firebase functions
-#' @param app_name the name of the app
-#'
+#' @param server A Shiny server function (e.g `function(input, output, session) {}`)
+#' @param firebase_functions_url The url for your project's Firebase functions.
+#' @param app_name The name of the app.
+#' @param custom_admin_server Either NULL, the default, or a Shiny server function containing your custom admin
+#' server functionality.
 #'
 #' @export
 #'
@@ -12,7 +13,12 @@
 #' is set to NULL if user is not signed in or a list with user data if the user is
 #' signed in
 #'
-secure_server <- function(server, firebase_functions_url, app_name) {
+secure_server <- function(
+  server,
+  firebase_functions_url,
+  app_name,
+  custom_admin_server = NULL
+) {
 
 
   function(input, output, session) {
@@ -146,7 +152,6 @@ secure_server <- function(server, firebase_functions_url, app_name) {
 
 
 
-
     observeEvent(input$polish__sign_out, {
       req(session$userData$current_user())
       sign_out_from_shiny(session)
@@ -194,6 +199,15 @@ secure_server <- function(server, firebase_functions_url, app_name) {
 
       session$reload()
     }, ignoreInit = TRUE)
+
+
+    # custom admin server functionality
+    if (isTRUE(!is.null(custom_admin_server))) {
+      observeEvent(session$userData$current_user(), {
+        custom_admin_server(input, output, session)
+      })
+    }
+
 
     # user developed server.  Required signed in user to
     # access
