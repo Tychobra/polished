@@ -160,14 +160,14 @@ your_secure_server <- secure_server(
 shinyApp(your_secure_ui, your_secure_server, onStart = global())
 ```
 
-You can find full working examples with properly configured "config.yml" files in the "inst/examples/" directory in this package.  The examples in "inst/examples/" use our preferred file and folder structure for organizaing Shiny apps.
+You can find full working examples with placeholder "config.yml" files in the "inst/examples/" directory in this package.  Update the "config.yml" with your Firebase project credentials to demo these applications.
 
 ### Additional Options
 
 #### 1. Customize the Sign In / Register UI
 
-Companies often want to add their logos and branding to the sign in and register pages.  With polished, you can easily customize these pages.  Just pass your custom UI to the `sign_in_page_ui` argument of `secure_ui()`.  You can find an example of a customized sign in and register UI in the "inst/examples/auth_custom" Shiny app that is shipped with `polished`.
+Companies often want to add their logos and branding to the sign in and register pages.  With polished, you can easily customize these pages.  Just pass your custom UI to the `sign_in_page_ui` argument of `secure_ui()`.  You can find an example of a customized sign in and register UI in the "inst/examples/auth_custom" Shiny app that is shipped with `polished`.  To get this example working, you will need to update the "config.yml" with your Firebase credentials. 
 
 #### 2. Add custom tabs to the Polished Admin shinydashboard
 
-You can add custom tabs to the admin dashboard by passing the ui and server code to the `secure_ui()` and `secure_server()` functions.  An example app with custom Admin tabs can be found in the "inst/examples/custom_admin_tabs".
+You can add custom tabs to the admin dashboard by passing the ui and server code to the `secure_ui()` and `secure_server()` functions.  An example app with custom Admin tabs can be found in the "inst/examples/custom_admin_tabs". To get this example working, you will need to update the "config.yml" with your Firebase credentials. 
