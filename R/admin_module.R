@@ -39,31 +39,73 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
     profile_module_ui(ns("polish__profile"))
   )
 
-  sidebar <- shinydashboard::dashboardSidebar(
-    sidebarMenu(
-      id = ns("sidebar_menu"),
-      menuItem(
-        text = "Dashboard",
-        tabName = "dashboard",
-        icon = icon("dashboard")
-      ),
-      menuItem(
-        text = "User Access",
-        tabName = "user_access",
-        icon = icon("users")
-      ),
+  if (is.null(custom_admin_ui$menu_items)) {
+    sidebar <- shinydashboard::dashboardSidebar(
+      sidebarMenu(
+        id = ns("sidebar_menu"),
+        menuItem(
+          text = "Dashboard",
+          tabName = "dashboard",
+          icon = icon("dashboard")
+        ),
+        menuItem(
+          text = "User Access",
+          tabName = "user_access",
+          icon = icon("users")
+        ),
 
-      custom_admin_ui$menu_items,
 
-      tags$a(
-        href = "https://www.tychobra.com/",
-        img(
-          style = "position: fixed; bottom: 0; left: 0; width: 230px;",
-          src = "polish/images/tychobra_logo_blue_co_name.png"
+        tags$a(
+          href = "https://www.tychobra.com/",
+          img(
+            style = "position: fixed; bottom: 0; left: 0; width: 230px;",
+            src = "polish/images/tychobra_logo_blue_co_name.png"
+          )
         )
       )
     )
-  )
+  } else {
+    sidebar <- shinydashboard::dashboardSidebar(
+      sidebarMenu(
+        id = ns("sidebar_menu"),
+        menuItem(
+          text = "Dashboard",
+          tabName = "dashboard",
+          icon = icon("dashboard")
+        ),
+        menuItem(
+          text = "User Access",
+          tabName = "user_access",
+          icon = icon("users")
+        ),
+
+        custom_admin_ui$menu_items,
+
+        tags$a(
+          href = "https://www.tychobra.com/",
+          img(
+            style = "position: fixed; bottom: 0; left: 0; width: 230px;",
+            src = "polish/images/tychobra_logo_blue_co_name.png"
+          )
+        )
+      )
+    )
+  }
+
+
+  if (is.null(custom_admin_ui$tab_items)) {
+    tab_items <- tabItems(
+      dashboard_module_ui(ns("dashboard")),
+      user_access_module_ui(ns("user_access"))
+    )
+  } else {
+    tab_items <- tabItems(
+      dashboard_module_ui(ns("dashboard")),
+      user_access_module_ui(ns("user_access")),
+      custom_admin_ui$tab_items
+    )
+  }
+
 
   body <- shinydashboard::dashboardBody(
     shiny::tags$head(
@@ -85,11 +127,8 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
       )
     ),
 
-    tabItems(
-      dashboard_module_ui(ns("dashboard")),
-      user_access_module_ui(ns("user_access")),
-      custom_admin_ui$tab_items
-    ),
+    tab_items,
+
 
     tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
     tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"),
