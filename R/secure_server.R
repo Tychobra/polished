@@ -188,7 +188,7 @@ secure_server <- function(
       global_user <- .global_users$find_user_by_uid(polished_user$uid, polished_user$polished_session)
       global_user$clear_signed_in_as()
 
-      # remove admin_pane=false from query
+      # remove admin_panel=false from query
       updateQueryString(
         queryString = paste0("?admin_panel=true"),
         session = session,
@@ -212,8 +212,13 @@ secure_server <- function(
     # user developed server.  Required signed in user to
     # access
     observeEvent(session$userData$current_user(), {
-      server(input, output, session)
+      query_string <- getQueryString()
+
+      if (is.null(query_string$admin_panel)) {
+        server(input, output, session)
+      }
     })
+
   }
 
 }
