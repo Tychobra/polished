@@ -120,7 +120,8 @@ dashboard_module <- function(input, output, session) {
       distinct(.data$date, .data$email) %>%
       group_by(.data$date) %>%
       summarize(n = n()) %>%
-      ungroup()
+      ungroup() %>%
+      filter(.data$date >= Sys.Date() - lubridate::days(30))
 
   })
 
