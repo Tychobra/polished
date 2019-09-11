@@ -72,6 +72,7 @@ dashboard_module_ui <- function(id) {
 #' @param session the Shiny server session
 #'
 #' @import shiny
+#' @importFrom lubridate days
 #'
 #' @export
 dashboard_module <- function(input, output, session) {
@@ -121,7 +122,7 @@ dashboard_module <- function(input, output, session) {
       group_by(.data$date) %>%
       summarize(n = n()) %>%
       ungroup() %>%
-      filter(.data$date >= Sys.Date() - lubridate::days(30))
+      filter(.data$date >= lubridate::today(tzone = "America/New_York") - lubridate::days(30))
 
   })
 
