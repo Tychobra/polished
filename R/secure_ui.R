@@ -43,16 +43,12 @@ secure_ui <- function(
     }
 
     user <- NULL
-    if (!is.null(uid)) {
+    if (!is.null(uid) && !is.null(polished_session) && length(uid) > 0 && length(polished_session)) {
       tryCatch({
         user <- .global_users$find_user_by_uid(uid, polished_session)
       }, error = function(error) {
         print("sign_in_ui_1")
         print(error)
-        print(list(
-          "uid" = uid,
-          "polished_session" = polished_session
-        ))
       })
     }
 
