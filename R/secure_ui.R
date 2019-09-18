@@ -8,6 +8,8 @@
 #' to use for the UI of the Sign In page.
 #' @param custom_admin_ui Either `NULL`, the default, or a list of 2 elements containing custom
 #' ui to add addtional `shinydashboard` tabs to the Polished admin panel.
+#' @param custom_admin_button_ui Either `admin_button_ui("polished")`, the default, ot your custom
+#' ui to take admins from the custom Shiny app to the Admin panel.
 #'
 #' @return Secured Shiny app ui
 #'
@@ -22,10 +24,12 @@ secure_ui <- function(
   firebase_config,
   app_name,
   sign_in_page_ui = NULL,
-  custom_admin_ui = NULL
+  custom_admin_ui = NULL,
+  custom_admin_button_ui = admin_button_ui("polished")
 ) {
 
   ui <- force(ui)
+  custom_admin_button_ui <- force(custom_admin_button_ui)
 
   function(request) {
     query <- parseQueryString(request$QUERY_STRING)
@@ -106,13 +110,7 @@ secure_ui <- function(
                 tags$link(rel = "stylesheet", href = "polish/css/all.css")
               ),
               ui,
-              actionButton(
-                "polish__go_to_admin_panel",
-                "Admin Panel",
-                icon = icon("cog"),
-                class = "btn-primary btn-lg",
-                style = "position: fixed; bottom: 15px; right: 15px; color: #FFFFFF;"
-              ),
+              custom_admin_button_ui,
               firebase_dependencies(),
               firebase_init(firebase_config),
               tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),

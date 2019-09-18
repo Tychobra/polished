@@ -5,7 +5,8 @@
 \title{Secure the Shiny Application UI}
 \usage{
 secure_ui(ui, firebase_config, app_name, sign_in_page_ui = NULL,
-  custom_admin_ui = NULL)
+  custom_admin_ui = NULL,
+  admin_button_ui = admin_button_ui("polished"))
 }
 \arguments{
 \item{ui}{UI of the application.}
@@ -20,6 +21,9 @@ to use for the UI of the Sign In page.}
 
 \item{custom_admin_ui}{Either `NULL`, the default, or a list of 2 elements containing custom
 ui to add addtional `shinydashboard` tabs to the Polished admin panel.}
+
+\item{admin_button_ui}{Either `admin_button_ui("polished")`, the default, ot your custom
+ui to take admins from the custom Shiny app to the Admin panel.}
 }
 \value{
 Secured Shiny app ui

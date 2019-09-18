@@ -2,6 +2,7 @@
 
 export(User)
 export(Users)
+export(admin_button_ui)
 export(admin_module)
 export(admin_module_ui)
 export(convert_timestamp)
