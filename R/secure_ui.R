@@ -49,6 +49,10 @@ secure_ui <- function(
       }, error = function(error) {
         print("sign_in_ui_1")
         print(error)
+        print(list(
+          "uid" = uid,
+          "polished_session" = polished_session
+        ))
       })
     }
 
