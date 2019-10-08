@@ -63,9 +63,3 @@ node_modules/
 
 # dotenv environment variables file
 .env
-
-# R
-.Rhistory
-*.Rproj
-rsconnect/
-

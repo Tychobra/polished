@@ -10,6 +10,7 @@
 #' @import shinyjs
 #' @import shinydashboard
 #' @import htmltools
+#' @import shinytoastr
 #'
 #' @export
 #'
@@ -115,6 +116,7 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
       firebase_init(firebase_config)
     ),
     shinyjs::useShinyjs(),
+    shinytoastr::useToastr(),
 
     div(
       style = "position: fixed; bottom: 15px; right: 15px; z-index: 1000;",
@@ -130,12 +132,7 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
     tab_items,
 
 
-    tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
-    tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"),
-    tags$script(src = "polish/js/all.js"),
-    tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-    tags$script(src = "polish/js/auth-state.js"),
-    tags$script(src = "polish/js/admin.js")
+    tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js")
   )
 
 
@@ -182,9 +179,6 @@ admin_module <- function(input, output, session) {
 
   }, ignoreInit = TRUE)
 
-  observeEvent(input$polish__sign_out, {
-    sign_out_from_shiny(session)
-  })
 
   callModule(dashboard_module, "dashboard")
   callModule(user_access_module, "user_access")

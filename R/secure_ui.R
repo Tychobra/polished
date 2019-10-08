@@ -1,9 +1,7 @@
 #' Secure the Shiny Application UI
 #'
 #' @param ui UI of the application.
-#' @param firebase_config A list containing your Firebase project configuration.  This will
-#' be passed to \code{\link{firebase_init()}}.
-#' @param app_name The name of the app.
+#' @param firebase_config Firebase configuration.
 #' @param sign_in_page_ui Either `NULL`, the default, or the HTML, CSS, and JavaScript
 #' to use for the UI of the Sign In page.
 #' @param custom_admin_ui Either `NULL`, the default, or a list of 2 elements containing custom
@@ -22,7 +20,6 @@
 secure_ui <- function(
   ui,
   firebase_config,
-  app_name,
   sign_in_page_ui = NULL,
   custom_admin_ui = NULL,
   custom_admin_button_ui = admin_button_ui("polished")
@@ -36,16 +33,15 @@ secure_ui <- function(
 
     cookie_string <- request$HTTP_COOKIE
 
-    uid <- NULL
+    polished_token <- NULL
     if (!is.null(cookie_string)) {
-      uid <- get_cookie(cookie_string, "polish__uid")
-      polished_session <- get_cookie(cookie_string, "polish__session")
+      polished_token <- get_cookie(cookie_string, "polished__token")
     }
 
     user <- NULL
-    if (!is.null(uid) && !is.null(polished_session) && length(uid) > 0 && length(polished_session)) {
+    if (!is.null(polished_token) && length(polished_token) > 0) {
       tryCatch({
-        user <- .global_users$find_user_by_uid(uid, polished_session)
+        user <- .global_sessions$find(polished_token)
       }, error = function(error) {
         print("sign_in_ui_1")
         print(error)
@@ -61,34 +57,21 @@ secure_ui <- function(
 
         # go to default sign in page
         page_out <- tagList(
-          tags$head(
-            tags$script(paste0("var app_name = '", app_name, "'")),
-            tags$link(rel = "stylesheet", href = "polish/css/all.css")
-          ),
           sign_in_ui_default(firebase_config)
         )
       } else {
 
         # go to custom sign in page
         page_out <- tagList(
-          tags$head(
-            tags$script(paste0("var app_name = '", app_name, "'")),
-            tags$link(rel = "stylesheet", href = "polish/css/all.css")
-          ),
           sign_in_page_ui
         )
       }
 
     } else {
 
+      if (isTRUE(user$email_verified)) {
 
-      is_email_verified <- user$get_email_verified()
-      is_admin <- user$get_is_admin()
-
-
-      if (isTRUE(is_email_verified)) {
-
-        if (isTRUE(is_admin)) {
+        if (isTRUE(user$is_admin)) {
 
           admin_panel_query <- query$admin_panel
 
@@ -96,58 +79,45 @@ secure_ui <- function(
 
             # go to Admin Panel
             page_out <- tagList(
-              tags$head(
-                tags$script(paste0("var app_name = '", app_name, "'")),
-                tags$link(rel = "stylesheet", href = "polish/css/all.css")
-              ),
-              admin_module_ui("admin", firebase_config, custom_admin_ui)
+              admin_module_ui("admin", firebase_config, custom_admin_ui),
+              tags$script(paste0("$(document).on('shiny:sessioninitialized', function() {Shiny.setInputValue('polished__session', '", user$token, "' )})"))
             )
           } else {
 
             page_out <- tagList(
-              tags$head(
-                tags$script(paste0("var app_name = '", app_name, "'")),
-                tags$link(rel = "stylesheet", href = "polish/css/all.css")
-              ),
               ui,
               custom_admin_button_ui,
-              firebase_dependencies(),
-              firebase_init(firebase_config),
               tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
-              tags$script(src = "polish/js/all.js"),
-          tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-              tags$script(src = "polish/js/auth-state.js")
+              tags$script(paste0("$(document).on('shiny:sessioninitialized', function() {Shiny.setInputValue('polished__session', '", user$token, "' )})"))
             )
           }
 
 
-         } else {
-
-            # go to Shiny app
-            page_out <- tagList(
-              tags$head(
-                tags$script(paste0("var app_name = '", app_name, "'")),
-                tags$link(rel = "stylesheet", href = "polish/css/all.css")
-              ),
-              ui,
-              firebase_dependencies(),
-              firebase_init(firebase_config),
-              tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
-              tags$script(src = "polish/js/all.js"),
-              tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-              tags$script(src = "polish/js/auth-state.js")
-            )
-
-          } # end is_admin check
-
         } else {
 
-          # show email verification view
-          page_out <- verify_email_ui("verify", firebase_config)
+          # go to Shiny app without admin button.  User is not an admin
+          page_out <- tagList(
+            ui,
+            tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
+            tags$script(paste0("$(document).on('shiny:sessioninitialized', function() {Shiny.setInputValue('polished__session', '", user$token, "' )})"))
+          )
 
-        } # end is_email_verified block
+        } # end is_admin check
+      } else {
+        # email is not verified.
+        # go to email verification page
 
+        page_out <- tagList(
+          verify_email_ui(
+            "verify",
+            firebase_config
+          ),
+          tags$script(paste0("$(document).on('shiny:sessioninitialized', function() {Shiny.setInputValue('polished__session', '", user$token, "' )})"))
+        )
       }
+
+
+    }
     page_out
   } # end request handler function
 }

@@ -5,3 +5,4 @@
 .DS_Store
 *.Rproj
 node_modules/
+config.yml

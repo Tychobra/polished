@@ -59,9 +59,7 @@ dashboard_module_ui <- function(id) {
           )
         )
       )
-    ),
-    tags$script(src = "polish/js/admin_dashboard.js"),
-    tags$script(paste0("dashboard_js('", ns(''), "')"))
+    )
   )
 }
 
@@ -78,23 +76,26 @@ dashboard_module_ui <- function(id) {
 dashboard_module <- function(input, output, session) {
   ns <- session$ns
 
-  # get a data frame of user sessions from Firestore and count the
-  # sessions per user per day.  Returns a data frame with 3 columns:
+  #  Returns a data frame with 3 columns:
   # - "date" in the "America/New_York" time zone
-  # - "email"
+  # - "user_uid"
   # - "n" the number of sessions
   #
-  # If any days have 0 sessions, a row is added with an "email" of NA and
-  # and "n" of 0. This helps for calculating daily averages.
-  daily_user_sessions <- eventReactive(input$polish__user_sessions, {
-    dat <- input$polish__user_sessions %>%
-      dplyr::mutate(
-        time_created = convert_timestamp(.data$time_created),
-        date = as.Date(.data$time_created, tz = "America/New_York")
-      ) %>%
-      dplyr::group_by(.data$date, .data$email) %>%
+  daily_user_sessions <- reactive({
+
+    hold_app_name = .global_sessions$app_name
+
+    dat <- session$userData$pcon %>%
+      dplyr::tbl(in_schema("polished", "sessions")) %>%
+      dplyr::filter(app_name == hold_app_name) %>%
+      dplyr::select(.data$user_uid, .data$created_at) %>%
+      dplyr::collect() %>%
+      dplyr::mutate(date = as.Date(.data$created_at, tz = "America/New_York")) %>%
+      dplyr::group_by(.data$date, .data$user_uid) %>%
       dplyr::summarize(n = n()) %>%
       dplyr::ungroup()
+
+
 
     # make sure all days are included even if zero sessions in a day
     first_day <- min(dat$date)
@@ -118,13 +119,15 @@ dashboard_module <- function(input, output, session) {
   daily_users <- reactive({
 
     daily_user_sessions() %>%
-      distinct(.data$date, .data$email) %>%
-      group_by(.data$date) %>%
-      summarize(n = n()) %>%
-      ungroup() %>%
-      filter(.data$date >= lubridate::today(tzone = "America/New_York") - lubridate::days(30))
+      dplyr::distinct(.data$date, .data$user_uid) %>%
+      dplyr::group_by(.data$date) %>%
+      dplyr::summarize(n = n()) %>%
+      dplyr::ungroup() %>%
+      dplyr::filter(.data$date >= lubridate::today(tzone = "America/New_York") - lubridate::days(30))
 
   })
+
+
 
   # calculate an format Daily Average Users for the value box
   dau_box_prep <- reactive({
@@ -144,7 +147,7 @@ dashboard_module <- function(input, output, session) {
   mau_box_prep <- reactive({
     by_month <- daily_user_sessions() %>%
       mutate(month_ = lubridate::month(.data$date)) %>%
-      distinct(.data$month_, .data$email) %>%
+      distinct(.data$month_, .data$user_uid) %>%
       group_by(.data$month_) %>%
       summarize(n = n()) %>%
       ungroup()
@@ -180,25 +183,37 @@ dashboard_module <- function(input, output, session) {
     reactive("Average Daily Sessions")
   )
 
-  # poll the active sessions from the `.global_users` object
+  # poll the active sessions from the `.global_sessions` object
   poll_global_users <- shiny::reactivePoll(
     intervalMillis = 1000 * 10, # check every 10 seconds,
     session = session,
     checkFunc = function() {
-      .global_users$users
+      length(.global_sessions$list())
     },
     valueFunc = function() {
-      .global_users$users
+
+      out <- .global_sessions$list()
+
+      out_emails <- lapply(out, function(sesh) {
+        tibble::tibble(
+          email = sesh$email
+        )
+      })
+
+      dplyr::bind_rows(out_emails) %>%
+        dplyr::distinct(email)
     }
   )
+
+
+
 
   # calculate the unique active users from the active sessions.  Note: a user
   # can have more than 1 active session
   active_users_number_prep <- reactive({
-    users_list <- poll_global_users()
-    users <- unique(lapply(users_list, function(user) user$get_email()))
+    active_user_emails <- poll_global_users()
 
-    length(users) %>%
+    nrow(active_user_emails) %>%
       format(big.mark = ",")
   })
 
@@ -311,16 +326,6 @@ dashboard_module <- function(input, output, session) {
   })
 
 
-  active_users_table_prep <- reactive({
-    users_list <- poll_global_users()
-
-    user_emails <- unlist(lapply(users_list, function(user) user$get_email()))
-
-    dplyr::tibble(
-      email = unique(user_emails)
-    )
-  })
-
   container <- htmltools::tags$table(
     htmltools::tags$thead(
       htmltools::tags$tr(
@@ -333,12 +338,13 @@ dashboard_module <- function(input, output, session) {
   )
 
   output$active_users_table <- DT::renderDataTable({
-    out <- active_users_table_prep()
+    out <- poll_global_users()
 
     DT::datatable(
       out,
       rownames = FALSE,
       container = container,
+      selection = "none",
       options = list(
         dom = "t",
         scrollX = TRUE

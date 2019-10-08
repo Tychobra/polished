@@ -28,11 +28,9 @@ verify_email_ui <- function(id, firebase_config) {
       )
     ),
     firebase_dependencies(),
-    tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
+    #tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
     firebase_init(firebase_config),
-    tags$script(src = "polish/js/all.js"),
-    tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-    tags$script(src = "polish/js/auth-state.js"),
+    #tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
     tags$script(src = "polish/js/verify_email.js")
   )
 }

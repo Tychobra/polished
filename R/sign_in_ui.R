@@ -1,20 +1,29 @@
-#' sign_in_ui
+#' sign_in_module_ui
 #'
+#' UI for the sign in and register panels
+#'
+#' @param id the Shiny module id
 #' @param firebase_config list of Firebase config
+#'
+#' @import shiny
+#' @import shinytoastr
+#' @import shinyjs
 #'
 #' @export
 #'
 #'
-sign_in_ui <- function(firebase_config) {
+sign_in_module_ui <- function(id, firebase_config) {
+  ns <- NS(id)
+
   tagList(
     tags$head(
       tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
-      # load toastr assets
-      tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"),
-      tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css")
+      tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css")
     ),
+    shinyjs::useShinyjs(),
+    shinytoastr::useToastr(),
     div(
-      id = "sign_in_panel",
+      id = ns("sign_in_panel"),
       class = "auth_panel",
       h1(
         class = "text-center",
@@ -22,24 +31,14 @@ sign_in_ui <- function(firebase_config) {
         "Sign In"
       ),
       br(),
-      div(
-        class = "form-group",
-        style = "width: 100%",
-        tags$label(
-          tagList(icon("envelope"), "email"),
-          `for` = "email"
-        ),
-        tags$input(
-          id = "email",
-          type = "text",
-          class = "form-control",
-          value = ""
-        )
+      shiny::textInput(
+        inputId = ns("email"),
+        label = tagList(icon("envelope"), "email"),
+        value = ""
       ),
       br(),
-      div(
-        id = "sign_in_password",
-        style = "display: none;",
+      shinyjs::hidden(div(
+        id = ns("sign_in_password"),
         div(
           class = "form-group",
           style = "width: 100%;",
@@ -48,7 +47,7 @@ sign_in_ui <- function(firebase_config) {
             `for` = "password"
           ),
           tags$input(
-            id = "password",
+            id = ns("password"),
             type = "password",
             class = "form-control",
             value = "",
@@ -56,38 +55,35 @@ sign_in_ui <- function(firebase_config) {
           )
         ),
         br(),
-        tags$button(
-          id = "submit_sign_in",
+        actionButton(
+          inputId = ns("submit_sign_in"),
+          label = "Sign In",
           class = "text-center",
           style = "color: white; width: 100%;",
-          type = "button",
-          class = "btn btn-primary btn-lg",
-          "Sign In"
+          class = "btn btn-primary btn-lg"
         )
-      ),
+      )),
       div(
-        id = "continue_sign_in",
-        tags$button(
-          id = "submit_continue_sign_in",
+        id = ns("continue_sign_in"),
+        actionButton(
+          inputId = ns("submit_continue_sign_in"),
+          label = "Continue",
           style = "color: white; width: 100%;",
-          type = "button",
-          class = "btn btn-primary btn-lg",
-          "Continue"
+          class = "btn btn-primary btn-lg"
         )
       ),
       div(
         style = "text-align: center;",
         hr(),
         br(),
-        tags$a(
-          id = "go_to_register",
-          href = "#",
-          "Not a member? Register!"
+        shiny::actionLink(
+          inputId = ns("go_to_register"),
+          label = "Not a member? Register!"
         ),
         br(),
         br(),
         tags$a(
-          id = "reset_password",
+          id = ns("reset_password"),
           href = "#",
           "Forgot your password?"
         )
@@ -96,9 +92,9 @@ sign_in_ui <- function(firebase_config) {
 
 
 
-    div(
-      id = "register_panel",
-      style = "display: none;",
+    shinyjs::hidden(div(
+      id = ns("register_panel"),
+      #style = "display: none;",
       class = "auth_panel",
       h1(
         class = "text-center",
@@ -109,41 +105,35 @@ sign_in_ui <- function(firebase_config) {
       div(
         class = "form-group",
         style = "width: 100%",
-        tags$label(
-          tagList(icon("envelope"), "email"),
-          `for` = "register_email"
-        ),
-        tags$input(
-          id = "register_email",
-          type = "text",
-          class = "form-control",
+        textInput(
+          inputId = ns("register_email"),
+          label = tagList(shiny::icon("envelope"), "email"),
           value = ""
         )
       ),
       div(
-        id = "continue_registation",
+        id = ns("continue_registation"),
         br(),
-        tags$button(
-          id = "submit_continue_register",
+        shiny::actionButton(
+          inputId = ns("submit_continue_register"),
+          label = "Continue",
           style = "color: white; width: 100%;",
-          type = "button",
-          class = "btn btn-primary btn-lg",
-          "Continue"
+          class = "btn btn-primary btn-lg"
         )
       ),
-      div(
-        id = "register_passwords",
-        style = "display: none",
+      shinyjs::hidden(div(
+        id = ns("register_passwords"),
+        #style = "display: none",
         br(),
         div(
           class = "form-group",
           style = "width: 100%",
           tags$label(
             tagList(icon("unlock-alt"), "password"),
-            `for` = "register_password"
+            `for` = ns("register_password")
           ),
           tags$input(
-            id = "register_password",
+            id = ns("register_password"),
             type = "password",
             class = "form-control",
             value = "",
@@ -155,11 +145,11 @@ sign_in_ui <- function(firebase_config) {
           class = "form-group shiny-input-container",
           style = "width: 100%",
           tags$label(
-            tagList(icon("unlock-alt"), "verify password"),
-            `for` = "register_password_verify"
+            tagList(shiny::icon("unlock-alt"), "verify password"),
+            `for` = ns("register_password_verify")
           ),
           tags$input(
-            id = "register_password_verify",
+            id = ns("register_password_verify"),
             type = "password",
             class = "form-control",
             value = "",
@@ -170,36 +160,121 @@ sign_in_ui <- function(firebase_config) {
         br(),
         div(
           style = "text-align: center;",
-          tags$button(
-            id = "submit_register",
+          actionButton(
+            inputId = ns("submit_register"),
+            label = "Register",
             style = "color: white; width: 100%;",
-            type = "button",
-            class = "btn btn-primary btn-lg",
-            "Register"
+            class = "btn btn-primary btn-lg"
           )
         )
-      ),
+      )),
       div(
         style = "text-align: center",
         hr(),
         br(),
-        tags$a(
-          id = "go_to_sign_in",
-          href = "#",
-          "Already a member? Sign in!"
+        shiny::actionLink(
+          inputId = ns("go_to_sign_in"),
+          label = "Already a member? Sign in!"
         ),
         br(),
         br()
       )
-    ),
+    )),
 
     tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
+    tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"),
     firebase_dependencies(),
     firebase_init(firebase_config),
-    tags$script(src = "polish/js/all.js"),
-    tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-    tags$script(src = "polish/js/auth-state.js"),
-    tags$script(src = "polish/js/fetch.umd.js"), # polyfill for IE
-    tags$script(src = "polish/js/auth.js")
+    tags$script(src = "polish/js/auth_all.js"),
+    tags$script(paste0("auth_all('", id, "')")),
+    tags$script(src = "polish/js/auth_firebase.js"),
+    tags$script(paste0("auth_firebase('", id, "')")),
+    tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js")
   )
+}
+
+#' sign_in
+#'
+#' @param input the Shiny input
+#' @param output the Shiny output
+#' @param session the Shiny session
+#' @param conn a database connection
+#'
+#' @import shiny
+#' @import shinyjs
+#'
+#'
+sign_in_module <- function(input, output, session, conn) {
+
+  shiny::observeEvent(input$submit_continue_sign_in, {
+
+    email <- input$email
+
+    # TODO: check user invite
+    # this should probably be moved to Sessions
+    user <- DBI::dbGetQuery(
+      conn,
+      "SELECT * FROM polished.users WHERE email=$1",
+      params = list(
+        email
+      )
+    )
+
+    if (nrow(user) == 1) {
+      # user is invited
+      shinyjs::hide("submit_continue_sign_in")
+
+      shinyjs::show(
+        "sign_in_password",
+        anim = TRUE
+      )
+    } else {
+      # user is not invited
+
+      toastr_error("Not Authorized")
+    }
+
+  })
+
+  shiny::observeEvent(input$go_to_register, {
+    shinyjs::hide("sign_in_panel")
+    shinyjs::show("register_panel")
+  })
+
+  shiny::observeEvent(input$go_to_sign_in, {
+    shinyjs::hide("register_panel")
+    shinyjs::show("sign_in_panel")
+  })
+
+  shiny::observeEvent(input$submit_continue_register, {
+
+    email <- input$register_email
+
+    # TODO: check user invite
+    # this should probably be moved to Sessions
+    user <- DBI::dbGetQuery(
+      conn,
+      "SELECT * FROM polished.users WHERE email=$1",
+      params = list(
+        email
+      )
+    )
+
+    if (nrow(user) == 1) {
+      # user is invited
+      shinyjs::hide("continue_registation")
+
+      shinyjs::show(
+        "register_passwords",
+        anim = TRUE
+      )
+    } else {
+      # user is not invited
+
+      toastr_error("Not Authorized")
+    }
+
+    print("continue sign in")
+
+  })
 }
