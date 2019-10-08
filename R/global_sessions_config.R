@@ -1,8 +1,8 @@
 #' configuration for global sessions
 #'
 #'
-#' @param app_name
-#' @param firebase_functions_url
+#' @param app_name the name of the app.
+#' @param firebase_functions_url the url of the firebase functions.
 #'
 #' @export
 #'

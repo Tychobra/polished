@@ -5,6 +5,7 @@
 #' @return a character string uid
 #'
 #' @importFrom digest digest
+#' @importFrom stats runif
 #'
 create_uid <- function() {
 

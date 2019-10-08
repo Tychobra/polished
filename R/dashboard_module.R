@@ -88,7 +88,7 @@ dashboard_module <- function(input, output, session) {
     dat <- session$userData$pcon %>%
       dplyr::tbl(in_schema("polished", "sessions")) %>%
       dplyr::filter(app_name == hold_app_name) %>%
-      dplyr::select(user_uid, created_at) %>%
+      dplyr::select(.data$user_uid, .data$created_at) %>%
       dplyr::collect() %>%
       dplyr::mutate(date = as.Date(.data$created_at, tz = "America/New_York")) %>%
       dplyr::group_by(.data$date, .data$user_uid) %>%

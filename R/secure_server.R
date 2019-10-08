@@ -2,8 +2,6 @@
 #'
 #' @param server A Shiny server function (e.g `function(input, output, session) {}`)
 #' @param conn database connection
-#' @param app_name The name of the app.
-#' @param firebase_functions_url the url for the firebase functions
 #' @param custom_admin_server Either NULL, the default, or a Shiny server function containing your custom admin
 #' server functionality.
 #'

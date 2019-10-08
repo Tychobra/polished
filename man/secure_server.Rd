@@ -13,10 +13,6 @@ secure_server(server, conn, custom_admin_server = NULL)
 
 \item{custom_admin_server}{Either NULL, the default, or a Shiny server function containing your custom admin
 server functionality.}
-
-\item{app_name}{The name of the app.}
-
-\item{firebase_functions_url}{the url for the firebase functions}
 }
 \value{
 session session object with new reactive session$userData$current_user which

@@ -7,7 +7,9 @@
 global_sessions_config(app_name, firebase_functions_url)
 }
 \arguments{
-\item{firebase_functions_url}{}
+\item{app_name}{the name of the app.}
+
+\item{firebase_functions_url}{the url of the firebase functions.}
 }
 \description{
 configuration for global sessions

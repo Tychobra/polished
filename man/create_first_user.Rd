@@ -7,7 +7,11 @@
 create_first_user(conn, app_name, email)
 }
 \arguments{
-\item{email}{}
+\item{conn}{the database connection.}
+
+\item{app_name}{the name of the Shiny app.}
+
+\item{email}{the email address of the first user.}
 }
 \description{
 Add the first user to the "polished" schema

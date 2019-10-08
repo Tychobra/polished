@@ -9,8 +9,6 @@
 #'  - sessions
 #'
 #' @param conn the `RPostgres` database connection.  Only `RPostgres` is supported.
-#' @param app_name the name of the first Shiny app.
-#' @param first_user_email the email address of the first user.
 #'
 #' @import DBI
 #'
@@ -97,8 +95,9 @@ create_schema <- function(conn) {
 #'
 #' Add the first user to the "polished" schema
 #'
-#' @param app_name
-#' @param email
+#' @param conn the database connection.
+#' @param app_name the name of the Shiny app.
+#' @param email the email address of the first user.
 #'
 #' @export
 #'

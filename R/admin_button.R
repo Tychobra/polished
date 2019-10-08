@@ -26,6 +26,10 @@ admin_button_ui <- function(id) {
 #'
 #' the server logic for the admin button
 #'
+#' @param input the Shiny server input
+#' @param output the Shiny server output
+#' @param session the Shiny server session
+#'
 #' @import shiny
 #'
 #'

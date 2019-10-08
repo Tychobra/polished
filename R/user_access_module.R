@@ -1,4 +1,3 @@
-library(shinycssloaders)
 #' admin_user_access_ui
 #'
 #' @param id the module id
@@ -131,17 +130,19 @@ user_access_module <- function(input, output, session) {
         last_sign_in_at,
         created_at) %>%
       dplyr::collect()
-      app_user_uids <- app_users$user_uid
+
+    app_user_uids <- app_users$user_uid
 
     # find the email address for all users of the app
     app_user_emails <- conn %>%
       dplyr::tbl(dbplyr::in_schema("polished", "users")) %>%
-      dplyr::filter(uid %in% app_user_uids) %>%
-      dplyr::select(user_uid = uid, email) %>%
+      dplyr::filter(.data$uid %in% app_user_uids) %>%
+      dplyr::select(user_uid = .data$uid, .data$email) %>%
       dplyr::collect()
-      app_users %>%
+
+    app_users %>%
       dplyr::left_join(app_user_emails, by = "user_uid") %>%
-      dplyr::arrange(desc(last_sign_in_at))
+      dplyr::arrange(desc(.data$last_sign_in_at))
   })
 
   user_roles <- reactive({
@@ -150,16 +151,16 @@ user_access_module <- function(input, output, session) {
 
     session$userData$pcon %>%
       dplyr::tbl(dbplyr::in_schema("polished", "user_roles")) %>%
-      dplyr::filter(app_name == app_name) %>%
-      dplyr::select(user_uid, role_uid) %>%
+      dplyr::filter(app_name == .data$app_name) %>%
+      dplyr::select(.data$user_uid, .data$role_uid) %>%
       dplyr::collect()
   })
 
   user_role_names <- reactive({
     user_roles() %>%
       dplyr::left_join(roles(), by = c("role_uid" = "uid")) %>%
-      dplyr::select(user_uid, role_uid, role_name = name) %>%
-      tidyr::nest(roles = c(role_uid, role_name))
+      dplyr::select(.data$user_uid, .data$role_uid, role_name = .data$name) %>%
+      tidyr::nest(roles = c(.data$role_uid, .data$role_name))
   })
 
 
@@ -209,10 +210,10 @@ user_access_module <- function(input, output, session) {
         out
       ) %>%
         dplyr::mutate(
-          invite_status = ifelse(is.na(last_sign_in_at), "Pending", "Accepted"),
-          role = roles_out
+          invite_status = ifelse(is.na(.data$last_sign_in_at), "Pending", "Accepted"),
+          role = .data$roles_out
         ) %>%
-        dplyr::select(actions, email, invite_status, is_admin, role, last_sign_in_at)
+        dplyr::select(.data$actions, .data$email, .data$invite_status, .data$is_admin, .data$role, .data$last_sign_in_at)
     }
 
     if (is.null(users_table_prep())) {

@@ -6,6 +6,13 @@
 \usage{
 admin_button(input, output, session)
 }
+\arguments{
+\item{input}{the Shiny server input}
+
+\item{output}{the Shiny server output}
+
+\item{session}{the Shiny server session}
+}
 \description{
 the server logic for the admin button
 }
