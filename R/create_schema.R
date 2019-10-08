@@ -8,7 +8,7 @@
 #'  - user_roles
 #'  - sessions
 #'
-#' @param conn the `RPostgres` database connection.  Only `RPostgres` is supported at this point.
+#' @param conn the `RPostgres` database connection.  Only `RPostgres` is supported.
 #' @param app_name the name of the first Shiny app.
 #' @param first_user_email the email address of the first user.
 #'

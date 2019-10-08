@@ -31,6 +31,7 @@ You can have as many Shiny apps in the "<project_name>" folder as you want.  At 
 - one or more Shiny app(s)
 - [nodejs](https://nodejs.org/en/)
 - a [Firebase](https://firebase.google.com/) account
+- a PostgreSQL database
 
 ### `polished` installation
 
@@ -46,12 +47,7 @@ remotes::install_github("tychobra/polished")
 1. Set up your Firebase project. Go to [https://firebase.google.com/](https://firebase.google.com/) and create a firebase project named "polished-<project_name>".  Open your new Firebase project and:
    - go to the "Authentication" page "Sign-in method" tab and enable "Email/Password" sign in.
 
-2. Generate the SQL schema.  This schema will contain tables to authorize users to access your different Shiny apps.  If you only have a single
-Shiny app, you can use `RSQLite` as your database driver.  If you have more than 1 Shiny app, you must use `RPostgres`.
-
-```
-polished::create_schema()
-```
+2. Generate the SQL schema using the `polished::create_schema()` function.  This schema will contain tables to authorize users to access your different Shiny apps.  Note: you will need to have a PostgreSQL database and the credentials to connect to this database to create the schema.
 
 3. Organize your Shiny app(s) in accordance with the folder structure from the "Getting Started" section
 
@@ -82,8 +78,6 @@ Enter the following in the command line prompts:
 
 Your "polished-<project_name>" folder should now look like this:
  - firebase.json
- - firestore.indexes.json
- - firestore.rules
  - functions/
  
 Next Install Firebase functions dependencies 
