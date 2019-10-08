@@ -45,14 +45,13 @@ remotes::install_github("tychobra/polished")
 
 1. Set up your Firebase project. Go to [https://firebase.google.com/](https://firebase.google.com/) and create a firebase project named "polished-<project_name>".  Open your new Firebase project and:
    - go to the "Authentication" page "Sign-in method" tab and enable "Email/Password" sign in.
-   - go to the "Database" tab, and click "Create Database" to create a Firestore database.  Start the database in "test mode".  We will secure the database in a later step.
 
-2. Set up initial user in Firestore.  In the Firebase web UI of your Firebase project, go the the "Database" tab and create a new "apps/{your Shiny app name}/users/{your email address} document with the following fields:
-   - email: string - "<your_email_address>"
-   - app_name: string - "<your_shiny_app_name>"
-   - time_created: timestamp - fill it in with some time today
-   - invite_status: string - "pending"
-   - is_admin: boolean - `true`
+2. Generate the SQL schema.  This schema will contain tables to authorize users to access your different Shiny apps.  If you only have a single
+Shiny app, you can use `RSQLite` as your database driver.  If you have more than 1 Shiny app, you must use `RPostgres`.
+
+```
+polished::generate_schema(driver = "RSQLite")
+```
 
 3. Organize your Shiny app(s) in accordance with the folder structure from the "Getting Started" section
 
@@ -75,10 +74,8 @@ firebase init
 ```
 
 Enter the following in the command line prompts:
- - Which Firebase CLI features do you want...? Firestore and Functions
+ - Which Firebase CLI features do you want...? Functions
  - Select a default Firebase project for this directory: choose the Firebase project id from step 1
- - What file should be used for Firestore Rules? use the default
- - What file should be used for Firestore indexes? use the default
  - What language would you like to use to write Cloud Functions? JavaScript
  - Do you want to use ESLint to catch probable bugs and enforce style? N
  - Do you want to install dependencies with npm now? Y
@@ -98,23 +95,6 @@ cd functions
 npm install --save firebase-admin firebase-functions
 ```
 
-Publish Firestore rules:
-
-Open R and set your working directory to the "polished-<project_name>" folder.
-
-```
-# R
-
-polished::write_firestore_rules(
-  c("<shiny_app_1_name>", "<shiny_app_2_name>", ...)
-)
-```
-
-```
-# terminal
-firebase deploy --only firestore:rules
-```
-
 Create and deploy Firebase Functions
 
 ```
@@ -129,38 +109,17 @@ firebase deploy --only functions
 
 ## Secure Your Shiny App
 
-To secure your Shiny app you simply pass your Shiny ui to `secure_ui()` and your Shiny server to `secure_server()`.  Additionally you need to pass the firebase configuration and the app name to `secure_ui()` and `secure_server()`.    
-
-e.g. here is a complete secure Shiny app less the correct Firebase configuation.
+To secure your Shiny app you simply pass your Shiny ui to `secure_ui()` and your Shiny server to `secure_server()`.  See the the documentation of `secure_ui()` and `secure_server()` for details.
 
 ```
-global <- function() {
-  library(shiny)
-  library(polished)
-  
-  my_config <- config::get()
-}
-
-ui <- h1("Hellow World")
-
-server <- function(input, output, session) {}
-
-your_secure_ui <- secure_ui(
-  ui,
-  firebase_config = my_config$firebase,
-  app_name = "your_app_name"
-)
-
-your_secure_server <- secure_server(
-  server,
-  firebase_functions_url = my_config$firebase_functions_url,
-  app_name = "your_app_name"
-)
-
-shinyApp(your_secure_ui, your_secure_server, onStart = global())
+# R
+?secure_ui
+?secure_server
 ```
 
-You can find full working examples with placeholder "config.yml" files in the "inst/examples/" directory in this package.  Update the "config.yml" with your Firebase project credentials to demo these applications.
+Additionally you need to pass the firebase functions url and the app name to `global_sessions_config()` in your "global.R" file.    
+
+You can find a full working example in the "inst/examples/" directory in this package.  
 
 ### Additional Options
 
