@@ -25,7 +25,12 @@ Imports:
     lubridate,
     tibble,
     tychobratools,
-    htmlwidgets
+    htmlwidgets,
+    DBI,
+    dbplyr,
+    digest,
+    shinytoastr,
+    shinyWidgets
 Remotes: 
     github::tychobra/tychobratools
 RoxygenNote: 6.1.1
