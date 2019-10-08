@@ -23,7 +23,10 @@ sign_in_ui_default <- function(firebase_config) {
       ")
     ),
     fluidRow(
-      sign_in_ui(firebase_config)
+      sign_in_module_ui(
+        "sign_in",
+        firebase_config
+      )
     )
   )
 }

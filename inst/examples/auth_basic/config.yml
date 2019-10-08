@@ -1,8 +1,0 @@
-default:
-  firebase:
-    apiKey: "<your Firebase project API key>"
-    authDomain: "<your Firebase project auth domain>"
-    databaseURL: "<your Firebase project database URL>"
-    projectId: "<your Firebase project ID>"
-  app_name: "auth_basic"
-  firebase_functions_url: "<your Firebase project cloud functions url>"

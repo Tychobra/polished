@@ -21,7 +21,7 @@
 write_firebase_functions <- function(path = "functions/index.js", overwrite = TRUE) {
 
   file.copy(
-    from = system.file("firebase_functions/index.js", package = "polished"),
+    from = system.file("firebase_functions/index.js", package = "pgpolished"),
     to = path,
     overwrite = overwrite
   )

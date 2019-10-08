@@ -27,7 +27,7 @@ profile_module_ui <- function(id) {
       ),
       htmltools::tags$li(
         shiny::actionLink(
-          "polish__sign_out",
+          ns("polish__sign_out"),
           label = "Sign Out",
           icon = icon("sign-out")
         )
@@ -50,17 +50,19 @@ profile_module_ui <- function(id) {
 profile_module <- function(input, output, session) {
 
   output$auth_user <- shiny::renderText({
-    req(session$userData$current_user())
+    req(session$userData$user())
 
-    session$userData$current_user()$email
+    session$userData$user()$email
   })
+
 
   shiny::observeEvent(input$polish__sign_out, {
-    req(session$userData$current_user()$email)
+    req(session$userData$user()$email)
 
     sign_out_from_shiny(session)
-  })
 
+    session$reload()
+  })
 }
 
 

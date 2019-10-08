@@ -1,8 +1,9 @@
 #' secure_server
 #'
 #' @param server A Shiny server function (e.g `function(input, output, session) {}`)
-#' @param firebase_functions_url The url for your project's Firebase functions.
+#' @param conn database connection
 #' @param app_name The name of the app.
+#' @param firebase_functions_url the url for the firebase functions
 #' @param custom_admin_server Either NULL, the default, or a Shiny server function containing your custom admin
 #' server functionality.
 #'
@@ -15,22 +16,27 @@
 #'
 secure_server <- function(
   server,
-  firebase_functions_url,
-  app_name,
+  conn,
   custom_admin_server = NULL
 ) {
 
 
   function(input, output, session) {
-    session$userData$current_user <- reactiveVal(NULL)
+    session$userData$user <- reactiveVal(NULL)
+    session$userData$pcon <- conn
 
-    shiny::observeEvent(input$polish__sign_in, {
-      token <- input$polish__sign_in$token
-      uid <- input$polish__sign_in$uid
-      polished_session <- input$polish__sign_in$session
+    shiny::observeEvent(input$polished__sign_in, {
+      firebase_token <- input$polished__sign_in$firebase_token
+      polished_token <- input$polished__sign_in$polished_token
 
-      global_user <- .global_users$find_user_by_uid(uid, polished_session)
 
+      # the user session
+      global_user <- NULL
+
+      if (!is.null(polished_token)) {
+        # token already exists in cookie, so see if there is a corresponding session on server side
+        global_user <- .global_sessions$find(polished_token)
+      }
 
 
       if (is.null(global_user)) {
@@ -47,19 +53,13 @@ secure_server <- function(
 
 
         tryCatch({
-          new_user <- User$new(
-            firebase_functions_url = firebase_functions_url,
-            firebase_auth_token = token,
-            app_name = app_name,
-            polished_session = polished_session
-          )
+          new_user <- .global_sessions$sign_in(conn, firebase_token)
 
         }, error = function(error) {
           print(paste0("eror signing in: ", error))
         })
 
         if (is.null(new_user)) {
-
           # user sign in failed.
 
           session$sendCustomMessage(
@@ -68,10 +68,7 @@ secure_server <- function(
           )
 
           # sign out from Firebase on client side
-          session$sendCustomMessage(
-            "polish__sign_out",
-            message = list()
-          )
+          # sign_out_from_shiny()
 
           session$sendCustomMessage(
             "polish__show_toast",
@@ -87,89 +84,95 @@ secure_server <- function(
           return()
 
         } else {
-
           # go to app.  If user is admin, then they will have the blue "Admin Panel" button
           # in the bottom right
-          .global_users$add_user(new_user)
 
-          session$reload()
+          # send cookie to front end, wait for confirmation that cookie is set, and then reload session
+          session$sendCustomMessage(
+            "polished__set_cookie",
+            list(
+              polished_token = new_user$token
+            )
+          )
+
+          observeEvent(input$polished__set_cookie_complete, {
+            session$reload()
+          }, once = TRUE)
+
         }
-
 
       } else {
 
         # user is already signed in, so we don't need to do anything
         # user was already found in the global scope
+        session$userData$user(global_user)
+      }
+    }, ignoreInit = TRUE)
 
-        if (isTRUE(global_user$get_email_verified())) {
 
+    observeEvent(input$polished__session, {
+
+      global_user <- .global_sessions$find(input$polished__session)
+
+      if (is.null(global_user)) {
+        session$userData$user(NULL)
+        return()
+      } else {
+
+
+        if (isTRUE(global_user$email_verified)) {
 
           session$sendCustomMessage(
             "polish__remove_loading",
             message = list()
           )
 
-          signed_in_as <- global_user$get_signed_in_as()
+          # log session to database "sessions" table
+          .global_sessions$log_session(conn, global_user$token, global_user$uid)
 
-          if (!is.null(signed_in_as) && isTRUE(global_user$get_is_admin())) {
-
-            user_out <- signed_in_as[c("email", "is_admin", "role")]
-
-          } else {
-            user_out <- list(
-              "email" = global_user$get_email(),
-              "is_admin" = global_user$get_is_admin(),
-              "role" = global_user$get_role()
-            )
-          }
-
-          user_out$uid <- uid
-          user_out$polished_session <- polished_session
-
-          session$userData$current_user(user_out)
+          session$userData$user(global_user)
 
         } else {
-
+          print("secure_server 4")
           # go to email verification view.
           # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
 
-          global_user$refreshEmailVerification(token)
+          token <- global_user$token
+          global_user <- .global_sessions$refresh_email_verification(
+            token,
+            global_user$firebase_uid
+          )$find(token)
 
 
           # if refreshing the email verification causes it to switch from FALSE to TRUE
           # then reload the session, and the user will move from the email verification page
           # to the actual app
-          if (isTRUE(global_user$get_email_verified())) {
+          if (isTRUE(global_user$email_verified)) {
             session$reload()
           }
-
-
         }
-
-        return()
       }
-    }, ignoreInit = TRUE)
 
 
-
-    observeEvent(input$polish__sign_out, {
-      req(session$userData$current_user())
-      sign_out_from_shiny(session)
     })
 
-    observeEvent(input$polish__reload, {
 
-      session$reload()
-    })
 
-    # if the user is signed in, set up the polish firebase functions
-    observeEvent(session$userData$current_user(), {
 
-      callModule(
-        admin_module,
-        "admin"
-      )
 
+    # if the user is an admin and on the admin page, set up the admin server
+    observeEvent(session$userData$user(), {
+
+      query_list <- shiny::getQueryString()
+      is_on_admin_page <- if (!is.null(query_list$admin_pane) && query_list$admin_pane == 'true') TRUE else FALSE
+
+
+      if (isTRUE(session$userData$user()$is_admin) && isTRUE(is_on_admin_page)) {
+        callModule(
+          admin_module,
+          "admin"
+        )
+      }
 
     })
 
@@ -182,15 +185,28 @@ secure_server <- function(
 
     # custom admin server functionality
     if (isTRUE(!is.null(custom_admin_server))) {
-      observeEvent(session$userData$current_user(), {
+      observeEvent(session$userData$user(), {
         custom_admin_server(input, output, session)
       })
     }
 
+    observeEvent(session$userData$user(), {
+
+      if (is.null(session$userData$user())) {
+        callModule(
+          sign_in_module,
+          "sign_in",
+          conn
+        )
+      }
+
+    }, ignoreNULL = FALSE)
+
+
 
     # user developed server.  Required signed in user to
     # access
-    observeEvent(session$userData$current_user(), {
+    observeEvent(session$userData$user(), {
       query_string <- getQueryString()
 
       if (is.null(query_string$admin_panel)) {

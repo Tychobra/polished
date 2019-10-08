@@ -42,9 +42,11 @@ admin_button <- function(input, output, session) {
 
     # if user is an admin and is signed into the Shiny app as another user, then
     # clear clear the signed in as user
-    polished_user <- session$userData$current_user()
-    global_user <- .global_users$find_user_by_uid(polished_user$uid, polished_user$polished_session)
-    global_user$clear_signed_in_as()
+    #polished_user <- session$userData$user()
+    #global_user <- .global_sessions$find(polished_user$token)
+
+    # TODO: clear signed in as in .global_sessions
+    #global_user$clear_signed_in_as()
 
     # remove admin_panel=false from query
     shiny::updateQueryString(
