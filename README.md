@@ -50,7 +50,7 @@ remotes::install_github("tychobra/polished")
 Shiny app, you can use `RSQLite` as your database driver.  If you have more than 1 Shiny app, you must use `RPostgres`.
 
 ```
-polished::generate_schema(driver = "RSQLite")
+polished::create_schema()
 ```
 
 3. Organize your Shiny app(s) in accordance with the folder structure from the "Getting Started" section
