@@ -8,5 +8,5 @@ server <- function(input, output, session) {
 
 secure_server(
   server,
-  conn
+  conn = db_conn
 )

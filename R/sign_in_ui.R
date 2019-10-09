@@ -202,25 +202,19 @@ sign_in_module_ui <- function(id, firebase_config) {
 #'
 #' @import shiny
 #' @import shinyjs
+#' @import shinyWidgets
 #'
-#'
-sign_in_module <- function(input, output, session, conn) {
+sign_in_module <- function(input, output, session) {
 
   shiny::observeEvent(input$submit_continue_sign_in, {
 
     email <- input$email
 
-    # TODO: check user invite
-    # this should probably be moved to Sessions
-    user <- DBI::dbGetQuery(
-      conn,
-      "SELECT * FROM polished.users WHERE email=$1",
-      params = list(
-        email
-      )
-    )
+    # check user invite
+    invite <- NULL
+    tryCatch({
+      invite <- .global_sessions$get_invite(session$userData$pcon, email)
 
-    if (nrow(user) == 1) {
       # user is invited
       shinyjs::hide("submit_continue_sign_in")
 
@@ -228,11 +222,17 @@ sign_in_module <- function(input, output, session, conn) {
         "sign_in_password",
         anim = TRUE
       )
-    } else {
+    }, error = function(e) {
       # user is not invited
+      print(e)
+      shinyWidgets::sendSweetAlert(
+        session,
+        title = "Not Authorized",
+        text = "You must have an invite to access this app",
+        type = "error"
+      )
 
-      toastr_error("Not Authorized")
-    }
+    })
 
   })
 
@@ -250,17 +250,10 @@ sign_in_module <- function(input, output, session, conn) {
 
     email <- input$register_email
 
-    # TODO: check user invite
-    # this should probably be moved to Sessions
-    user <- DBI::dbGetQuery(
-      conn,
-      "SELECT * FROM polished.users WHERE email=$1",
-      params = list(
-        email
-      )
-    )
+    invite <- NULL
+    tryCatch({
+      invite <- .global_sessions$get_invite(session$userData$pcon, email)
 
-    if (nrow(user) == 1) {
       # user is invited
       shinyjs::hide("continue_registation")
 
@@ -268,13 +261,16 @@ sign_in_module <- function(input, output, session, conn) {
         "register_passwords",
         anim = TRUE
       )
-    } else {
+    }, error = function(e) {
       # user is not invited
-
-      toastr_error("Not Authorized")
-    }
-
-    print("continue sign in")
+      print(e)
+      shinyWidgets::sendSweetAlert(
+        session,
+        title = "Not Authorized",
+        text = "You must have an invite to access this app",
+        type = "error"
+      )
+    })
 
   })
 }

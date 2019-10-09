@@ -193,8 +193,7 @@ secure_server <- function(
       if (is.null(session$userData$user())) {
         callModule(
           sign_in_module,
-          "sign_in",
-          conn
+          "sign_in"
         )
       }
 
