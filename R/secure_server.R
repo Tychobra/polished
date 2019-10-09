@@ -103,7 +103,8 @@ secure_server <- function(
 
         # user is already signed in, so we don't need to do anything
         # user was already found in the global scope
-        session$userData$user(global_user)
+        #session$userData$user(global_user)
+        stop("secure_server: does this ever happen")
       }
     }, ignoreInit = TRUE)
 
@@ -128,7 +129,12 @@ secure_server <- function(
           # log session to database "sessions" table
           .global_sessions$log_session(conn, global_user$token, global_user$uid)
 
-          session$userData$user(global_user)
+          if (is.null(global_user$signed_in_as)) {
+            session$userData$user(global_user)
+          } else {
+            session$userData$user(global_user$signed_in_as)
+          }
+
 
         } else {
           print("secure_server 4")

@@ -202,6 +202,20 @@ Sessions <-  R6::R6Class(
 
       })
 
+    },
+    set_signed_in_as = function(token, signed_in_as) {
+
+      private$sessions[[token]]$signed_in_as <- signed_in_as
+
+      invisible(self)
+    },
+    clear_signed_in_as = function(token) {
+      browser()
+      if (!is.null(private$sessions[[token]]$signed_in_as)) {
+        private$sessions[[token]]$signed_in_as <- NULL
+      }
+
+      invisible(self)
     }
   ),
   private = list(

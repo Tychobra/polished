@@ -595,9 +595,19 @@ user_access_module <- function(input, output, session) {
 
   })
 
+  observe({
+    print(list(
+      users = users()
+    ))
+  })
 
   observeEvent(input$sign_in_as_btn_row, {
-    user_to_sign_in_as <- as.list(users()[as.numeric(input$sign_in_as_btn_row), c("email", "is_admin", "role")])
+    user_to_sign_in_as <- users_w_roles()[as.numeric(input$sign_in_as_btn_row), ] %>%
+      dplyr::select(.data$email, .data$is_admin, uid = user_uid, .data$roles) %>%
+      as.list()
+    #browser()
+    #user_to_sign_in_as$roles <- user_to_sign_in_as$roles[[1]]$role_name
+    user_to_sign_in_as$token <- session$userData$user()$token
 
     session$sendCustomMessage(
       "polish__show_loading",
@@ -606,13 +616,12 @@ user_access_module <- function(input, output, session) {
       )
     )
 
-    polished_user <- session$userData$current_user()
-
     # TODO: allow user to sign in as another user
     #global_user <- .global_sessions$find(polished_user$uid, polished_user$polished_session)
-    #global_user$set_signed_in_as(
-    #  user_to_sign_in_as
-    #)
+    .global_sessions$set_signed_in_as(
+      session$userData$user()$token,
+      user_to_sign_in_as
+    )
 
     # to to the Shiny app
     remove_query_string(session)
