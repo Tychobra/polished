@@ -143,96 +143,26 @@ user_edit_module <- function(input, output, session,
 
     if (is.null(hold_user)) {
       # adding a new user
-      if (input_email %in% existing_users()$email) {
+      tryCatch({
+        create_app_user(
+          conn = session$userData$pcon,
+          app_name = .global_sessions$app_name,
+          email = input_email,
+          is_admin = is_admin_out,
+          roles = input_roles,
+          created_by = session_user
+        )
 
-        tychobratools::show_toast("error", "The email already exists")
-        return()
-
-      } else {
         shiny::removeModal()
 
-        tryCatch({
-          DBI::dbWithTransaction(session$userData$pcon, {
 
-            new_user <- DBI::dbGetQuery(
-              session$userData$pcon,
-              "SELECT uid FROM polished.users WHERE email=$1",
-              params = users_params
-            )
+        users_trigger(users_trigger() + 1)
+        tychobratools::show_toast("success", "User successfully added!")
+      }, error = function(e) {
+        tychobratools::show_toast("error", "Error adding user")
+        print(e)
+      })
 
-
-            # if user does not exist, add the user to the users table
-            if (nrow(new_user) == 0) {
-
-              user_uid <- create_uid()
-
-              DBI::dbExecute(
-                session$userData$pcon,
-                "INSERT INTO polished.users ( uid, email, created_by, modified_by ) VALUES ( $1, $2, $3, $4 )",
-                params = c(
-                  list(
-                    user_uid
-                  ),
-                  users_params,
-                  list(
-                    session_user,
-                    session_user
-                  )
-                )
-              )
-            } else {
-              user_uid <- new_user$uid
-            }
-
-
-            # add user to app_users
-            DBI::dbExecute(
-              session$userData$pcon,
-              "INSERT INTO polished.app_users ( uid, app_name, user_uid, is_admin, created_by, modified_by) VALUES ( $1, $2, $3, $4, $5, $6 )",
-              params = list(
-                create_uid(),
-                .global_sessions$app_name, # app_name
-                user_uid, # user_uid
-                is_admin_out,     # is_admin
-                session_user, # created_by
-                session_user  # modified_by
-              )
-            )
-
-
-            # add the user roles
-            if (length(input_roles) > 0) {
-
-              # create table of new roles to insert into "user_roles"
-              new_roles <- data.frame(
-                user_uid = user_uid,
-                role_uid = input_roles,
-                app_name = .global_sessions$app_name,
-                created_by = session_user,
-                stringsAsFactors = FALSE
-              )
-
-              # append new roles to "user_roles" table
-              DBI::dbWriteTable(
-                session$userData$pcon,
-                name = DBI::Id(schema = "polished", table = "user_roles"),
-                value = new_roles,
-                append = TRUE,
-                overwrite = FALSE
-              )
-            }
-
-          })
-
-          users_trigger(users_trigger() + 1)
-          tychobratools::show_toast("success", "User successfully added!")
-        }, error = function(e) {
-          tychobratools::show_toast("error", "Error adding user")
-          print(e)
-        })
-
-
-      }
     } else {
       # editing an existing user
 
