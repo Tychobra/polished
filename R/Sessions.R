@@ -40,10 +40,7 @@ Sessions <-  R6::R6Class(
 
       new_session <- NULL
 
-      if (is.null(user)) {
-        # user sign in failed
-        return(NULL)
-      } else {
+      if (!is.null(user)) {
 
         new_session <- list(
           email = user$email,
@@ -58,54 +55,33 @@ Sessions <-  R6::R6Class(
           # confirm that user is invited
           DBI::dbWithTransaction(conn, {
 
-            user_db <- DBI::dbGetQuery(
+            invite <- self$get_invite(new_session$email)
+
+            role_names <- DBI::dbGetQuery(
               conn,
-              "SELECT * FROM polished.users WHERE email=$1",
+              "SELECT uid, name FROM polished.roles WHERE app_name=$1",
               params = list(
-                new_session$email
+                self$app_name
               )
             )
 
-
-            if (nrow(user_db) != 1) {
-              stop('unable to find uers in "users" table')
-            } else {
-
-              is_admin <- DBI::dbGetQuery(
-                conn,
-                "SELECT is_admin FROM polished.app_users WHERE user_uid=$1 AND app_name=$2",
-                params = list(
-                  user_db$uid,
-                  self$app_name
-                )
+            role_uids <- DBI::dbGetQuery(
+              conn,
+              "SELECT role_uid FROM polished.user_roles WHERE user_uid=$1 AND app_name=$2",
+              params = list(
+                invite$user_uid,
+                self$app_name
               )
+            )$role_uid
 
-              role_names <- DBI::dbGetQuery(
-                conn,
-                "SELECT uid, name FROM polished.roles WHERE app_name=$1",
-                params = list(
-                  self$app_name
-                )
-              )
+            roles_out <- role_names %>%
+              dplyr::filter(uid %in% role_uids) %>%
+              dplyr::pull(name)
 
-              role_uids <- DBI::dbGetQuery(
-                conn,
-                "SELECT role_uid FROM polished.user_roles WHERE user_uid=$1 AND app_name=$2",
-                params = list(
-                  user_db$uid,
-                  self$app_name
-                )
-              )$role_uid
+            new_session$is_admin <- is_admin$is_admin
+            new_session$uid <- invite$user_uid
+            new_session$roles <- roles_out
 
-              roles_out <- role_names %>%
-                dplyr::filter(uid %in% role_uids) %>%
-                dplyr::pull(name)
-
-              new_session$is_admin <- is_admin$is_admin
-              new_session$uid <- user_db$uid
-              new_session$roles <- roles_out
-
-            }
 
             # update the last sign in time
             DBI::dbExecute(
@@ -113,7 +89,7 @@ Sessions <-  R6::R6Class(
               "UPDATE polished.app_users SET last_sign_in_at=$1 WHERE user_uid=$2 AND app_name=$3",
               params = list(
                 tychobratools::time_now_utc(),
-                user_db$uid,
+                invite$user_uid,
                 self$app_name
               )
             )
@@ -122,21 +98,57 @@ Sessions <-  R6::R6Class(
         }, error = function(e) {
 
           print(e)
-          return(NULL)
+          new_session <- NULL
         })
 
 
 
 
         # geneate a session token
-        token <- create_uid()
+        if (!is.null(new_session)) {
+          token <- create_uid()
 
-        new_session$token <- token
+          new_session$token <- token
 
-        private$add(new_session)
+          private$add(new_session)
+        }
       }
 
       return(new_session)
+    },
+    get_invite = function(email) {
+
+      invite <- NULL
+      DBI::dbWithTransaction(conn, {
+
+        user_db <- DBI::dbGetQuery(
+          conn,
+          "SELECT * FROM polished.users WHERE email=$1",
+          params = list(
+            email
+          )
+        )
+
+
+        if (nrow(user_db) != 1) {
+          stop('unable to find users in "users" table')
+        }
+
+        invite <- DBI::dbGetQuery(
+          conn,
+          "SELECT * FROM polished.app_users WHERE user_uid=$1 AND app_name=$2",
+          params = list(
+            user_db$uid,
+            self$app_name
+          )
+        )
+
+        if (nrow(invite) != 1) {
+          stop(sprintf('user "%s" is not authoized to access "%s"', email, self$app_name))
+        }
+      })
+
+      return(invite)
     },
     find = function(token) {
       if (length(private$sessions) == 0) return(NULL)
