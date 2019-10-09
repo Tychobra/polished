@@ -48,60 +48,32 @@ Sessions <-  R6::R6Class(
           email_verified = user$email_verified
         )
 
-
-
-        # check user authorization
         tryCatch({
           # confirm that user is invited
-          DBI::dbWithTransaction(conn, {
+          invite <- self$get_invite(conn, new_session$email)
 
-            invite <- self$get_invite(new_session$email)
+          # find the users roles
+          roles_out <- self$get_roles(conn, invite$user_uid)
 
-            role_names <- DBI::dbGetQuery(
-              conn,
-              "SELECT uid, name FROM polished.roles WHERE app_name=$1",
-              params = list(
-                self$app_name
-              )
+          new_session$is_admin <- invite$is_admin
+          new_session$uid <- invite$user_uid
+          new_session$roles <- roles_out
+
+          # update the last sign in time
+          DBI::dbExecute(
+            conn,
+            "UPDATE polished.app_users SET last_sign_in_at=$1 WHERE user_uid=$2 AND app_name=$3",
+            params = list(
+              tychobratools::time_now_utc(),
+              invite$user_uid,
+              self$app_name
             )
-
-            role_uids <- DBI::dbGetQuery(
-              conn,
-              "SELECT role_uid FROM polished.user_roles WHERE user_uid=$1 AND app_name=$2",
-              params = list(
-                invite$user_uid,
-                self$app_name
-              )
-            )$role_uid
-
-            roles_out <- role_names %>%
-              dplyr::filter(uid %in% role_uids) %>%
-              dplyr::pull(name)
-
-            new_session$is_admin <- is_admin$is_admin
-            new_session$uid <- invite$user_uid
-            new_session$roles <- roles_out
-
-
-            # update the last sign in time
-            DBI::dbExecute(
-              conn,
-              "UPDATE polished.app_users SET last_sign_in_at=$1 WHERE user_uid=$2 AND app_name=$3",
-              params = list(
-                tychobratools::time_now_utc(),
-                invite$user_uid,
-                self$app_name
-              )
-            )
-
-          })
+          )
         }, error = function(e) {
 
           print(e)
           new_session <- NULL
         })
-
-
 
 
         # geneate a session token
@@ -116,7 +88,7 @@ Sessions <-  R6::R6Class(
 
       return(new_session)
     },
-    get_invite = function(email) {
+    get_invite = function(conn, email) {
 
       invite <- NULL
       DBI::dbWithTransaction(conn, {
@@ -149,6 +121,36 @@ Sessions <-  R6::R6Class(
       })
 
       return(invite)
+    },
+    # return a character vector of the user's roles
+    get_roles = function(conn, user_uid) {
+      roles <- character(0)
+      DBI::dbWithTransaction(conn, {
+
+
+        role_names <- DBI::dbGetQuery(
+          conn,
+          "SELECT uid, name FROM polished.roles WHERE app_name=$1",
+          params = list(
+            self$app_name
+          )
+        )
+
+        role_uids <- DBI::dbGetQuery(
+          conn,
+          "SELECT role_uid FROM polished.user_roles WHERE user_uid=$1 AND app_name=$2",
+          params = list(
+            user_uid,
+            self$app_name
+          )
+        )$role_uid
+
+        roles <- role_names %>%
+          dplyr::filter(uid %in% role_uids) %>%
+          dplyr::pull(name)
+      })
+
+      roles
     },
     find = function(token) {
       if (length(private$sessions) == 0) return(NULL)

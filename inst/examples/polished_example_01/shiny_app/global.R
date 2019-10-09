@@ -4,7 +4,7 @@ library(config)
 
 app_config <- config::get()
 
-conn <- tychobratools::db_connect(app_config$db)
+db_conn <- tychobratools::db_connect(app_config$db)
 
 
 global_sessions_config(

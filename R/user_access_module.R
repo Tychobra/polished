@@ -134,7 +134,7 @@ user_access_module <- function(input, output, session) {
     app_user_uids <- app_users$user_uid
 
     # find the email address for all users of the app
-    app_user_emails <- conn %>%
+    app_user_emails <- session$userData$pcon %>%
       dplyr::tbl(dbplyr::in_schema("polished", "users")) %>%
       dplyr::filter(.data$uid %in% app_user_uids) %>%
       dplyr::select(user_uid = .data$uid, .data$email) %>%
@@ -211,7 +211,7 @@ user_access_module <- function(input, output, session) {
       ) %>%
         dplyr::mutate(
           invite_status = ifelse(is.na(.data$last_sign_in_at), "Pending", "Accepted"),
-          role = .data$roles_out
+          role = roles_out
         ) %>%
         dplyr::select(.data$actions, .data$email, .data$invite_status, .data$is_admin, .data$role, .data$last_sign_in_at)
     }

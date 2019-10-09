@@ -204,7 +204,7 @@ sign_in_module_ui <- function(id, firebase_config) {
 #' @import shinyjs
 #' @import shinyWidgets
 #'
-sign_in_module <- function(input, output, session, conn) {
+sign_in_module <- function(input, output, session) {
 
   shiny::observeEvent(input$submit_continue_sign_in, {
 
@@ -213,7 +213,7 @@ sign_in_module <- function(input, output, session, conn) {
     # check user invite
     invite <- NULL
     tryCatch({
-      invite <- .global_sessions$get_invite(email)
+      invite <- .global_sessions$get_invite(session$userData$pcon, email)
 
       # user is invited
       shinyjs::hide("submit_continue_sign_in")
@@ -252,7 +252,7 @@ sign_in_module <- function(input, output, session, conn) {
 
     invite <- NULL
     tryCatch({
-      invite <- .global_sessions$get_invite(email)
+      invite <- .global_sessions$get_invite(session$userData$pcon, email)
 
       # user is invited
       shinyjs::hide("continue_registation")
