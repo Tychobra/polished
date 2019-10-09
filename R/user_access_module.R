@@ -116,12 +116,12 @@ user_access_module <- function(input, output, session) {
   users <- reactive({
     users_trigger()
 
-    app_name <- .global_sessions$app_name
+    hold_app_name <- .global_sessions$app_name
 
     # find all users of the app
     app_users <- session$userData$pcon %>%
       dplyr::tbl(dbplyr::in_schema("polished", "app_users")) %>%
-      dplyr::filter(app_name == app_name) %>%
+      dplyr::filter(app_name == hold_app_name) %>%
       dplyr::select(
         app_uid = uid,
         app_name,
@@ -147,11 +147,11 @@ user_access_module <- function(input, output, session) {
 
   user_roles <- reactive({
     users_trigger()
-    app_name <- .global_sessions$app_name
+    hold_app_name <- .global_sessions$app_name
 
     session$userData$pcon %>%
       dplyr::tbl(dbplyr::in_schema("polished", "user_roles")) %>%
-      dplyr::filter(app_name == .data$app_name) %>%
+      dplyr::filter(app_name == hold_app_name) %>%
       dplyr::select(.data$user_uid, .data$role_uid) %>%
       dplyr::collect()
   })
