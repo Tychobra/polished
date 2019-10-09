@@ -4,7 +4,7 @@
 \alias{sign_in_module}
 \title{sign_in}
 \usage{
-sign_in_module(input, output, session, conn)
+sign_in_module(input, output, session)
 }
 \arguments{
 \item{input}{the Shiny input}
