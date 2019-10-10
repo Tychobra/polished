@@ -93,6 +93,11 @@ secure_server <- function(
           admin_module,
           "admin"
         )
+
+        # custom admin server functionality
+        if (isTRUE(!is.null(custom_admin_server))) {
+          custom_admin_server(input, output, session)
+        }
       }
 
     })
@@ -103,13 +108,6 @@ secure_server <- function(
       "polished"
     )
 
-
-    # custom admin server functionality
-    if (isTRUE(!is.null(custom_admin_server))) {
-      shiny::observeEvent(session$userData$user(), {
-        custom_admin_server(input, output, session)
-      })
-    }
 
     shiny::observeEvent(session$userData$user(), {
 
