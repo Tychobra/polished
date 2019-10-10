@@ -124,31 +124,10 @@ user_access_module <- function(input, output, session) {
 
     hold_app_name <- .global_sessions$app_name
 
-    # find all users of the app
-    app_users <- session$userData$pcon %>%
-      dplyr::tbl(dbplyr::in_schema("polished", "app_users")) %>%
-      dplyr::filter(app_name == hold_app_name) %>%
-      dplyr::select(
-        app_uid = uid,
-        app_name,
-        user_uid,
-        is_admin,
-        last_sign_in_at,
-        created_at) %>%
-      dplyr::collect()
-
-    app_user_uids <- app_users$user_uid
-
-    # find the email address for all users of the app
-    app_user_emails <- session$userData$pcon %>%
-      dplyr::tbl(dbplyr::in_schema("polished", "users")) %>%
-      dplyr::filter(.data$uid %in% app_user_uids) %>%
-      dplyr::select(user_uid = .data$uid, .data$email) %>%
-      dplyr::collect()
-
-    app_users %>%
-      dplyr::left_join(app_user_emails, by = "user_uid") %>%
-      dplyr::arrange(desc(.data$last_sign_in_at))
+    get_app_users(
+      session$userData$pcon,
+      hold_app_name
+    )
   })
 
   user_roles <- reactive({
