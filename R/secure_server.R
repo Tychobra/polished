@@ -7,6 +7,7 @@
 #'
 #' @export
 #'
+#' @importFrom shiny observeEvent getQueryString
 #'
 #' @return session session object with new reactive session$userData$current_user which
 #' is set to NULL if user is not signed in or a list with user data if the user is
@@ -109,7 +110,7 @@ secure_server <- function(
     }, ignoreInit = TRUE)
 
 
-    observeEvent(input$polished__session, {
+    shiny::observeEvent(input$polished__session, {
 
       global_user <- .global_sessions$find(input$polished__session)
 
@@ -130,7 +131,7 @@ secure_server <- function(
           .global_sessions$log_session(conn, global_user$token, global_user$uid)
 
           if (is.null(global_user$signed_in_as)) {
-            session$userData$user(global_user)
+            session$userData$user(global_user[c("uid", "email", "is_admin", "roles", "token")])
           } else {
             session$userData$user(global_user$signed_in_as)
           }
@@ -165,7 +166,7 @@ secure_server <- function(
 
 
     # if the user is an admin and on the admin page, set up the admin server
-    observeEvent(session$userData$user(), {
+    shiny::observeEvent(session$userData$user(), {
 
       query_list <- shiny::getQueryString()
       is_on_admin_page <- if (!is.null(query_list$admin_pane) && query_list$admin_pane == 'true') TRUE else FALSE

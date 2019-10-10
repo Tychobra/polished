@@ -45,7 +45,6 @@ admin_button <- function(input, output, session) {
     )
 
     # TODO: clear signed in as in .global_sessions
-    global_user <- .global_sessions$find()
     .global_sessions$clear_signed_in_as(session$userData$user()$token)
 
     # remove admin_panel=false from query
