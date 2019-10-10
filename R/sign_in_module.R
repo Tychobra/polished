@@ -94,7 +94,6 @@ sign_in_module_ui <- function(id, firebase_config) {
 
     shinyjs::hidden(div(
       id = ns("register_panel"),
-      #style = "display: none;",
       class = "auth_panel",
       h1(
         class = "text-center",
@@ -123,7 +122,6 @@ sign_in_module_ui <- function(id, firebase_config) {
       ),
       shinyjs::hidden(div(
         id = ns("register_passwords"),
-        #style = "display: none",
         br(),
         div(
           class = "form-group",
@@ -207,6 +205,54 @@ sign_in_module_ui <- function(id, firebase_config) {
 #' @import shinyWidgets
 #'
 sign_in_module <- function(input, output, session) {
+
+  ns <- session$ns
+
+  shiny::observeEvent(input$polished__sign_in, {
+    firebase_token <- input$polished__sign_in$firebase_token
+    polished_token <- input$polished__sign_in$polished_token
+
+
+    session$sendCustomMessage(
+      "polish__show_loading",
+      message = list(
+        text = "Loading..."
+      )
+    )
+
+    # attempt to sign in
+    new_user <- .global_sessions$sign_in(session$userData$pcon, firebase_token)
+
+    if (is.null(new_user)) {
+      # user sign in failed.
+
+      session$sendCustomMessage(
+        "polish__remove_loading",
+        message = list()
+      )
+
+      tychobratools::show_toast("error", "Error signing into polished server")
+
+    } else {
+      # go to app.  If user is admin, then they will have the blue "Admin Panel" button
+      # in the bottom right
+
+      # send cookie to front end, wait for confirmation that cookie is set, and then reload session
+      session$sendCustomMessage(
+        ns("polished__set_cookie"),
+        message = list(
+          polished_token = new_user$token
+        )
+      )
+
+      # wait for the cookie to be set, and then reload the session
+      observeEvent(input$polished__set_cookie_complete, {
+        session$reload()
+      }, once = TRUE)
+
+    }
+  }, ignoreInit = TRUE)
+
 
   shiny::observeEvent(input$submit_continue_sign_in, {
 

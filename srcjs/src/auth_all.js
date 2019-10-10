@@ -66,12 +66,5 @@ const auth_all = (ns_id) => {
 }
 
 
-Shiny.addCustomMessageHandler(
-  "polished__set_cookie",
-  function(message) {
-    Cookies.set('polished__token', message.polished_token)
 
-    Shiny.setInputValue("polished__set_cookie_complete", 1, { priority: "event" })
-  }
-)
 

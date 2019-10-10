@@ -72,7 +72,7 @@ Sessions <-  R6::R6Class(
         }, error = function(e) {
 
           print(e)
-          new_session <- NULL
+          new_session <<- NULL
         })
 
 

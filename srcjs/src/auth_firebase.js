@@ -1,29 +1,40 @@
 const auth = firebase.auth()
 
-const sign_in = (email, password) => {
 
-  return auth.signInWithEmailAndPassword(email, password).then(user => {
-
-    const polished_token = Cookies.get("polished__token")
-
-    return user.user.getIdToken(true).then(firebase_token => {
-
-      Shiny.setInputValue("polished__sign_in", {
-        firebase_token: firebase_token,
-        polished_token: polished_token
-      }, {
-        event: "priority"
-      });
-    })
-
-
-  })
-}
 
 
 const auth_firebase = (ns_id) => {
   const ns = NS(ns_id)
+  const ns2 = NS(ns_id, "")
 
+  const sign_in = (email, password) => {
+
+    return auth.signInWithEmailAndPassword(email, password).then(user => {
+
+      const polished_token = Cookies.get("polished__token")
+
+      return user.user.getIdToken(true).then(firebase_token => {
+
+        Shiny.setInputValue(ns2("polished__sign_in"), {
+          firebase_token: firebase_token,
+          polished_token: polished_token
+        }, {
+          event: "priority"
+        });
+      })
+
+
+    })
+  }
+
+  Shiny.addCustomMessageHandler(
+    ns2("polished__set_cookie"),
+    function(message) {
+      Cookies.set('polished__token', message.polished_token)
+
+      Shiny.setInputValue(ns2("polished__set_cookie_complete"), 1, { priority: "event" })
+    }
+  )
 
   $(document).on("click", ns("submit_register"), () => {
     const email = $(ns("register_email")).val().toLowerCase()

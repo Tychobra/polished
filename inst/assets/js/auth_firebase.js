@@ -2,22 +2,30 @@
 
 var auth = firebase.auth();
 
-var sign_in = function sign_in(email, password) {
-  return auth.signInWithEmailAndPassword(email, password).then(function (user) {
-    var polished_token = Cookies.get("polished__token");
-    return user.user.getIdToken(true).then(function (firebase_token) {
-      Shiny.setInputValue("polished__sign_in", {
-        firebase_token: firebase_token,
-        polished_token: polished_token
-      }, {
-        event: "priority"
-      });
-    });
-  });
-};
-
 var auth_firebase = function auth_firebase(ns_id) {
   var ns = NS(ns_id);
+  var ns2 = NS(ns_id, "");
+
+  var sign_in = function sign_in(email, password) {
+    return auth.signInWithEmailAndPassword(email, password).then(function (user) {
+      var polished_token = Cookies.get("polished__token");
+      return user.user.getIdToken(true).then(function (firebase_token) {
+        Shiny.setInputValue(ns2("polished__sign_in"), {
+          firebase_token: firebase_token,
+          polished_token: polished_token
+        }, {
+          event: "priority"
+        });
+      });
+    });
+  };
+
+  Shiny.addCustomMessageHandler(ns2("polished__set_cookie"), function (message) {
+    Cookies.set('polished__token', message.polished_token);
+    Shiny.setInputValue(ns2("polished__set_cookie_complete"), 1, {
+      priority: "event"
+    });
+  });
   $(document).on("click", ns("submit_register"), function () {
     var email = $(ns("register_email")).val().toLowerCase();
     var password = $(ns("register_password")).val();
