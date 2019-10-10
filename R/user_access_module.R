@@ -424,7 +424,7 @@ user_access_module <- function(input, output, session) {
   observeEvent(valid_new_role(), {
     new_role <- valid_new_role()
     user_uid <- session$userData$user()$uid
-    print(new_role)
+
     tryCatch({
 
       dbExecute(
@@ -595,11 +595,7 @@ user_access_module <- function(input, output, session) {
 
   })
 
-  observe({
-    print(list(
-      users = users()
-    ))
-  })
+
 
   observeEvent(input$sign_in_as_btn_row, {
     user_to_sign_in_as <- users_w_roles()[as.numeric(input$sign_in_as_btn_row), ] %>%
