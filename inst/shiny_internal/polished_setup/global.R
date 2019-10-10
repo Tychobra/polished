@@ -1,6 +1,5 @@
 library(shiny)
 library(polished)
+library(shinydashboard)
 
-source("funs/ui_w_firebase.R", local = TRUE)
-
-app_config <- config::get()
+#app_config <- config::get()

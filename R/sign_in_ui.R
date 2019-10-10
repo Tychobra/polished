@@ -185,6 +185,8 @@ sign_in_module_ui <- function(id, firebase_config) {
     tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"),
     firebase_dependencies(),
     firebase_init(firebase_config),
+    tags$script(src = "polish/js/loading_options.js"),
+    tags$script(src = "polish/js/toast_options.js"),
     tags$script(src = "polish/js/auth_all.js"),
     tags$script(paste0("auth_all('", id, "')")),
     tags$script(src = "polish/js/auth_firebase.js"),

@@ -4,7 +4,6 @@ var auth = firebase.auth();
 
 var sign_in = function sign_in(email, password) {
   return auth.signInWithEmailAndPassword(email, password).then(function (user) {
-    console.log("user: ", user);
     var polished_token = Cookies.get("polished__token");
     return user.user.getIdToken(true).then(function (firebase_token) {
       Shiny.setInputValue("polished__sign_in", {
@@ -25,7 +24,7 @@ var auth_firebase = function auth_firebase(ns_id) {
     var password_2 = $(ns("register_password_verify")).val();
 
     if (password !== password_2) {
-      //toastr.error("The passwords do not match")
+      toastr.error("The passwords do not match", null, toast_options);
       console.log("the passwords do not match");
       return;
     }
@@ -40,11 +39,11 @@ var auth_firebase = function auth_firebase(ns_id) {
     }).then(function () {
       return sign_in(email, password)["catch"](function (error) {
         $.LoadingOverlay("hide");
-        toastr.error("Sign in Error: " + error.message);
+        toastr.error("Sign in Error: " + error.message, null, toast_options);
         console.log("error: ", error);
       });
     })["catch"](function (error) {
-      //toastr.error("" + error)
+      toastr.error("" + error, null, toast_options);
       $.LoadingOverlay("hide");
       console.log("error registering user");
       console.log(error);
@@ -53,9 +52,10 @@ var auth_firebase = function auth_firebase(ns_id) {
   $(document).on("click", ns("reset_password"), function () {
     var email = $(ns("email")).val().toLowerCase();
     auth.sendPasswordResetEmail(email).then(function () {
-      console.log("Password reset email sent to ".concat(email)); //toastr.success("Password reset email sent to " + email)
+      console.log("Password reset email sent to ".concat(email));
+      toastr.success("Password reset email sent to " + email, null, toast_options);
     })["catch"](function (error) {
-      //toastr.error("" + error)
+      toastr.error("" + error, null, toast_options);
       console.log("error resetting email: ", error);
     });
   });
@@ -65,7 +65,7 @@ var auth_firebase = function auth_firebase(ns_id) {
     var password = $(ns("password")).val();
     sign_in(email, password)["catch"](function (error) {
       $.LoadingOverlay("hide");
-      toastr.error("Sign in Error: " + error.message);
+      toastr.error("Sign in Error: " + error.message, null, toast_options);
       console.log("error: ", error);
     });
   });

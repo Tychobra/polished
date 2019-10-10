@@ -32,7 +32,7 @@ const auth_firebase = (ns_id) => {
 
     if (password !== password_2) {
 
-      //toastr.error("The passwords do not match")
+      toastr.error("The passwords do not match", null, toast_options)
       console.log("the passwords do not match")
 
       return
@@ -55,12 +55,12 @@ const auth_firebase = (ns_id) => {
 
       return sign_in(email, password).catch(error => {
         $.LoadingOverlay("hide")
-        toastr.error("Sign in Error: " + error.message)
+        toastr.error("Sign in Error: " + error.message, null, toast_options)
         console.log("error: ", error)
       })
 
     }).catch((error) => {
-      //toastr.error("" + error)
+      toastr.error("" + error, null, toast_options)
       $.LoadingOverlay("hide")
       console.log("error registering user")
       console.log(error)
@@ -74,9 +74,9 @@ const auth_firebase = (ns_id) => {
 
     auth.sendPasswordResetEmail(email).then(() => {
       console.log(`Password reset email sent to ${email}`)
-      //toastr.success("Password reset email sent to " + email)
+      toastr.success("Password reset email sent to " + email, null, toast_options)
     }).catch((error) => {
-      //toastr.error("" + error)
+      toastr.error("" + error, null, toast_options)
       console.log("error resetting email: ", error)
     })
   })
@@ -90,7 +90,7 @@ const auth_firebase = (ns_id) => {
     sign_in(email, password).catch(error => {
 
       $.LoadingOverlay("hide")
-      toastr.error("Sign in Error: " + error.message)
+      toastr.error("Sign in Error: " + error.message, null, toast_options)
       console.log("error: ", error)
     })
 
