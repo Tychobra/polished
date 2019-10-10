@@ -3,6 +3,9 @@
 #' @param id the Shiny module id
 #' @param firebase_config Firebase configuration
 #'
+#' @importFrom htmltools tags h1
+#' @importFrom shiny fluidPage fluidRow column
+#'
 #' @export
 verify_email_ui <- function(id, firebase_config) {
   ns <- NS(id)

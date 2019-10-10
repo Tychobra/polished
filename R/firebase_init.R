@@ -6,7 +6,10 @@
 #'
 #' @return a character string of JavaScript code defining firebaseConfig
 #'
+#' @importFrom htmltools tagList tags
+#'
 #' @examples
+#'
 #'
 #' \dontrun{
 #' my_config <- list(
@@ -20,7 +23,7 @@
 #' }
 firebase_init <- function(firebase_config) {
 
-  tagList(
+  htmltools::tagList(
     tags$script(
       paste0("
         var firebaseConfig = {

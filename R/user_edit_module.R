@@ -12,8 +12,10 @@
 #'
 #' @export
 #'
-#' @import shiny DBI
+#' @importFrom shiny reactive observeEvent showModal modalDialog modalButton removeModal
+#' @importFrom DBI dbExecute dbWithTransaction
 #' @importFrom shinyWidgets pickerInput
+#' @importFrom tychobratools show_toast
 #'
 user_edit_module <- function(input, output, session,
   modal_title,

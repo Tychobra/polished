@@ -4,14 +4,14 @@
 #'
 #' @param id the Shiny module id.
 #'
-#' @import shiny
+#' @importFrom shiny actionButton NS
 #'
 #' @return admin button UI
 #'
 #' @export
 #'
 admin_button_ui <- function(id) {
-  ns <- NS(id)
+  ns <- shiny::NS(id)
 
   shiny::actionButton(
     ns("go_to_admin_panel"),
@@ -30,7 +30,7 @@ admin_button_ui <- function(id) {
 #' @param output the Shiny server output
 #' @param session the Shiny server session
 #'
-#' @import shiny
+#' @importFrom shiny observeEvent updateQueryString
 #'
 #'
 admin_button <- function(input, output, session) {

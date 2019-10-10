@@ -7,9 +7,10 @@
 #' @export
 #'
 #' @importFrom R6 R6Class
-#' @importFrom httr GET content
+#' @importFrom httr GET content warn_for_status
 #' @importFrom jsonlite fromJSON
 #' @importFrom digest digest
+#' @importFrom DBI dbGetQuery dbWithTransaction dbExecute
 #'
 Sessions <-  R6::R6Class(
   classname = "Sessions",

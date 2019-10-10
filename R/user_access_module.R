@@ -2,8 +2,10 @@
 #'
 #' @param id the module id
 #'
-#' @import shiny shinydashboard shinycssloaders
-#' @importFrom htmltools br
+#' @importFrom shiny fluidRow column actionButton
+#' @importFrom shinydashboard tabItem box
+#' @importFrom shinycssloaders withSpinner
+#' @importFrom htmltools br tags
 #' @importFrom DT DTOutput
 #'
 #'
@@ -100,11 +102,15 @@ user_access_module_ui <- function(id) {
 #' @param output the Shiny server output
 #' @param session the Shiny server session
 #'
-#' @import shiny shinyjs dplyr
+#' @importFrom shiny showModal modalDialog removeModal reactiveVal reactive observeEvent callModule
 #' @importFrom htmltools br div
-#' @importFrom DT renderDT datatable
+#' @importFrom DT renderDT datatable dataTableProxy formatDate
 #' @importFrom dbplyr in_schema
-#' @importFrom tidyr chop
+#' @importFrom tidyr nest
+#' @importFrom DBI dbExecute dbWithTransaction
+#' @importFrom dplyr tbl filter select %>% left_join arrange collect mutate
+#' @importFrom tibble tibble
+#' @importFrom tychobratools show_toast
 #'
 #' @export
 #'
@@ -585,10 +591,10 @@ user_access_module <- function(input, output, session) {
       })
 
 
-      show_toast("success", "Role successfully deleted")
+      tychobratools::show_toast("success", "Role successfully deleted")
       roles_trigger(roles_trigger() + 1)
     }, error = function(e) {
-      show_toast("error", "Error deleting role")
+      tychobratools::show_toast("error", "Error deleting role")
       print(e)
     })
 
@@ -599,7 +605,7 @@ user_access_module <- function(input, output, session) {
 
 
 
-  observeEvent(input$sign_in_as_btn_row, {
+  shiny::observeEvent(input$sign_in_as_btn_row, {
     user_to_sign_in_as <- users_w_roles()[as.numeric(input$sign_in_as_btn_row), ] %>%
       dplyr::select(.data$email, .data$is_admin, uid = user_uid, .data$roles) %>%
       as.list()
@@ -620,8 +626,7 @@ user_access_module <- function(input, output, session) {
       )
     )
 
-    # TODO: allow user to sign in as another user
-    #global_user <- .global_sessions$find(polished_user$uid, polished_user$polished_session)
+    # sign in as another user
     .global_sessions$set_signed_in_as(
       session$userData$user()$token,
       user_to_sign_in_as

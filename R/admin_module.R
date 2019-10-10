@@ -5,17 +5,14 @@
 #' @param custom_admin_ui Either `NULL`, the default, or a list of 2 elements containing custom
 #' ui to add addtional `shinydashboard` tabs to the Polished admin panel.
 #'
-#' @import shiny
-#' @import DT
-#' @import shinyjs
-#' @import shinydashboard
-#' @import htmltools
-#' @import shinytoastr
+#' @importFrom shiny NS
+#' @importFrom shinydashboard dashboardHeader dashboardSidebar dashboardBody dashboardPage sidebarMenu menuItem tabItems
+#' @importFrom htmltools HTML tags
 #'
 #' @export
 #'
 admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
-  ns <- NS(id)
+  ns <- shiny::NS(id)
 
   stopifnot(is.null(custom_admin_ui) || names(custom_admin_ui) == c("menu_items", "tab_items"))
 
@@ -42,7 +39,7 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
 
   if (is.null(custom_admin_ui$menu_items)) {
     sidebar <- shinydashboard::dashboardSidebar(
-      sidebarMenu(
+      shinydashboard::sidebarMenu(
         id = ns("sidebar_menu"),
         menuItem(
           text = "Dashboard",
@@ -69,12 +66,12 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
     sidebar <- shinydashboard::dashboardSidebar(
       sidebarMenu(
         id = ns("sidebar_menu"),
-        menuItem(
+        shinydashboard::menuItem(
           text = "Dashboard",
           tabName = "dashboard",
           icon = icon("dashboard")
         ),
-        menuItem(
+        shinydashboard::menuItem(
           text = "User Access",
           tabName = "user_access",
           icon = icon("users")
@@ -95,12 +92,12 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
 
 
   if (is.null(custom_admin_ui$tab_items)) {
-    tab_items <- tabItems(
+    tab_items <- shinydashboard::tabItems(
       dashboard_module_ui(ns("dashboard")),
       user_access_module_ui(ns("user_access"))
     )
   } else {
-    tab_items <- tabItems(
+    tab_items <- shinydashboard::tabItems(
       dashboard_module_ui(ns("dashboard")),
       user_access_module_ui(ns("user_access")),
       custom_admin_ui$tab_items
@@ -109,7 +106,7 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
 
 
   body <- shinydashboard::dashboardBody(
-    shiny::tags$head(
+    htmltools::tags$head(
       tags$link(rel = "shortcut icon", href = "polish/images/polished_hex.png"),
       tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"),
       firebase_dependencies(),
@@ -153,17 +150,19 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
 #' @param output the Shiny server output
 #' @param session the Shiny server session
 #'
+#' @importFrom shiny callModule observeEvent
+#'
 #' @export
 #'
 admin_module <- function(input, output, session) {
   ns <- session$ns
 
-  callModule(
+  shiny::callModule(
     profile_module,
     "polish__profile"
   )
 
-  observeEvent(input$go_to_shiny_app, {
+  shiny::observeEvent(input$go_to_shiny_app, {
 
     session$sendCustomMessage(
       "polish__show_loading",
@@ -180,6 +179,6 @@ admin_module <- function(input, output, session) {
   }, ignoreInit = TRUE)
 
 
-  callModule(dashboard_module, "dashboard")
-  callModule(user_access_module, "user_access")
+  shiny::callModule(dashboard_module, "dashboard")
+  shiny::callModule(user_access_module, "user_access")
 }

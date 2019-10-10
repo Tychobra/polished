@@ -5,27 +5,28 @@
 #' @param id the Shiny module id
 #' @param firebase_config list of Firebase config
 #'
-#' @import shiny
-#' @import shinytoastr
-#' @import shinyjs
+#' @importFrom shiny textInput actionButton NS actionLink
+#' @importFrom htmltools tagList tags div h1 br
+#' @importFrom shinytoastr useToastr
+#' @importFrom shinyjs useShinyjs hidden
 #'
 #' @export
 #'
 #'
 sign_in_module_ui <- function(id, firebase_config) {
-  ns <- NS(id)
+  ns <- shiny::NS(id)
 
-  tagList(
+  htmltools::tagList(
     tags$head(
       tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
       tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css")
     ),
     shinyjs::useShinyjs(),
     shinytoastr::useToastr(),
-    div(
+    shiny::div(
       id = ns("sign_in_panel"),
       class = "auth_panel",
-      h1(
+      htmltools::h1(
         class = "text-center",
         style = "padding-top: 0;",
         "Sign In"
@@ -55,7 +56,7 @@ sign_in_module_ui <- function(id, firebase_config) {
           )
         ),
         br(),
-        actionButton(
+        shiny::actionButton(
           inputId = ns("submit_sign_in"),
           label = "Sign In",
           class = "text-center",
@@ -65,7 +66,7 @@ sign_in_module_ui <- function(id, firebase_config) {
       )),
       div(
         id = ns("continue_sign_in"),
-        actionButton(
+        shiny::actionButton(
           inputId = ns("submit_continue_sign_in"),
           label = "Continue",
           style = "color: white; width: 100%;",
@@ -200,9 +201,10 @@ sign_in_module_ui <- function(id, firebase_config) {
 #' @param session the Shiny session
 #' @param conn a database connection
 #'
-#' @import shiny
-#' @import shinyjs
-#' @import shinyWidgets
+#' @importFrom shiny observeEvent
+#' @importFrom tychobratools show_toast
+#' @importFrom shinyjs show hide
+#' @importFrom shinyWidgets sendSweetAlert
 #'
 sign_in_module <- function(input, output, session) {
 

@@ -17,6 +17,7 @@ firebase_init
 }
 \examples{
 
+
 \dontrun{
 my_config <- list(
   apiKey = "your Firebase API key",

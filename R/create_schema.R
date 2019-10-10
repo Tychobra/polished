@@ -10,7 +10,7 @@
 #'
 #' @param conn the `RPostgres` database connection.  Only `RPostgres` is supported.
 #'
-#' @import DBI
+#' @importFrom DBI dbExecute
 #'
 #' @export
 #'

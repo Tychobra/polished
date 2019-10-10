@@ -7,7 +7,7 @@
 #'
 #' @export
 #'
-#' @importFrom shiny observeEvent getQueryString
+#' @importFrom shiny observeEvent getQueryString callModule
 #'
 #' @return session session object with new reactive session$userData$current_user which
 #' is set to NULL if user is not signed in or a list with user data if the user is
@@ -55,7 +55,6 @@ secure_server <- function(
 
 
         } else {
-          print("secure_server 4")
           # go to email verification view.
           # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
 
@@ -99,7 +98,7 @@ secure_server <- function(
     })
 
     # go to admin panel
-    callModule(
+    shiny::callModule(
       admin_button,
       "polished"
     )
@@ -107,15 +106,15 @@ secure_server <- function(
 
     # custom admin server functionality
     if (isTRUE(!is.null(custom_admin_server))) {
-      observeEvent(session$userData$user(), {
+      shiny::observeEvent(session$userData$user(), {
         custom_admin_server(input, output, session)
       })
     }
 
-    observeEvent(session$userData$user(), {
+    shiny::observeEvent(session$userData$user(), {
 
       if (is.null(session$userData$user())) {
-        callModule(
+        shiny::callModule(
           sign_in_module,
           "sign_in"
         )
@@ -127,8 +126,8 @@ secure_server <- function(
 
     # user developed server.  Required signed in user to
     # access
-    observeEvent(session$userData$user(), {
-      query_string <- getQueryString()
+    shiny::observeEvent(session$userData$user(), {
+      query_string <- shiny::getQueryString()
 
       if (is.null(query_string$admin_panel)) {
         server(input, output, session)

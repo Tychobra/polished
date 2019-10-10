@@ -2,7 +2,12 @@
 #'
 #' @param id the module id
 #'
-#' @import shiny shinydashboard apexcharter xts dplyr DT shinycssloaders lubridate tychobratools
+#' @importFrom shiny NS fluidRow column
+#' @importFrom shinydashboard tabItem box
+#' @importFrom apexcharter apexchartOutput
+#' @importFrom DT DTOutput
+#' @importFrom shinycssloaders withSpinner
+#' @importFrom tychobratools value_box_module_ui
 #' @importFrom htmlwidgets JS
 #'
 #' @export
@@ -69,8 +74,13 @@ dashboard_module_ui <- function(id) {
 #' @param output the Shiny server output
 #' @param session the Shiny server session
 #'
-#' @import shiny
-#' @importFrom lubridate days
+#' @importFrom shiny reactive callModule reactivePoll
+#' @importFrom lubridate days today month
+#' @importFrom dplyr tbl filter select collect mutate group_by summarize ungroup left_join %>% bind_rows distinct
+#' @importFrom tibble tibble
+#' @importFrom apexcharter apexchart ax_title ax_chart ax_tooltip ax_xaxis ax_stroke ax_dataLabels ax_fill ax_series ax_yaxis
+#' @importFrom DT renderDT datatable
+#' @importFrom tychobratools value_box_module
 #'
 #' @export
 dashboard_module <- function(input, output, session) {
@@ -81,12 +91,12 @@ dashboard_module <- function(input, output, session) {
   # - "user_uid"
   # - "n" the number of sessions
   #
-  daily_user_sessions <- reactive({
+  daily_user_sessions <- shiny::reactive({
 
     hold_app_name = .global_sessions$app_name
 
     dat <- session$userData$pcon %>%
-      dplyr::tbl(in_schema("polished", "sessions")) %>%
+      dplyr::tbl(dbplyr::in_schema("polished", "sessions")) %>%
       dplyr::filter(app_name == hold_app_name) %>%
       dplyr::select(.data$user_uid, .data$created_at) %>%
       dplyr::collect() %>%
@@ -100,7 +110,7 @@ dashboard_module <- function(input, output, session) {
     # make sure all days are included even if zero sessions in a day
     first_day <- min(dat$date)
 
-    out <- tibble(
+    out <- tibble::tibble(
       date = seq.Date(
         from = first_day,
         to = lubridate::today(tzone = "America/New_York"),
@@ -109,7 +119,7 @@ dashboard_module <- function(input, output, session) {
     )
 
     out %>%
-      left_join(dat, by = "date") %>%
+      dplyr::left_join(dat, by = "date") %>%
       mutate(n = ifelse(is.na(n), 0, n))
   })
 
@@ -130,7 +140,7 @@ dashboard_module <- function(input, output, session) {
 
 
   # calculate an format Daily Average Users for the value box
-  dau_box_prep <- reactive({
+  dau_box_prep <- shiny::reactive({
     mean(daily_users()$n) %>%
       round(1) %>%
       format(big.mark = ",")
@@ -144,13 +154,13 @@ dashboard_module <- function(input, output, session) {
   )
 
   # calculate and format the Monthly Average Users for the value box
-  mau_box_prep <- reactive({
+  mau_box_prep <- shiny::reactive({
     by_month <- daily_user_sessions() %>%
-      mutate(month_ = lubridate::month(.data$date)) %>%
-      distinct(.data$month_, .data$user_uid) %>%
-      group_by(.data$month_) %>%
-      summarize(n = n()) %>%
-      ungroup()
+      dplyr::mutate(month_ = lubridate::month(.data$date)) %>%
+      dplyr::distinct(.data$month_, .data$user_uid) %>%
+      dplyr::group_by(.data$month_) %>%
+      dplyr::summarize(n = n()) %>%
+      dplyr::ungroup()
 
     mean(by_month$n) %>%
       round(1) %>%
@@ -161,13 +171,13 @@ dashboard_module <- function(input, output, session) {
     tychobratools::value_box_module,
     "mau_box",
     mau_box_prep,
-    reactive("Average Monthly Users")
+    shiny::reactive("Average Monthly Users")
   )
 
   # calculate and format the Monthly Average Sessions for the value box
-  das_box_prep <- reactive({
+  das_box_prep <- shiny::reactive({
     daily_user_sessions() %>%
-      group_by(.data$date) %>%
+      dplyr::group_by(.data$date) %>%
       summarize(n_sessions = sum(n)) %>%
       ungroup() %>%
       pull("n_sessions") %>%
@@ -180,7 +190,7 @@ dashboard_module <- function(input, output, session) {
     tychobratools::value_box_module,
     "das_box",
     das_box_prep,
-    reactive("Average Daily Sessions")
+    shiny::reactive("Average Daily Sessions")
   )
 
   # poll the active sessions from the `.global_sessions` object
@@ -242,7 +252,7 @@ dashboard_module <- function(input, output, session) {
     }
 
     daily_users %>%
-      mutate(
+      dplyr::mutate(
         month_ = as.character(lubridate::month(.data$date, label = TRUE)),
         day_ = lubridate::day(.data$date),
         date_out = paste0(.data$month_, " ", .data$day_)
@@ -321,8 +331,7 @@ dashboard_module <- function(input, output, session) {
         )
     }
 
-    ax_out %>%
-      ax_chart(parentHeightOffset = 0)
+    ax_out
   })
 
 
@@ -337,7 +346,7 @@ dashboard_module <- function(input, output, session) {
     )
   )
 
-  output$active_users_table <- DT::renderDataTable({
+  output$active_users_table <- DT::renderDT({
     out <- poll_global_users()
 
     DT::datatable(

@@ -4,6 +4,9 @@
 #'
 #' @export
 #'
+#' @importFrom shiny fluidPage fluidRow
+#' @importFrom htmltools tags
+#'
 #' @return the UI for the sign in page
 #'
 sign_in_ui_default <- function(firebase_config) {

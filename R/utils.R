@@ -22,8 +22,9 @@ remove_query_string <- function(session = shiny::getDefaultReactiveDomain()) {
 #' @param cookie_string the cookie string
 #' @param name the name of the cookie
 #'
-#' @import dplyr
-#' @import tidyr
+#' @importFrom dplyr filter pull %>%
+#' @importFrom tidyr separate
+#' @importFrom tibble tibble
 #'
 #' @export
 #'
@@ -38,7 +39,7 @@ get_cookie <- function(cookie_string, name) {
 
   cookies <- strsplit(cookie_string , split = "; ", fixed = TRUE)
 
-  dplyr::tibble(cookie = unlist(cookies)) %>%
+  tibble::tibble(cookie = unlist(cookies)) %>%
     tidyr::separate(.data$cookie, into = c("key", "value"), sep = "=", extra = "merge") %>%
     dplyr::filter(.data$key == name) %>%
     dplyr::pull("value")
@@ -53,7 +54,7 @@ get_cookie <- function(cookie_string, name) {
 #' @param timestamp the JSON UTC date(s)
 #' @param tz the timezone to convert the returned datetime to
 #'
-#' @importFrom lubridate force_tz
+#' @importFrom lubridate with_tz
 #'
 #' @return the R POSIX.ct datetime(s)
 #'

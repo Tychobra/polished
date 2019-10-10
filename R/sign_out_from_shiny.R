@@ -2,7 +2,6 @@
 #'
 #' @param session the Shiny session
 #'
-#' @import shiny
 #'
 #' @export
 #'

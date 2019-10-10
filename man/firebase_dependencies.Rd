@@ -4,7 +4,7 @@
 \alias{firebase_dependencies}
 \title{load the Firebase dependencies into the ui}
 \usage{
-firebase_dependencies(services = c("auth", "firestore", "functions"))
+firebase_dependencies(services = c("auth"))
 }
 \arguments{
 \item{services}{character vector of Firebase services to load into the ui.  Valid strings are
