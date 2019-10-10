@@ -454,9 +454,11 @@ user_access_module <- function(input, output, session) {
   roles <- reactive({
     roles_trigger()
 
+    hold_app_name <- .global_sessions$app_name
+
     session$userData$pcon %>%
       dplyr::tbl(dbplyr::in_schema("polished", "roles")) %>%
-      dplyr::filter(app_name == app_name) %>%
+      dplyr::filter(app_name == hold_app_name) %>%
       dplyr::select(uid, name) %>%
       dplyr::collect()
   })
