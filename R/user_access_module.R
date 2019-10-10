@@ -603,8 +603,14 @@ user_access_module <- function(input, output, session) {
     user_to_sign_in_as <- users_w_roles()[as.numeric(input$sign_in_as_btn_row), ] %>%
       dplyr::select(.data$email, .data$is_admin, uid = user_uid, .data$roles) %>%
       as.list()
-    #browser()
-    #user_to_sign_in_as$roles <- user_to_sign_in_as$roles[[1]]$role_name
+
+    roles_out <- user_to_sign_in_as$roles[[1]]$role_name
+    if (is.null(roles_out)) {
+      user_to_sign_in_as$roles <- character(0)
+    } else {
+      user_to_sign_in_as$roles <- roles_out
+    }
+
     user_to_sign_in_as$token <- session$userData$user()$token
 
     session$sendCustomMessage(
