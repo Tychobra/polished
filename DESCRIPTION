@@ -30,7 +30,8 @@ Imports:
     dbplyr,
     digest,
     shinytoastr,
-    shinyWidgets
+    shinyWidgets,
+    rlang
 Remotes: 
     github::tychobra/tychobratools
 RoxygenNote: 6.1.1
