@@ -6,7 +6,7 @@
 #' @importFrom shinydashboard tabItem box
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom htmltools br tags
-#' @importFrom DT DTOutput
+#' @importFrom DT DTOutput replaceData
 #'
 #'
 #' @export
@@ -204,7 +204,7 @@ user_access_module <- function(input, output, session) {
     if (is.null(users_table_prep())) {
       users_table_prep(out)
     } else {
-      replaceData(users_proxy, out, resetPaging = FALSE, rownames = FALSE)
+      DT::replaceData(users_proxy, out, resetPaging = FALSE, rownames = FALSE)
     }
 
   })
