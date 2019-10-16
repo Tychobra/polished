@@ -17,8 +17,8 @@
 #'
 create_app_user <- function(conn, app_name, email, is_admin = FALSE, roles = character(0), created_by = NULL) {
 
-
-
+  email <- tolower(email)
+  email <- trimws(email)
 
   DBI::dbWithTransaction(conn, {
 
