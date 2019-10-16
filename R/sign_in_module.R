@@ -18,7 +18,6 @@ sign_in_module_ui <- function(id, firebase_config) {
 
   htmltools::tagList(
     tags$head(
-      tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
       tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css")
     ),
     shinyjs::useShinyjs(),
