@@ -1,7 +1,7 @@
 #' get_app_users
 #'
 #' @param conn the database connection
-#' @param app_name the name of the app
+#' @param app_name the name of the app or `NULL` to get all app users. Defaults to NULL.
 #'
 #' @return a data frame of the app users from the polished schema.
 #'
@@ -11,13 +11,20 @@
 #' @importFrom dbplyr in_schema
 #' @importFrom rlang !! enquo
 #'
-get_app_users <- function(conn, app_name) {
+get_app_users <- function(conn, app_name = NULL) {
   hold_app_name <- rlang::enquo(app_name)
 
   # find all users of the app
   app_users <- conn %>%
-    dplyr::tbl(dbplyr::in_schema("polished", "app_users")) %>%
-    dplyr::filter(app_name == !!app_name) %>%
+    dplyr::tbl(dbplyr::in_schema("polished", "app_users"))
+
+
+  if (!is.null(app_name)) {
+    app_users <- app_users %>%
+      dplyr::filter(.data$app_name == !!app_name)
+  }
+
+  app_users <- app_users %>%
     dplyr::select(
       app_uid = uid,
       app_name,
