@@ -101,6 +101,27 @@ polished::write_firebase_functions()
 firebase deploy --only functions
 ```
 
+Set up PostgreSQL "polished" schema.  This schema stores your users, apps, and information about which users are authorized to access which apps.  To create this schema you must have a PostgreSQL database that you can connect to.
+
+```
+# R
+
+# connect to your PostgreSQL database
+db_conn <- DBI::db_connect(
+  RPostgres::Postgres(),
+  <your db connection credentials>
+)
+
+# create the "polished" schema.
+# Warning: if you already have a polished schema this function will overwrite your existing schema with empty tables.
+polished::create_schema(db_conn)
+
+# add the first user to your first app
+# I always add myself first using this function, and then I add other additional users via 
+# the "Polished Admin > User Access" page
+polished::create_app_user(db_conn, app_name = "<your app name>", email = "<your email>", is_admin = TRUE)
+```
+
 ## Secure Your Shiny App
 
 To secure your Shiny app you simply pass your Shiny ui to `secure_ui()` and your Shiny server to `secure_server()`.  See the the documentation of `secure_ui()` and `secure_server()` for details.
