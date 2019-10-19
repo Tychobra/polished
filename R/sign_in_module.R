@@ -198,7 +198,6 @@ sign_in_module_ui <- function(id, firebase_config) {
 #' @param input the Shiny input
 #' @param output the Shiny output
 #' @param session the Shiny session
-#' @param conn a database connection
 #'
 #' @importFrom shiny observeEvent
 #' @importFrom tychobratools show_toast

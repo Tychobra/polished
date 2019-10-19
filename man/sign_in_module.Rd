@@ -12,8 +12,6 @@ sign_in_module(input, output, session)
 \item{output}{the Shiny output}
 
 \item{session}{the Shiny session}
-
-\item{conn}{a database connection}
 }
 \description{
 sign_in
