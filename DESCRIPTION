@@ -31,7 +31,8 @@ Imports:
     digest,
     shinytoastr,
     shinyWidgets,
-    rlang
+    rlang,
+    purrr
 Remotes: 
     github::tychobra/tychobratools
 RoxygenNote: 6.1.1

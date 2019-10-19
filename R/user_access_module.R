@@ -71,26 +71,23 @@ user_access_module_ui <- function(id) {
     # users table
     tags$script(paste0("
       $(document).on('click', '#", ns('users_table'), " .sign_in_as_btn', function() {
-        Shiny.setInputValue('", ns('sign_in_as_btn_row'), "', this.id, { priority: 'event'});
+        $(this).tooltip('hide');
+        Shiny.setInputValue('", ns('sign_in_as_btn_user_uid'), "', this.id, { priority: 'event'});
       });
       $(document).on('click', '#", ns('users_table'), " .delete_btn', function() {
-        //$(this).tooltip('hide');
-        Shiny.setInputValue('", ns('user_row_to_delete'), "', this.id, { priority: 'event'});
+        $(this).tooltip('hide');
+        Shiny.setInputValue('", ns('user_uid_to_delete'), "', this.id, { priority: 'event'});
       });
       $(document).on('click', '#", ns('users_table'), " .edit_btn', function() {
-        //$(this).tooltip('hide');
-        Shiny.setInputValue('", ns('user_row_to_edit'), "', this.id, { priority: 'event'});
+        $(this).tooltip('hide');
+        Shiny.setInputValue('", ns('user_uid_to_edit'), "', this.id, { priority: 'event'});
       });
     ")),
     # roles table
     tags$script(paste0("
       $(document).on('click', '#", ns('roles_table'), " .delete_btn', function() {
-        //$(this).tooltip('hide');
-        Shiny.setInputValue('", ns('role_row_to_delete'), "', this.id, { priority: 'event'});
-      });
-      $(document).on('click', '#", ns('roles_table'), " .edit_btn', function() {
-        //$(this).tooltip('hide');
-        Shiny.setInputValue('", ns('role_row_to_edit'), "', this.id, { priority: 'event'});
+        $(this).tooltip('hide');
+        Shiny.setInputValue('", ns('role_uid_to_delete'), "', this.id, { priority: 'event'});
       });
     "))
   )
@@ -111,6 +108,7 @@ user_access_module_ui <- function(id) {
 #' @importFrom dplyr tbl filter select %>% left_join arrange collect mutate
 #' @importFrom tibble tibble
 #' @importFrom tychobratools show_toast
+#' @importFrom purrr map_chr
 #'
 #' @export
 #'
@@ -132,11 +130,13 @@ user_access_module <- function(input, output, session) {
 
   user_roles <- reactive({
     users_trigger()
+    roles_trigger()
+
     hold_app_name <- .global_sessions$app_name
 
     session$userData$pcon %>%
       dplyr::tbl(dbplyr::in_schema("polished", "user_roles")) %>%
-      dplyr::filter(app_name == hold_app_name) %>%
+      dplyr::filter(.data$app_name == hold_app_name) %>%
       dplyr::select(.data$user_uid, .data$role_uid) %>%
       dplyr::collect()
   })
@@ -155,30 +155,30 @@ user_access_module <- function(input, output, session) {
   })
 
   users_table_prep <- reactiveVal(NULL)
-  observeEvent(users(), {
+  observeEvent(users_w_roles(), {
 
     out <- users_w_roles()
+    n_rows <- nrow(out)
 
-    if (nrow(out) == 0) {
+    if (n_rows == 0) {
       actions <- character(0)
     } else {
-      rows <- 1:nrow(out)
 
-      actions <- lapply(rows, function(row_num) {
+      actions <- purrr::map_chr(seq_len(n_rows), function(row_num) {
 
-        is_admin <- out[row_num, ]$is_admin
+        the_row <- out[row_num, ]
 
-        if (isTRUE(is_admin)) {
+        if (isTRUE(the_row$is_admin)) {
           buttons_out <- paste0('<div class="btn-group" style="width: 105px" role="group" aria-label="User Action Buttons">
-            <button class="btn btn-default btn-sm sign_in_as_btn" data-toggle="tooltip" data-placement="top" title="Sign In As" id = ', rows[row_num], ' style="margin: 0"><i class="fas fa-user-astronaut"></i></button>
-            <button class="btn btn-primary btn-sm edit_btn" data-toggle="tooltip" data-placement="top" title="Edit User" id = ', rows[row_num], ' style="margin: 0"><i class="fa fa-pencil-square-o"></i></button>
-            <button class="btn btn-danger btn-sm delete_btn" id = ', rows[row_num], ' style="margin: 0" disabled><i class="fa fa-trash-o"></i></button>
+            <button class="btn btn-default btn-sm sign_in_as_btn" data-toggle="tooltip" data-placement="top" title="Sign In As" id = ', the_row$user_uid, ' style="margin: 0"><i class="fas fa-user-astronaut"></i></button>
+            <button class="btn btn-primary btn-sm edit_btn" data-toggle="tooltip" data-placement="top" title="Edit User" id = ', the_row$user_uid, ' style="margin: 0"><i class="fa fa-pencil-square-o"></i></button>
+            <button class="btn btn-danger btn-sm delete_btn" id = ', the_row$user_uid, ' style="margin: 0" disabled><i class="fa fa-trash-o"></i></button>
           </div>')
         } else {
           buttons_out <- paste0('<div class="btn-group" style="width: 105px" role="group" aria-label="User Action Buttons">
-            <button class="btn btn-default btn-sm sign_in_as_btn" data-toggle="tooltip" data-placement="top" title="Sign In As" id = ', rows[row_num], ' style="margin: 0"><i class="fas fa-user-astronaut"></i></button>
-            <button class="btn btn-primary btn-sm edit_btn" data-toggle="tooltip" data-placement="top" title="Edit User" id = ', rows[row_num], ' style="margin: 0"><i class="fa fa-pencil-square-o"></i></button>
-            <button class="btn btn-danger btn-sm delete_btn" data-toggle="tooltip" data-placement="top" title="Delete User" id = ', rows[row_num], ' style="margin: 0"><i class="fa fa-trash-o"></i></button>
+            <button class="btn btn-default btn-sm sign_in_as_btn" data-toggle="tooltip" data-placement="top" title="Sign In As" id = ', the_row$user_uid, ' style="margin: 0"><i class="fas fa-user-astronaut"></i></button>
+            <button class="btn btn-primary btn-sm edit_btn" data-toggle="tooltip" data-placement="top" title="Edit User" id = ', the_row$user_uid, ' style="margin: 0"><i class="fa fa-pencil-square-o"></i></button>
+            <button class="btn btn-danger btn-sm delete_btn" data-toggle="tooltip" data-placement="top" title="Delete User" id = ', the_row$user_uid, ' style="margin: 0"><i class="fa fa-trash-o"></i></button>
           </div>')
         }
 
@@ -266,9 +266,10 @@ user_access_module <- function(input, output, session) {
 
 
   user_to_edit <- reactiveVal(NULL)
-  observeEvent(input$user_row_to_edit, {
-    row_num <- as.numeric(input$user_row_to_edit)
-    out <- users_w_roles()[row_num, ]
+  observeEvent(input$user_uid_to_edit, {
+
+    out <- users_w_roles() %>%
+      dplyr::filter(.data$user_uid == input$user_uid_to_edit)
 
     user_to_edit(out)
   }, priority = 1)
@@ -278,7 +279,7 @@ user_access_module <- function(input, output, session) {
     "edit_user",
     modal_title = "Edit User",
     user_to_edit = user_to_edit,
-    open_modal_trigger = reactive({input$user_row_to_edit}),
+    open_modal_trigger = reactive({input$user_uid_to_edit}),
     existing_roles = roles,
     existing_users = users
   )
@@ -293,17 +294,19 @@ user_access_module <- function(input, output, session) {
 
 
   user_to_delete <- reactiveVal(NULL)
-  observeEvent(input$user_row_to_delete, {
-    row_num <- as.numeric(input$user_row_to_delete)
-    out <- users()[row_num, ]
+  observeEvent(input$user_uid_to_delete, {
+
+    out <- users() %>%
+      dplyr::filter(.data$user_uid == input$user_uid_to_delete)
 
     user_to_delete(out)
   }, priority = 1)
 
 
 
-  observeEvent(input$user_row_to_delete, {
+  observeEvent(input$user_uid_to_delete, {
     hold_user <- user_to_delete()
+    req(nrow(hold_user) == 1)
 
     shiny::showModal(
       shiny::modalDialog(
@@ -443,8 +446,8 @@ user_access_module <- function(input, output, session) {
 
     session$userData$pcon %>%
       dplyr::tbl(dbplyr::in_schema("polished", "roles")) %>%
-      dplyr::filter(app_name == hold_app_name) %>%
-      dplyr::select(uid, name) %>%
+      dplyr::filter(.data$app_name == hold_app_name) %>%
+      dplyr::select(.data$uid, .data$name) %>%
       dplyr::collect()
   })
 
@@ -453,8 +456,7 @@ user_access_module <- function(input, output, session) {
   roles_table_prep <- reactive({
     req(roles())
 
-    out <- roles() %>%
-      dplyr::select(-uid)
+    out <- roles()
 
     n_rows <- nrow(out)
 
@@ -463,14 +465,21 @@ user_access_module <- function(input, output, session) {
     } else {
       rows <- seq_len(n_rows)
 
-      actions <- paste0(
-        '<button class="btn btn-danger btn-sm delete_btn" data-toggle="tooltip" data-placement="top" title="Delete Role" id = ',
-        rows,
-        ' style="margin: 0"><i class="fa fa-trash-o"></i></button></div>'
-      )
+      actions <- purrr::map_chr(rows, function(i) {
+
+        paste0(
+          '<button class="btn btn-danger btn-sm delete_btn" data-toggle="tooltip" data-placement="top" title="Delete Role" id = ',
+          out[i, ]$uid,
+          ' style="margin: 0"><i class="fa fa-trash-o"></i></button></div>'
+        )
+      })
+
     }
 
-    out <- cbind(
+    out <- out %>%
+      select(-.data$uid)
+
+    cbind(
       tibble::tibble(actions = actions),
       out
     )
@@ -509,15 +518,17 @@ user_access_module <- function(input, output, session) {
 
   role_to_delete <- reactiveVal(NULL)
 
-  observeEvent(input$role_row_to_delete, {
-    row_num <- as.numeric(input$role_row_to_delete)
-    out <- roles()[row_num, ]
+  observeEvent(input$role_uid_to_delete, {
+
+    out <- roles() %>%
+      dplyr::filter(.data$uid == input$role_uid_to_delete)
 
     role_to_delete(out)
   }, priority = 1)
 
-  observeEvent(input$role_row_to_delete, {
+  observeEvent(input$role_uid_to_delete, {
     hold_role <- role_to_delete()
+    req(nrow(hold_role) == 1)
 
     shiny::showModal(
       shiny::modalDialog(
@@ -537,7 +548,7 @@ user_access_module <- function(input, output, session) {
         h3(
           style = "line-height: 1.3;",
           paste0(
-            'Are you sure you want to delete role: "', hold_role, '"?  Any ',
+            'Are you sure you want to delete role: "', hold_role$name, '"?  Any ',
             'users with this role will lose it.'
           )
         )
@@ -557,18 +568,16 @@ user_access_module <- function(input, output, session) {
       dbWithTransaction(session$userData$pcon, {
         DBI::dbExecute(
           session$userData$pcon,
-          "DELETE FROM polished.roles WHERE uid=$1",
-          params = list(role_uid)
-        )
-
-
-        DBI::dbExecute(
-          session$userData$pcon,
           "DELETE FROM polished.user_roles WHERE role_uid=$1",
           params = list(role_uid)
         )
-      })
 
+        DBI::dbExecute(
+          session$userData$pcon,
+          "DELETE FROM polished.roles WHERE uid=$1",
+          params = list(role_uid)
+        )
+      })
 
       tychobratools::show_toast("success", "Role successfully deleted")
       roles_trigger(roles_trigger() + 1)
@@ -586,7 +595,7 @@ user_access_module <- function(input, output, session) {
 
   shiny::observeEvent(input$sign_in_as_btn_row, {
     user_to_sign_in_as <- users_w_roles()[as.numeric(input$sign_in_as_btn_row), ] %>%
-      dplyr::select(.data$email, .data$is_admin, uid = user_uid, .data$roles) %>%
+      dplyr::select(.data$email, .data$is_admin, uid = .data$user_uid, .data$roles) %>%
       as.list()
 
     roles_out <- user_to_sign_in_as$roles[[1]]$role_name
