@@ -5,6 +5,7 @@
 #'
 #' @importFrom htmltools tags h1
 #' @importFrom shiny fluidPage fluidRow column
+#' @importFrom shinytoastr useToastr
 #'
 #' @export
 verify_email_ui <- function(id, firebase_config) {
@@ -13,10 +14,9 @@ verify_email_ui <- function(id, firebase_config) {
   fluidPage(
     tags$head(
       tags$link(rel = "stylesheet", href = "polish/css/all.css"),
-      tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
-      tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"),
-      tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css")
+      tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png")
     ),
+    shinytoastr::useToastr(),
     fluidRow(
       column(
         12,

@@ -17,9 +17,6 @@ sign_in_module_ui <- function(id, firebase_config) {
   ns <- shiny::NS(id)
 
   htmltools::tagList(
-    tags$head(
-      tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css")
-    ),
     shinyjs::useShinyjs(),
     shinytoastr::useToastr(),
     shiny::div(
@@ -180,7 +177,6 @@ sign_in_module_ui <- function(id, firebase_config) {
     )),
 
     tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
-    tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"),
     firebase_dependencies(),
     firebase_init(firebase_config),
     tags$script(src = "polish/js/loading_options.js"),

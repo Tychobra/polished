@@ -108,7 +108,6 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
   body <- shinydashboard::dashboardBody(
     htmltools::tags$head(
       tags$link(rel = "shortcut icon", href = "polish/images/polished_hex.png"),
-      tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"),
       firebase_dependencies(),
       firebase_init(firebase_config)
     ),
