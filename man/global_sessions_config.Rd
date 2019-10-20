@@ -4,12 +4,14 @@
 \alias{global_sessions_config}
 \title{configuration for global sessions}
 \usage{
-global_sessions_config(app_name, firebase_functions_url)
+global_sessions_config(app_name, firebase_functions_url, conn)
 }
 \arguments{
 \item{app_name}{the name of the app.}
 
 \item{firebase_functions_url}{the url of the firebase functions.}
+
+\item{conn}{the database connection}
 }
 \description{
 configuration for global sessions

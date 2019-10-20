@@ -10,12 +10,13 @@ var auth_firebase = function auth_firebase(ns_id) {
     return auth.signInWithEmailAndPassword(email, password).then(function (user) {
       var polished_token = Cookies.get("polished__token");
       return user.user.getIdToken(true).then(function (firebase_token) {
-        Shiny.setInputValue(ns2("polished__sign_in"), {
-          firebase_token: firebase_token,
-          polished_token: polished_token
-        }, {
-          event: "priority"
-        });
+        Cookies.set('polished__token', "p" + Math.random());
+        window.location.replace(window.location.href + "?jwt=" + firebase_token); //Shiny.setInputValue(ns2("polished__sign_in"), {
+        //  firebase_token: firebase_token,
+        //  polished_token: polished_token
+        //}, {
+        //  event: "priority"
+        //});
       });
     });
   };

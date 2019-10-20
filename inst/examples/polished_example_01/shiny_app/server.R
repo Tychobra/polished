@@ -6,7 +6,4 @@ server <- function(input, output, session) {
 
 }
 
-secure_server(
-  server,
-  conn = db_conn
-)
+secure_server(server)

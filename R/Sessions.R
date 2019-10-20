@@ -17,15 +17,17 @@ Sessions <-  R6::R6Class(
   public = list(
     app_name = character(0),
     firebase_functions_url = character(0),
-    config = function(app_name, firebase_functions_url = NULL) {
+    conn = NULL,
+    config = function(app_name, firebase_functions_url = NULL, conn = NULL) {
 
       self$app_name <- app_name
       self$firebase_functions_url <- firebase_functions_url
+      self$conn <- conn
 
       invisible(self)
     },
-    sign_in = function(conn, firebase_token) {
-
+    sign_in = function(firebase_token, token) {
+      conn <- self$conn
       # firebase function callable via url
       url_out <- paste0(self$firebase_functions_url, "sign_in_firebase")
       response <- httr::GET(
@@ -51,10 +53,10 @@ Sessions <-  R6::R6Class(
 
         tryCatch({
           # confirm that user is invited
-          invite <- self$get_invite(conn, new_session$email)
+          invite <- self$get_invite(new_session$email)
 
           # find the users roles
-          roles_out <- self$get_roles(conn, invite$user_uid)
+          roles_out <- self$get_roles(invite$user_uid)
 
           new_session$is_admin <- invite$is_admin
           new_session$uid <- invite$user_uid
@@ -62,7 +64,7 @@ Sessions <-  R6::R6Class(
 
           # update the last sign in time
           DBI::dbExecute(
-            conn,
+            self$conn,
             "UPDATE polished.app_users SET last_sign_in_at=$1 WHERE user_uid=$2 AND app_name=$3",
             params = list(
               tychobratools::time_now_utc(),
@@ -79,7 +81,6 @@ Sessions <-  R6::R6Class(
 
         # geneate a session token
         if (!is.null(new_session)) {
-          token <- create_uid()
 
           new_session$token <- token
 
@@ -89,13 +90,14 @@ Sessions <-  R6::R6Class(
 
       return(new_session)
     },
-    get_invite = function(conn, email) {
+    get_invite = function(email) {
 
       invite <- NULL
-      DBI::dbWithTransaction(conn, {
+      DBI::dbWithTransaction(self$conn, {
 
         user_db <- DBI::dbGetQuery(
-          conn,
+          #conn,
+          self$conn,
           "SELECT * FROM polished.users WHERE email=$1",
           params = list(
             email
@@ -108,7 +110,8 @@ Sessions <-  R6::R6Class(
         }
 
         invite <- DBI::dbGetQuery(
-          conn,
+          #conn,
+          self$conn,
           "SELECT * FROM polished.app_users WHERE user_uid=$1 AND app_name=$2",
           params = list(
             user_db$uid,
@@ -124,13 +127,14 @@ Sessions <-  R6::R6Class(
       return(invite)
     },
     # return a character vector of the user's roles
-    get_roles = function(conn, user_uid) {
+    get_roles = function(user_uid) {
       roles <- character(0)
-      DBI::dbWithTransaction(conn, {
+      DBI::dbWithTransaction(self$conn, {
 
 
         role_names <- DBI::dbGetQuery(
-          conn,
+          #conn,
+          self$conn,
           "SELECT uid, name FROM polished.roles WHERE app_name=$1",
           params = list(
             self$app_name
@@ -138,7 +142,8 @@ Sessions <-  R6::R6Class(
         )
 
         role_uids <- DBI::dbGetQuery(
-          conn,
+          #conn,
+          self$conn,
           "SELECT role_uid FROM polished.user_roles WHERE user_uid=$1 AND app_name=$2",
           params = list(
             user_uid,
@@ -186,11 +191,12 @@ Sessions <-  R6::R6Class(
 
       invisible(self)
     },
-    log_session = function(conn, token, user_uid) {
+    log_session = function(token, user_uid) {
 
       tryCatch({
         DBI::dbExecute(
-          conn,
+          #conn,
+          self$conn,
           "INSERT INTO polished.sessions ( app_name, user_uid, token ) VALUES ( $1, $2, $3 )",
           params = list(
             self$app_name,

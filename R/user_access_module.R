@@ -123,7 +123,7 @@ user_access_module <- function(input, output, session) {
     hold_app_name <- .global_sessions$app_name
 
     get_app_users(
-      session$userData$pcon,
+      .global_sessions$conn,
       hold_app_name
     )
   })
@@ -134,7 +134,7 @@ user_access_module <- function(input, output, session) {
 
     hold_app_name <- .global_sessions$app_name
 
-    session$userData$pcon %>%
+    .global_sessions$conn %>%
       dplyr::tbl(dbplyr::in_schema("polished", "user_roles")) %>%
       dplyr::filter(.data$app_name == hold_app_name) %>%
       dplyr::select(.data$user_uid, .data$role_uid) %>%
@@ -339,7 +339,7 @@ user_access_module <- function(input, output, session) {
 
     tryCatch({
       DBI::dbExecute(
-        session$userData$pcon,
+        .global_sessions$conn,
         "DELETE FROM polished.app_users WHERE user_uid=$1",
         params = list(user_uid)
       )
@@ -416,7 +416,7 @@ user_access_module <- function(input, output, session) {
     tryCatch({
 
       dbExecute(
-        session$userData$pcon,
+        .global_sessions$conn,
         "INSERT INTO polished.roles ( uid, name, app_name, created_by, modified_by ) VALUES ( $1, $2, $3, $4, $5 )",
         params = list(
           create_uid(),
@@ -444,7 +444,7 @@ user_access_module <- function(input, output, session) {
 
     hold_app_name <- .global_sessions$app_name
 
-    session$userData$pcon %>%
+    .global_sessions$conn %>%
       dplyr::tbl(dbplyr::in_schema("polished", "roles")) %>%
       dplyr::filter(.data$app_name == hold_app_name) %>%
       dplyr::select(.data$uid, .data$name) %>%
@@ -565,15 +565,15 @@ user_access_module <- function(input, output, session) {
 
     tryCatch({
 
-      dbWithTransaction(session$userData$pcon, {
+      dbWithTransaction(.global_sessions$conn, {
         DBI::dbExecute(
-          session$userData$pcon,
+          .global_sessions$conn,
           "DELETE FROM polished.user_roles WHERE role_uid=$1",
           params = list(role_uid)
         )
 
         DBI::dbExecute(
-          session$userData$pcon,
+          .global_sessions$conn,
           "DELETE FROM polished.roles WHERE uid=$1",
           params = list(role_uid)
         )

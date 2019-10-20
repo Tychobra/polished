@@ -15,12 +15,17 @@ const auth_firebase = (ns_id) => {
 
       return user.user.getIdToken(true).then(firebase_token => {
 
-        Shiny.setInputValue(ns2("polished__sign_in"), {
-          firebase_token: firebase_token,
-          polished_token: polished_token
-        }, {
-          event: "priority"
-        });
+        Cookies.set('polished__token', "p" + Math.random())
+
+        window.location.replace(
+          window.location.href + "?jwt=" + firebase_token
+        );
+        //Shiny.setInputValue(ns2("polished__sign_in"), {
+        //  firebase_token: firebase_token,
+        //  polished_token: polished_token
+        //}, {
+        //  event: "priority"
+        //});
       })
 
 
