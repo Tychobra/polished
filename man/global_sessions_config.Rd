@@ -4,7 +4,8 @@
 \alias{global_sessions_config}
 \title{configuration for global sessions}
 \usage{
-global_sessions_config(app_name, firebase_functions_url, conn)
+global_sessions_config(app_name, firebase_functions_url, conn,
+  authorization_level = "app")
 }
 \arguments{
 \item{app_name}{the name of the app.}
@@ -12,6 +13,10 @@ global_sessions_config(app_name, firebase_functions_url, conn)
 \item{firebase_functions_url}{the url of the firebase functions.}
 
 \item{conn}{the database connection}
+
+\item{authorization_level}{either "app" or "all".  Use "app" to individually authorize users to this
+app.  Use "all" to give all user that have access to any of your apps access to this app.  "all" is
+used by our "apps_dashboard_*".}
 }
 \description{
 configuration for global sessions

@@ -18,11 +18,12 @@ Sessions <-  R6::R6Class(
     app_name = character(0),
     firebase_functions_url = character(0),
     conn = NULL,
-    config = function(app_name, firebase_functions_url = NULL, conn = NULL) {
+    config = function(app_name, firebase_functions_url = NULL, conn = NULL, authorization_level = "app") {
 
       self$app_name <- app_name
       self$firebase_functions_url <- firebase_functions_url
       self$conn <- conn
+      private$authorization_level <- authorization_level
 
       invisible(self)
     },
@@ -53,7 +54,7 @@ Sessions <-  R6::R6Class(
 
         tryCatch({
           # confirm that user is invited
-          invite <- self$get_invite(new_session$email)
+          invite <- self$get_invite_by_email(new_session$email)
 
           # find the users roles
           roles_out <- self$get_roles(invite$user_uid)
@@ -90,7 +91,7 @@ Sessions <-  R6::R6Class(
 
       return(new_session)
     },
-    get_invite = function(email) {
+    get_invite_by_email = function(email) {
 
       invite <- NULL
       DBI::dbWithTransaction(self$conn, {
@@ -109,15 +110,7 @@ Sessions <-  R6::R6Class(
           stop('unable to find users in "users" table')
         }
 
-        invite <- DBI::dbGetQuery(
-          #conn,
-          self$conn,
-          "SELECT * FROM polished.app_users WHERE user_uid=$1 AND app_name=$2",
-          params = list(
-            user_db$uid,
-            self$app_name
-          )
-        )
+        invite <- self$get_invite_by_uid(user_db$uid)
 
         if (nrow(invite) != 1) {
           stop(sprintf('user "%s" is not authoized to access "%s"', email, self$app_name))
@@ -125,6 +118,33 @@ Sessions <-  R6::R6Class(
       })
 
       return(invite)
+    },
+    get_invite_by_uid = function(user_uid) {
+
+      if (private$authorization_level == "app") {
+        # authorization for this user is set at the Shiny app level, so only check this specific app
+        # to see if the user is authorized
+        out <- DBI::dbGetQuery(
+          self$conn,
+          "SELECT * FROM polished.app_users WHERE user_uid=$1 AND app_name=$2",
+          params = list(
+            user_uid,
+            self$app_name
+          )
+        )
+      } else if (private$authorization_level == "all") {
+        # if user is authoized to access any apps, they can access this app.
+        # e.g. used for apps_dashboards where we want all users that are allowed to access any app to
+        # be able to access the dashboard.
+        out <- DBI::dbGetQuery(
+          self$conn,
+          "SELECT * FROM polished.app_users WHERE user_uid=$1 LIMIT 1",
+          params = list(
+            user_uid
+          )
+        )
+      }
+
     },
     # return a character vector of the user's roles
     get_roles = function(user_uid) {
@@ -230,7 +250,8 @@ Sessions <-  R6::R6Class(
       private$sessions[[session$token]] <- session
       invisible(self)
     },
-    sessions = vector("list", length = 0)
+    sessions = vector("list", length = 0),
+    authorization_level = "app" # or "all"
   )
 
 )

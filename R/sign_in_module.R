@@ -211,7 +211,7 @@ sign_in_module <- function(input, output, session) {
     # check user invite
     invite <- NULL
     tryCatch({
-      invite <- .global_sessions$get_invite(email)
+      invite <- .global_sessions$get_invite_by_email(email)
 
       # user is invited
       shinyjs::hide("submit_continue_sign_in")
@@ -250,7 +250,7 @@ sign_in_module <- function(input, output, session) {
 
     invite <- NULL
     tryCatch({
-      invite <- .global_sessions$get_invite(email)
+      invite <- .global_sessions$get_invite_by_email(email)
 
       # user is invited
       shinyjs::hide("continue_registation")
