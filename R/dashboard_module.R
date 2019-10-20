@@ -95,7 +95,7 @@ dashboard_module <- function(input, output, session) {
 
     hold_app_name = .global_sessions$app_name
 
-    dat <- session$userData$pcon %>%
+    dat <- .global_sessions$conn %>%
       dplyr::tbl(dbplyr::in_schema("polished", "sessions")) %>%
       dplyr::filter(app_name == hold_app_name) %>%
       dplyr::select(.data$user_uid, .data$created_at) %>%

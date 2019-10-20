@@ -147,7 +147,7 @@ user_edit_module <- function(input, output, session,
       # adding a new user
       tryCatch({
         create_app_user(
-          conn = session$userData$pcon,
+          conn = .global_sessions$conn,
           app_name = .global_sessions$app_name,
           email = input_email,
           is_admin = is_admin_out,
@@ -171,11 +171,11 @@ user_edit_module <- function(input, output, session,
       shiny::removeModal()
 
       tryCatch({
-        DBI::dbWithTransaction(session$userData$pcon, {
+        DBI::dbWithTransaction(.global_sessions$conn, {
 
           # add user to app_users
           DBI::dbExecute(
-            session$userData$pcon,
+            .global_sessions$conn,
             "UPDATE polished.app_users SET is_admin=$1, modified_by=$2, modified_at=$3 WHERE user_uid=$4 AND app_name=$5",
             params = list(
               is_admin_out,                   # is_admin
@@ -189,7 +189,7 @@ user_edit_module <- function(input, output, session,
           # edit user roles
           # delete any existing roles for this user
           DBI::dbExecute(
-            session$userData$pcon,
+            .global_sessions$conn,
             "DELETE FROM polished.user_roles WHERE user_uid=$1 AND app_name=$2",
             params = list(
               hold_user$user_uid, # user_uid
@@ -210,7 +210,7 @@ user_edit_module <- function(input, output, session,
 
             # append new roles to "user_roles" table
             DBI::dbWriteTable(
-              session$userData$pcon,
+              .global_sessions$conn,
               name = DBI::Id(schema = "polished", table = "user_roles"),
               value = new_roles,
               append = TRUE,

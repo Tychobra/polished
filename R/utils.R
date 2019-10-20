@@ -15,6 +15,23 @@ remove_query_string <- function(session = shiny::getDefaultReactiveDomain()) {
   )
 }
 
+# Remove the jwt from the query string
+#' @importFrom shiny updateQueryString getQueryString getDefaultReactiveDomain
+remove_query_jwt <- function(session = getDefaultReactiveDomain()) {
+  query <- shiny::getQueryString(session = session)
+  query$jwt <- NULL
+  if (length(query) == 0) {
+    remove_query_string(session = session)
+  } else {
+    query <- paste(names(query), query, sep = "=", collapse="&")
+    shiny::updateQueryString(
+      queryString = paste0("?", query),
+      mode = "replace",
+      session = session
+    )
+  }
+}
+
 #' get_cookie
 #'
 #' Get a cookie value by name from a cookie string

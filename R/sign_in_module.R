@@ -204,52 +204,6 @@ sign_in_module <- function(input, output, session) {
 
   ns <- session$ns
 
-  shiny::observeEvent(input$polished__sign_in, {
-    firebase_token <- input$polished__sign_in$firebase_token
-    polished_token <- input$polished__sign_in$polished_token
-
-
-    session$sendCustomMessage(
-      "polish__show_loading",
-      message = list(
-        text = "Loading..."
-      )
-    )
-
-    # attempt to sign in
-    new_user <- .global_sessions$sign_in(session$userData$pcon, firebase_token)
-
-    if (is.null(new_user)) {
-      # user sign in failed.
-
-      session$sendCustomMessage(
-        "polish__remove_loading",
-        message = list()
-      )
-
-      tychobratools::show_toast("error", "Error signing into polished server")
-
-    } else {
-      # go to app.  If user is admin, then they will have the blue "Admin Panel" button
-      # in the bottom right
-
-      # send cookie to front end, wait for confirmation that cookie is set, and then reload session
-      session$sendCustomMessage(
-        ns("polished__set_cookie"),
-        message = list(
-          polished_token = new_user$token
-        )
-      )
-
-      # wait for the cookie to be set, and then reload the session
-      observeEvent(input$polished__set_cookie_complete, {
-        session$reload()
-      }, once = TRUE)
-
-    }
-  }, ignoreInit = TRUE)
-
-
   shiny::observeEvent(input$submit_continue_sign_in, {
 
     email <- input$email
@@ -257,7 +211,7 @@ sign_in_module <- function(input, output, session) {
     # check user invite
     invite <- NULL
     tryCatch({
-      invite <- .global_sessions$get_invite(session$userData$pcon, email)
+      invite <- .global_sessions$get_invite(email)
 
       # user is invited
       shinyjs::hide("submit_continue_sign_in")
@@ -296,7 +250,7 @@ sign_in_module <- function(input, output, session) {
 
     invite <- NULL
     tryCatch({
-      invite <- .global_sessions$get_invite(session$userData$pcon, email)
+      invite <- .global_sessions$get_invite(email)
 
       # user is invited
       shinyjs::hide("continue_registation")

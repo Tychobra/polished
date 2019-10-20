@@ -38,6 +38,13 @@ secure_ui <- function(
       polished_token <- get_cookie(cookie_string, "polished__token")
     }
 
+    # Check if jwt is in the query string.  If it is, then attempt to sign in the user. Pass the
+    # cookie with the sign in.  If the sign in succeeds we will add this cookie as the session token,
+    # so we can go straight to the authed page with out an additional page reload.
+    if (!is.null(query$jwt)) {
+      .global_sessions$sign_in(query$jwt, polished_token)
+    }
+
     user <- NULL
     if (!is.null(polished_token) && length(polished_token) > 0) {
       tryCatch({

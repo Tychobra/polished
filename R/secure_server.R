@@ -1,7 +1,6 @@
 #' secure_server
 #'
 #' @param server A Shiny server function (e.g `function(input, output, session) {}`)
-#' @param conn database connection
 #' @param custom_admin_server Either NULL, the default, or a Shiny server function containing your custom admin
 #' server functionality.
 #'
@@ -15,17 +14,16 @@
 #'
 secure_server <- function(
   server,
-  conn,
   custom_admin_server = NULL
 ) {
 
 
   function(input, output, session) {
     session$userData$user <- reactiveVal(NULL)
-    session$userData$pcon <- conn
 
-
-
+    observe({
+      remove_query_jwt()
+    })
 
     shiny::observeEvent(input$polished__session, {
 
@@ -45,7 +43,7 @@ secure_server <- function(
           )
 
           # log session to database "sessions" table
-          .global_sessions$log_session(conn, global_user$token, global_user$uid)
+          .global_sessions$log_session(global_user$token, global_user$uid)
 
           if (is.null(global_user$signed_in_as)) {
             session$userData$user(global_user[c("uid", "email", "is_admin", "roles", "token")])
