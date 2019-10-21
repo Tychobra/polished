@@ -593,8 +593,9 @@ user_access_module <- function(input, output, session) {
 
 
 
-  shiny::observeEvent(input$sign_in_as_btn_row, {
-    user_to_sign_in_as <- users_w_roles()[as.numeric(input$sign_in_as_btn_row), ] %>%
+  shiny::observeEvent(input$sign_in_as_btn_user_uid, {
+    user_to_sign_in_as <- users_w_roles() %>%
+      filter(.data$user_uid == input$sign_in_as_btn_user_uid) %>%
       dplyr::select(.data$email, .data$is_admin, uid = .data$user_uid, .data$roles) %>%
       as.list()
 
