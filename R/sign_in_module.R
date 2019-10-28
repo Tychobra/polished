@@ -206,7 +206,7 @@ sign_in_module <- function(input, output, session) {
 
   shiny::observeEvent(input$submit_continue_sign_in, {
 
-    email <- input$email
+    email <- tolower(input$email)
 
     # check user invite
     invite <- NULL
@@ -246,7 +246,7 @@ sign_in_module <- function(input, output, session) {
 
   shiny::observeEvent(input$submit_continue_register, {
 
-    email <- input$register_email
+    email <- tolower(input$register_email)
 
     invite <- NULL
     tryCatch({
