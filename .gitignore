@@ -6,3 +6,4 @@
 *.Rproj
 node_modules/
 config.yml
+rsconnect/
