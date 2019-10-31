@@ -1,6 +1,6 @@
 # polished <img src="inst/assets/images/polished_hex.png" align="right" width="120" />
 
-[Lice Demo Shiny App](https://tychobra.shinyapps.io/polished_example_01)
+[Live Demo Shiny App](https://tychobra.shinyapps.io/polished_example_01)
 
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![Travis-CI Build Status](https://travis-ci.org/Tychobra/polished.svg?branch=master)](https://travis-ci.org/tychobra/polished)
