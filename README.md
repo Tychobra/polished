@@ -1,11 +1,14 @@
 # polished <img src="inst/assets/images/polished_hex.png" align="right" width="120" />
 
-[Live Demo Shiny App](https://tychobra.shinyapps.io/polished_example_01)
-
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![Travis-CI Build Status](https://travis-ci.org/Tychobra/polished.svg?branch=master)](https://travis-ci.org/tychobra/polished)
 
 Authentication and administration for Shiny apps.  `polished` provides a way to secure your Shiny application behind an authentication layer.  It also provides a UI for controlling user access and monitoring user activitiy. 
+
+Sign in to a [Live Demo Shiny App](https://tychobra.shinyapps.io/polished_example_01) with the following:
+
+ - email: demo@tychobra.com
+ - password: polished
 
 Check out the [introducing polished blog post](https://www.tychobra.com/posts/2019_08_27_announcing_polished/) for a high level overview and video.
 
