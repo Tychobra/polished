@@ -4,7 +4,7 @@
 #'
 #' @param id the Shiny module id.
 #'
-#' @importFrom shiny actionButton NS
+#' @importFrom shiny actionButton NS icon
 #'
 #' @return admin button UI
 #'
@@ -16,7 +16,7 @@ admin_button_ui <- function(id) {
   shiny::actionButton(
     ns("go_to_admin_panel"),
     "Admin Panel",
-    icon = icon("cog"),
+    icon = shiny::icon("cog"),
     class = "btn-primary btn-lg",
     style = "position: fixed; bottom: 15px; right: 15px; color: #FFFFFF;"
   )

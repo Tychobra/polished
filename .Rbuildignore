@@ -3,3 +3,5 @@ node_modules/
 ^\.Rproj\.user$
 srcjs/
 .travis.yml
+rsconnect/
+.firebaserc

@@ -7,7 +7,7 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr tbl filter select collect left_join arrange
+#' @importFrom dplyr tbl filter select collect left_join arrange .data
 #' @importFrom dbplyr in_schema
 #' @importFrom rlang !! enquo
 #'

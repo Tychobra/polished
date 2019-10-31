@@ -5,7 +5,7 @@
 #' @param custom_admin_ui Either `NULL`, the default, or a list of 2 elements containing custom
 #' ui to add addtional `shinydashboard` tabs to the Polished admin panel.
 #'
-#' @importFrom shiny NS
+#' @importFrom shiny NS icon
 #' @importFrom shinydashboard dashboardHeader dashboardSidebar dashboardBody dashboardPage sidebarMenu menuItem tabItems
 #' @importFrom htmltools HTML tags
 #'
@@ -20,16 +20,16 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
     title = shiny::titlePanel(
       htmltools::HTML(
         paste0(
-          htmltools::tags$a(
+          tags$a(
             href = "https://polished.tychobra.com",
-            htmltools::tags$img(
+            tags$img(
               src="polish/images/polished_hex.png",
               height = "50px",
               alt = "Polished Logo",
               style = "margin-top: -20px; float: left;"
             )
           ),
-          htmltools::tags$span("Polished", style='float: left; font-size: 37px !important; margin-top: -14px !important; margin-left: 10px; padding-top: 0 !important;')
+          tags$span("Polished", style='float: left; font-size: 37px !important; margin-top: -14px !important; margin-left: 10px; padding-top: 0 !important;')
         )
       ),
       windowTitle = "Polished"
@@ -44,18 +44,18 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
         menuItem(
           text = "Dashboard",
           tabName = "dashboard",
-          icon = icon("dashboard")
+          icon = shiny::icon("dashboard")
         ),
         menuItem(
           text = "User Access",
           tabName = "user_access",
-          icon = icon("users")
+          icon = shiny::icon("users")
         ),
 
 
         tags$a(
           href = "https://www.tychobra.com/",
-          img(
+          tags$img(
             style = "position: fixed; bottom: 0; left: 0; width: 230px;",
             src = "polish/images/tychobra_logo_blue_co_name.png"
           )
@@ -69,19 +69,19 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
         shinydashboard::menuItem(
           text = "Dashboard",
           tabName = "dashboard",
-          icon = icon("dashboard")
+          icon = shiny::icon("dashboard")
         ),
         shinydashboard::menuItem(
           text = "User Access",
           tabName = "user_access",
-          icon = icon("users")
+          icon = shiny::icon("users")
         ),
 
         custom_admin_ui$menu_items,
 
         tags$a(
           href = "https://www.tychobra.com/",
-          img(
+          tags$img(
             style = "position: fixed; bottom: 0; left: 0; width: 230px;",
             src = "polish/images/tychobra_logo_blue_co_name.png"
           )
@@ -119,7 +119,7 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL) {
       actionButton(
         ns("go_to_shiny_app"),
         "Shiny App",
-        icon = icon("rocket"),
+        icon = shiny::icon("rocket"),
         class = "btn-primary btn-lg",
         style = "color: #FFFFFF;"
       )

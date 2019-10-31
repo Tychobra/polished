@@ -76,7 +76,7 @@ dashboard_module_ui <- function(id) {
 #'
 #' @importFrom shiny reactive callModule reactivePoll
 #' @importFrom lubridate days today month
-#' @importFrom dplyr tbl filter select collect mutate group_by summarize ungroup left_join %>% bind_rows distinct
+#' @importFrom dplyr tbl filter select collect mutate group_by summarize ungroup left_join %>% bind_rows distinct .data n
 #' @importFrom tibble tibble
 #' @importFrom apexcharter apexchart ax_title ax_chart ax_tooltip ax_xaxis ax_stroke ax_dataLabels ax_fill ax_series ax_yaxis
 #' @importFrom DT renderDT datatable
@@ -97,12 +97,12 @@ dashboard_module <- function(input, output, session) {
 
     dat <- .global_sessions$conn %>%
       dplyr::tbl(dbplyr::in_schema("polished", "sessions")) %>%
-      dplyr::filter(app_name == hold_app_name) %>%
+      dplyr::filter(.data$app_name == hold_app_name) %>%
       dplyr::select(.data$user_uid, .data$created_at) %>%
       dplyr::collect() %>%
       dplyr::mutate(date = as.Date(.data$created_at, tz = "America/New_York")) %>%
       dplyr::group_by(.data$date, .data$user_uid) %>%
-      dplyr::summarize(n = n()) %>%
+      dplyr::summarize(n = dplyr::n()) %>%
       dplyr::ungroup()
 
 
@@ -131,7 +131,7 @@ dashboard_module <- function(input, output, session) {
     daily_user_sessions() %>%
       dplyr::distinct(.data$date, .data$user_uid) %>%
       dplyr::group_by(.data$date) %>%
-      dplyr::summarize(n = n()) %>%
+      dplyr::summarize(n = dplyr::n()) %>%
       dplyr::ungroup() %>%
       dplyr::filter(.data$date >= lubridate::today(tzone = "America/New_York") - lubridate::days(30))
 
@@ -159,7 +159,7 @@ dashboard_module <- function(input, output, session) {
       dplyr::mutate(month_ = lubridate::month(.data$date)) %>%
       dplyr::distinct(.data$month_, .data$user_uid) %>%
       dplyr::group_by(.data$month_) %>%
-      dplyr::summarize(n = n()) %>%
+      dplyr::summarize(n = dplyr::n()) %>%
       dplyr::ungroup()
 
     mean(by_month$n) %>%
@@ -211,7 +211,7 @@ dashboard_module <- function(input, output, session) {
       })
 
       dplyr::bind_rows(out_emails) %>%
-        dplyr::distinct(email)
+        dplyr::distinct(.data$email)
     }
   )
 
