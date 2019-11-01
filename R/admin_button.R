@@ -18,7 +18,7 @@ admin_button_ui <- function(id) {
     "Admin Panel",
     icon = shiny::icon("cog"),
     class = "btn-primary btn-lg",
-    style = "position: fixed; bottom: 15px; right: 15px; color: #FFFFFF;"
+    style = "position: fixed; bottom: 15px; right: 15px; color: #FFFFFF; z-index: 9999;"
   )
 }
 
