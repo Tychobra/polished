@@ -50,13 +50,12 @@ remotes::install_github("tychobra/polished")
 ### Initial Set Up
 
 1. Set up your Firebase project. Go to [https://firebase.google.com/](https://firebase.google.com/) and create a firebase project named "polished-<project_name>".  Open your new Firebase project and:
-   - go to the "Authentication" page "Sign-in method" tab and enable "Email/Password" sign in.
+   - go to the "Authentication" page "Sign-in method" tab and enable "Email/Password" sign in. See the below screenshot:
+   ![](https://res.cloudinary.com/dxqnb8xjb/image/upload/v1573001859/firabse-auth_roq6yv.png)
 
-2. Generate the SQL schema using the `polished::create_schema()` function.  This schema will contain tables to authorize users to access your different Shiny apps.  Note: you will need to have a PostgreSQL database and the credentials to connect to this database to create the schema.
+2. Organize your Shiny app(s) in accordance with the folder structure from the "Getting Started" section
 
-3. Organize your Shiny app(s) in accordance with the folder structure from the "Getting Started" section
-
-4. Set up the "<project_name>/polished-<project_name>" folder.
+3. Set up the "<project_name>/polished-<project_name>" folder.
 
 ```
 # terminal
@@ -127,12 +126,15 @@ polished::create_schema(db_conn)
 polished::create_app_user(db_conn, app_name = "<your app name>", email = "<your email>", is_admin = TRUE)
 ```
 
-## Secure Your Shiny App
+You have now completed setting up the "<project_name>/polished-<project_name>" folder.
 
-To secure your Shiny app you simply pass your Shiny ui to `secure_ui()` and your Shiny server to `secure_server()`.  See the the documentation of `secure_ui()` and `secure_server()` for details.
+4. Secure Your Shiny App
+
+To secure your Shiny app you pass your Shiny ui to `secure_ui()` and your Shiny server to `secure_server()`.  See the the documentation of `secure_ui()` and `secure_server()` for details.
 
 ```
 # R
+?
 ?secure_ui
 ?secure_server
 ```
