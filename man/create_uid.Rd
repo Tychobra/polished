@@ -4,11 +4,23 @@
 \alias{create_uid}
 \title{create a uid}
 \usage{
-create_uid()
+create_uid(n = 1)
+}
+\arguments{
+\item{n}{length 1 integer > 0.  The number of uids to create.}
 }
 \value{
 a character string uid
 }
 \description{
 user for the uids in the database
+}
+\examples{
+
+# create a single uid
+create_uid()
+
+# create 10 uids
+create_uid(10)
+
 }
