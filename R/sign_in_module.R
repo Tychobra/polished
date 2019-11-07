@@ -79,9 +79,9 @@ sign_in_module_ui <- function(id, firebase_config) {
         ),
         br(),
         br(),
-        tags$a(
+        tags$button(
+          class = 'btn btn-link btn-small',
           id = ns("reset_password"),
-          href = "#",
           "Forgot your password?"
         )
       )
