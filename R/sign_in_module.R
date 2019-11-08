@@ -47,8 +47,7 @@ sign_in_module_ui <- function(id, firebase_config) {
             id = ns("password"),
             type = "password",
             class = "form-control",
-            value = "",
-            placeholder = "**********"
+            value = ""
           )
         ),
         br(),
@@ -131,8 +130,7 @@ sign_in_module_ui <- function(id, firebase_config) {
             id = ns("register_password"),
             type = "password",
             class = "form-control",
-            value = "",
-            placeholder = "**********"
+            value = ""
           )
         ),
         br(),
@@ -147,8 +145,7 @@ sign_in_module_ui <- function(id, firebase_config) {
             id = ns("register_password_verify"),
             type = "password",
             class = "form-control",
-            value = "",
-            placeholder = "**********"
+            value = ""
           )
         ),
         br(),
