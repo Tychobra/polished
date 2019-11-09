@@ -239,12 +239,38 @@ user_access_module <- function(input, output, session) {
           list(targets = 0, orderable = FALSE),
           list(targets = 0, class = "dt-center"),
           list(targets = 0, width = "105px")
+        ),
+        rowCallback = JS(
+          "function(row, data) {",
+            "// convert time last signed in to time if time last signed in is today",
+            "// or to date if time last signed in is a date prior to today",
+            "function is_today(date) {
+              var today = new Date()
+              return date.getDate() == today.getDate() &&
+              date.getMonth() == today.getMonth() &&
+              date.getFullYear() == today.getFullYear()
+            }",
+
+            "var date_string = data[5]",
+
+            "// convert date string to a JS date",
+            "var date_local = new Date(date_string)",
+            "var date_is_today = is_today(date_local)",
+
+            "var out = null",
+            "if (date_is_today === true) {
+              out = date_local.toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})
+            } else {
+              out = date_local.toLocaleDateString()
+            }",
+
+            "$('td:eq(5)', row).html(out)",
+
+          "}"
         )
       )
-    ) %>%
-      formatDate(
-        "last_sign_in_at"
-      )
+    )
+
   })
 
   users_proxy <- DT::dataTableProxy("users_table")
