@@ -31,16 +31,25 @@ Sessions <-  R6::R6Class(
       conn <- self$conn
       # firebase function callable via url
       url_out <- paste0(self$firebase_functions_url, "sign_in_firebase")
-      response <- httr::GET(
-        url_out,
-        query = list(
-          token = firebase_token
-        )
-      )
 
-      httr::warn_for_status(response)
-      user_text <- httr::content(response, "text")
-      user <- jsonlite::fromJSON(user_text)
+      user <- NULL
+      tryCatch({
+        response <- httr::GET(
+          url_out,
+          query = list(
+            token = firebase_token
+          )
+        )
+
+        httr::warn_for_status(response)
+        user_text <- httr::content(response, "text")
+        user <- jsonlite::fromJSON(user_text)
+
+      }, error = function(e) {
+        print('error signing in')
+        print(e)
+      })
+
 
       new_session <- NULL
 
