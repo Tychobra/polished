@@ -1,4 +1,4 @@
-library(pgpolished)
+library(polished)
 
 
 # function to set up database "polished" schema
