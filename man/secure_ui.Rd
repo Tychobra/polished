@@ -4,9 +4,13 @@
 \alias{secure_ui}
 \title{Secure the Shiny Application UI}
 \usage{
-secure_ui(ui, firebase_config, sign_in_page_ui = NULL,
+secure_ui(
+  ui,
+  firebase_config,
+  sign_in_page_ui = NULL,
   custom_admin_ui = NULL,
-  custom_admin_button_ui = admin_button_ui("polished"))
+  custom_admin_button_ui = admin_button_ui("polished")
+)
 }
 \arguments{
 \item{ui}{UI of the application.}

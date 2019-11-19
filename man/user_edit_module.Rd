@@ -4,8 +4,16 @@
 \alias{user_edit_module}
 \title{user_edit_module}
 \usage{
-user_edit_module(input, output, session, modal_title, user_to_edit,
-  open_modal_trigger, existing_roles, existing_users)
+user_edit_module(
+  input,
+  output,
+  session,
+  modal_title,
+  user_to_edit,
+  open_modal_trigger,
+  existing_roles,
+  existing_users
+)
 }
 \arguments{
 \item{input}{Shiny server function input}

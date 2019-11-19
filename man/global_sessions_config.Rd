@@ -4,8 +4,12 @@
 \alias{global_sessions_config}
 \title{configuration for global sessions}
 \usage{
-global_sessions_config(app_name, firebase_functions_url, conn,
-  authorization_level = "app")
+global_sessions_config(
+  app_name,
+  firebase_functions_url,
+  conn,
+  authorization_level = "app"
+)
 }
 \arguments{
 \item{app_name}{the name of the app.}

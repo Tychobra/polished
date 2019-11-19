@@ -4,8 +4,14 @@
 \alias{create_app_user}
 \title{create_app_user}
 \usage{
-create_app_user(conn, app_name, email, is_admin = FALSE,
-  roles = character(0), created_by = NULL)
+create_app_user(
+  conn,
+  app_name,
+  email,
+  is_admin = FALSE,
+  roles = character(0),
+  created_by = NULL
+)
 }
 \arguments{
 \item{conn}{the database connection.}
