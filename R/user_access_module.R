@@ -107,7 +107,7 @@ user_access_module_ui <- function(id) {
 #' @importFrom DBI dbExecute dbWithTransaction
 #' @importFrom dplyr tbl filter select %>% left_join arrange collect mutate
 #' @importFrom tibble tibble
-#' @importFrom tychobratools show_toast
+#' @importFrom tychobratools show_toast format_dt_time
 #' @importFrom purrr map_chr
 #'
 #' @export
@@ -240,36 +240,7 @@ user_access_module <- function(input, output, session) {
           list(targets = 0, class = "dt-center"),
           list(targets = 0, width = "105px")
         ),
-        rowCallback = JS(
-          "function(row, data) {",
-
-            "var date_string = data[5]",
-            "if (date_string === null) return",
-
-            "// convert time last signed in to time if time last signed in is today",
-            "// or to date if time last signed in is a date prior to today",
-            "function is_today(date) {
-              var today = new Date()
-              return date.getDate() == today.getDate() &&
-              date.getMonth() == today.getMonth() &&
-              date.getFullYear() == today.getFullYear()
-            }",
-
-            "// convert date string to a JS date",
-            "var date_local = new Date(date_string)",
-            "var date_is_today = is_today(date_local)",
-
-            "var out = null",
-            "if (date_is_today === true) {
-              out = date_local.toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})
-            } else {
-              out = date_local.toLocaleDateString()
-            }",
-
-            "$('td:eq(5)', row).html(out)",
-
-          "}"
-        )
+        rowCallback = tychobratools::format_dt_time(6)
       )
     )
 
