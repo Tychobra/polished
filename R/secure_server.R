@@ -21,15 +21,14 @@ secure_server <- function(
   function(input, output, session) {
     session$userData$user <- reactiveVal(NULL)
 
+    shiny::observe({
+      polished__session <- get_cookie(session$request$HTTP_COOKIE, "polished__token")
+      if (is.null(polished__session)) {
+        session$userData$user(NULL)
+        return()
+      }
 
-
-    #observe({
-    #  remove_query_jwt()
-    #})
-
-    shiny::observeEvent(input$polished__session, {
-
-      global_user <- .global_sessions$find(input$polished__session)
+      global_user <- .global_sessions$find(polished__session)
 
       if (is.null(global_user)) {
         session$userData$user(NULL)
