@@ -21,9 +21,11 @@ secure_server <- function(
   function(input, output, session) {
     session$userData$user <- reactiveVal(NULL)
 
-    observe({
-      remove_query_jwt()
-    })
+
+
+    #observe({
+    #  remove_query_jwt()
+    #})
 
     shiny::observeEvent(input$polished__session, {
 
