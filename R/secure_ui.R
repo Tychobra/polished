@@ -32,7 +32,9 @@ secure_ui <- function(
     query <- parseQueryString(request$QUERY_STRING)
 
     cookie_string <- request$HTTP_COOKIE
-
+    #print(list(
+    #  request = as.list(request)
+    #))
     polished_token <- NULL
     if (!is.null(cookie_string)) {
       polished_token <- get_cookie(cookie_string, "polished__token")
@@ -41,9 +43,9 @@ secure_ui <- function(
     # Check if jwt is in the query string.  If it is, then attempt to sign in the user. Pass the
     # cookie with the sign in.  If the sign in succeeds we will add this cookie as the session token,
     # so we can go straight to the authed page with out an additional page reload.
-    if (!is.null(query$jwt)) {
-      .global_sessions$sign_in(query$jwt, polished_token)
-    }
+    #if (!is.null(query$jwt)) {
+    #  .global_sessions$sign_in(query$jwt, polished_token)
+    #}
 
     user <- NULL
     if (!is.null(polished_token) && length(polished_token) > 0) {

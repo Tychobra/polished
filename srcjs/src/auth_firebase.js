@@ -11,21 +11,20 @@ const auth_firebase = (ns_id) => {
 
     return auth.signInWithEmailAndPassword(email, password).then(user => {
 
-      const polished_token = Cookies.get("polished__token")
+
 
       return user.user.getIdToken(true).then(firebase_token => {
 
-        Cookies.set('polished__token', "p" + Math.random())
+        const polished_token = "p" + Math.random()//Cookies.get("polished__token")
 
-        window.location.replace(
-          window.location.href + "?jwt=" + firebase_token
-        );
-        //Shiny.setInputValue(ns2("polished__sign_in"), {
-        //  firebase_token: firebase_token,
-        //  polished_token: polished_token
-        //}, {
-        //  event: "priority"
-        //});
+        Cookies.set('polished__token', polished_token)
+
+        Shiny.setInputValue(ns2("check_jwt"), {
+          jwt: firebase_token,
+          polished_token: polished_token
+        }, {
+          event: "priority"
+        });
       })
 
 
