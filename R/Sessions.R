@@ -215,13 +215,13 @@ Sessions <-  R6::R6Class(
 
 
         # confirm that user is invited
-        invite <- self$get_invite_by_uid(active_session$user_uid)
-        roles <- self$get_roles(active_session$user_uid)
+        invite <- self$get_invite_by_uid(active_session$user_uid[1])
+        roles <- self$get_roles(active_session$user_uid[1])
 
         app_session <- active_session %>%
           filter(.data$app_name == self$app_name)
 
-        # if user is not invites, the above function will throw an error.  If user is invited,
+        # if user is not invited, the above `get_invite_by_uid()` function will throw an error.  If user is invited,
         # return the user session
         session_out <- list(
           "uid" = active_session$user_uid[1],
