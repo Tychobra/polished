@@ -24,6 +24,7 @@ secure_server <- function(
     shiny::observe({
       cookie_string <- session$request$HTTP_COOKIE
       print(list('server_cookie_string' = cookie_string))
+      polished__session <- NULL
       if (!is.null(cookie_string)) {
         polished__session <- get_cookie(session$request$HTTP_COOKIE, "polished__token")
       }
