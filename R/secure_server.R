@@ -46,10 +46,12 @@ secure_server <- function(
           # log session to database "sessions" table
           .global_sessions$log_session(global_user$token, global_user$uid)
 
-          if (is.null(global_user$signed_in_as)) {
+          if (is.na(global_user$signed_in_as)) {
             session$userData$user(global_user[c("uid", "email", "is_admin", "roles", "token")])
           } else {
-            session$userData$user(global_user$signed_in_as)
+            signed_in_as_user <- .global_sessions$get_signed_in_as_user(global_user$signed_in_as)
+            signed_in_as_user$token <- global_user$token
+            session$userData$user(signed_in_as_user)
           }
 
 

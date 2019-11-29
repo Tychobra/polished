@@ -81,6 +81,7 @@ create_schema <- function(conn) {
     email                 TEXT,
     email_verified        BOOLEAN,
     token                 TEXT,
+    signed_in_as          TEXT,
     app_name              TEXT,
     created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW()
   )"

@@ -203,7 +203,7 @@ Sessions <-  R6::R6Class(
 
       active_session <- dbGetQuery(
         self$conn,
-        'SELECT user_uid, email, email_verified, firebase_uid, app_name FROM polished.active_sessions WHERE token=$1',
+        'SELECT user_uid, email, email_verified, firebase_uid, app_name, signed_in_as FROM polished.active_sessions WHERE token=$1',
         params = list(
           token
         )
@@ -218,23 +218,27 @@ Sessions <-  R6::R6Class(
         invite <- self$get_invite_by_uid(active_session$user_uid)
         roles <- self$get_roles(active_session$user_uid)
 
-
+        app_session <- active_session %>%
+          filter(.data$app_name == self$app_name)
 
         # if user is not invites, the above function will throw an error.  If user is invited,
         # return the user session
         session_out <- list(
-          "uid" = active_session$user_uid,
-          "email" = active_session$email,
-          "firebase_uid" = active_session$firebase_uid,
-          "email_verified" = active_session$email_verified,
+          "uid" = active_session$user_uid[1],
+          "email" = active_session$email[1],
+          "firebase_uid" = active_session$firebase_uid[1],
+          "email_verified" = active_session$email_verified[1],
           "is_admin" = invite$is_admin,
           "roles" = roles,
           "token" = token
         )
 
-        if (!(self$app_name %in% active_session$app_name)) {
+        if (nrow(app_session) == 0) {
           # user was signed into another app and came over to this app, so add a session for this app
           private$add(session_out)
+          session_out$signed_in_as <- NA
+        } else {
+          session_out$signed_in_as <- active_session$signed_in_as
         }
 
         return(session_out)
@@ -299,18 +303,53 @@ Sessions <-  R6::R6Class(
 
     },
     set_signed_in_as = function(token, signed_in_as) {
-
-      private$sessions[[token]]$signed_in_as <- signed_in_as
+      browser()
+      dbExecute(
+        self$conn,
+        'UPDATE polished.active_sessions SET signed_in_as=$1 WHERE token=$2 AND app_name=$3',
+        params = list(
+          signed_in_as$uid,
+          token,
+          self$app_name
+        )
+      )
 
       invisible(self)
     },
     clear_signed_in_as = function(token) {
 
-      if (!is.null(private$sessions[[token]]$signed_in_as)) {
-        private$sessions[[token]]$signed_in_as <- NULL
-      }
+      dbExecute(
+        self$conn,
+        'UPDATE polished.active_sessions SET signed_in_as=$1 WHERE token=$2 AND app_name=$3',
+        params = list(
+          NA,
+          token,
+          self$app_name
+        )
+      )
 
       invisible(self)
+    },
+    get_signed_in_as_user = function(user_uid) {
+
+      email <- dbGetQuery(
+        self$conn,
+        'SELECT email FROM polished.users WHERE uid=$1',
+        list(
+          user_uid
+        )
+      )$email
+
+      invite <- self$get_invite_by_uid(user_uid)
+
+      roles <- self$get_roles(user_uid)
+
+      list(
+        uid = user_uid,
+        email = email,
+        is_admin = invite$is_admin,
+        roles = roles
+      )
     }
   ),
   private = list(
