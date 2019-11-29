@@ -22,7 +22,12 @@ secure_server <- function(
     session$userData$user <- reactiveVal(NULL)
 
     shiny::observe({
-      polished__session <- get_cookie(session$request$HTTP_COOKIE, "polished__token")
+      cookie_string <- session$request$HTTP_COOKIE
+      print(list('server_cookie_string' = cookie_string))
+      if (!is.null(cookie_string)) {
+        polished__session <- get_cookie(session$request$HTTP_COOKIE, "polished__token")
+      }
+
       if (is.null(polished__session)) {
         session$userData$user(NULL)
         return()
