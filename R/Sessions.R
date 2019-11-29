@@ -303,7 +303,7 @@ Sessions <-  R6::R6Class(
 
     },
     set_signed_in_as = function(token, signed_in_as) {
-      browser()
+
       dbExecute(
         self$conn,
         'UPDATE polished.active_sessions SET signed_in_as=$1 WHERE token=$2 AND app_name=$3',
