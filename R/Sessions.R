@@ -233,12 +233,14 @@ Sessions <-  R6::R6Class(
           "token" = token
         )
 
+
         if (nrow(app_session) == 0) {
           # user was signed into another app and came over to this app, so add a session for this app
+
           private$add(session_out)
           session_out$signed_in_as <- NA
         } else {
-          session_out$signed_in_as <- active_session$signed_in_as
+          session_out$signed_in_as <- app_session$signed_in_as
         }
 
         return(session_out)
