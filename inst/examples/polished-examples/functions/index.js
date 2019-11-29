@@ -1,7 +1,7 @@
 /*
 *
-* version 0.0.6
-* last updated 2019-09-24
+* version 0.0.7
+* last updated 2019-11-15
 * bump the above version and change the last updated date whenever a change
 * is made to this file
 *
@@ -12,7 +12,7 @@ const admin = require('firebase-admin')
 
 admin.initializeApp();
 
-const db = admin.firestore();
+
 
 
 exports.sign_in_firebase = functions.https.onRequest(async (req, res) => {

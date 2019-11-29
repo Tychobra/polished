@@ -4,7 +4,7 @@ ui <- fluidPage(
   fluidRow(
     column(
       12,
-      h1("Title"),
+      h1("Polished Example 01"),
       br()
     ),
     column(
