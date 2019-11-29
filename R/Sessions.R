@@ -13,12 +13,27 @@
 #' @importFrom DBI dbGetQuery dbWithTransaction dbExecute
 #'
 Sessions <-  R6::R6Class(
-  classname = "Sessions",
+  classname = 'Sessions',
   public = list(
     app_name = character(0),
     firebase_functions_url = character(0),
     conn = NULL,
-    config = function(app_name, firebase_functions_url = NULL, conn = NULL, authorization_level = "app") {
+    session_store = 'memory',
+    # Session configuration function.  This must be executed in global.R of the Shiny app.
+    #
+    # @param app_name the name of the app
+    # @param firebase_functions_url the firebase function url
+    # @param conn the database connection
+    # @param authorization_level whether the app should be accessible to "all" users in the
+    # "polished.users" table, or if it should only be accessible to users as defined in the
+    # "app_users" table. Valid options are "app" or "all".  Defaults to "app".
+    #
+    config = function(
+      app_name,
+      firebase_functions_url = NULL,
+      conn = NULL,
+      authorization_level = 'app'
+    ) {
 
       self$app_name <- app_name
       self$firebase_functions_url <- firebase_functions_url
@@ -106,7 +121,6 @@ Sessions <-  R6::R6Class(
       DBI::dbWithTransaction(self$conn, {
 
         user_db <- DBI::dbGetQuery(
-          #conn,
           self$conn,
           "SELECT * FROM polished.users WHERE email=$1",
           params = list(
@@ -114,16 +128,11 @@ Sessions <-  R6::R6Class(
           )
         )
 
-
         if (nrow(user_db) != 1) {
-          stop('unable to find users in "users" table')
+          stop(sprintf('unable to find "%s" in "users" table', email))
         }
 
         invite <- self$get_invite_by_uid(user_db$uid)
-
-        if (nrow(invite) != 1) {
-          stop(sprintf('user "%s" is not authoized to access "%s"', email, self$app_name))
-        }
       })
 
       return(invite)
@@ -133,7 +142,7 @@ Sessions <-  R6::R6Class(
       if (private$authorization_level == "app") {
         # authorization for this user is set at the Shiny app level, so only check this specific app
         # to see if the user is authorized
-        out <- DBI::dbGetQuery(
+        invite <- DBI::dbGetQuery(
           self$conn,
           "SELECT * FROM polished.app_users WHERE user_uid=$1 AND app_name=$2",
           params = list(
@@ -145,7 +154,7 @@ Sessions <-  R6::R6Class(
         # if user is authoized to access any apps, they can access this app.
         # e.g. used for apps_dashboards where we want all users that are allowed to access any app to
         # be able to access the dashboard.
-        out <- DBI::dbGetQuery(
+        invite <- DBI::dbGetQuery(
           self$conn,
           "SELECT * FROM polished.app_users WHERE user_uid=$1 LIMIT 1",
           params = list(
@@ -154,6 +163,11 @@ Sessions <-  R6::R6Class(
         )
       }
 
+      if (nrow(invite) != 1) {
+        stop(sprintf('user "%s" is not authoized to access "%s"', email, self$app_name))
+      }
+
+      invite
     },
     # return a character vector of the user's roles
     get_roles = function(user_uid) {
@@ -188,19 +202,58 @@ Sessions <-  R6::R6Class(
       roles
     },
     find = function(token) {
-      if (length(private$sessions) == 0) return(NULL)
 
-      private$sessions[[token]]
+      active_session <- dbGetQuery(
+        self$conn,
+        'SELECT user_uid, email, email_verified, firebase_uid FROM polished.active_sessions WHERE token=$1',
+        params = list(
+          token
+        )
+      )
+
+      session_out <- NULL
+      if (nrow(active_session) == 1) {
+        # confirm that user is invited
+
+        invite <- self$get_invite_by_uid(active_session$user_uid)
+        roles <- self$get_roles(active_session$user_uid)
+
+        # if user is not invites, the above function will throw an error.  If user is invited,
+        # return the user session
+        session_out <- list(
+          "uid" = active_session$user_uid,
+          "email" = active_session$email,
+          "firebase_uid" = active_session$firebase_uid,
+          "email_verified" = active_session$email_verified,
+          "is_admin" = invite$is_admin,
+          "roles" = roles,
+          "token" = token
+        )
+
+        return(session_out)
+      }
+
     },
     remove = function(token) {
-      if (length(private$sessions) == 0) invisible(self)
 
-      private$sessions[[token]] <- NULL
+      dbExecute(
+        self$conn,
+        'DELETE FROM polished.active_sessions WHERE token=$1',
+        params = list(
+          token
+        )
+      )
 
       invisible(self)
     },
     list = function() {
-      private$sessions
+
+      out <- dbGetQuery(
+        self$conn,
+        "SELECT * FROM polished.active_sessions"
+      )
+
+      return(out)
     },
     refresh_email_verification = function(token, firebase_uid) {
 
@@ -256,14 +309,29 @@ Sessions <-  R6::R6Class(
   ),
   private = list(
     add = function(session) {
-      private$sessions[[session$token]] <- session
+
+      uid <- create_uid()
+      dbExecute(
+        self$conn,
+        'INSERT INTO polished.active_sessions (uid, user_uid, firebase_uid, email, email_verified, token) VALUES ($1, $2, $3, $4, $5, $6)',
+        list(
+          uid,
+          session$uid,
+          session$firebase_uid,
+          session$email,
+          session$email_verified,
+          session$token
+        )
+      )
+
       invisible(self)
     },
-    sessions = vector("list", length = 0),
     authorization_level = "app" # or "all"
   )
-
 )
 
 .global_sessions <- Sessions$new()
+
+
+
 

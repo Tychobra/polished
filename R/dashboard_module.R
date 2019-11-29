@@ -194,27 +194,12 @@ dashboard_module <- function(input, output, session) {
   )
 
   # poll the active sessions from the `.global_sessions` object
-  poll_global_users <- shiny::reactivePoll(
-    intervalMillis = 1000 * 10, # check every 10 seconds,
-    session = session,
-    checkFunc = function() {
-      length(.global_sessions$list())
-    },
-    valueFunc = function() {
-
-      out <- .global_sessions$list()
-
-      out_emails <- lapply(out, function(sesh) {
-        tibble::tibble(
-          email = sesh$email
-        )
-      })
-
-      dplyr::bind_rows(out_emails) %>%
-        dplyr::distinct(.data$email)
-    }
-  )
-
+  poll_global_users <- shiny::reactive({
+    .global_sessions$conn %>%
+      dplyr::tbl(dbplyr::in_schema("polished", "active_sessions")) %>%
+      dplyr::collect() %>%
+      dplyr::distinct(.data$email)
+  })
 
 
 
