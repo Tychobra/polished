@@ -195,10 +195,13 @@ dashboard_module <- function(input, output, session) {
 
   # poll the active sessions from the `.global_sessions` object
   poll_global_users <- shiny::reactive({
+    app_name_ <- .global_sessions$app_name
+
     .global_sessions$conn %>%
       dplyr::tbl(dbplyr::in_schema("polished", "active_sessions")) %>%
-      dplyr::collect() %>%
-      dplyr::distinct(.data$email)
+      filter(.data$app_name == app_name_) %>%
+      dplyr::distinct(.data$email) %>%
+      dplyr::collect()
   })
 
 

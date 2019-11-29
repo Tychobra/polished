@@ -176,7 +176,6 @@ Sessions <-  R6::R6Class(
 
 
         role_names <- DBI::dbGetQuery(
-          #conn,
           self$conn,
           "SELECT uid, name FROM polished.roles WHERE app_name=$1",
           params = list(
@@ -185,7 +184,6 @@ Sessions <-  R6::R6Class(
         )
 
         role_uids <- DBI::dbGetQuery(
-          #conn,
           self$conn,
           "SELECT role_uid FROM polished.user_roles WHERE user_uid=$1 AND app_name=$2",
           params = list(
@@ -205,18 +203,22 @@ Sessions <-  R6::R6Class(
 
       active_session <- dbGetQuery(
         self$conn,
-        'SELECT user_uid, email, email_verified, firebase_uid FROM polished.active_sessions WHERE token=$1',
+        'SELECT user_uid, email, email_verified, firebase_uid, app_name FROM polished.active_sessions WHERE token=$1',
         params = list(
           token
         )
       )
 
       session_out <- NULL
-      if (nrow(active_session) == 1) {
-        # confirm that user is invited
+      if (nrow(active_session) > 0) {
 
+
+
+        # confirm that user is invited
         invite <- self$get_invite_by_uid(active_session$user_uid)
         roles <- self$get_roles(active_session$user_uid)
+
+
 
         # if user is not invites, the above function will throw an error.  If user is invited,
         # return the user session
@@ -229,6 +231,11 @@ Sessions <-  R6::R6Class(
           "roles" = roles,
           "token" = token
         )
+
+        if (!(self$app_name %in% active_session$app_name)) {
+          # user was signed into another app and came over to this app, so add a session for this app
+          private$add(session_out)
+        }
 
         return(session_out)
       }
@@ -277,7 +284,6 @@ Sessions <-  R6::R6Class(
 
       tryCatch({
         DBI::dbExecute(
-          #conn,
           self$conn,
           "INSERT INTO polished.sessions ( app_name, user_uid, token ) VALUES ( $1, $2, $3 )",
           params = list(
@@ -313,14 +319,15 @@ Sessions <-  R6::R6Class(
       uid <- create_uid()
       dbExecute(
         self$conn,
-        'INSERT INTO polished.active_sessions (uid, user_uid, firebase_uid, email, email_verified, token) VALUES ($1, $2, $3, $4, $5, $6)',
+        'INSERT INTO polished.active_sessions (uid, user_uid, firebase_uid, email, email_verified, token, app_name) VALUES ($1, $2, $3, $4, $5, $6, $7)',
         list(
           uid,
           session$uid,
           session$firebase_uid,
           session$email,
           session$email_verified,
-          session$token
+          session$token,
+          self$app_name
         )
       )
 
