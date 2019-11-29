@@ -89,14 +89,18 @@ secure_ui <- function(
             # go to Admin Panel
             page_out <- tagList(
               admin_module_ui("admin", firebase_config, custom_admin_ui),
-              tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js")
+              tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
+              tags$script(src = "polish/js/polished_session.js"),
+              tags$script(paste0("polished_session('", user$token, "')"))
             )
           } else {
 
             page_out <- tagList(
               ui,
               custom_admin_button_ui,
-              tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js")
+              tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
+              tags$script(src = "polish/js/polished_session.js"),
+              tags$script(paste0("polished_session('", user$token, "')"))
             )
           }
 
@@ -106,7 +110,9 @@ secure_ui <- function(
           # go to Shiny app without admin button.  User is not an admin
           page_out <- tagList(
             ui,
-            tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js")
+            tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
+            tags$script(src = "polish/js/polished_session.js"),
+            tags$script(paste0("polished_session('", user$token, "')"))
           )
 
         } # end is_admin check
@@ -119,7 +125,9 @@ secure_ui <- function(
             "verify",
             firebase_config
           ),
-          tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js")
+          tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
+          tags$script(src = "polish/js/polished_session.js"),
+          tags$script(paste0("polished_session('", user$token, "')"))
         )
       }
 

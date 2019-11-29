@@ -21,13 +21,13 @@ secure_server <- function(
   function(input, output, session) {
     session$userData$user <- reactiveVal(NULL)
 
-    shiny::observe({
-      cookie_string <- session$request$HTTP_COOKIE
-      print(list('server_cookie_string' = cookie_string))
-      polished__session <- NULL
-      if (!is.null(cookie_string)) {
-        polished__session <- get_cookie(session$request$HTTP_COOKIE, "polished__token")
-      }
+    shiny::observeEvent(input$polished__session, {
+      #cookie_string <- session$request$HTTP_COOKIE
+      #print(list('server_cookie_string' = cookie_string))
+      polished__session <- input$polished__session
+      #if (!is.null(cookie_string)) {
+      #  polished__session <- get_cookie(session$request$HTTP_COOKIE, "polished__token")
+      #}
 
       if (is.null(polished__session)) {
         session$userData$user(NULL)
