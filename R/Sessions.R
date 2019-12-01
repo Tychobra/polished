@@ -18,7 +18,6 @@ Sessions <-  R6::R6Class(
     app_name = character(0),
     firebase_functions_url = character(0),
     conn = NULL,
-    session_store = 'memory',
     # Session configuration function.  This must be executed in global.R of the Shiny app.
     #
     # @param app_name the name of the app
