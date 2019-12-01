@@ -123,6 +123,7 @@ secure_server <- function(
 
       if (is.null(query_string$admin_panel)) {
         # log session to database "sessions" table
+        global_user <- session$userData$user()
         .global_sessions$log_session(global_user$token, global_user$uid)
 
         server(input, output, session)
