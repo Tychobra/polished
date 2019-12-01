@@ -34,11 +34,6 @@ secure_server <- function(
 
         if (isTRUE(global_user$email_verified)) {
 
-          session$sendCustomMessage(
-            "polish__remove_loading",
-            message = list()
-          )
-
 
           if (is.na(global_user$signed_in_as)) {
             session$userData$user(global_user[c("uid", "email", "is_admin", "roles", "token")])
