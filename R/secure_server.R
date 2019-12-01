@@ -7,6 +7,7 @@
 #' @export
 #'
 #' @importFrom shiny observeEvent getQueryString callModule
+#' @importFrom digest digest
 #'
 #' @return session session object with new reactive session$userData$current_user which
 #' is set to NULL if user is not signed in or a list with user data if the user is

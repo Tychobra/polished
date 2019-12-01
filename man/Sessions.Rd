@@ -21,6 +21,7 @@ R6 class to track the polished sessions
 \item \href{#method-log_session}{\code{Sessions$log_session()}}
 \item \href{#method-set_signed_in_as}{\code{Sessions$set_signed_in_as()}}
 \item \href{#method-clear_signed_in_as}{\code{Sessions$clear_signed_in_as()}}
+\item \href{#method-get_signed_in_as_user}{\code{Sessions$get_signed_in_as_user()}}
 \item \href{#method-clone}{\code{Sessions$clone()}}
 }
 }
@@ -122,6 +123,14 @@ R6 class to track the polished sessions
 \subsection{Method \code{clear_signed_in_as()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$clear_signed_in_as(token)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_signed_in_as_user"></a>}}
+\subsection{Method \code{get_signed_in_as_user()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$get_signed_in_as_user(user_uid)}\if{html}{\out{</div>}}
 }
 
 }

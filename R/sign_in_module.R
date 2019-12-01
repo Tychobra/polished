@@ -196,6 +196,7 @@ sign_in_module_ui <- function(id, firebase_config) {
 #' @importFrom tychobratools show_toast
 #' @importFrom shinyjs show hide
 #' @importFrom shinyWidgets sendSweetAlert
+#' @importFrom digest digest
 #'
 sign_in_module <- function(input, output, session) {
   ns <- session$ns
@@ -269,7 +270,10 @@ sign_in_module <- function(input, output, session) {
   })
 
   observeEvent(input$check_jwt, {
-    new_user <- .global_sessions$sign_in(input$check_jwt$jwt, input$check_jwt$polished_token)
+    new_user <- .global_sessions$sign_in(
+      input$check_jwt$jwt,
+      digest::digest(input$check_jwt$polished_token)
+    )
 
     if (is.null(new_user)) {
       # show unable to sign in message
