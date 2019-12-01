@@ -9,9 +9,11 @@ var auth_firebase = function auth_firebase(ns_id) {
   var sign_in = function sign_in(email, password) {
     return auth.signInWithEmailAndPassword(email, password).then(function (user) {
       return user.user.getIdToken(true).then(function (firebase_token) {
-        var polished_token = "p" + Math.random(); //Cookies.get("polished__token")
-
-        Cookies.set('polished__token', polished_token);
+        var polished_token = "p" + Math.random();
+        Cookies.set('polished__token', polished_token, // set cookie to expire in 1 year
+        {
+          expires: 365
+        });
         Shiny.setInputValue(ns("check_jwt"), {
           jwt: firebase_token,
           polished_token: polished_token

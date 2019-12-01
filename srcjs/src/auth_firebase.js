@@ -15,9 +15,12 @@ const auth_firebase = (ns_id) => {
 
       return user.user.getIdToken(true).then(firebase_token => {
 
-        const polished_token = "p" + Math.random()//Cookies.get("polished__token")
+        const polished_token = "p" + Math.random()
 
-        Cookies.set('polished__token', polished_token)
+
+        Cookies.set('polished__token', polished_token,
+        // set cookie to expire in 1 year
+        { expires: 365 })
 
         Shiny.setInputValue(ns("check_jwt"), {
           jwt: firebase_token,
