@@ -32,9 +32,7 @@ secure_ui <- function(
     query <- parseQueryString(request$QUERY_STRING)
 
     cookie_string <- request$HTTP_COOKIE
-    #print(list(
-    #  request = as.list(request)
-    #))
+
     polished_token <- NULL
     if (!is.null(cookie_string)) {
       polished_token <- get_cookie(cookie_string, "polished__token")
