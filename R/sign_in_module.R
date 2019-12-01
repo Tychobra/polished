@@ -198,6 +198,7 @@ sign_in_module_ui <- function(id, firebase_config) {
 #' @importFrom shinyWidgets sendSweetAlert
 #'
 sign_in_module <- function(input, output, session) {
+  ns <- session$ns
 
   shiny::observeEvent(input$submit_continue_sign_in, {
 
@@ -273,6 +274,12 @@ sign_in_module <- function(input, output, session) {
     if (is.null(new_user)) {
       # show unable to sign in message
       print('sign_in_module: sign in error')
+
+      session$sendCustomMessage(
+        ns('remove_loading'),
+        message = list()
+      )
+
       tychobratools::show_toast('error', 'sign in error')
     } else {
       session$reload()

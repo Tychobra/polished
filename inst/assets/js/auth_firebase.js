@@ -4,7 +4,7 @@ var auth = firebase.auth();
 
 var auth_firebase = function auth_firebase(ns_id) {
   var ns = NS(ns_id);
-  var ns2 = NS(ns_id, "");
+  var ns_pound = NS(ns_id, "#");
 
   var sign_in = function sign_in(email, password) {
     return auth.signInWithEmailAndPassword(email, password).then(function (user) {
@@ -12,7 +12,7 @@ var auth_firebase = function auth_firebase(ns_id) {
         var polished_token = "p" + Math.random(); //Cookies.get("polished__token")
 
         Cookies.set('polished__token', polished_token);
-        Shiny.setInputValue(ns2("check_jwt"), {
+        Shiny.setInputValue(ns("check_jwt"), {
           jwt: firebase_token,
           polished_token: polished_token
         }, {
@@ -22,16 +22,16 @@ var auth_firebase = function auth_firebase(ns_id) {
     });
   };
 
-  Shiny.addCustomMessageHandler(ns2("polished__set_cookie"), function (message) {
+  Shiny.addCustomMessageHandler(ns("polished__set_cookie"), function (message) {
     Cookies.set('polished__token', message.polished_token);
-    Shiny.setInputValue(ns2("polished__set_cookie_complete"), 1, {
+    Shiny.setInputValue(ns("polished__set_cookie_complete"), 1, {
       priority: "event"
     });
   });
-  $(document).on("click", ns("submit_register"), function () {
-    var email = $(ns("register_email")).val().toLowerCase();
-    var password = $(ns("register_password")).val();
-    var password_2 = $(ns("register_password_verify")).val();
+  $(document).on("click", ns_pound("submit_register"), function () {
+    var email = $(ns_pound("register_email")).val().toLowerCase();
+    var password = $(ns_pound("register_password")).val();
+    var password_2 = $(ns_pound("register_password_verify")).val();
 
     if (password !== password_2) {
       toastr.error("The passwords do not match", null, toast_options);
@@ -59,7 +59,7 @@ var auth_firebase = function auth_firebase(ns_id) {
       console.log(error);
     });
   });
-  $(document).on("click", ns("reset_password"), function () {
+  $(document).on("click", ns_pound("reset_password"), function () {
     var email = $(ns("email")).val().toLowerCase();
     auth.sendPasswordResetEmail(email).then(function () {
       console.log("Password reset email sent to ".concat(email));
@@ -69,10 +69,10 @@ var auth_firebase = function auth_firebase(ns_id) {
       console.log("error resetting email: ", error);
     });
   });
-  $(document).on("click", ns("submit_sign_in"), function () {
+  $(document).on("click", ns_pound("submit_sign_in"), function () {
     $.LoadingOverlay("show", loading_options);
-    var email = $(ns("email")).val().toLowerCase();
-    var password = $(ns("password")).val();
+    var email = $(ns_pound("email")).val().toLowerCase();
+    var password = $(ns_pound("password")).val();
     sign_in(email, password)["catch"](function (error) {
       $.LoadingOverlay("hide");
       toastr.error("Sign in Error: " + error.message, null, toast_options);
