@@ -39,8 +39,6 @@ secure_server <- function(
             message = list()
           )
 
-          # log session to database "sessions" table
-          .global_sessions$log_session(global_user$token, global_user$uid)
 
           if (is.na(global_user$signed_in_as)) {
             session$userData$user(global_user[c("uid", "email", "is_admin", "roles", "token")])
@@ -119,10 +117,12 @@ secure_server <- function(
 
 
 
-    # user developed server.  Required signed in user to
-    # access
+    # custom app server.  Requires signed in user to access
     shiny::observeEvent(session$userData$user(), {
       query_string <- shiny::getQueryString()
+
+      # log session to database "sessions" table
+      .global_sessions$log_session(global_user$token, global_user$uid)
 
       if (is.null(query_string$admin_panel)) {
         server(input, output, session)
