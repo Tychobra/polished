@@ -25,6 +25,8 @@ create_app_user(
   is_admin = TRUE
 )
 
+dbDisconnect(db_conn)
+
 # write and deploy the Firebase functions
 write_firebase_functions()
 
