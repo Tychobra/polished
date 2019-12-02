@@ -66,15 +66,8 @@ create_schema <- function(conn) {
     created_at             TIMESTAMPTZ NOT NULL DEFAULT NOW()
   )"
 
-  create_sessions_table_query <- "CREATE TABLE polished.sessions (
-    uid                   SERIAL PRIMARY KEY,
-    app_name              TEXT REFERENCES polished.apps(app_name),
-    user_uid              TEXT REFERENCES polished.users(uid),
-    token                 TEXT,
-    created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW()
-  )"
 
-  create_active_sessions_table_query <- "CREATE TABLE polished.active_sessions (
+  create_sessions_table_query <- "CREATE TABLE polished.sessions (
     uid                   TEXT PRIMARY KEY,
     user_uid              TEXT,
     firebase_uid          TEXT,
@@ -83,6 +76,8 @@ create_schema <- function(conn) {
     token                 TEXT,
     signed_in_as          TEXT,
     app_name              TEXT,
+    is_active             BOOLEAN DEFAULT true,
+    is_signed_in          BOOLEAN DEFAULT true,
     created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW()
   )"
 
@@ -92,8 +87,7 @@ create_schema <- function(conn) {
   dbExecute(conn, "DROP TABLE IF EXISTS polished.roles CASCADE")
   dbExecute(conn, "DROP TABLE IF EXISTS polished.user_roles CASCADE")
   dbExecute(conn, "DROP TABLE IF EXISTS polished.app_users CASCADE")
-  dbExecute(conn, "DROP TABLE IF EXISTS polished.sessions CASCADE")
-  dbExecute(conn, "DROP TABLE IF EXISTS polished.active_sessions")
+  dbExecute(conn, "DROP TABLE IF EXISTS polished.sessions")
 
   dbExecute(conn, create_users_table_query)
   dbExecute(conn, create_apps_table_query)
@@ -101,5 +95,4 @@ create_schema <- function(conn) {
   dbExecute(conn, create_roles_table_query)
   dbExecute(conn, create_user_roles_table_query)
   dbExecute(conn, create_sessions_table_query)
-  dbExecute(conn, create_active_sessions_table_query)
 }

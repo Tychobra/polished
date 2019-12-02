@@ -21,6 +21,9 @@ secure_server <- function(
 
   function(input, output, session) {
     session$userData$user <- reactiveVal(NULL)
+    # track the polished in a non reactive, so that we can access it in
+    # the onStop() funtion
+    #non_rv_token <- NULL
 
     shiny::observeEvent(input$polished__session, {
       polished__session <- input$polished__session
@@ -33,13 +36,30 @@ secure_server <- function(
       } else {
 
 
+
         if (isTRUE(global_user$email_verified)) {
 
 
+
           if (is.na(global_user$signed_in_as)) {
-            session$userData$user(global_user[c("uid", "email", "is_admin", "roles", "token")])
+            session$userData$user(global_user[c("session_uid", "user_uid", "email", "is_admin", "roles", "token")])
+
+            # set the session to inactive when the session ends
+            shiny::onStop(fun = function() {
+
+              tryCatch({
+
+                .global_sessions$set_inactive(global_user$session_uid)
+
+              }, catch = function(err) {
+                print('error setting the session to incative')
+                print(err)
+              })
+
+            })
           } else {
             signed_in_as_user <- .global_sessions$get_signed_in_as_user(global_user$signed_in_as)
+            signed_in_as_user$session_uid <- global_user$session_uid
             signed_in_as_user$token <- global_user$token
             session$userData$user(signed_in_as_user)
           }
@@ -118,13 +138,12 @@ secure_server <- function(
       query_string <- shiny::getQueryString()
 
       if (is.null(query_string$page)) {
-        # log session to database "sessions" table
-        global_user <- session$userData$user()
-        .global_sessions$log_session(global_user$token, global_user$uid)
 
         server(input, output, session)
       }
     })
+
+
 
   }
 

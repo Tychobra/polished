@@ -83,7 +83,7 @@ Sessions <-  R6::R6Class(
           roles_out <- self$get_roles(invite$user_uid)
 
           new_session$is_admin <- invite$is_admin
-          new_session$uid <- invite$user_uid
+          new_session$user_uid <- invite$user_uid
           new_session$roles <- roles_out
 
           # update the last sign in time
@@ -103,13 +103,11 @@ Sessions <-  R6::R6Class(
         })
 
 
-        # geneate a session token
-        if (!is.null(new_session)) {
 
-          new_session$token <- token
+        new_session$token <- token
 
-          private$add(new_session)
-        }
+        # add the session to the 'sessions' table
+        private$add(new_session)
       }
 
       return(new_session)
@@ -200,33 +198,36 @@ Sessions <-  R6::R6Class(
     },
     find = function(token) {
 
-      active_session <- dbGetQuery(
+      signed_in_sessions <- dbGetQuery(
         self$conn,
-        'SELECT user_uid, email, email_verified, firebase_uid, app_name, signed_in_as FROM polished.active_sessions WHERE token=$1',
+        'SELECT uid AS session_uid, user_uid, email, email_verified, firebase_uid, app_name, signed_in_as FROM polished.sessions WHERE token=$1 AND is_signed_in=$2',
         params = list(
-          token
+          token,
+          TRUE
         )
       )
 
       session_out <- NULL
-      if (nrow(active_session) > 0) {
+      if (nrow(signed_in_sessions) > 0) {
 
 
 
         # confirm that user is invited
-        invite <- self$get_invite_by_uid(active_session$user_uid[1])
-        roles <- self$get_roles(active_session$user_uid[1])
+        invite <- self$get_invite_by_uid(signed_in_sessions$user_uid[1])
+        roles <- self$get_roles(signed_in_sessions$user_uid[1])
 
-        app_session <- active_session %>%
+        app_session <- signed_in_sessions %>%
           filter(.data$app_name == self$app_name)
 
         # if user is not invited, the above `get_invite_by_uid()` function will throw an error.  If user is invited,
         # return the user session
+
+
         session_out <- list(
-          "uid" = active_session$user_uid[1],
-          "email" = active_session$email[1],
-          "firebase_uid" = active_session$firebase_uid[1],
-          "email_verified" = active_session$email_verified[1],
+          "user_uid" = signed_in_sessions$user_uid[1],
+          "email" = signed_in_sessions$email[1],
+          "firebase_uid" = signed_in_sessions$firebase_uid[1],
+          "email_verified" = signed_in_sessions$email_verified[1],
           "is_admin" = invite$is_admin,
           "roles" = roles,
           "token" = token
@@ -236,27 +237,23 @@ Sessions <-  R6::R6Class(
         if (nrow(app_session) == 0) {
           # user was signed into another app and came over to this app, so add a session for this app
 
+
           private$add(session_out)
           session_out$signed_in_as <- NA
-        } else {
+        } else if (nrow(app_session) == 1) {
+
+          # set the session from inactive to active
+          #self$set_active(app_session$session_uid)
+
+          session_out$session_uid <- app_session$session_uid
           session_out$signed_in_as <- app_session$signed_in_as
+        } else {
+          stop('error: too many sessions')
         }
 
         return(session_out)
       }
 
-    },
-    remove = function(token) {
-
-      dbExecute(
-        self$conn,
-        'DELETE FROM polished.active_sessions WHERE token=$1',
-        params = list(
-          token
-        )
-      )
-
-      invisible(self)
     },
     list = function() {
 
@@ -285,29 +282,11 @@ Sessions <-  R6::R6Class(
 
       invisible(self)
     },
-    log_session = function(token, user_uid) {
-
-      tryCatch({
-        DBI::dbExecute(
-          self$conn,
-          "INSERT INTO polished.sessions ( app_name, user_uid, token ) VALUES ( $1, $2, $3 )",
-          params = list(
-            self$app_name,
-            user_uid,
-            token
-          )
-        )
-      }, error = function(e) {
-        print(e)
-
-      })
-
-    },
     set_signed_in_as = function(token, signed_in_as) {
 
       dbExecute(
         self$conn,
-        'UPDATE polished.active_sessions SET signed_in_as=$1 WHERE token=$2 AND app_name=$3',
+        'UPDATE polished.sessions SET signed_in_as=$1 WHERE token=$2 AND app_name=$3',
         params = list(
           signed_in_as$uid,
           token,
@@ -321,7 +300,7 @@ Sessions <-  R6::R6Class(
 
       dbExecute(
         self$conn,
-        'UPDATE polished.active_sessions SET signed_in_as=$1 WHERE token=$2 AND app_name=$3',
+        'UPDATE polished.sessions SET signed_in_as=$1 WHERE token=$2 AND app_name=$3',
         params = list(
           NA,
           token,
@@ -346,23 +325,57 @@ Sessions <-  R6::R6Class(
       roles <- self$get_roles(user_uid)
 
       list(
-        uid = user_uid,
+        user_uid = user_uid,
         email = email,
         is_admin = invite$is_admin,
         roles = roles
+      )
+    },
+    set_inactive = function(session_uid) {
+
+      dbExecute(
+        self$conn,
+        'UPDATE polished.sessions SET is_active=$1 WHERE uid=$2',
+        list(
+          FALSE,
+          session_uid
+        )
+      )
+
+    },
+    set_active = function(session_uid) {
+      dbExecute(
+        self$conn,
+        'UPDATE polished.sessions SET is_active=$1 WHERE uid=$2',
+        list(
+          TRUE,
+          session_uid
+        )
+      )
+
+    },
+    sign_out = function(session_uid) {
+      dbExecute(
+        self$conn,
+        'UPDATE polished.sessions SET is_active=$1, is_signed_in=$2 WHERE uid=$2',
+        list(
+          FALSE,
+          FALSE,
+          session_uid
+        )
       )
     }
   ),
   private = list(
     add = function(session) {
 
-      uid <- create_uid()
+      uid <- if (is.null(session$session_uid)) create_uid() else session$session_uid
       dbExecute(
         self$conn,
-        'INSERT INTO polished.active_sessions (uid, user_uid, firebase_uid, email, email_verified, token, app_name) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+        'INSERT INTO polished.sessions (uid, user_uid, firebase_uid, email, email_verified, token, app_name) VALUES ($1, $2, $3, $4, $5, $6, $7)',
         list(
           uid,
-          session$uid,
+          session$user_uid,
           session$firebase_uid,
           session$email,
           session$email_verified,
