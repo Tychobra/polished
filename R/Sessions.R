@@ -105,10 +105,20 @@ Sessions <-  R6::R6Class(
 
 
         new_session$token <- token
-
+        new_session$session_uid <- create_uid()
         # add the session to the 'sessions' table
         private$add(new_session)
       }
+
+      dbExecute(
+        self$conn,
+        "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
+        list(
+          create_uid(),
+          new_session$session_uid,
+          'sign_in'
+        )
+      )
 
       return(new_session)
     },
@@ -236,24 +246,20 @@ Sessions <-  R6::R6Class(
 
         if (nrow(app_session) == 0) {
           # user was signed into another app and came over to this app, so add a session for this app
-
+          session_out$session_uid <- create_uid()
 
           private$add(session_out)
           session_out$signed_in_as <- NA
         } else if (nrow(app_session) == 1) {
-
-          # set the session from inactive to active
-          #self$set_active(app_session$session_uid)
 
           session_out$session_uid <- app_session$session_uid
           session_out$signed_in_as <- app_session$signed_in_as
         } else {
           stop('error: too many sessions')
         }
-
-        return(session_out)
       }
 
+      return(session_out)
     },
     list = function() {
 
@@ -342,6 +348,16 @@ Sessions <-  R6::R6Class(
         )
       )
 
+      dbExecute(
+        self$conn,
+        "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
+        list(
+          create_uid(),
+          session_uid,
+          'deactivate'
+        )
+      )
+
     },
     set_active = function(session_uid) {
       dbExecute(
@@ -353,15 +369,34 @@ Sessions <-  R6::R6Class(
         )
       )
 
+      dbExecute(
+        self$conn,
+        "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
+        list(
+          create_uid(),
+          session_uid,
+          'activate'
+        )
+      )
     },
     sign_out = function(session_uid) {
       dbExecute(
         self$conn,
-        'UPDATE polished.sessions SET is_active=$1, is_signed_in=$2 WHERE uid=$2',
+        'UPDATE polished.sessions SET is_active=$1, is_signed_in=$2 WHERE uid=$3',
         list(
           FALSE,
           FALSE,
           session_uid
+        )
+      )
+
+      dbExecute(
+        self$conn,
+        "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
+        list(
+          create_uid(),
+          session_uid,
+          'sign_out'
         )
       )
     }
@@ -369,12 +404,11 @@ Sessions <-  R6::R6Class(
   private = list(
     add = function(session) {
 
-      uid <- if (is.null(session$session_uid)) create_uid() else session$session_uid
       dbExecute(
         self$conn,
         'INSERT INTO polished.sessions (uid, user_uid, firebase_uid, email, email_verified, token, app_name) VALUES ($1, $2, $3, $4, $5, $6, $7)',
         list(
-          uid,
+          session$session_uid,
           session$user_uid,
           session$firebase_uid,
           session$email,
