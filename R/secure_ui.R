@@ -76,9 +76,9 @@ secure_ui <- function(
 
         if (isTRUE(user$is_admin)) {
 
-          admin_panel_query <- query$admin_panel
+          page_query <- query$page
 
-          if (identical(admin_panel_query, "true")) {
+          if (identical(page_query, "admin_panel")) {
 
             # go to Admin Panel
             page_out <- tagList(

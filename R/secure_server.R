@@ -76,7 +76,7 @@ secure_server <- function(
     shiny::observeEvent(session$userData$user(), {
 
       query_list <- shiny::getQueryString()
-      is_on_admin_page <- if (!is.null(query_list$admin_pane) && query_list$admin_pane == 'true') TRUE else FALSE
+      is_on_admin_page <- if (!is.null(query_list$page) && query_list$page == 'admin_panel') TRUE else FALSE
 
 
       if (isTRUE(session$userData$user()$is_admin) && isTRUE(is_on_admin_page)) {
@@ -117,7 +117,7 @@ secure_server <- function(
     shiny::observeEvent(session$userData$user(), {
       query_string <- shiny::getQueryString()
 
-      if (is.null(query_string$admin_panel)) {
+      if (is.null(query_string$page)) {
         # log session to database "sessions" table
         global_user <- session$userData$user()
         .global_sessions$log_session(global_user$token, global_user$uid)
