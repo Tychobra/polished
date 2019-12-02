@@ -91,7 +91,7 @@ R6 class to track the polished sessions
 \if{html}{\out{<a id="method-refresh_email_verification"></a>}}
 \subsection{Method \code{refresh_email_verification()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$refresh_email_verification(token, firebase_uid)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$refresh_email_verification(session_uid, firebase_uid)}\if{html}{\out{</div>}}
 }
 
 }
