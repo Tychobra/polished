@@ -8,7 +8,17 @@ get_last_active_session_time(conn, app_name_)
 }
 \arguments{
 \item{conn}{the database connection}
+
+\item{app_name_}{the name of the app}
+}
+\value{
+a data frame with 2 columns:
+- user_uid
+- timestamp
+The timestamps in this dataframe mark the most recent time that the user
+has accessed the app.  Users without a row in this table have not yet accessed the
+app
 }
 \description{
-get last active session time
+find the time that the last session became active for all users of a particular app
 }
