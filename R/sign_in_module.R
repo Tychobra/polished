@@ -270,24 +270,44 @@ sign_in_module <- function(input, output, session) {
   })
 
   observeEvent(input$check_jwt, {
-    new_user <- .global_sessions$sign_in(
-      input$check_jwt$jwt,
-      digest::digest(input$check_jwt$polished_token)
-    )
+    email <- tolower(input$email)
 
-    if (is.null(new_user)) {
-      # show unable to sign in message
-      print('sign_in_module: sign in error')
+    tryCatch({
+      invite <- .global_sessions$get_invite_by_email(email)
 
-      session$sendCustomMessage(
-        ns('remove_loading'),
-        message = list()
+      # user is invited, so attempt sign in
+      new_user <- .global_sessions$sign_in(
+        input$check_jwt$jwt,
+        digest::digest(input$check_jwt$polished_token)
       )
 
-      tychobratools::show_toast('error', 'sign in error')
-    } else {
-      session$reload()
-    }
+      if (is.null(new_user)) {
+        # show unable to sign in message
+        print('sign_in_module: sign in error')
+
+        session$sendCustomMessage(
+          ns('remove_loading'),
+          message = list()
+        )
+
+        tychobratools::show_toast('error', 'sign in error')
+      } else {
+        session$reload()
+      }
+
+    }, error = function(e) {
+      # user is not invited
+      print(e)
+      shinyWidgets::sendSweetAlert(
+        session,
+        title = "Not Authorized",
+        text = "You must have an invite to access this app",
+        type = "error"
+      )
+
+    })
+
+
 
   })
 }
