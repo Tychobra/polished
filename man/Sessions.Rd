@@ -15,13 +15,14 @@ R6 class to track the polished sessions
 \item \href{#method-get_invite_by_uid}{\code{Sessions$get_invite_by_uid()}}
 \item \href{#method-get_roles}{\code{Sessions$get_roles()}}
 \item \href{#method-find}{\code{Sessions$find()}}
-\item \href{#method-remove}{\code{Sessions$remove()}}
 \item \href{#method-list}{\code{Sessions$list()}}
 \item \href{#method-refresh_email_verification}{\code{Sessions$refresh_email_verification()}}
-\item \href{#method-log_session}{\code{Sessions$log_session()}}
 \item \href{#method-set_signed_in_as}{\code{Sessions$set_signed_in_as()}}
 \item \href{#method-clear_signed_in_as}{\code{Sessions$clear_signed_in_as()}}
 \item \href{#method-get_signed_in_as_user}{\code{Sessions$get_signed_in_as_user()}}
+\item \href{#method-set_inactive}{\code{Sessions$set_inactive()}}
+\item \href{#method-set_active}{\code{Sessions$set_active()}}
+\item \href{#method-sign_out}{\code{Sessions$sign_out()}}
 \item \href{#method-clone}{\code{Sessions$clone()}}
 }
 }
@@ -79,14 +80,6 @@ R6 class to track the polished sessions
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-remove"></a>}}
-\subsection{Method \code{remove()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$remove(token)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-list"></a>}}
 \subsection{Method \code{list()}}{
 \subsection{Usage}{
@@ -99,14 +92,6 @@ R6 class to track the polished sessions
 \subsection{Method \code{refresh_email_verification()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$refresh_email_verification(token, firebase_uid)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-log_session"></a>}}
-\subsection{Method \code{log_session()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$log_session(token, user_uid)}\if{html}{\out{</div>}}
 }
 
 }
@@ -131,6 +116,30 @@ R6 class to track the polished sessions
 \subsection{Method \code{get_signed_in_as_user()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$get_signed_in_as_user(user_uid)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_inactive"></a>}}
+\subsection{Method \code{set_inactive()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$set_inactive(session_uid)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_active"></a>}}
+\subsection{Method \code{set_active()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$set_active(session_uid)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-sign_out"></a>}}
+\subsection{Method \code{sign_out()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_out(session_uid)}\if{html}{\out{</div>}}
 }
 
 }

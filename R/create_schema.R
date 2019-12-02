@@ -81,6 +81,13 @@ create_schema <- function(conn) {
     created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW()
   )"
 
+  create_session_actions_table_query <- "CREATE TABLE polished.session_actions (
+    uid                  TEXT PRIMARY KEY,
+    session_uid          TEXT,
+    action               TEXT,
+    timestamp            TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  )"
+
   dbExecute(conn, "CREATE SCHEMA IF NOT EXISTS polished")
   dbExecute(conn, "DROP TABLE IF EXISTS polished.users CASCADE")
   dbExecute(conn, "DROP TABLE IF EXISTS polished.apps CASCADE")
@@ -88,6 +95,7 @@ create_schema <- function(conn) {
   dbExecute(conn, "DROP TABLE IF EXISTS polished.user_roles CASCADE")
   dbExecute(conn, "DROP TABLE IF EXISTS polished.app_users CASCADE")
   dbExecute(conn, "DROP TABLE IF EXISTS polished.sessions")
+  dbExecute(conn, "DROP TABLE IF EXISTS polished.session_actions")
 
   dbExecute(conn, create_users_table_query)
   dbExecute(conn, create_apps_table_query)
@@ -95,4 +103,5 @@ create_schema <- function(conn) {
   dbExecute(conn, create_roles_table_query)
   dbExecute(conn, create_user_roles_table_query)
   dbExecute(conn, create_sessions_table_query)
+  dbExecute(conn, create_session_actions_table_query)
 }

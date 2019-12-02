@@ -44,19 +44,7 @@ secure_server <- function(
           if (is.na(global_user$signed_in_as)) {
             session$userData$user(global_user[c("session_uid", "user_uid", "email", "is_admin", "roles", "token")])
 
-            # set the session to inactive when the session ends
-            shiny::onStop(fun = function() {
 
-              tryCatch({
-
-                .global_sessions$set_inactive(global_user$session_uid)
-
-              }, catch = function(err) {
-                print('error setting the session to incative')
-                print(err)
-              })
-
-            })
           } else {
             signed_in_as_user <- .global_sessions$get_signed_in_as_user(global_user$signed_in_as)
             signed_in_as_user$session_uid <- global_user$session_uid
@@ -138,8 +126,25 @@ secure_server <- function(
       query_string <- shiny::getQueryString()
 
       if (is.null(query_string$page)) {
-
+        session_uid <- session$userData$user()$session_uid
         server(input, output, session)
+
+        # set the session from inactive to active
+        .global_sessions$set_active(session_uid)
+
+        # set the session to inactive when the session ends
+        shiny::onStop(fun = function() {
+
+          tryCatch({
+
+            .global_sessions$set_inactive(session_uid)
+
+          }, catch = function(err) {
+            print('error setting the session to incative')
+            print(err)
+          })
+
+        })
       }
     })
 
