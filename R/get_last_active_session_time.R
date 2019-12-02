@@ -23,7 +23,7 @@ get_last_active_session_time <- function(conn, app_name_) {
 
   session_uids <- last_user_app_sessions$uid
 
-  conn %>%
+  last_active_times <- conn %>%
     dplyr::tbl(dbplyr::in_schema('polished', 'session_actions')) %>%
     dplyr::filter(
       .data$session_uid %in% session_uids,
@@ -33,4 +33,7 @@ get_last_active_session_time <- function(conn, app_name_) {
     dplyr::filter(timestamp == max(.data$timestamp, na.rm = TRUE)) %>%
     dplyr::ungroup() %>%
     dplyr::collect()
+
+  last_user_app_sessions %>%
+    left_join(last_active_times, by = c('uid' = 'session_uid'))
 }

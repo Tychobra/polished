@@ -122,10 +122,19 @@ user_access_module <- function(input, output, session) {
 
     hold_app_name <- .global_sessions$app_name
 
-    get_app_users(
+    app_users <- get_app_users(
       .global_sessions$conn,
       hold_app_name
     )
+
+    last_active_times <- get_last_active_session_time(
+      .global_sessions$conn,
+      hold_app_name
+    ) %>%
+      select(user_uid, last_sign_in_at = timestamp)
+
+    app_users %>%
+      left_join(last_active_times, by = 'user_uid')
   })
 
   user_roles <- reactive({
@@ -410,7 +419,7 @@ user_access_module <- function(input, output, session) {
 
   observeEvent(valid_new_role(), {
     new_role <- valid_new_role()
-    user_uid <- session$userData$user()$uid
+    user_uid <- session$userData$user()$user_uid
 
     tryCatch({
 

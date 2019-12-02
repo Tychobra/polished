@@ -40,7 +40,6 @@ create_schema <- function(conn) {
     app_name              TEXT REFERENCES polished.apps(app_name),
     user_uid              TEXT REFERENCES polished.users(uid),
     is_admin              BOOLEAN NOT NULL,
-    last_sign_in_at       TIMESTAMPTZ,
     created_by            TEXT NOT NULL,
     created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     modified_by           TEXT NOT NULL,

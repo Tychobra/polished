@@ -30,7 +30,6 @@ get_app_users <- function(conn, app_name = NULL) {
       app_name,
       user_uid,
       is_admin,
-      last_sign_in_at,
       created_at) %>%
     dplyr::collect()
 
@@ -44,6 +43,5 @@ get_app_users <- function(conn, app_name = NULL) {
     dplyr::collect()
 
   app_users %>%
-    dplyr::left_join(app_user_emails, by = "user_uid") %>%
-    dplyr::arrange(desc(.data$last_sign_in_at))
+    dplyr::left_join(app_user_emails, by = "user_uid")
 }
