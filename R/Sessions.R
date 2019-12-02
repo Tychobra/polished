@@ -86,16 +86,6 @@ Sessions <-  R6::R6Class(
           new_session$user_uid <- invite$user_uid
           new_session$roles <- roles_out
 
-          # update the last sign in time
-          DBI::dbExecute(
-            self$conn,
-            "UPDATE polished.app_users SET last_sign_in_at=$1 WHERE user_uid=$2 AND app_name=$3",
-            params = list(
-              tychobratools::time_now_utc(),
-              invite$user_uid,
-              self$app_name
-            )
-          )
         }, error = function(e) {
 
           print(e)
