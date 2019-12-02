@@ -59,7 +59,7 @@ secure_server <- function(
 
           token <- global_user$token
           global_user <- .global_sessions$refresh_email_verification(
-            token,
+            global_user$session_uid,
             global_user$firebase_uid
           )$find(token)
 

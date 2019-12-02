@@ -270,21 +270,27 @@ Sessions <-  R6::R6Class(
 
       return(out)
     },
-    refresh_email_verification = function(token, firebase_uid) {
+    refresh_email_verification = function(session_uid, firebase_uid) {
 
       url_out <- paste0(self$firebase_functions_url, "get_user")
       response <- httr::GET(
         url_out,
         query = list(
           uid = firebase_uid
-          #token = firebase_token
         )
       )
       httr::warn_for_status(response)
       email_verified_text <- httr::content(response, "text")
       email_verified <- jsonlite::fromJSON(email_verified_text)
 
-      private$sessions[[token]]$email_verified <- email_verified
+      dbExecute(
+        self$conn,
+        'UPDATE polished.sessions SET email_verified=$1 WHERE uid=$2',
+        params = list(
+          email_verified,
+          session_uid
+        )
+      )
 
       invisible(self)
     },
