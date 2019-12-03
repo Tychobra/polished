@@ -222,12 +222,6 @@ user_access_module <- function(input, output, session) {
     req(users_table_prep())
     out <- users_table_prep()
 
-    if (nrow(out) > 10) {
-      dom_out <-  "ftp"
-    } else {
-      dom_out <- "ft"
-    }
-
     DT::datatable(
       out,
       rownames = FALSE,
@@ -242,7 +236,7 @@ user_access_module <- function(input, output, session) {
       escape = -1,
       selection = "none",
       options = list(
-        dom = dom_out,
+        dom = 'ftp',
         scrollX = TRUE,
         columnDefs = list(
           list(targets = 0, orderable = FALSE),
@@ -496,14 +490,7 @@ user_access_module <- function(input, output, session) {
 
   output$roles_table <- DT::renderDT({
     req(roles_table_prep())
-
     out <- roles_table_prep()
-
-    if (nrow(out) > 10) {
-      dom_out <- "tp"
-    } else {
-      dom_out <- "t"
-    }
 
     DT::datatable(
       roles_table_prep(),
@@ -512,7 +499,7 @@ user_access_module <- function(input, output, session) {
       escape = -1,
       selection = "none",
       options = list(
-        dom = dom_out,
+        dom = 'ftp',
         columnDefs = list(
           list(targets = 0:1, class = "dt-center"),
           list(targets = 0, width = "35px")
