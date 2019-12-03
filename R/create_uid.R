@@ -22,6 +22,10 @@ create_uid <- function(n = 1) {
   stopifnot(length(n) == 1)
   stopifnot(n > 0)
 
+  # unset the seed if it was set somewhere in app
+  old <- .Random.seed
+  set.seed(Sys.time())
+  on.exit( { .Random.seed <<- old } )
 
   paste0(
     "p",
