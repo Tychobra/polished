@@ -6,7 +6,7 @@
 #' @param firebase_config list of Firebase config
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
-#' @importFrom htmltools tagList tags div h1 br
+#' @importFrom htmltools tagList tags div h1 br hr
 #' @importFrom shinytoastr useToastr
 #' @importFrom shinyjs useShinyjs hidden
 #'

@@ -200,7 +200,7 @@ dashboard_module <- function(input, output, session) {
     .global_sessions$conn %>%
       dplyr::tbl(dbplyr::in_schema("polished", "sessions")) %>%
       filter(
-        is_active == TRUE,
+        .data$is_active == TRUE,
         .data$app_name == app_name_
       ) %>%
       dplyr::distinct(.data$email) %>%

@@ -13,7 +13,7 @@
 #'
 #' @export
 #'
-#' @importFrom shiny fluidPage fluidRow column actionButton
+#' @importFrom shiny fluidPage fluidRow column actionButton parseQueryString
 #' @importFrom htmltools tagList h1 tags
 #' @importFrom digest digest
 #'
@@ -30,7 +30,7 @@ secure_ui <- function(
   custom_admin_button_ui <- force(custom_admin_button_ui)
 
   function(request) {
-    query <- parseQueryString(request$QUERY_STRING)
+    query <- shiny::parseQueryString(request$QUERY_STRING)
 
     cookie_string <- request$HTTP_COOKIE
 

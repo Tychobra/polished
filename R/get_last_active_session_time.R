@@ -31,8 +31,8 @@ get_last_active_session_time <- function(conn, app_name_) {
     dplyr::filter(created_at == max(.data$created_at, na.rm = TRUE)) %>%
     dplyr::ungroup() %>%
     select(
-      session_uid = uid,
-      user_uid
+      session_uid = .data$uid,
+      .data$user_uid
     )
 
   session_uids <- last_user_app_sessions$session_uid
@@ -49,9 +49,9 @@ get_last_active_session_time <- function(conn, app_name_) {
     dplyr::filter(timestamp == max(.data$timestamp, na.rm = TRUE)) %>%
     dplyr::ungroup() %>%
     dplyr::collect() %>%
-    select(session_uid, timestamp)
+    select(.data$session_uid, .data$timestamp)
 
   last_user_app_sessions %>%
     left_join(last_active_times, by = 'session_uid') %>%
-    select(user_uid, timestamp)
+    select(.data$user_uid, .data$timestamp)
 }

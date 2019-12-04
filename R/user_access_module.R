@@ -99,8 +99,8 @@ user_access_module_ui <- function(id) {
 #' @param output the Shiny server output
 #' @param session the Shiny server session
 #'
-#' @importFrom shiny showModal modalDialog removeModal reactiveVal reactive observeEvent callModule
-#' @importFrom htmltools br div
+#' @importFrom shiny showModal modalDialog removeModal reactiveVal reactive observeEvent callModule req eventReactive
+#' @importFrom htmltools br div h3
 #' @importFrom DT renderDT datatable dataTableProxy formatDate
 #' @importFrom dbplyr in_schema
 #' @importFrom tidyr nest
@@ -131,7 +131,7 @@ user_access_module <- function(input, output, session) {
       .global_sessions$conn,
       hold_app_name
     ) %>%
-      select(user_uid, last_sign_in_at = timestamp)
+      select(.data$user_uid, last_sign_in_at = .data$timestamp)
 
     app_users %>%
       left_join(last_active_times, by = 'user_uid')
@@ -219,7 +219,7 @@ user_access_module <- function(input, output, session) {
   })
 
   output$users_table <- DT::renderDT({
-    req(users_table_prep())
+    shiny::req(users_table_prep())
     out <- users_table_prep()
 
     DT::datatable(
@@ -308,7 +308,7 @@ user_access_module <- function(input, output, session) {
 
   observeEvent(input$user_uid_to_delete, {
     hold_user <- user_to_delete()
-    req(nrow(hold_user) == 1)
+    shiny::req(nrow(hold_user) == 1)
 
     shiny::showModal(
       shiny::modalDialog(
@@ -389,7 +389,7 @@ user_access_module <- function(input, output, session) {
 
 
 
-  valid_new_role <- eventReactive(input$submit_role_add, {
+  valid_new_role <- shiny::eventReactive(input$submit_role_add, {
     role_input <- input$new_user_role
 
     if (role_input %in% roles()$name) {
@@ -456,7 +456,7 @@ user_access_module <- function(input, output, session) {
 
 
   roles_table_prep <- reactive({
-    req(roles())
+    shiny::req(roles())
 
     out <- roles()
 
@@ -489,7 +489,7 @@ user_access_module <- function(input, output, session) {
 
 
   output$roles_table <- DT::renderDT({
-    req(roles_table_prep())
+    shiny::req(roles_table_prep())
     out <- roles_table_prep()
 
     DT::datatable(
@@ -523,7 +523,7 @@ user_access_module <- function(input, output, session) {
 
   observeEvent(input$role_uid_to_delete, {
     hold_role <- role_to_delete()
-    req(nrow(hold_role) == 1)
+    shiny::req(nrow(hold_role) == 1)
 
     shiny::showModal(
       shiny::modalDialog(

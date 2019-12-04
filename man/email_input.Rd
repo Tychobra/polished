@@ -2,7 +2,7 @@
 % Please edit documentation in R/email_input.R
 \name{email_input}
 \alias{email_input}
-\title{shiny::textInput with type="email"}
+\title{email input}
 \usage{
 email_input(inputId, label, value = "", width = NULL, placeholder = NULL)
 }
@@ -13,7 +13,7 @@ email_input(inputId, label, value = "", width = NULL, placeholder = NULL)
 
 \item{value}{Initial value.}
 
-\item{width}{The width of the input, e.g. '400px', or '100%'}
+\item{width}{The width of the input, e.g. '400px'.}
 
 \item{placeholder}{A character string giving the user a hint as to what can be entered
 into the control. Internet Explorer 8 and 9 do not support this option.}

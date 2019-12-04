@@ -44,20 +44,20 @@ profile_module_ui <- function(id) {
 #'
 #' @export
 #'
-#' @importFrom shiny renderText observeEvent
+#' @importFrom shiny renderText observeEvent req
 #'
 #'
 profile_module <- function(input, output, session) {
 
   output$auth_user <- shiny::renderText({
-    req(session$userData$user())
+    shiny::req(session$userData$user())
 
     session$userData$user()$email
   })
 
 
   shiny::observeEvent(input$polish__sign_out, {
-    req(session$userData$user()$email)
+    shiny::req(session$userData$user()$email)
 
     sign_out_from_shiny(session)
 
