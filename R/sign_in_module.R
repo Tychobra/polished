@@ -28,7 +28,7 @@ sign_in_module_ui <- function(id, firebase_config) {
         "Sign In"
       ),
       br(),
-      shiny::textInput(
+      email_input(
         inputId = ns("email"),
         label = tagList(icon("envelope"), "email"),
         value = ""
@@ -100,7 +100,7 @@ sign_in_module_ui <- function(id, firebase_config) {
       div(
         class = "form-group",
         style = "width: 100%",
-        textInput(
+        email_input(
           inputId = ns("register_email"),
           label = tagList(shiny::icon("envelope"), "email"),
           value = ""
