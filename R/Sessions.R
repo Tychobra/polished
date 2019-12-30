@@ -375,14 +375,14 @@ Sessions <-  R6::R6Class(
         )
       )
     },
-    sign_out = function(session_uid) {
+    sign_out = function(user_uid, session_uid) {
       dbExecute(
         self$conn,
-        'UPDATE polished.sessions SET is_active=$1, is_signed_in=$2 WHERE uid=$3',
+        'UPDATE polished.sessions SET is_active=$1, is_signed_in=$2 WHERE user_uid=$3',
         list(
           FALSE,
           FALSE,
-          session_uid
+          user_uid
         )
       )
 
