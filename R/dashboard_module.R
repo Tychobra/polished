@@ -95,17 +95,33 @@ dashboard_module <- function(input, output, session) {
 
     hold_app_name = .global_sessions$app_name
 
-    dat <- .global_sessions$conn %>%
+    start_date <- lubridate::today(tzone = "America/New_York") - lubridate::days(30)
+
+    # find all sessions for this app
+    dat_sessions <- .global_sessions$conn %>%
       dplyr::tbl(dbplyr::in_schema("polished", "sessions")) %>%
       dplyr::filter(.data$app_name == hold_app_name) %>%
-      dplyr::select(.data$user_uid, .data$created_at) %>%
+      dplyr::select(.data$user_uid, .data$email, .data$is_active, .data$uid) %>%
+      collect()
+
+    app_sessions <- dat_sessions$uid
+
+    dat_actions <- .global_sessions$conn %>%
+      dplyr::tbl(dbplyr::in_schema("polished", "session_actions")) %>%
+      dplyr::filter(
+        .data$action == "activate",
+        .data$timestamp >= start_date,
+        .data$session_uid %in% app_sessions
+      ) %>%
+      dplyr::select(.data$session_uid, .data$timestamp) %>%
       dplyr::collect() %>%
-      dplyr::mutate(date = as.Date(.data$created_at, tz = "America/New_York")) %>%
+      dplyr::mutate(date = as.Date(.data$timestamp, tz = "America/New_York"))
+
+    dat <- dat_actions %>%
+      left_join(dat_sessions, by = c("session_uid" = "uid")) %>%
       dplyr::group_by(.data$date, .data$user_uid) %>%
       dplyr::summarize(n = dplyr::n()) %>%
       dplyr::ungroup()
-
-
 
     # make sure all days are included even if zero sessions in a day
     first_day <- min(dat$date)
@@ -132,8 +148,7 @@ dashboard_module <- function(input, output, session) {
       dplyr::distinct(.data$date, .data$user_uid) %>%
       dplyr::group_by(.data$date) %>%
       dplyr::summarize(n = dplyr::n()) %>%
-      dplyr::ungroup() %>%
-      dplyr::filter(.data$date >= lubridate::today(tzone = "America/New_York") - lubridate::days(30))
+      dplyr::ungroup()
 
   })
 
@@ -194,19 +209,26 @@ dashboard_module <- function(input, output, session) {
   )
 
   # poll the active sessions from the `.global_sessions` object
-  poll_global_users <- shiny::reactive({
-    app_name_ <- .global_sessions$app_name
+  poll_global_users <- shiny::reactivePoll(
+    # trigger once every 30 seconds
+    intervalMillis = 30000,
+    session = session,
+    # invalidate every 30 second interval
+    checkFun = function() {
+      Sys.time()
+    },
+    valueFunc = function() {
+      hold_app_name = .global_sessions$app_name
 
-    .global_sessions$conn %>%
-      dplyr::tbl(dbplyr::in_schema("polished", "sessions")) %>%
-      filter(
-        .data$is_active == TRUE,
-        .data$app_name == app_name_
-      ) %>%
-      dplyr::distinct(.data$email) %>%
-      dplyr::collect()
+      .global_sessions$conn %>%
+        dplyr::tbl(dbplyr::in_schema("polished", "sessions")) %>%
+        dplyr::filter(
+          .data$app_name == hold_app_name,
+          .data$is_active == TRUE
+        ) %>%
+        dplyr::select(.data$email) %>%
+        dplyr::collect()
   })
-
 
 
   # calculate the unique active users from the active sessions.  Note: a user
@@ -330,7 +352,7 @@ dashboard_module <- function(input, output, session) {
     htmltools::tags$thead(
       htmltools::tags$tr(
         htmltools::tags$th(
-          style = "font-size: 18px; font-weight: 500;",
+          style = "font-size: 18px; font-weight: 500; text-align: center;",
           "Active Users"
         )
       )
@@ -347,7 +369,10 @@ dashboard_module <- function(input, output, session) {
       selection = "none",
       options = list(
         dom = "t",
-        scrollX = TRUE
+        scrollX = TRUE,
+        language = list(
+          emptyTable = "No Active Users"
+        )
       )
     )
   })
