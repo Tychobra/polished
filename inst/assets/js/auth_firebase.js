@@ -62,7 +62,7 @@ var auth_firebase = function auth_firebase(ns_id) {
     });
   });
   $(document).on("click", ns_pound("reset_password"), function () {
-    var email = $(ns("email")).val().toLowerCase();
+    var email = $(ns_pound("email")).val().toLowerCase();
     auth.sendPasswordResetEmail(email).then(function () {
       console.log("Password reset email sent to ".concat(email));
       toastr.success("Password reset email sent to " + email, null, toast_options);

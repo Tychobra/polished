@@ -88,7 +88,7 @@ const auth_firebase = (ns_id) => {
 
 
   $(document).on("click", ns_pound("reset_password"), () => {
-    const email = $(ns("email")).val().toLowerCase()
+    const email = $(ns_pound("email")).val().toLowerCase()
 
     auth.sendPasswordResetEmail(email).then(() => {
       console.log(`Password reset email sent to ${email}`)
