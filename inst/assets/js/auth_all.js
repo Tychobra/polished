@@ -44,7 +44,6 @@ var auth_all = function auth_all(ns_id) {
     }
   });
   Shiny.addCustomMessageHandler(ns('remove_loading'), function (message) {
-    console.log('I ran');
     $.LoadingOverlay("hide");
   });
 };
