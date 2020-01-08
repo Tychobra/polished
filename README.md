@@ -147,8 +147,20 @@ You can find a full working example in the "inst/examples/" directory in this pa
 
 #### 1. Customize the Sign In / Register UI
 
-Companies often want to add their logos and branding to the sign in and register pages.  With polished, you can easily customize these pages.  Just pass your custom UI to the `sign_in_page_ui` argument of `secure_ui()`.  You can find an example of a customized sign in and register UI in the "inst/examples/auth_custom" Shiny app that is shipped with `polished`.  To get this example working, you will need to update the "config.yml" with your Firebase credentials. 
+Companies often want to add their logos and branding to the sign in and register pages.  With polished, you can easily customize these pages.  Just pass your custom UI to the `sign_in_page_ui` argument of `secure_ui()`.  
+
+Sign in to a [Live Example](https://tychobra.shinyapps.io/custom_sign_in) with the following:
+
+ - email: demo@tychobra.com
+ - password: polished
+
+The code for the above example is available in the "inst/examples/custom_sign_in/" directory.  To get this example working, you will need to update the "config.yml" with your Firebase credentials. 
 
 #### 2. Add custom tabs to the Polished Admin shinydashboard
 
-You can add custom tabs to the admin dashboard by passing the ui and server code to the `secure_ui()` and `secure_server()` functions.  An example app with custom Admin tabs can be found in the "inst/examples/custom_admin_tabs". To get this example working, you will need to update the "config.yml" with your Firebase credentials. 
+You can add custom tabs to the admin dashboard by passing the ui and server code to the `secure_ui()` and `secure_server()` functions.  Example coming soon.
+
+#### 3. Apps Dashboard
+
+Create a Shiny dashboard of your Shiny dashboards/apps.  Example coming soon.
+
