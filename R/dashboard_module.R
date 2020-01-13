@@ -226,7 +226,7 @@ dashboard_module <- function(input, output, session) {
           .data$app_name == hold_app_name,
           .data$is_active == TRUE
         ) %>%
-        dplyr::select(.data$email) %>%
+        dplyr::distinct(.data$email) %>%
         dplyr::collect()
   })
 
