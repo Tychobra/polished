@@ -1,22 +1,25 @@
 #' set_config_env
 #'
-#' Determines if the app is deployed on shinyapps.io, where the environment variable USER is 'shiny', 
-#' or running locally and adjusts the config environment accordingly
+#' Determines if the app is deployed to a server or running locally, and adjusts
+#' the config environment to "production" or "default" respectively.  This function
+#' is almost always called in the "global.R" file of a shiny app immediately before
+#' the configuration in the "config.yml" is read in.
 #'
-#' @param override Set the environment to "default" or "production" manully. \strong{CAUTION:}
+#' @param override Set the environment to "default" or "production" manually. \strong{CAUTION:}
 #' Be sure you know the difference between "default" & "production" configuration environments.
 #' Using the "production" environment will affect the database of the deployed application.
 #'
 #' @export
 #'
+#'
 set_config_env <- function(override = NULL) {
   stopifnot(is.null(override) || override %in% c("default", "production"))
 
   if (is.null(override)) {
-    if (isTRUE(Sys.getenv('USER') == "shiny")) {
-      environment <- "production"
-    } else {
+    if (isTRUE(Sys.getenv('SHINY_PORT') == "")) {
       environment <- "default"
+    } else {
+      environment <- "production"
     }
   } else {
     environment <- override
