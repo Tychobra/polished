@@ -7,11 +7,13 @@
 set_config_env(override = NULL)
 }
 \arguments{
-\item{override}{Set the environment to "default" or "production" manully. \strong{CAUTION:}
+\item{override}{Set the environment to "default" or "production" manually. \strong{CAUTION:}
 Be sure you know the difference between "default" & "production" configuration environments.
 Using the "production" environment will affect the database of the deployed application.}
 }
 \description{
-Determines if the app is deployed on shinyapps.io, where the environment variable USER is 'shiny', 
-or running locally and adjusts the config environment accordingly
+Determines if the app is deployed to a server or running locally, and adjusts
+the config environment to "production" or "default" respectively.  This function
+is almost always called in the "global.R" file of a shiny app immediately before
+the configuration in the "config.yml" is read in.
 }

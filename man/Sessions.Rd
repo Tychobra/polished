@@ -139,7 +139,7 @@ R6 class to track the polished sessions
 \if{html}{\out{<a id="method-sign_out"></a>}}
 \subsection{Method \code{sign_out()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_out(session_uid)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_out(user_uid, session_uid)}\if{html}{\out{</div>}}
 }
 
 }
