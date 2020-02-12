@@ -4,7 +4,7 @@
 #' @param custom_admin_server Either NULL, the default, or a Shiny server function containing your custom admin
 #' server functionality.
 #' @param allow_reconnect argument to pass to Shiny's `session$allowReconnect()` function. Defaults to
-#' `NULL`.  Set to `TRUE` to allow reconnect with shiny-server and Rstudio Connect.  Set to "force"
+#' `FALSE`.  Set to `TRUE` to allow reconnect with shiny-server and Rstudio Connect.  Set to "force"
 #' for local testing.  See \link{https://shiny.rstudio.com/articles/reconnecting.html} for more information.
 #'
 #' @export
@@ -19,7 +19,7 @@
 secure_server <- function(
   server,
   custom_admin_server = NULL,
-  allow_reconnect = NULL
+  allow_reconnect = FALSE
 ) {
 
 

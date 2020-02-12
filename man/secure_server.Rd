@@ -4,7 +4,7 @@
 \alias{secure_server}
 \title{secure_server}
 \usage{
-secure_server(server, custom_admin_server = NULL, allow_reconnect = NULL)
+secure_server(server, custom_admin_server = NULL, allow_reconnect = FALSE)
 }
 \arguments{
 \item{server}{A Shiny server function (e.g `function(input, output, session) {}`)}
@@ -13,7 +13,7 @@ secure_server(server, custom_admin_server = NULL, allow_reconnect = NULL)
 server functionality.}
 
 \item{allow_reconnect}{argument to pass to Shiny's `session$allowReconnect()` function. Defaults to
-`NULL`.  Set to `TRUE` to allow reconnect with shiny-server and Rstudio Connect.  Set to "force"
+`FALSE`.  Set to `TRUE` to allow reconnect with shiny-server and Rstudio Connect.  Set to "force"
 for local testing.  See \link{https://shiny.rstudio.com/articles/reconnecting.html} for more information.}
 }
 \value{
