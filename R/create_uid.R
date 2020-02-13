@@ -1,12 +1,11 @@
-#' create a uid
-#'
-#' user for the uids in the database
+#' create a uid(s)
 #'
 #' @param n length 1 integer > 0.  The number of uids to create.
 #'
-#' @return a character string uid
+#' @return a character vector of uids
 #'
-#' @importFrom stats runif
+#' @importFrom uuid UUIDgenerate
+#' @importFrom purrr map_chr
 #'
 #' @export
 #'
@@ -22,20 +21,7 @@ create_uid <- function(n = 1) {
   stopifnot(length(n) == 1)
   stopifnot(n > 0)
 
-  # unset the seed if it was set somewhere in app
-  old <- .Random.seed
-  set.seed(Sys.time())
-  on.exit( { .Random.seed <<- old } )
-
-  paste0(
-    "p",
-    vdigest(runif(n))
-  )
+  purrr::map_chr(seq_len(n), uuid::UUIDgenerate)
 }
 
-#' vectorize the
-#'
-#' @importFrom digest digest
-#'
-#' @noRd
-vdigest <- Vectorize(digest::digest)
+
