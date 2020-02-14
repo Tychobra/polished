@@ -292,6 +292,8 @@ sign_in_module <- function(input, output, session) {
 
         tychobratools::show_toast('error', 'sign in error')
       } else {
+        # sign in success
+        remove_query_string()
         session$reload()
       }
 

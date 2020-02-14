@@ -16,6 +16,7 @@
 #' @importFrom shiny fluidPage fluidRow column actionButton parseQueryString
 #' @importFrom htmltools tagList h1 tags
 #' @importFrom digest digest
+#' @importFrom uuid UUIDgenerate
 #'
 #'
 secure_ui <- function(
@@ -53,22 +54,37 @@ secure_ui <- function(
 
 
     page_out <- NULL
+
     if (is.null(user)) {
 
-      # go to the sign in page
-      if (is.null(sign_in_page_ui)) {
+      page_query <- query$page
 
-        # go to default sign in page
-        page_out <- tagList(
-          sign_in_ui_default(firebase_config)
-        )
+      if (identical(page_query, "sign_in")) {
+        # go to the sign in page
+        if (is.null(sign_in_page_ui)) {
+
+          # go to default sign in page
+          page_out <- tagList(
+            sign_in_ui_default(firebase_config)
+          )
+
+        } else {
+
+          # go to custom sign in page
+          page_out <- tagList(
+            sign_in_page_ui
+          )
+        }
       } else {
 
-        # go to custom sign in page
+        # send a random uuid as the polished_session.  This will trigger a session
+        # reload and a redirect to the sign in page
         page_out <- tagList(
-          sign_in_page_ui
+          tags$script(src = "polish/js/polished_session.js"),
+          tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
         )
       }
+
 
     } else {
 
@@ -89,6 +105,7 @@ secure_ui <- function(
             )
           } else {
 
+            # go to Shiny app with admin button.  User is an admin.
             page_out <- tagList(
               ui,
               custom_admin_button_ui,

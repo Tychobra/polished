@@ -31,21 +31,44 @@ secure_server <- function(
     }
 
 
-    # track the polished in a non reactive, so that we can access it in
-    # the onStop() funtion
-    #non_rv_token <- NULL
-
+    # handle the initial input$polished_session
     shiny::observeEvent(input$polished__session, {
       polished__session <- input$polished__session
 
+      # attempt to find the signed in user.  If user is signed in, `global_user`
+      # will be a list of user data.  If the user is not signed in, `global_user`
+      # will be `NULL`
       global_user <- .global_sessions$find(polished__session)
+      query_list <- shiny::getQueryString(session)
 
       if (is.null(global_user)) {
-        session$userData$user(NULL)
-        return()
+        # user is not signed in
+
+        # if the user is not on the sign in page, redirect to sign in and reload
+        if (is.null(query_list$page) || query_list$page != "sign_in") {
+          shiny::updateQueryString(
+            queryString = paste0("?page=sign_in"),
+            session = session,
+            mode = "replace"
+          )
+          session$reload()
+        } else {
+
+          session$userData$user(NULL)
+          return()
+        }
+
+
+
       } else {
+        # the user is signed in
 
-
+        # if the user somehow ends up on the sign_in page, redirect them to the
+        # Shiny app and reload
+        if (!is.null(query_list$page) && query_list$page == "sign_in") {
+          remove_query_string()
+          session$reload()
+        }
 
         if (isTRUE(global_user$email_verified)) {
 
@@ -120,7 +143,10 @@ secure_server <- function(
 
     shiny::observeEvent(session$userData$user(), {
 
-      if (is.null(session$userData$user())) {
+      query_list <- shiny::getQueryString()
+      is_on_sign_in_page <- if (!is.null(query_list$page) && query_list$page == 'sign_in') TRUE else FALSE
+
+      if (is.null(session$userData$user()) && is_on_sign_in_page) {
         shiny::callModule(
           sign_in_module,
           "sign_in"
@@ -131,9 +157,11 @@ secure_server <- function(
 
 
 
+
     # custom app server.  Requires signed in user to access
     shiny::observeEvent(session$userData$user(), {
       query_string <- shiny::getQueryString()
+
 
       if (is.null(query_string$page)) {
         session_uid <- session$userData$user()$session_uid
