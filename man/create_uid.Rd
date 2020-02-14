@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_uid.R
 \name{create_uid}
 \alias{create_uid}
-\title{create a uid}
+\title{create a uid(s)}
 \usage{
 create_uid(n = 1)
 }
@@ -10,10 +10,10 @@ create_uid(n = 1)
 \item{n}{length 1 integer > 0.  The number of uids to create.}
 }
 \value{
-a character string uid
+a character vector of uids
 }
 \description{
-user for the uids in the database
+create a uid(s)
 }
 \examples{
 
