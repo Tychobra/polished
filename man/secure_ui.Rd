@@ -9,7 +9,8 @@ secure_ui(
   firebase_config,
   sign_in_page_ui = NULL,
   custom_admin_ui = NULL,
-  custom_admin_button_ui = admin_button_ui("polished")
+  custom_admin_button_ui = admin_button_ui("polished"),
+  admin_ui_options = default_admin_ui_options()
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ ui to add addtional `shinydashboard` tabs to the Polished admin panel.}
 
 \item{custom_admin_button_ui}{Either `admin_button_ui("polished")`, the default, ot your custom
 ui to take admins from the custom Shiny app to the Admin panel.}
+
+\item{admin_ui_options}{list of custom UI options.  Passed as argument to `admin_module_ui()`.}
 }
 \value{
 Secured Shiny app ui
