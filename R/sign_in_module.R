@@ -201,9 +201,12 @@ sign_in_module_ui <- function(id, firebase_config) {
 sign_in_module <- function(input, output, session) {
   ns <- session$ns
 
+  email_rv <- reactiveVal("")
+
   shiny::observeEvent(input$submit_continue_sign_in, {
 
     email <- tolower(input$email)
+    email_rv(email)
 
     # check user invite
     invite <- NULL
@@ -241,10 +244,16 @@ sign_in_module <- function(input, output, session) {
     shinyjs::show("sign_in_panel")
   })
 
+
+
+
+
+
+
   shiny::observeEvent(input$submit_continue_register, {
 
     email <- tolower(input$register_email)
-
+    email_rv(email)
     invite <- NULL
     tryCatch({
       invite <- .global_sessions$get_invite_by_email(email)
@@ -270,7 +279,7 @@ sign_in_module <- function(input, output, session) {
   })
 
   observeEvent(input$check_jwt, {
-    email <- tolower(input$email)
+    email <- email_rv()
 
     tryCatch({
       invite <- .global_sessions$get_invite_by_email(email)
@@ -281,14 +290,10 @@ sign_in_module <- function(input, output, session) {
         digest::digest(input$check_jwt$polished_token)
       )
 
+
       if (is.null(new_user)) {
         # show unable to sign in message
         print('sign_in_module: sign in error')
-
-        session$sendCustomMessage(
-          ns('remove_loading'),
-          message = list()
-        )
 
         tychobratools::show_toast('error', 'sign in error')
       } else {
@@ -299,6 +304,10 @@ sign_in_module <- function(input, output, session) {
 
     }, error = function(e) {
       # user is not invited
+      session$sendCustomMessage(
+        ns('remove_loading'),
+        message = list()
+      )
       print(e)
       shinyWidgets::sendSweetAlert(
         session,

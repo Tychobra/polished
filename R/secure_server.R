@@ -140,21 +140,10 @@ secure_server <- function(
       "polished"
     )
 
-
-    shiny::observeEvent(session$userData$user(), {
-
-      query_list <- shiny::getQueryString()
-      is_on_sign_in_page <- if (!is.null(query_list$page) && query_list$page == 'sign_in') TRUE else FALSE
-
-      if (is.null(session$userData$user()) && is_on_sign_in_page) {
-        shiny::callModule(
-          sign_in_module,
-          "sign_in"
-        )
-      }
-
-    }, ignoreNULL = FALSE)
-
+    shiny::callModule(
+      sign_in_module,
+      "sign_in"
+    )
 
 
 
