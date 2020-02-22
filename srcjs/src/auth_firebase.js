@@ -3,9 +3,8 @@ const auth = firebase.auth()
 
 
 
-const auth_firebase = (ns_id) => {
-  const ns = NS(ns_id)
-  const ns_pound = NS(ns_id, "#")
+const auth_firebase = (ns_prefix) => {
+
 
   const sign_in = (email, password) => {
 
@@ -18,11 +17,13 @@ const auth_firebase = (ns_id) => {
         const polished_token = "p" + Math.random()
 
 
-        Cookies.set('polished__token', polished_token,
-        // set cookie to expire in 1 year
-        { expires: 365 })
+        Cookies.set(
+          'polished__token',
+          polished_token,
+          { expires: 365 } // set cookie to expire in 1 year
+        )
 
-        Shiny.setInputValue(ns("check_jwt"), {
+        Shiny.setInputValue(`${ns_prefix}check_jwt`, {
           jwt: firebase_token,
           polished_token: polished_token
         }, {
@@ -35,18 +36,18 @@ const auth_firebase = (ns_id) => {
   }
 
   Shiny.addCustomMessageHandler(
-    ns("polished__set_cookie"),
+    `${ns_prefix}polished__set_cookie`,
     function(message) {
       Cookies.set('polished__token', message.polished_token)
 
-      Shiny.setInputValue(ns("polished__set_cookie_complete"), 1, { priority: "event" })
+      Shiny.setInputValue(`${ns_prefix}polished__set_cookie_complete`, 1, { priority: "event" })
     }
   )
 
-  $(document).on("click", ns_pound("submit_register"), () => {
-    const email = $(ns_pound("register_email")).val().toLowerCase()
-    const password = $(ns_pound("register_password")).val()
-    const password_2 = $(ns_pound("register_password_verify")).val()
+  $(document).on("click", `#${ns_prefix}submit_register`, () => {
+    const email = $(`#${ns_prefix}register_email`).val().toLowerCase()
+    const password = $(`#${ns_prefix}register_password`).val()
+    const password_2 = $(`#${ns_prefix}register_password_verify`).val()
 
     if (password !== password_2) {
 
@@ -87,8 +88,8 @@ const auth_firebase = (ns_id) => {
   })
 
 
-  $(document).on("click", ns_pound("reset_password"), () => {
-    const email = $(ns_pound("email")).val().toLowerCase()
+  $(document).on("click", `#${ns_prefix}reset_password`, () => {
+    const email = $(`#${ns_prefix}email`).val().toLowerCase()
 
     auth.sendPasswordResetEmail(email).then(() => {
       console.log(`Password reset email sent to ${email}`)
@@ -99,11 +100,11 @@ const auth_firebase = (ns_id) => {
     })
   })
 
-  $(document).on("click", ns_pound("submit_sign_in"), () => {
+  $(document).on("click", `#${ns_prefix}submit_sign_in`, () => {
     $.LoadingOverlay("show", loading_options)
 
-    const email = $(ns_pound("email")).val().toLowerCase()
-    const password = $(ns_pound("password")).val()
+    const email = $(`#${ns_prefix}email`).val().toLowerCase()
+    const password = $(`#${ns_prefix}password`).val()
 
     sign_in(email, password).catch(error => {
 

@@ -179,10 +179,10 @@ sign_in_module_ui <- function(id, firebase_config) {
     tags$script(src = "polish/js/loading_options.js"),
     tags$script(src = "polish/js/toast_options.js"),
     tags$script(src = "polish/js/auth_all.js"),
-    tags$script(paste0("auth_all('", id, "')")),
+    tags$script(paste0("auth_all('", ns(''), "')")),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
     tags$script(src = "polish/js/auth_firebase.js"),
-    tags$script(paste0("auth_firebase('", id, "')"))
+    tags$script(paste0("auth_firebase('", ns(''), "')"))
   )
 }
 
