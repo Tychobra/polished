@@ -33,7 +33,8 @@ Imports:
     shinyWidgets,
     rlang,
     purrr,
-    uuid
+    uuid,
+    jose
 Remotes: 
     github::tychobra/tychobratools
 RoxygenNote: 7.0.2

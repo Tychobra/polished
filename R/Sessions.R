@@ -11,6 +11,7 @@
 #' @importFrom jsonlite fromJSON
 #' @importFrom digest digest
 #' @importFrom DBI dbGetQuery dbWithTransaction dbExecute
+#' @importFrom jose jwt_decode_sig
 #'
 Sessions <-  R6::R6Class(
   classname = 'Sessions',
@@ -18,6 +19,7 @@ Sessions <-  R6::R6Class(
     app_name = character(0),
     firebase_functions_url = character(0),
     conn = NULL,
+    firebase_project_id = NULL,
     # Session configuration function.  This must be executed in global.R of the Shiny app.
     #
     # @param app_name the name of the app
@@ -31,48 +33,69 @@ Sessions <-  R6::R6Class(
       app_name,
       firebase_functions_url = NULL,
       conn = NULL,
-      authorization_level = 'app'
+      authorization_level = 'app',
+      firebase_project_id = NULL
     ) {
 
       self$app_name <- app_name
       self$firebase_functions_url <- firebase_functions_url
       self$conn <- conn
+      self$firebase_project_id <- firebase_project_id
       private$authorization_level <- authorization_level
 
       invisible(self)
     },
     sign_in = function(firebase_token, token) {
       conn <- self$conn
-      # firebase function callable via url
-      url_out <- paste0(self$firebase_functions_url, "sign_in_firebase")
+      
+      # Decode and verify the firebase token to make sure it's valid, then get
+      # the user information from it.
 
-      user <- NULL
-      tryCatch({
-        response <- httr::GET(
-          url_out,
-          query = list(
-            token = firebase_token
-          )
-        )
+      private$refresh_google_keys()
+      if (is.null(private$google_keys)) {
+        return(NULL)
+      }
 
-        httr::warn_for_status(response)
-        user_text <- httr::content(response, "text")
-        user <- jsonlite::fromJSON(user_text)
+      # Try to decode with each key
+      decoded_token = NULL
+      for (key in private$google_keys) {
+        # If a key isn't the right one for the token, then we get an error.
+        # Ignore the errors and just don't set decoded_token if there's
+        # an error. When we're done, we'll look at the the decoded_token
+        # to see if we found a valid key.
+        try({
+          decoded_token = jose::jwt_decode_sig(firebase_token, key)
+          break
+        }, silent=TRUE)
+      }
 
-      }, error = function(e) {
-        print('error signing in')
-        print(e)
-      })
+      if (is.null(decoded_token)) {
+        # Couldn't decode with any key
+        return(NULL)
+      }
 
+      # Verify the ID token
+      # https://firebase.google.com/docs/auth/admin/verify-id-tokens
+      cur_time = Sys.time()
+      if (!(as.numeric(decoded_token$exp) > cur_time &&
+          as.numeric(decoded_token$iat) < cur_time &&
+          as.numeric(decoded_token$auth_time) < cur_time &&
+          decoded_token$aud == self$firebase_project_id &&
+          decoded_token$iss == paste0("https://securetoken.google.com/", self$firebase_project_id) &&
+          nchar(decoded_token$sub) > 0)) {
+
+        # Token failed one of the checks
+        return(NULL)
+      }
 
       new_session <- NULL
 
-      if (!is.null(user)) {
+      if (!is.null(decoded_token)) {
 
         new_session <- list(
-          email = user$email,
-          firebase_uid = user$user_id,
-          email_verified = user$email_verified
+          email = decoded_token$email,
+          firebase_uid = decoded_token$sub,
+          email_verified = decoded_token$email_verified
         )
 
         tryCatch({
@@ -416,6 +439,43 @@ Sessions <-  R6::R6Class(
 
       invisible(self)
     },
+    
+    refresh_google_keys = function () {
+      # See if we have un-expired keys to use already
+      if (!is.null(private$google_keys) && !is.null(private$google_keys_expiration) &&
+          Sys.time() < private$google_keys_expiration) {
+        return(invisible(NULL))
+      }
+      
+      # Fetch the public keys from Google
+      google_keys_resp = httr::GET(
+        "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com")
+      
+      # Error if we didn't get the keys successfully
+      httr::stop_for_status(google_keys_resp)
+      
+      private$google_keys = httr::content(google_keys_resp)
+      private$google_keys_expiration = NULL
+      
+      # Decode the expiration time of the keys from the Cache-Control header
+      cache_controls = httr::headers(google_keys_resp)$`Cache-Control`
+      if (!is.null(cache_controls)) {
+        cache_control_elems = strsplit(cache_controls, ",")[[1]]
+        split_equals = strsplit(cache_control_elems, "=")
+        for (elem in split_equals) {
+          if (length(elem) == 2 && trimws(elem[1]) == "max-age") {
+            max_age = as.numeric(elem[2])
+            private$google_keys_expiration = Sys.time() + max_age
+            break
+          }
+        }
+      }
+    },
+
+    google_keys = NULL,
+
+    google_keys_expiration = NULL,
+
     authorization_level = "app" # or "all"
   )
 )
