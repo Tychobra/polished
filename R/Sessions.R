@@ -161,7 +161,7 @@ Sessions <-  R6::R6Class(
       }
 
       if (nrow(invite) != 1) {
-        stop(sprintf('user "%s" is not authoized to access "%s"', email, self$app_name))
+        stop(sprintf('user "%s" is not authorized to access "%s"', user_uid, self$app_name))
       }
 
       invite
