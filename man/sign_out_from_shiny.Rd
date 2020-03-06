@@ -4,10 +4,20 @@
 \alias{sign_out_from_shiny}
 \title{sign_out_from_shiny}
 \usage{
-sign_out_from_shiny(session)
+sign_out_from_shiny(session, user = NULL)
 }
 \arguments{
 \item{session}{the Shiny session}
+
+\item{user}{optional user list.  A list containing the following elements
+- user_uid
+- session_uid
+This argument is used when we need to sign the user out of polished before the
+`session$userData$user()` reactive has been set.  e.g. we call
+`sign_out_from_shiny(session, user = list(user_uid = <user's uid>, session_uid = <session uid>))`
+to sign the user out of polished if there is an error in the email verification process.  If the
+user is already signed into the app (i.e. the `session$userData$user()` is set), then this argument
+should be NULL and we can grab the user_uid and session_uid from the `session$userData$user()` object.}
 }
 \description{
 sign_out_from_shiny
