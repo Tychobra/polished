@@ -269,18 +269,23 @@ Sessions <-  R6::R6Class(
           uid = firebase_uid
         )
       )
-      httr::warn_for_status(response)
+      httr::stop_for_status(response)
       email_verified_text <- httr::content(response, "text")
       email_verified <- jsonlite::fromJSON(email_verified_text)
 
-      dbExecute(
-        self$conn,
-        'UPDATE polished.sessions SET email_verified=$1 WHERE uid=$2',
-        params = list(
-          email_verified,
-          session_uid
+      if (is.null(email_verified)) {
+        stop("user not found")
+      } else {
+        dbExecute(
+          self$conn,
+          'UPDATE polished.sessions SET email_verified=$1 WHERE uid=$2',
+          params = list(
+            email_verified,
+            session_uid
+          )
         )
-      )
+      }
+
 
       invisible(self)
     },
@@ -376,6 +381,8 @@ Sessions <-  R6::R6Class(
       )
     },
     sign_out = function(user_uid, session_uid) {
+
+
       dbExecute(
         self$conn,
         'UPDATE polished.sessions SET is_active=$1, is_signed_in=$2 WHERE user_uid=$3',
