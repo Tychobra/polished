@@ -91,10 +91,27 @@ secure_server <- function(
           # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
 
           token <- global_user$token
-          global_user <- .global_sessions$refresh_email_verification(
-            global_user$session_uid,
-            global_user$firebase_uid
-          )$find(token)
+
+          tryCatch({
+            global_user <- .global_sessions$refresh_email_verification(
+              global_user$session_uid,
+              global_user$firebase_uid
+            )$find(token)
+          }, error = function(err) {
+            # set query string to sign in page
+
+            sign_out_from_shiny(
+              session,
+              user = list(
+                user_uid = global_user$user_uid,
+                session_uid = global_user$session_uid
+              )
+            )
+
+            print("[polished] error - refreshing email verification")
+            session$reload()
+          })
+
 
 
           # if refreshing the email verification causes it to switch from FALSE to TRUE
