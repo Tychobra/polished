@@ -293,14 +293,16 @@ sign_in_module <- function(input, output, session) {
 
       if (is.null(new_user)) {
         # show unable to sign in message
-        print('sign_in_module: sign in error')
-
         tychobratools::show_toast('error', 'sign in error')
+        stop('sign_in_module: sign in error')
+
       } else {
         # sign in success
         remove_query_string()
         session$reload()
       }
+
+
 
     }, error = function(e) {
       # user is not invited
