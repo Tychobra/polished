@@ -42,7 +42,7 @@ remotes::install_github("tychobra/polished")
 # R
 
 # connect to your PostgreSQL database
-db_conn <- DBI::db_connect(
+db_conn <- DBI::dbConnect(
   RPostgres::Postgres(),
   <your db connection credentials>
 )
