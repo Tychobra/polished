@@ -134,7 +134,7 @@ secure_ui <- function(
         # go to email verification page
 
         page_out <- tagList(
-          verify_email_ui(
+          verify_email_module_ui(
             "verify",
             firebase_config
           ),

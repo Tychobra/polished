@@ -8,7 +8,7 @@
 #' @importFrom shinytoastr useToastr
 #'
 #' @export
-verify_email_ui <- function(id, firebase_config) {
+verify_email_module_ui <- function(id, firebase_config) {
   ns <- NS(id)
 
   fluidPage(
@@ -33,8 +33,44 @@ verify_email_ui <- function(id, firebase_config) {
     firebase_dependencies(),
     firebase_init(firebase_config),
     tags$script(src = "polish/js/toast_options.js"),
-    tags$script(src = "polish/js/verify_email.js")
+    tags$script(src = "polish/js/verify_email.js"),
+    tags$script(paste0("verify_email('", ns(''), "')"))
   )
 }
 
 
+#' verify email page ui
+#'
+#' @param input the Shiny server input
+#' @param output the Shiny server output
+#' @param session the Shiny server session
+#'
+#' @importFrom shiny observeEvent
+#'
+#' @export
+#'
+#'
+verify_email_module <- function(input, output, session) {
+
+
+  shiny::observeEvent(input$refresh_email_verification, {
+
+    tryCatch({
+
+      .global_sessions$refresh_email_verification(
+        session$userData$user()$session_uid,
+        input$refresh_email_verification
+      )
+
+    }, error = function(err) {
+      sign_out_from_shiny(session)
+
+      print("[polished] error - refreshing email verification")
+      print(err)
+    })
+
+    session$reload()
+
+  })
+
+}

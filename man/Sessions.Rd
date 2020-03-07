@@ -10,6 +10,8 @@ R6 class to track the polished sessions
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-config}{\code{Sessions$config()}}
+\item \href{#method-refresh_jwt_pub_key}{\code{Sessions$refresh_jwt_pub_key()}}
+\item \href{#method-check_firebase_token}{\code{Sessions$check_firebase_token()}}
 \item \href{#method-sign_in}{\code{Sessions$sign_in()}}
 \item \href{#method-get_invite_by_email}{\code{Sessions$get_invite_by_email()}}
 \item \href{#method-get_invite_by_uid}{\code{Sessions$get_invite_by_uid()}}
@@ -32,10 +34,26 @@ R6 class to track the polished sessions
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$config(
   app_name,
-  firebase_functions_url = NULL,
+  firebase_project_id = NULL,
   conn = NULL,
   authorization_level = "app"
 )}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-refresh_jwt_pub_key"></a>}}
+\subsection{Method \code{refresh_jwt_pub_key()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$refresh_jwt_pub_key()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check_firebase_token"></a>}}
+\subsection{Method \code{check_firebase_token()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$check_firebase_token(firebase_token)}\if{html}{\out{</div>}}
 }
 
 }
@@ -91,7 +109,7 @@ R6 class to track the polished sessions
 \if{html}{\out{<a id="method-refresh_email_verification"></a>}}
 \subsection{Method \code{refresh_email_verification()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$refresh_email_verification(session_uid, firebase_uid)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$refresh_email_verification(session_uid, firebase_token)}\if{html}{\out{</div>}}
 }
 
 }

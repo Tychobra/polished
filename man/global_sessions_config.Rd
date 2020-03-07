@@ -6,7 +6,7 @@
 \usage{
 global_sessions_config(
   app_name,
-  firebase_functions_url,
+  firebase_project_id,
   conn,
   authorization_level = "app"
 )
@@ -14,7 +14,7 @@ global_sessions_config(
 \arguments{
 \item{app_name}{the name of the app.}
 
-\item{firebase_functions_url}{the url of the firebase functions.}
+\item{firebase_project_id}{the Firebase project ID.}
 
 \item{conn}{the database connection}
 

@@ -1,6 +1,5 @@
 default:
   app_name: "custom_sign_in"
-  firebase_functions_url: "<your Firebase functions url>"
   firebase:
     apiKey: "<your Firebase project API Key>"
     authDomain: "<your Firebase project auth domain>"

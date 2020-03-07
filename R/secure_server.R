@@ -70,56 +70,23 @@ secure_server <- function(
           session$reload()
         }
 
-        if (isTRUE(global_user$email_verified)) {
+        #if (isTRUE(global_user$email_verified)) {
+        if (is.na(global_user$signed_in_as)) {
 
+          user_out <- global_user[
+            c("session_uid", "user_uid", "email", "is_admin", "roles", "token", "email_verified")
+          ]
 
-
-          if (is.na(global_user$signed_in_as)) {
-            session$userData$user(global_user[c("session_uid", "user_uid", "email", "is_admin", "roles", "token")])
-
-
-          } else {
-            signed_in_as_user <- .global_sessions$get_signed_in_as_user(global_user$signed_in_as)
-            signed_in_as_user$session_uid <- global_user$session_uid
-            signed_in_as_user$token <- global_user$token
-            session$userData$user(signed_in_as_user)
-          }
-
+          session$userData$user(user_out)
 
         } else {
-          # go to email verification view.
-          # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
+          signed_in_as_user <- .global_sessions$get_signed_in_as_user(global_user$signed_in_as)
+          signed_in_as_user$session_uid <- global_user$session_uid
+          signed_in_as_user$token <- global_user$token
 
-          token <- global_user$token
-
-          tryCatch({
-            global_user <- .global_sessions$refresh_email_verification(
-              global_user$session_uid,
-              global_user$firebase_uid
-            )$find(token)
-          }, error = function(err) {
-            # set query string to sign in page
-
-            sign_out_from_shiny(
-              session,
-              user = list(
-                user_uid = global_user$user_uid,
-                session_uid = global_user$session_uid
-              )
-            )
-
-            print("[polished] error - refreshing email verification")
-            session$reload()
-          })
-
-
-
-          # if refreshing the email verification causes it to switch from FALSE to TRUE
-          # then reload the session, and the user will move from the email verification page
-          # to the actual app
-          if (isTRUE(global_user$email_verified)) {
-            session$reload()
-          }
+          # set email verified to TRUE, so that you go directly to app
+          signed_in_as_user$email_verified <- TRUE
+          session$userData$user(signed_in_as_user)
         }
       }
 
@@ -133,21 +100,54 @@ secure_server <- function(
     # if the user is an admin and on the admin page, set up the admin server
     shiny::observeEvent(session$userData$user(), {
 
-      query_list <- shiny::getQueryString()
-      is_on_admin_page <- if (!is.null(query_list$page) && query_list$page == 'admin_panel') TRUE else FALSE
+      if (isTRUE(session$userData$user()$email_verified)) {
+        query_list <- shiny::getQueryString()
+        is_on_admin_page <- if (!is.null(query_list$page) && query_list$page == 'admin_panel') TRUE else FALSE
 
 
-      if (isTRUE(session$userData$user()$is_admin) && isTRUE(is_on_admin_page)) {
-        callModule(
-          admin_module,
-          "admin"
-        )
+        if (isTRUE(session$userData$user()$is_admin) && isTRUE(is_on_admin_page)) {
+          callModule(
+            admin_module,
+            "admin"
+          )
 
-        # custom admin server functionality
-        if (isTRUE(!is.null(custom_admin_server))) {
-          custom_admin_server(input, output, session)
+          # custom admin server functionality
+          if (isTRUE(!is.null(custom_admin_server))) {
+            custom_admin_server(input, output, session)
+          }
         }
+
+      } else {
+
+        # go to email verification view.
+        # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
+
+        callModule(
+          verify_email_module,
+          "verify"
+        )
+        #tryCatch({
+        #   global_user <- .global_sessions$refresh_email_verification(
+        #     global_user$session_uid,
+        #     global_user$firebase_uid
+        #   )$find(token)
+        # }, error = function(err) {
+        #   # set query string to sign in page
+        #
+        #   sign_out_from_shiny(
+        #     session,
+        #     user = list(
+        #       user_uid = global_user$user_uid,
+        #       session_uid = global_user$session_uid
+        #     )
+        #   )
+        #
+        #   print("[polished] error - refreshing email verification")
+        #   session$reload()
+        # })
       }
+
+
 
     })
 

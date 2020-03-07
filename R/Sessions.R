@@ -1,5 +1,7 @@
 
 
+
+
 #' Sessions
 #'
 #' R6 class to track the polished sessions
@@ -11,17 +13,21 @@
 #' @importFrom jsonlite fromJSON
 #' @importFrom digest digest
 #' @importFrom DBI dbGetQuery dbWithTransaction dbExecute
+#' @importFrom jose jwt_decode_sig
+#' @importFrom lubridate with_tz minutes
 #'
 Sessions <-  R6::R6Class(
   classname = 'Sessions',
   public = list(
     app_name = character(0),
-    firebase_functions_url = character(0),
     conn = NULL,
+    jwt_pub_key = NULL,
+    # number of seconds that the public key will remain valid
+    jwt_pub_key_expires = NULL,
     # Session configuration function.  This must be executed in global.R of the Shiny app.
     #
     # @param app_name the name of the app
-    # @param firebase_functions_url the firebase function url
+    # @param firebase_project_id the project ID for the Firebase project
     # @param conn the database connection
     # @param authorization_level whether the app should be accessible to "all" users in the
     # "polished.users" table, or if it should only be accessible to users as defined in the
@@ -29,50 +35,92 @@ Sessions <-  R6::R6Class(
     #
     config = function(
       app_name,
-      firebase_functions_url = NULL,
+      firebase_project_id = NULL,
       conn = NULL,
       authorization_level = 'app'
     ) {
 
       self$app_name <- app_name
-      self$firebase_functions_url <- firebase_functions_url
       self$conn <- conn
       private$authorization_level <- authorization_level
+      private$firebase_project_id <- firebase_project_id
+
+      self$refresh_jwt_pub_key()
 
       invisible(self)
     },
+    refresh_jwt_pub_key = function() {
+      response <- httr::GET("https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com")
+      response_text <- httr::content(response, "text")
+      self$jwt_pub_key <- jsonlite::fromJSON(response_text)
+
+      expires <- response$headers$expires
+      expires_date <- substr(expires, 6, 25)
+      expires_date <- as.POSIXct(
+        expires_date,
+        format = "%d %b %Y %H:%M:%S",
+        tz = "UTC"
+      )
+
+      self$jwt_pub_key_expires <- expires_date
+    },
+    check_firebase_token = function(firebase_token) {
+      # Google sends us 2 public keys to authenticate the JWT.  Sometimes the correct
+      # key is the first one, and sometimes it is the second.  I do not know how
+      # to tell which key is the right one to use, so we try them both for now.
+      decoded_jwt <- NULL
+      try({
+        decoded_jwt <- jose::jwt_decode_sig(
+          firebase_token,
+          self$jwt_pub_key[[1]]
+        )
+      }, silent = TRUE)
+      if (is.null(decoded_jwt)) {
+        decoded_jwt <- jose::jwt_decode_sig(
+          firebase_token,
+          self$jwt_pub_key[[2]]
+        )
+      }
+
+      decoded_jwt
+    },
     sign_in = function(firebase_token, token) {
       conn <- self$conn
-      # firebase function callable via url
-      url_out <- paste0(self$firebase_functions_url, "sign_in_firebase")
 
-      user <- NULL
+      decoded_jwt <- NULL
       tryCatch({
-        response <- httr::GET(
-          url_out,
-          query = list(
-            token = firebase_token
-          )
-        )
 
-        httr::warn_for_status(response)
-        user_text <- httr::content(response, "text")
-        user <- jsonlite::fromJSON(user_text)
+        # check if the jwt public key has expired.  Add an extra minute to the
+        # current time for padding before checking if the key has expired.
+        if (lubridate::with_tz(Sys.time(), tzone = "UTC") + lubridate::minutes(1) >
+            self$jwt_pub_key_expires) {
+          self$refresh_jwt_pub_key()
+        }
+
+
+
+        decoded_jwt <- self$check_firebase_token(firebase_token)
+
+        # check that the jwt was generated for this Firebase project
+        if (isFALSE(identical(private$firebase_project_id, decoded_jwt$aud))) {
+          decoded_jwt <- NULL
+          stop("[polished] incorrect Firebase project id")
+        }
 
       }, error = function(e) {
-        print('error signing in')
+        print('[polished] error signing in')
         print(e)
       })
 
 
       new_session <- NULL
 
-      if (!is.null(user)) {
+      if (!is.null(decoded_jwt)) {
 
         new_session <- list(
-          email = user$email,
-          firebase_uid = user$user_id,
-          email_verified = user$email_verified
+          email = decoded_jwt$email,
+          firebase_uid = decoded_jwt$user_id,
+          email_verified = decoded_jwt$email_verified
         )
 
         tryCatch({
@@ -260,21 +308,37 @@ Sessions <-  R6::R6Class(
 
       return(out)
     },
-    refresh_email_verification = function(session_uid, firebase_uid) {
+    refresh_email_verification = function(session_uid, firebase_token) {
 
-      url_out <- paste0(self$firebase_functions_url, "get_user")
-      response <- httr::GET(
-        url_out,
-        query = list(
-          uid = firebase_uid
-        )
-      )
-      httr::stop_for_status(response)
-      email_verified_text <- httr::content(response, "text")
-      email_verified <- jsonlite::fromJSON(email_verified_text)
+      email_verified <- NULL
+      tryCatch({
+
+        # check if the jwt public key has expired.  Add an extra minute to the
+        # current time for padding before checking if the key has expired.
+        if (lubridate::with_tz(Sys.time(), tzone = "UTC") + lubridate::minutes(1) >
+            self$jwt_pub_key_expires) {
+          self$refresh_jwt_pub_key()
+        }
+
+        decoded_jwt <- self$check_firebase_token(firebase_token)
+
+        # check that the jwt was generated for this Firebase project
+        if (isFALSE(identical(private$firebase_project_id, decoded_jwt$aud))) {
+          decoded_jwt <- NULL
+          stop("[polished] incorrect Firebase project id")
+        } else {
+          email_verified <- decoded_jwt$email_verified
+        }
+
+
+
+      }, error = function(e) {
+        print('[polished] error signing in')
+        print(e)
+      })
 
       if (is.null(email_verified)) {
-        stop("user not found")
+        stop("email verification user not found")
       } else {
         dbExecute(
           self$conn,
@@ -423,7 +487,8 @@ Sessions <-  R6::R6Class(
 
       invisible(self)
     },
-    authorization_level = "app" # or "all"
+    authorization_level = "app", # or "all"
+    firebase_project_id = NULL
   )
 )
 
