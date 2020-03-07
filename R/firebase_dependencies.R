@@ -21,10 +21,10 @@ firebase_dependencies <- function(services = c("auth")) {
   stopifnot(all(services %in% c("auth", "firestore", "functions", "messaging", "storage")))
 
 
-  scripts_to_load <- paste0("https://www.gstatic.com/firebasejs/7.1.0/firebase-", services, ".js")
+  scripts_to_load <- paste0("https://www.gstatic.com/firebasejs/7.10.0/firebase-", services, ".js")
 
   htmltools::tagList(
-    tags$script(src = "https://www.gstatic.com/firebasejs/7.1.0/firebase-app.js"),
+    tags$script(src = "https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"),
     lapply(scripts_to_load, function(script_src) {
       htmltools::tags$script(src = script_src)
     })
