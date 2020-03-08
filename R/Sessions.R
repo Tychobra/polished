@@ -21,9 +21,6 @@ Sessions <-  R6::R6Class(
   public = list(
     app_name = character(0),
     conn = NULL,
-    jwt_pub_key = NULL,
-    # number of seconds that the public key will remain valid
-    jwt_pub_key_expires = NULL,
     # Session configuration function.  This must be executed in global.R of the Shiny app.
     #
     # @param app_name the name of the app
@@ -45,44 +42,9 @@ Sessions <-  R6::R6Class(
       private$authorization_level <- authorization_level
       private$firebase_project_id <- firebase_project_id
 
-      self$refresh_jwt_pub_key()
+      private$refresh_jwt_pub_key()
 
       invisible(self)
-    },
-    refresh_jwt_pub_key = function() {
-      response <- httr::GET("https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com")
-      response_text <- httr::content(response, "text")
-      self$jwt_pub_key <- jsonlite::fromJSON(response_text)
-
-      expires <- response$headers$expires
-      expires_date <- substr(expires, 6, 25)
-      expires_date <- as.POSIXct(
-        expires_date,
-        format = "%d %b %Y %H:%M:%S",
-        tz = "UTC"
-      )
-
-      self$jwt_pub_key_expires <- expires_date
-    },
-    check_firebase_token = function(firebase_token) {
-      # Google sends us 2 public keys to authenticate the JWT.  Sometimes the correct
-      # key is the first one, and sometimes it is the second.  I do not know how
-      # to tell which key is the right one to use, so we try them both for now.
-      decoded_jwt <- NULL
-      try({
-        decoded_jwt <- jose::jwt_decode_sig(
-          firebase_token,
-          self$jwt_pub_key[[1]]
-        )
-      }, silent = TRUE)
-      if (is.null(decoded_jwt)) {
-        decoded_jwt <- jose::jwt_decode_sig(
-          firebase_token,
-          self$jwt_pub_key[[2]]
-        )
-      }
-
-      decoded_jwt
     },
     sign_in = function(firebase_token, token) {
       conn <- self$conn
@@ -93,13 +55,11 @@ Sessions <-  R6::R6Class(
         # check if the jwt public key has expired.  Add an extra minute to the
         # current time for padding before checking if the key has expired.
         if (lubridate::with_tz(Sys.time(), tzone = "UTC") + lubridate::minutes(1) >
-            self$jwt_pub_key_expires) {
-          self$refresh_jwt_pub_key()
+            private$jwt_pub_key_expires) {
+          private$refresh_jwt_pub_key()
         }
 
-
-
-        decoded_jwt <- self$check_firebase_token(firebase_token)
+        decoded_jwt <- private$check_firebase_token(firebase_token)
 
         # check that the jwt was generated for this Firebase project
         if (isFALSE(identical(private$firebase_project_id, decoded_jwt$aud))) {
@@ -316,11 +276,11 @@ Sessions <-  R6::R6Class(
         # check if the jwt public key has expired.  Add an extra minute to the
         # current time for padding before checking if the key has expired.
         if (lubridate::with_tz(Sys.time(), tzone = "UTC") + lubridate::minutes(1) >
-            self$jwt_pub_key_expires) {
-          self$refresh_jwt_pub_key()
+            private$jwt_pub_key_expires) {
+          private$refresh_jwt_pub_key()
         }
 
-        decoded_jwt <- self$check_firebase_token(firebase_token)
+        decoded_jwt <- private$check_firebase_token(firebase_token)
 
         # check that the jwt was generated for this Firebase project
         if (isFALSE(identical(private$firebase_project_id, decoded_jwt$aud))) {
@@ -488,7 +448,57 @@ Sessions <-  R6::R6Class(
       invisible(self)
     },
     authorization_level = "app", # or "all"
-    firebase_project_id = NULL
+    firebase_project_id = NULL,
+    refresh_jwt_pub_key = function() {
+      google_keys_resp <- httr::GET("https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com")
+
+      # Error if we didn't get the keys successfully
+      httr::stop_for_status(google_keys_resp)
+
+      private$jwt_pub_key <- jsonlite::fromJSON(
+        httr::content(google_keys_resp, "text")
+      )
+
+
+      # Decode the expiration time of the keys from the Cache-Control header
+      cache_controls <- httr::headers(google_keys_resp)[["Cache-Control"]]
+      if (!is.null(cache_controls)) {
+        cache_control_elems <- strsplit(cache_controls, ",")[[1]]
+        split_equals <- strsplit(cache_control_elems, "=")
+        for (elem in split_equals) {
+
+          if (length(elem) == 2 && trimws(elem[1]) == "max-age") {
+            max_age <- as.numeric(elem[2])
+            private$jwt_pub_key_expires <- lubridate::with_tz(Sys.time(), tzone = "UTC") + max_age
+            break
+          }
+
+        }
+      }
+    },
+    jwt_pub_key = NULL,
+    # number of seconds that the public key will remain valid
+    jwt_pub_key_expires = NULL,
+    check_firebase_token = function(firebase_token) {
+      # Google sends us 2 public keys to authenticate the JWT.  Sometimes the correct
+      # key is the first one, and sometimes it is the second.  I do not know how
+      # to tell which key is the right one to use, so we try them both for now.
+      decoded_jwt <- NULL
+      try({
+        decoded_jwt <- jose::jwt_decode_sig(
+          firebase_token,
+          private$jwt_pub_key[[1]]
+        )
+      }, silent = TRUE)
+      if (is.null(decoded_jwt)) {
+        decoded_jwt <- jose::jwt_decode_sig(
+          firebase_token,
+          private$jwt_pub_key[[2]]
+        )
+      }
+
+      decoded_jwt
+    }
   )
 )
 
