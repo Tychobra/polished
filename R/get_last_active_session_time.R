@@ -28,7 +28,7 @@ get_last_active_session_time <- function(conn, app_name_) {
     dplyr::filter(.data$app_name == app_name_) %>%
     dplyr::collect() %>%
     dplyr::group_by(.data$user_uid) %>%
-    dplyr::filter(created_at == max(.data$created_at, na.rm = TRUE)) %>%
+    dplyr::filter(.data$created_at == max(.data$created_at, na.rm = TRUE)) %>%
     dplyr::ungroup() %>%
     select(
       session_uid = .data$uid,
@@ -46,7 +46,7 @@ get_last_active_session_time <- function(conn, app_name_) {
       .data$action == 'activate'
     ) %>%
     dplyr::group_by(.data$session_uid) %>%
-    dplyr::filter(timestamp == max(.data$timestamp, na.rm = TRUE)) %>%
+    dplyr::filter(.data$timestamp == max(.data$timestamp, na.rm = TRUE)) %>%
     dplyr::ungroup() %>%
     dplyr::collect() %>%
     select(.data$session_uid, .data$timestamp)
