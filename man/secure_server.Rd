@@ -14,7 +14,7 @@ server functionality.}
 
 \item{allow_reconnect}{argument to pass to Shiny's `session$allowReconnect()` function. Defaults to
 `FALSE`.  Set to `TRUE` to allow reconnect with shiny-server and Rstudio Connect.  Set to "force"
-for local testing.  See \link{https://shiny.rstudio.com/articles/reconnecting.html} for more information.}
+for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.html} for more information.}
 }
 \value{
 session session object with new reactive session$userData$current_user which
