@@ -33,8 +33,8 @@ verify_email_module_ui <- function(id, firebase_config) {
     firebase_dependencies(),
     firebase_init(firebase_config),
     tags$script(src = "polish/js/toast_options.js"),
-    tags$script(src = "polish/js/verify_email.js"),
-    tags$script(paste0("verify_email('", ns(''), "')"))
+    tags$script(src = "polish/js/verify_email_module.js"),
+    tags$script(paste0("verify_email_module('", ns(''), "')"))
   )
 }
 

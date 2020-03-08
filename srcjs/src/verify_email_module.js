@@ -1,7 +1,7 @@
 
-function verify_email(ns_prefix) {
+const verify_email_module = (ns_prefix) => {
 
-  $(function() {
+  $(() => {
 
     const auth = firebase.auth()
 
@@ -24,7 +24,9 @@ function verify_email(ns_prefix) {
     })
 
 
-    this.checkForVerifiedInterval = setInterval(() => {
+
+
+    const check_email_verification = () => {
 
       firebase.auth().currentUser.reload()
       .then(ok => {
@@ -40,12 +42,16 @@ function verify_email(ns_prefix) {
 
           })
 
-          clearInterval(this.checkForVerifiedInterval)
+          clearInterval(checkForVerifiedInterval)
         }
 
       })
-    }, 1000)
+    }
 
+    const check_email_verification_interval = setInterval(
+      check_email_verification,
+      1000
+    )
 
   })
 }
