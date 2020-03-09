@@ -10,6 +10,7 @@ R6 class to track the polished sessions
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-config}{\code{Sessions$config()}}
+\item \href{#method-curr_time_1}{\code{Sessions$curr_time_1()}}
 \item \href{#method-sign_in}{\code{Sessions$sign_in()}}
 \item \href{#method-get_invite_by_email}{\code{Sessions$get_invite_by_email()}}
 \item \href{#method-get_invite_by_uid}{\code{Sessions$get_invite_by_uid()}}
@@ -36,6 +37,14 @@ R6 class to track the polished sessions
   conn = NULL,
   authorization_level = "app"
 )}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-curr_time_1"></a>}}
+\subsection{Method \code{curr_time_1()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$curr_time_1()}\if{html}{\out{</div>}}
 }
 
 }
