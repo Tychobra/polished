@@ -42,7 +42,7 @@ const verify_email_module = (ns_prefix) => {
 
           })
 
-          clearInterval(checkForVerifiedInterval)
+          clearInterval(check_email_verification_interval)
         }
 
       })

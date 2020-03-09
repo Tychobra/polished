@@ -21,7 +21,7 @@ var verify_email_module = function verify_email_module(ns_prefix) {
               event: "priority"
             });
           });
-          clearInterval(checkForVerifiedInterval);
+          clearInterval(check_email_verification_interval);
         }
       });
     };
