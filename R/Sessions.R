@@ -37,6 +37,9 @@ Sessions <-  R6::R6Class(
       conn = NULL,
       authorization_level = 'app'
     ) {
+      stopifnot(length(firebase_project_id) == 1, is.character(firebase_project_id))
+      stopifnot(length(app_name) == 1, is.character(app_name))
+      stopifnot(length(authorization_level) == 1, is.character(authorization_level))
 
       self$app_name <- app_name
       self$conn <- conn
