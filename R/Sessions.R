@@ -490,7 +490,7 @@ Sessions <-  R6::R6Class(
         stop("[polished] error decoding JWT")
       }
 
-      curr_time <- self$curr_time_1()
+      curr_time <- lubridate::with_tz(Sys.time(), tzone = "UTC")
       # Verify the ID token
       # https://firebase.google.com/docs/auth/admin/verify-id-tokens
       if (!(as.numeric(decoded_jwt$exp) > curr_time &&
