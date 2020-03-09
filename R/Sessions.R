@@ -21,6 +21,7 @@ Sessions <-  R6::R6Class(
   public = list(
     app_name = character(0),
     conn = NULL,
+    firebase_project_id = NULL,
     # Session configuration function.  This must be executed in global.R of the Shiny app.
     #
     # @param app_name the name of the app
@@ -40,32 +41,29 @@ Sessions <-  R6::R6Class(
       self$app_name <- app_name
       self$conn <- conn
       private$authorization_level <- authorization_level
-      private$firebase_project_id <- firebase_project_id
+      self$firebase_project_id <- firebase_project_id
 
       private$refresh_jwt_pub_key()
 
       invisible(self)
     },
+    # the current time + 1 minute.  Used to check that the keys have not
+    # expired.  Using time of 1 minute into the future to be safe.
+    curr_time_1 <- function() {
+      lubridate::with_tz(Sys.time(), tzone = "UTC") + lubridate::minutes(1)
+    },
     sign_in = function(firebase_token, token) {
-      conn <- self$conn
 
       decoded_jwt <- NULL
       tryCatch({
 
-        # check if the jwt public key has expired.  Add an extra minute to the
-        # current time for padding before checking if the key has expired.
-        if (lubridate::with_tz(Sys.time(), tzone = "UTC") + lubridate::minutes(1) >
-            private$jwt_pub_key_expires) {
+        # check if the jwt public key has expired.
+        curr_time <- self$curr_time_1()
+        if (curr_time > private$jwt_pub_key_expires) {
           private$refresh_jwt_pub_key()
         }
 
-        decoded_jwt <- private$check_firebase_token(firebase_token)
-
-        # check that the jwt was generated for this Firebase project
-        if (isFALSE(identical(private$firebase_project_id, decoded_jwt$aud))) {
-          decoded_jwt <- NULL
-          stop("[polished] incorrect Firebase project id")
-        }
+        decoded_jwt <- private$verify_firebase_token(firebase_token)
 
       }, error = function(e) {
         print('[polished] error signing in')
@@ -280,17 +278,11 @@ Sessions <-  R6::R6Class(
           private$refresh_jwt_pub_key()
         }
 
-        decoded_jwt <- private$check_firebase_token(firebase_token)
+        decoded_jwt <- private$verify_firebase_token(firebase_token)
 
-        # check that the jwt was generated for this Firebase project
-        if (isFALSE(identical(private$firebase_project_id, decoded_jwt$aud))) {
-          decoded_jwt <- NULL
-          stop("[polished] incorrect Firebase project id")
-        } else {
+        if (!is.null(decoded_jwt)) {
           email_verified <- decoded_jwt$email_verified
         }
-
-
 
       }, error = function(e) {
         print('[polished] error signing in')
@@ -448,7 +440,6 @@ Sessions <-  R6::R6Class(
       invisible(self)
     },
     authorization_level = "app", # or "all"
-    firebase_project_id = NULL,
     refresh_jwt_pub_key = function() {
       google_keys_resp <- httr::GET("https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com")
 
@@ -479,22 +470,37 @@ Sessions <-  R6::R6Class(
     jwt_pub_key = NULL,
     # number of seconds that the public key will remain valid
     jwt_pub_key_expires = NULL,
-    check_firebase_token = function(firebase_token) {
+    verify_firebase_token = function(firebase_token) {
       # Google sends us 2 public keys to authenticate the JWT.  Sometimes the correct
       # key is the first one, and sometimes it is the second.  I do not know how
       # to tell which key is the right one to use, so we try them both for now.
       decoded_jwt <- NULL
-      try({
-        decoded_jwt <- jose::jwt_decode_sig(
-          firebase_token,
-          private$jwt_pub_key[[1]]
-        )
-      }, silent = TRUE)
+      for (key in private$jwt_pub_key) {
+        # If a key isn't the right one for the token, then we get an error.
+        # Ignore the errors and just don't set decoded_token if there's
+        # an error. When we're done, we'll look at the the decoded_token
+        # to see if we found a valid key.
+        try({
+          decoded_jwt <- jose::jwt_decode_sig(firebase_token, key)
+          break
+        }, silent=TRUE)
+      }
+
       if (is.null(decoded_jwt)) {
-        decoded_jwt <- jose::jwt_decode_sig(
-          firebase_token,
-          private$jwt_pub_key[[2]]
-        )
+        stop("[polished] error decoding JWT")
+      }
+
+      curr_time <- self$curr_time_1()
+      # Verify the ID token
+      # https://firebase.google.com/docs/auth/admin/verify-id-tokens
+      if (!(as.numeric(decoded_jwt$exp) > curr_time &&
+            as.numeric(decoded_jwt$iat) < curr_time &&
+            as.numeric(decoded_jwt$auth_time) < curr_time &&
+            decoded_jwt$aud == self$firebase_project_id &&
+            decoded_jwt$iss == paste0("https://securetoken.google.com/", self$firebase_project_id) &&
+            nchar(decoded_jwt$sub) > 0)) {
+
+        stop("[polished] error verifying JWT")
       }
 
       decoded_jwt
