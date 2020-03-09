@@ -49,7 +49,7 @@ Sessions <-  R6::R6Class(
     },
     # the current time + 1 minute.  Used to check that the keys have not
     # expired.  Using time of 1 minute into the future to be safe.
-    curr_time_1 <- function() {
+    curr_time_1 = function() {
       lubridate::with_tz(Sys.time(), tzone = "UTC") + lubridate::minutes(1)
     },
     sign_in = function(firebase_token, token) {
