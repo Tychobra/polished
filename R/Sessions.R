@@ -12,7 +12,7 @@
 #' @importFrom httr GET content warn_for_status
 #' @importFrom jsonlite fromJSON
 #' @importFrom digest digest
-#' @importFrom DBI dbGetQuery dbWithTransaction dbExecute
+#' @importFrom DBI dbGetQuery dbWithTransaction dbExecute dbIsValid
 #' @importFrom jose jwt_decode_sig
 #' @importFrom lubridate with_tz minutes
 #'
@@ -37,9 +37,23 @@ Sessions <-  R6::R6Class(
       conn = NULL,
       authorization_level = 'app'
     ) {
-      stopifnot(length(firebase_project_id) == 1, is.character(firebase_project_id))
-      stopifnot(length(app_name) == 1, is.character(app_name))
-      stopifnot(length(authorization_level) == 1, is.character(authorization_level))
+      if (!(length(firebase_project_id) == 1 && is.character(firebase_project_id))) {
+        stop("invalid `firebase_project_id` argument passed to `global_sessions_config()`", call. = FALSE)
+      }
+      if (!(length(app_name) == 1 && is.character(app_name))) {
+        stop("invalid `app_name` argument passed to `global_sessions_config()`", call. = FALSE)
+      }
+      if (!(length(authorization_level) == 1 && is.character(authorization_level))) {
+        stop("invalid `authorization_level` argument passed to `global_sessions_config()`", call. = FALSE)
+      }
+      tryCatch({
+        if (!DBI::dbIsValid(conn)) {
+          stop("invalid `conn` argument passed to `global_sessions_config()`", call. = FALSE)
+        }
+      }, error = function(err) {
+        stop("invalid `conn` argument passed to `global_sessions_config()`", call. = FALSE)
+      })
+
 
       self$app_name <- app_name
       self$conn <- conn
