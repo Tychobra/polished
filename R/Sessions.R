@@ -121,17 +121,17 @@ Sessions <-  R6::R6Class(
         new_session$session_uid <- create_uid()
         # add the session to the 'sessions' table
         private$add(new_session)
-      }
 
-      dbExecute(
-        self$conn,
-        "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
-        list(
-          create_uid(),
-          new_session$session_uid,
-          'sign_in'
+        dbExecute(
+          self$conn,
+          "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
+          list(
+            create_uid(),
+            new_session$session_uid,
+            'sign_in'
+          )
         )
-      )
+      }
 
       return(new_session)
     },
