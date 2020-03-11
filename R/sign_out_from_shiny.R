@@ -6,9 +6,7 @@
 #'
 sign_out_from_shiny <- function(session) {
 
-  if (is.null(user)) {
-    user <- session$userData$user()
-  }
+  user <- session$userData$user()
 
   if (is.null(user)) stop("session$userData$user() does not exist")
 
