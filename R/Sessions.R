@@ -121,17 +121,17 @@ Sessions <-  R6::R6Class(
         new_session$session_uid <- create_uid()
         # add the session to the 'sessions' table
         private$add(new_session)
-      }
 
-      dbExecute(
-        self$conn,
-        "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
-        list(
-          create_uid(),
-          new_session$session_uid,
-          'sign_in'
+        dbExecute(
+          self$conn,
+          "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
+          list(
+            create_uid(),
+            new_session$session_uid,
+            'sign_in'
+          )
         )
-      )
+      }
 
       return(new_session)
     },
@@ -510,9 +510,9 @@ Sessions <-  R6::R6Class(
       curr_time <- lubridate::with_tz(Sys.time(), tzone = "UTC")
       # Verify the ID token
       # https://firebase.google.com/docs/auth/admin/verify-id-tokens
-      if (!(as.numeric(decoded_jwt$exp) > curr_time &&
-            as.numeric(decoded_jwt$iat) < curr_time &&
-            as.numeric(decoded_jwt$auth_time) < curr_time &&
+      if (!(as.numeric(decoded_jwt$exp) + private$firebase_token_grace_period_seconds > curr_time &&
+            as.numeric(decoded_jwt$iat) < curr_time + private$firebase_token_grace_period_seconds &&
+            as.numeric(decoded_jwt$auth_time) < curr_time + private$firebase_token_grace_period_seconds &&
             decoded_jwt$aud == self$firebase_project_id &&
             decoded_jwt$iss == paste0("https://securetoken.google.com/", self$firebase_project_id) &&
             nchar(decoded_jwt$sub) > 0)) {
@@ -521,7 +521,10 @@ Sessions <-  R6::R6Class(
       }
 
       decoded_jwt
-    }
+    },
+    # Grace period to allow for clock skew between our clock and the server that generates the
+    # firebase tokens.
+    firebase_token_grace_period_seconds = 300
   )
 )
 
