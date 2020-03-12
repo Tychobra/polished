@@ -1,0 +1,30 @@
+.datatables th {
+  text-align: center !important;
+}
+
+.datatables table {
+  white-space: nowrap;
+}
+
+tbody {
+  border-right: 1px solid #111;
+  border-left: 1px solid #111;
+  /*border-top: 1px solid #111;*/
+}
+
+.dt-border-left {
+  border-left: 1px solid #111;
+}
+
+.dt-border-right {
+  border-right: 1px solid #111;
+}
+
+.dt-border-top {
+  border-top: 1px solid #111;
+}
+
+.color_white {
+  color: #FFF;
+}
+
