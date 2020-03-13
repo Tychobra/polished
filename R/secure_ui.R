@@ -82,7 +82,7 @@ secure_ui <- function(
         # send a random uuid as the polished_session.  This will trigger a session
         # reload and a redirect to the sign in page
         page_out <- tagList(
-          tags$script(src = "polish/js/polished_session.js"),
+          tags$script(src = "polish/js/polished_session.js?version=2"),
           tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
         )
       }
@@ -102,7 +102,7 @@ secure_ui <- function(
             page_out <- tagList(
               admin_module_ui("admin", firebase_config, custom_admin_ui, options = admin_ui_options),
               tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
-              tags$script(src = "polish/js/polished_session.js"),
+              tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
             )
           } else {
@@ -112,7 +112,7 @@ secure_ui <- function(
               ui,
               custom_admin_button_ui,
               tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
-              tags$script(src = "polish/js/polished_session.js"),
+              tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
             )
           }
@@ -124,7 +124,7 @@ secure_ui <- function(
           page_out <- tagList(
             ui,
             tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
-            tags$script(src = "polish/js/polished_session.js"),
+            tags$script(src = "polish/js/polished_session.js?version=2"),
             tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
           )
 
@@ -139,7 +139,7 @@ secure_ui <- function(
             firebase_config
           ),
           tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
-          tags$script(src = "polish/js/polished_session.js"),
+          tags$script(src = "polish/js/polished_session.js?version=2"),
           tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
         )
       }
