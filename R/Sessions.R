@@ -274,15 +274,6 @@ Sessions <-  R6::R6Class(
 
       return(session_out)
     },
-    list = function() {
-
-      out <- dbGetQuery(
-        self$conn,
-        "SELECT * FROM polished.active_sessions"
-      )
-
-      return(out)
-    },
     refresh_email_verification = function(session_uid, firebase_token) {
 
       email_verified <- NULL
