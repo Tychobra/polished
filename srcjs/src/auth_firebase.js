@@ -14,18 +14,18 @@ const auth_firebase = (ns_prefix) => {
 
       return user.user.getIdToken(true).then(firebase_token => {
 
-        const polished_token = "p" + Math.random()
+        const polished_cookie = "p" + Math.random()
 
 
         Cookies.set(
-          'polished__token',
-          polished_token,
+          'polished',
+          polished_cookie,
           { expires: 365 } // set cookie to expire in 1 year
         )
 
         Shiny.setInputValue(`${ns_prefix}check_jwt`, {
           jwt: firebase_token,
-          polished_token: polished_token
+          cookie: polished_cookie
         }, {
           event: "priority"
         });
@@ -34,15 +34,6 @@ const auth_firebase = (ns_prefix) => {
 
     })
   }
-
-  Shiny.addCustomMessageHandler(
-    `${ns_prefix}polished__set_cookie`,
-    function(message) {
-      Cookies.set('polished__token', message.polished_token)
-
-      Shiny.setInputValue(`${ns_prefix}polished__set_cookie_complete`, 1, { priority: "event" })
-    }
-  )
 
   $(document).on("click", `#${ns_prefix}submit_register`, () => {
     const email = $(`#${ns_prefix}register_email`).val().toLowerCase()

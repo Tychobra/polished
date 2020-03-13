@@ -64,7 +64,7 @@ Sessions <-  R6::R6Class(
 
       invisible(self)
     },
-    sign_in = function(firebase_token, token) {
+    sign_in = function(firebase_token, hashed_cookie) {
 
       decoded_jwt <- NULL
       tryCatch({
@@ -112,7 +112,7 @@ Sessions <-  R6::R6Class(
 
 
 
-        new_session$token <- token
+        new_session$hashed_cookie <- hashed_cookie
         new_session$session_uid <- create_uid()
         # add the session to the 'sessions' table
         private$add(new_session)
@@ -214,13 +214,13 @@ Sessions <-  R6::R6Class(
 
       roles
     },
-    find = function(token) {
+    find = function(hashed_cookie) {
 
       signed_in_sessions <- dbGetQuery(
         self$conn,
-        'SELECT uid AS session_uid, user_uid, email, email_verified, firebase_uid, app_name, signed_in_as FROM polished.sessions WHERE token=$1 AND is_signed_in=$2',
+        'SELECT uid AS session_uid, user_uid, email, email_verified, firebase_uid, app_name, signed_in_as FROM polished.sessions WHERE hashed_cookie=$1 AND is_signed_in=$2',
         params = list(
-          token,
+          hashed_cookie,
           TRUE
         )
       )
@@ -248,7 +248,7 @@ Sessions <-  R6::R6Class(
           "email_verified" = signed_in_sessions$email_verified[1],
           "is_admin" = invite$is_admin,
           "roles" = roles,
-          "token" = token
+          "hashed_cookie" = hashed_cookie
         )
 
 
@@ -308,28 +308,28 @@ Sessions <-  R6::R6Class(
 
       invisible(self)
     },
-    set_signed_in_as = function(token, signed_in_as) {
+    set_signed_in_as = function(hashed_cookie, signed_in_as) {
 
       dbExecute(
         self$conn,
-        'UPDATE polished.sessions SET signed_in_as=$1 WHERE token=$2 AND app_name=$3',
+        'UPDATE polished.sessions SET signed_in_as=$1 WHERE hashed_cookie=$2 AND app_name=$3',
         params = list(
           signed_in_as$uid,
-          token,
+          hashed_cookie,
           self$app_name
         )
       )
 
       invisible(self)
     },
-    clear_signed_in_as = function(token) {
+    clear_signed_in_as = function(hashed_cookie) {
 
       dbExecute(
         self$conn,
-        'UPDATE polished.sessions SET signed_in_as=$1 WHERE token=$2 AND app_name=$3',
+        'UPDATE polished.sessions SET signed_in_as=$1 WHERE hashed_cookie=$2 AND app_name=$3',
         params = list(
           NA,
-          token,
+          hashed_cookie,
           self$app_name
         )
       )
@@ -428,14 +428,14 @@ Sessions <-  R6::R6Class(
 
       dbExecute(
         self$conn,
-        'INSERT INTO polished.sessions (uid, user_uid, firebase_uid, email, email_verified, token, app_name) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+        'INSERT INTO polished.sessions (uid, user_uid, firebase_uid, email, email_verified, hashed_cookie, app_name) VALUES ($1, $2, $3, $4, $5, $6, $7)',
         list(
           session$session_uid,
           session$user_uid,
           session$firebase_uid,
           session$email,
           session$email_verified,
-          session$token,
+          session$hashed_cookie,
           self$app_name
         )
       )
@@ -479,7 +479,7 @@ Sessions <-  R6::R6Class(
       # to tell which key is the right one to use, so we try them both for now.
       decoded_jwt <- NULL
       for (key in private$jwt_pub_key) {
-        # If a key isn't the right one for the token, then we get an error.
+        # If a key isn't the right one for the Firebase token, then we get an error.
         # Ignore the errors and just don't set decoded_token if there's
         # an error. When we're done, we'll look at the the decoded_token
         # to see if we found a valid key.

@@ -31,14 +31,14 @@ secure_server <- function(
     }
 
 
-    # handle the initial input$polished_session
-    shiny::observeEvent(input$polished__session, {
-      polished__session <- input$polished__session
+    # handle the initial input$hashed_cookie
+    shiny::observeEvent(input$hashed_cookie, {
+      hashed_cookie <- input$hashed_cookie
 
       # attempt to find the signed in user.  If user is signed in, `global_user`
       # will be a list of user data.  If the user is not signed in, `global_user`
       # will be `NULL`
-      global_user <- .global_sessions$find(polished__session)
+      global_user <- .global_sessions$find(hashed_cookie)
       query_list <- shiny::getQueryString(session)
 
       if (is.null(global_user)) {
@@ -74,7 +74,7 @@ secure_server <- function(
         if (is.na(global_user$signed_in_as)) {
 
           user_out <- global_user[
-            c("session_uid", "user_uid", "email", "is_admin", "roles", "token", "email_verified")
+            c("session_uid", "user_uid", "email", "is_admin", "roles", "hashed_cookie", "email_verified")
           ]
 
           session$userData$user(user_out)
@@ -82,7 +82,7 @@ secure_server <- function(
         } else {
           signed_in_as_user <- .global_sessions$get_signed_in_as_user(global_user$signed_in_as)
           signed_in_as_user$session_uid <- global_user$session_uid
-          signed_in_as_user$token <- global_user$token
+          signed_in_as_user$hashed_cookie <- global_user$hashed_cookie
 
           # set email verified to TRUE, so that you go directly to app
           signed_in_as_user$email_verified <- TRUE
@@ -130,7 +130,7 @@ secure_server <- function(
         #   global_user <- .global_sessions$refresh_email_verification(
         #     global_user$session_uid,
         #     global_user$firebase_uid
-        #   )$find(token)
+        #   )$find(hashed_cookie)
         # }, error = function(err) {
         #   # set query string to sign in page
         #

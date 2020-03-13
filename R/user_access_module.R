@@ -601,7 +601,7 @@ user_access_module <- function(input, output, session) {
       user_to_sign_in_as$roles <- roles_out
     }
 
-    user_to_sign_in_as$token <- session$userData$user()$token
+    user_to_sign_in_as$hashed_cookie <- session$userData$user()$hashed_cookie
 
     session$sendCustomMessage(
       "polish__show_loading",
@@ -612,7 +612,7 @@ user_access_module <- function(input, output, session) {
 
     # sign in as another user
     .global_sessions$set_signed_in_as(
-      session$userData$user()$token,
+      session$userData$user()$hashed_cookie,
       user_to_sign_in_as
     )
 

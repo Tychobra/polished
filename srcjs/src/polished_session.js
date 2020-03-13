@@ -1,6 +1,6 @@
 
-const polished_session = (token) => {
+const polished_session = (hashed_cookie) => {
   $(document).on('shiny:sessioninitialized', function () {
-    Shiny.setInputValue('polished__session', token)
+    Shiny.setInputValue('hashed_cookie', hashed_cookie)
   })
 }

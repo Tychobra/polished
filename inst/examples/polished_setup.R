@@ -11,7 +11,7 @@ db_conn <- DBI::dbConnect(
   password = db_config$password
 )
 
-# polished::create_schema(db_conn)
+polished::create_schema(db_conn)
 
 # add the first user to your first app
 # I always add myself first using this function, and then I add other additional users via
@@ -20,13 +20,13 @@ db_conn <- DBI::dbConnect(
 polished::create_app_user(
   db_conn,
   app_name = "polished_example_01",
-  email = "andy.merlino@tychobra.com",
+  email = "demo@tychobra.com",
   is_admin = TRUE
 )
 
 polished::create_app_user(
   db_conn,
   app_name = "custom_sign_in",
-  email = "andy.merlino@tychobra.com",
+  email = "demo@tychobra.com",
   is_admin = TRUE
 )

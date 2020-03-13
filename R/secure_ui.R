@@ -37,17 +37,17 @@ secure_ui <- function(
 
     cookie_string <- request$HTTP_COOKIE
 
-    polished_token <- NULL
+    hashed_cookie <- NULL
     if (!is.null(cookie_string)) {
-      polished_cookie <- get_cookie(cookie_string, "polished__token")
-      polished_token <- digest::digest(polished_cookie)
+      polished_cookie <- get_cookie(cookie_string, "polished")
+      hashed_cookie <- digest::digest(polished_cookie)
     }
 
 
     user <- NULL
-    if (!is.null(polished_token) && length(polished_token) > 0) {
+    if (!is.null(hashed_cookie) && length(hashed_cookie) > 0) {
       tryCatch({
-        user <- .global_sessions$find(polished_token)
+        user <- .global_sessions$find(hashed_cookie)
       }, error = function(error) {
         print("sign_in_ui_1")
         print(error)
@@ -103,7 +103,7 @@ secure_ui <- function(
               admin_module_ui("admin", firebase_config, custom_admin_ui, options = admin_ui_options),
               tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
               tags$script(src = "polish/js/polished_session.js"),
-              tags$script(paste0("polished_session('", user$token, "')"))
+              tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
             )
           } else {
 
@@ -113,7 +113,7 @@ secure_ui <- function(
               custom_admin_button_ui,
               tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
               tags$script(src = "polish/js/polished_session.js"),
-              tags$script(paste0("polished_session('", user$token, "')"))
+              tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
             )
           }
 
@@ -125,7 +125,7 @@ secure_ui <- function(
             ui,
             tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
             tags$script(src = "polish/js/polished_session.js"),
-            tags$script(paste0("polished_session('", user$token, "')"))
+            tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
           )
 
         } # end is_admin check
@@ -140,7 +140,7 @@ secure_ui <- function(
           ),
           tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
           tags$script(src = "polish/js/polished_session.js"),
-          tags$script(paste0("polished_session('", user$token, "')"))
+          tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
         )
       }
 

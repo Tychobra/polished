@@ -287,7 +287,7 @@ sign_in_module <- function(input, output, session) {
       # user is invited, so attempt sign in
       new_user <- .global_sessions$sign_in(
         input$check_jwt$jwt,
-        digest::digest(input$check_jwt$polished_token)
+        digest::digest(input$check_jwt$cookie)
       )
 
 

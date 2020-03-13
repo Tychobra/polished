@@ -72,7 +72,7 @@ create_schema <- function(conn) {
     firebase_uid          TEXT,
     email                 TEXT,
     email_verified        BOOLEAN,
-    token                 TEXT,
+    hashed_cookie         TEXT,
     signed_in_as          TEXT,
     app_name              TEXT,
     is_active             BOOLEAN DEFAULT true,
