@@ -322,15 +322,14 @@ Sessions <-  R6::R6Class(
 
       invisible(self)
     },
-    clear_signed_in_as = function(hashed_cookie) {
+    clear_signed_in_as = function(session_uid) {
 
       dbExecute(
         self$conn,
-        'UPDATE polished.sessions SET signed_in_as=$1 WHERE hashed_cookie=$2 AND app_name=$3',
+        'UPDATE polished.sessions SET signed_in_as=$1 WHERE uid=$2',
         params = list(
           NA,
-          hashed_cookie,
-          self$app_name
+          session_uid
         )
       )
 
