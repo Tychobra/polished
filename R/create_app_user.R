@@ -34,7 +34,7 @@ create_app_user <- function(conn, app_name, email, is_admin = FALSE, roles = cha
     # if user does not exist, add the user to the users table
     if (nrow(existing_user_uid) == 0) {
 
-      user_uid <- create_uid()
+      user_uid <- uuid::UUIDgenerate()
 
       if (is.null(created_by)) {
         created_by <- user_uid
@@ -101,7 +101,7 @@ create_app_user <- function(conn, app_name, email, is_admin = FALSE, roles = cha
       conn,
       "INSERT INTO polished.app_users ( uid, app_name, user_uid, is_admin, created_by, modified_by) VALUES ( $1, $2, $3, $4, $5, $6 )",
       params = list(
-        create_uid(),
+        uuid::UUIDgenerate(),
         app_name, # app_name
         user_uid, # user_uid
         is_admin,     # is_admin

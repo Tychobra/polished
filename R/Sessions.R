@@ -113,7 +113,7 @@ Sessions <-  R6::R6Class(
 
 
         new_session$hashed_cookie <- hashed_cookie
-        new_session$session_uid <- create_uid()
+        new_session$session_uid <- uuid::UUIDgenerate()
         # add the session to the 'sessions' table
         private$add(new_session)
 
@@ -121,7 +121,7 @@ Sessions <-  R6::R6Class(
           self$conn,
           "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
           list(
-            create_uid(),
+            uuid::UUIDgenerate(),
             new_session$session_uid,
             'sign_in'
           )
@@ -254,7 +254,7 @@ Sessions <-  R6::R6Class(
 
         if (nrow(app_session) == 0) {
           # user was signed into another app and came over to this app, so add a session for this app
-          session_out$session_uid <- create_uid()
+          session_out$session_uid <- uuid::UUIDgenerate()
 
           private$add(session_out)
           session_out$signed_in_as <- NA
@@ -371,7 +371,7 @@ Sessions <-  R6::R6Class(
         self$conn,
         "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
         list(
-          create_uid(),
+          uuid::UUIDgenerate(),
           session_uid,
           'deactivate'
         )
@@ -392,7 +392,7 @@ Sessions <-  R6::R6Class(
         self$conn,
         "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
         list(
-          create_uid(),
+          uuid::UUIDgenerate(),
           session_uid,
           'activate'
         )
@@ -415,7 +415,7 @@ Sessions <-  R6::R6Class(
         self$conn,
         "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
         list(
-          create_uid(),
+          uuid::UUIDgenerate(),
           session_uid,
           'sign_out'
         )

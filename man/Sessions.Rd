@@ -10,13 +10,11 @@ R6 class to track the polished sessions
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-config}{\code{Sessions$config()}}
-\item \href{#method-curr_time_1}{\code{Sessions$curr_time_1()}}
 \item \href{#method-sign_in}{\code{Sessions$sign_in()}}
 \item \href{#method-get_invite_by_email}{\code{Sessions$get_invite_by_email()}}
 \item \href{#method-get_invite_by_uid}{\code{Sessions$get_invite_by_uid()}}
 \item \href{#method-get_roles}{\code{Sessions$get_roles()}}
 \item \href{#method-find}{\code{Sessions$find()}}
-\item \href{#method-list}{\code{Sessions$list()}}
 \item \href{#method-refresh_email_verification}{\code{Sessions$refresh_email_verification()}}
 \item \href{#method-set_signed_in_as}{\code{Sessions$set_signed_in_as()}}
 \item \href{#method-clear_signed_in_as}{\code{Sessions$clear_signed_in_as()}}
@@ -41,18 +39,10 @@ R6 class to track the polished sessions
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-curr_time_1"></a>}}
-\subsection{Method \code{curr_time_1()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$curr_time_1()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sign_in"></a>}}
 \subsection{Method \code{sign_in()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_in(firebase_token, token)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_in(firebase_token, hashed_cookie)}\if{html}{\out{</div>}}
 }
 
 }
@@ -84,15 +74,7 @@ R6 class to track the polished sessions
 \if{html}{\out{<a id="method-find"></a>}}
 \subsection{Method \code{find()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$find(token)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-list"></a>}}
-\subsection{Method \code{list()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$list()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$find(hashed_cookie)}\if{html}{\out{</div>}}
 }
 
 }
@@ -108,7 +90,7 @@ R6 class to track the polished sessions
 \if{html}{\out{<a id="method-set_signed_in_as"></a>}}
 \subsection{Method \code{set_signed_in_as()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$set_signed_in_as(token, signed_in_as)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$set_signed_in_as(hashed_cookie, signed_in_as)}\if{html}{\out{</div>}}
 }
 
 }
@@ -116,7 +98,7 @@ R6 class to track the polished sessions
 \if{html}{\out{<a id="method-clear_signed_in_as"></a>}}
 \subsection{Method \code{clear_signed_in_as()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$clear_signed_in_as(token)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$clear_signed_in_as(session_uid)}\if{html}{\out{</div>}}
 }
 
 }

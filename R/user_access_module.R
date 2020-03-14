@@ -421,7 +421,7 @@ user_access_module <- function(input, output, session) {
         .global_sessions$conn,
         "INSERT INTO polished.roles ( uid, name, app_name, created_by, modified_by ) VALUES ( $1, $2, $3, $4, $5 )",
         params = list(
-          create_uid(),
+          uuid::UUIDgenerate(),
           new_role,
           .global_sessions$app_name,
           user_uid,
