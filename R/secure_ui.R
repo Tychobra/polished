@@ -101,7 +101,6 @@ secure_ui <- function(
             # go to Admin Panel
             page_out <- tagList(
               admin_module_ui("admin", firebase_config, custom_admin_ui, options = admin_ui_options),
-              tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
             )
@@ -111,7 +110,6 @@ secure_ui <- function(
             page_out <- tagList(
               ui,
               custom_admin_button_ui,
-              tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
             )
@@ -123,7 +121,6 @@ secure_ui <- function(
           # go to Shiny app without admin button.  User is not an admin
           page_out <- tagList(
             ui,
-            tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
             tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
           )
