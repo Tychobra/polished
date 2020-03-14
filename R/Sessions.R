@@ -2,9 +2,12 @@
 
 
 
-#' Sessions
+#' R6 class to track polished sessions
 #'
-#' R6 class to track the polished sessions
+#' @description
+#' An instance of this class handles the polished user sessions for each Shiny
+#' app using polished.  The Shiny developer should not need to interact with
+#' this class directly.
 #'
 #' @export
 #'
@@ -16,25 +19,33 @@
 #' @importFrom jose jwt_decode_sig
 #' @importFrom lubridate with_tz minutes
 #'
+#'
 Sessions <-  R6::R6Class(
   classname = 'Sessions',
   public = list(
     app_name = character(0),
     conn = NULL,
-    firebase_project_id = NULL,
-    # Session configuration function.  This must be executed in global.R of the Shiny app.
-    #
-    # @param app_name the name of the app
-    # @param firebase_project_id the project ID for the Firebase project
-    # @param conn the database connection
-    # @param authorization_level whether the app should be accessible to "all" users in the
-    # "polished.users" table, or if it should only be accessible to users as defined in the
-    # "app_users" table. Valid options are "app" or "all".  Defaults to "app".
-    #
+    firebase_project_id = character(0),
+
+
+    #' @description
+    #' polished Sessions configuration function
+    #'
+    #' @details
+    #' This function is called via `global_sessions_config()` in global.R
+    #' of all Shiny apps using polished.
+    #'
+    #' @param app_name the name of the app
+    #' @param firebase_project_id the project ID for the Firebase project
+    #' @param conn the database connection
+    #' @param authorization_level whether the app should be accessible to "all" users in the
+    #' "polished.users" table, or if it should only be accessible to users as defined in the
+    #' "app_users" table. Valid options are "app" or "all".  Defaults to "app".
+    #'
     config = function(
       app_name,
-      firebase_project_id = NULL,
-      conn = NULL,
+      firebase_project_id,
+      conn,
       authorization_level = 'app'
     ) {
       if (!(length(firebase_project_id) == 1 && is.character(firebase_project_id))) {
@@ -64,6 +75,29 @@ Sessions <-  R6::R6Class(
 
       invisible(self)
     },
+
+
+    #' @description
+    #' verify the users Firebase JWT and store the session
+    #'
+    #' @param firebase_token the Firebase JWT.  This JWT is created client side
+    #' (in JavaScript) via `firebase.auth()`.
+    #' @param hashed_cookie the hashed polished cookie.  Used for tracking the user
+    #' session.  This cookie is inserted into the "polished.sessions" table if the
+    #' JWT is valid.
+    #'
+    #' @return NULL if sign in fails. If sign in is successful, a list containing the following:
+    #' * email
+    #' * firebase_uid
+    #' * email_verified
+    #' * is_admin
+    #' * user_uid
+    #' * roles
+    #' * hashed_cookie
+    #' * session_uid
+    #' @md
+    #'
+    #'
     sign_in = function(firebase_token, hashed_cookie) {
 
       decoded_jwt <- NULL
@@ -230,7 +264,7 @@ Sessions <-  R6::R6Class(
 
 
 
-        # confirm that user is invited
+      # confirm that user is invited
         invite <- self$get_invite_by_uid(signed_in_sessions$user_uid[1])
         roles <- self$get_roles(signed_in_sessions$user_uid[1])
 
@@ -241,28 +275,28 @@ Sessions <-  R6::R6Class(
         # return the user session
 
 
-        session_out <- list(
-          "user_uid" = signed_in_sessions$user_uid[1],
-          "email" = signed_in_sessions$email[1],
-          "firebase_uid" = signed_in_sessions$firebase_uid[1],
-          "email_verified" = signed_in_sessions$email_verified[1],
-          "is_admin" = invite$is_admin,
-          "roles" = roles,
-          "hashed_cookie" = hashed_cookie
-        )
+      session_out <- list(
+        "user_uid" = signed_in_sessions$user_uid[1],
+        "email" = signed_in_sessions$email[1],
+        "firebase_uid" = signed_in_sessions$firebase_uid[1],
+        "email_verified" = signed_in_sessions$email_verified[1],
+        "is_admin" = invite$is_admin,
+        "roles" = roles,
+        "hashed_cookie" = hashed_cookie
+      )
 
 
-        if (nrow(app_session) == 0) {
-          # user was signed into another app and came over to this app, so add a session for this app
-          session_out$session_uid <- uuid::UUIDgenerate()
+      if (nrow(app_session) == 0) {
+        # user was signed into another app and came over to this app, so add a session for this app
+        session_out$session_uid <- uuid::UUIDgenerate()
 
-          private$add(session_out)
-          session_out$signed_in_as <- NA
-        } else if (nrow(app_session) == 1) {
+        private$add(session_out)
+        session_out$signed_in_as <- NA
+      } else if (nrow(app_session) == 1) {
 
-          session_out$session_uid <- app_session$session_uid
-          session_out$signed_in_as <- app_session$signed_in_as
-        } else {
+        session_out$session_uid <- app_session$session_uid
+        session_out$signed_in_as <- app_session$signed_in_as
+      } else {
           stop('error: too many sessions')
         }
       }

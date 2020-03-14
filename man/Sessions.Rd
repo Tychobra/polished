@@ -2,9 +2,11 @@
 % Please edit documentation in R/Sessions.R
 \name{Sessions}
 \alias{Sessions}
-\title{Sessions}
+\title{R6 class to track the polished sessions}
 \description{
-R6 class to track the polished sessions
+An instance of this class handles the polished user sessions for each Shiny
+app using polished.  The Shiny developer should not need to interact with
+this class directly.
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -27,27 +29,77 @@ R6 class to track the polished sessions
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-config"></a>}}
+\if{latex}{\out{\hypertarget{method-config}{}}}
 \subsection{Method \code{config()}}{
+polished Sessions configuration function
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$config(
   app_name,
-  firebase_project_id = NULL,
-  conn = NULL,
+  firebase_project_id,
+  conn,
   authorization_level = "app"
 )}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{app_name}}{the name of the app}
+
+\item{\code{firebase_project_id}}{the project ID for the Firebase project}
+
+\item{\code{conn}}{the database connection}
+
+\item{\code{authorization_level}}{whether the app should be accessible to "all" users in the
+"polished.users" table, or if it should only be accessible to users as defined in the
+"app_users" table. Valid options are "app" or "all".  Defaults to "app".}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+This function is called via \code{global_sessions_config()} in global.R
+of all Shiny apps using polished.
 }
 
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sign_in"></a>}}
+\if{latex}{\out{\hypertarget{method-sign_in}{}}}
 \subsection{Method \code{sign_in()}}{
+verify the users Firebase JWT and store the session
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_in(firebase_token, hashed_cookie)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{firebase_token}}{the Firebase JWT.  This JWT is created client side
+(in JavaScript) via \code{firebase.auth()}.}
+
+\item{\code{hashed_cookie}}{the hashed polished cookie.  Used for tracking the user
+session.  This cookie is inserted into the "polished.sessions" table if the
+JWT is valid.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+NULL if sign in fails. If sign in is successful, a list containing the following:
+\itemize{
+\item email
+\item firebase_uid
+\item email_verified
+\item is_admin
+\item user_uid
+\item roles
+\item hashed_cookie
+\item session_uid
+}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_invite_by_email"></a>}}
+\if{latex}{\out{\hypertarget{method-get_invite_by_email}{}}}
 \subsection{Method \code{get_invite_by_email()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$get_invite_by_email(email)}\if{html}{\out{</div>}}
@@ -56,6 +108,7 @@ R6 class to track the polished sessions
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_invite_by_uid"></a>}}
+\if{latex}{\out{\hypertarget{method-get_invite_by_uid}{}}}
 \subsection{Method \code{get_invite_by_uid()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$get_invite_by_uid(user_uid)}\if{html}{\out{</div>}}
@@ -64,6 +117,7 @@ R6 class to track the polished sessions
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_roles"></a>}}
+\if{latex}{\out{\hypertarget{method-get_roles}{}}}
 \subsection{Method \code{get_roles()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$get_roles(user_uid)}\if{html}{\out{</div>}}
@@ -72,6 +126,7 @@ R6 class to track the polished sessions
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-find"></a>}}
+\if{latex}{\out{\hypertarget{method-find}{}}}
 \subsection{Method \code{find()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$find(hashed_cookie)}\if{html}{\out{</div>}}
@@ -80,6 +135,7 @@ R6 class to track the polished sessions
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-refresh_email_verification"></a>}}
+\if{latex}{\out{\hypertarget{method-refresh_email_verification}{}}}
 \subsection{Method \code{refresh_email_verification()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$refresh_email_verification(session_uid, firebase_token)}\if{html}{\out{</div>}}
@@ -88,6 +144,7 @@ R6 class to track the polished sessions
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_signed_in_as"></a>}}
+\if{latex}{\out{\hypertarget{method-set_signed_in_as}{}}}
 \subsection{Method \code{set_signed_in_as()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$set_signed_in_as(hashed_cookie, signed_in_as)}\if{html}{\out{</div>}}
@@ -96,6 +153,7 @@ R6 class to track the polished sessions
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clear_signed_in_as"></a>}}
+\if{latex}{\out{\hypertarget{method-clear_signed_in_as}{}}}
 \subsection{Method \code{clear_signed_in_as()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$clear_signed_in_as(session_uid)}\if{html}{\out{</div>}}
@@ -104,6 +162,7 @@ R6 class to track the polished sessions
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_signed_in_as_user"></a>}}
+\if{latex}{\out{\hypertarget{method-get_signed_in_as_user}{}}}
 \subsection{Method \code{get_signed_in_as_user()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$get_signed_in_as_user(user_uid)}\if{html}{\out{</div>}}
@@ -112,6 +171,7 @@ R6 class to track the polished sessions
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_inactive"></a>}}
+\if{latex}{\out{\hypertarget{method-set_inactive}{}}}
 \subsection{Method \code{set_inactive()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$set_inactive(session_uid)}\if{html}{\out{</div>}}
@@ -120,6 +180,7 @@ R6 class to track the polished sessions
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_active"></a>}}
+\if{latex}{\out{\hypertarget{method-set_active}{}}}
 \subsection{Method \code{set_active()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$set_active(session_uid)}\if{html}{\out{</div>}}
@@ -128,6 +189,7 @@ R6 class to track the polished sessions
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sign_out"></a>}}
+\if{latex}{\out{\hypertarget{method-sign_out}{}}}
 \subsection{Method \code{sign_out()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_out(user_uid, session_uid)}\if{html}{\out{</div>}}
@@ -136,6 +198,7 @@ R6 class to track the polished sessions
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
