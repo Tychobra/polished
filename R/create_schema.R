@@ -19,7 +19,7 @@ create_schema <- function(conn) {
 
   create_users_table_query <- "CREATE TABLE polished.users (
     uid                            UUID PRIMARY KEY,
-    email                          TEXT,
+    email                          TEXT UNIQUE,
     created_by                     TEXT NOT NULL,
     created_at                     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     modified_by                    TEXT NOT NULL,
@@ -48,7 +48,7 @@ create_schema <- function(conn) {
 
   create_roles_table_query <- "CREATE TABLE polished.roles (
     uid                   UUID PRIMARY KEY,
-    name                  TEXT,
+    name                  TEXT UNIQUE,
     app_name              TEXT REFERENCES polished.apps(app_name),
     created_by            TEXT NOT NULL,
     created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
