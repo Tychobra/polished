@@ -104,7 +104,7 @@ The code for the above example is available in the "inst/examples/custom_sign_in
 
 #### 2. Do not require invite for sign in / register
 
-Allow anyone to register and sign into your app (i.e. no intite required).  See the code of a simple example in "inst/examples/custom_sign_in/no_invite_required" and the [live demo here](https://tychobra.shinyapps.io/custom_sign_in). 
+Allow anyone to register and sign in to your app (i.e. no invite required).  See the code of a simple example in "inst/examples/custom_sign_in/no_invite_required" and the [live demo here](https://tychobra.shinyapps.io/custom_sign_in). 
 
 #### 3. Add custom tabs to the Polished Admin shinydashboard
 
