@@ -102,11 +102,15 @@ Sign in to a [Live Example](https://tychobra.shinyapps.io/custom_sign_in) with t
 
 The code for the above example is available in the "inst/examples/custom_sign_in/" directory.  To get this example working, you will need to update the "config.yml" with your Firebase credentials. 
 
-#### 2. Add custom tabs to the Polished Admin shinydashboard
+#### 2. Do not require invite for sign in / register
+
+Allow anyone to register and sign into your app (i.e. no intite required).  See the code of a simple example in "inst/examples/custom_sign_in/no_invite_required" and the [live app here]([Live Example](https://tychobra.shinyapps.io/custom_sign_in)). 
+
+#### 3. Add custom tabs to the Polished Admin shinydashboard
 
 You can add custom tabs to the admin dashboard by passing the ui and server code to the `secure_ui()` and `secure_server()` functions.  Example coming soon.
 
-#### 3. Apps Dashboard
+#### 4. Apps Dashboard
 
 Create a Shiny dashboard of your Shiny dashboards/apps.  Example coming soon.
 
