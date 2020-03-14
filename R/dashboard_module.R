@@ -117,26 +117,30 @@ dashboard_module <- function(input, output, session) {
       dplyr::collect() %>%
       dplyr::mutate(date = as.Date(.data$timestamp, tz = "America/New_York"))
 
-    dat <- dat_actions %>%
+    out <- dat_actions %>%
       left_join(dat_sessions, by = c("session_uid" = "uid")) %>%
       dplyr::group_by(.data$date, .data$user_uid) %>%
       dplyr::summarize(n = dplyr::n()) %>%
       dplyr::ungroup()
 
-    # make sure all days are included even if zero sessions in a day
-    first_day <- min(dat$date)
+    if (nrow(out) > 0) {
+      # make sure all days are included even if zero sessions in a day
+      first_day <- min(out$date)
 
-    out <- tibble::tibble(
-      date = seq.Date(
-        from = first_day,
-        to = lubridate::today(tzone = "America/New_York"),
-        by = "day"
+      all_days <- tibble::tibble(
+        date = seq.Date(
+          from = first_day,
+          to = lubridate::today(tzone = "America/New_York"),
+          by = "day"
+        )
       )
-    )
 
-    out %>%
-      dplyr::left_join(dat, by = "date") %>%
-      mutate(n = ifelse(is.na(n), 0, n))
+      out <- all_days %>%
+        dplyr::left_join(out, by = "date") %>%
+        mutate(n = ifelse(is.na(n), 0, n))
+    }
+
+    out
   })
 
   # returns a data frame with 2 columns
@@ -254,7 +258,7 @@ dashboard_module <- function(input, output, session) {
     days <- nrow(daily_users)
 
     if (days < 7) {
-      current_date <- daily_users$date[[days]]
+      current_date <- lubridate::today(tzone = "America/New_York")
       past_week <- dplyr::tibble(
         date = current_date - c(6, 5, 4, 3, 2, 1, 0)
       )
