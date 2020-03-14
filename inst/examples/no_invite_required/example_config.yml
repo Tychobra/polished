@@ -1,5 +1,5 @@
 default:
-  app_name: "polished_example_01"
+  app_name: "no_invite_required"
   firebase:
     apiKey: "<your Firebase project API Key>"
     authDomain: "<your Firebase project auth domain>"
