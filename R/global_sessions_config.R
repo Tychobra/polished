@@ -10,19 +10,24 @@
 #' @param admin_mode FALSE by default.  Set to TRUE to enter the polished Admin Panel without needing
 #' to register and sign in.  This is useful during development for inviting the first users to your app.
 #' Make sure to set `admin_mode` to FALSE before deploying your app.
+#' @param is_invite_required TRUE by default.  Whether or not to require the user to have an
+#' invite before registering/signing in
 #'
 #' @export
 #'
 global_sessions_config <- function(app_name,
                                    firebase_project_id,
-                                   conn, authorization_level = "app", admin_mode = FALSE) {
+                                   conn, authorization_level = "app",
+                                   admin_mode = FALSE,
+                                   is_invite_required = TRUE) {
 
   .global_sessions$config(
     app_name = app_name,
     firebase_project_id = firebase_project_id,
     conn = conn,
     authorization_level = authorization_level,
-    admin_mode = admin_mode
+    admin_mode = admin_mode,
+    is_invite_required = is_invite_required
   )
 
 }

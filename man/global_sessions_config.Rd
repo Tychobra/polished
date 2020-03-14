@@ -9,7 +9,8 @@ global_sessions_config(
   firebase_project_id,
   conn,
   authorization_level = "app",
-  admin_mode = FALSE
+  admin_mode = FALSE,
+  is_invite_required = TRUE
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ used by our "apps_dashboard_*".}
 \item{admin_mode}{FALSE by default.  Set to TRUE to enter the polished Admin Panel without needing
 to register and sign in.  This is useful during development for inviting the first users to your app.
 Make sure to set `admin_mode` to FALSE before deploying your app.}
+
+\item{is_invite_required}{TRUE by default.  Whether or not to require the user to have an
+invite before registering/signing in}
 }
 \description{
 configuration for global sessions

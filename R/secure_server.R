@@ -179,10 +179,18 @@ secure_server <- function(
       "polished"
     )
 
-    shiny::callModule(
-      sign_in_module,
-      "sign_in"
-    )
+    if (isTRUE(.global_sessions$is_invite_required)) {
+      shiny::callModule(
+        sign_in_module,
+        "sign_in"
+      )
+    } else {
+      shiny::callModule(
+        sign_in_no_invite_module,
+        "sign_in"
+      )
+    }
+
 
 
 

@@ -26,7 +26,7 @@ Sessions <-  R6::R6Class(
     app_name = character(0),
     conn = NULL,
     firebase_project_id = character(0),
-
+    is_invite_required = TRUE,
 
     #' @description
     #' polished Sessions configuration function
@@ -47,7 +47,8 @@ Sessions <-  R6::R6Class(
       firebase_project_id,
       conn,
       authorization_level = 'app',
-      admin_mode = FALSE
+      admin_mode = FALSE,
+      is_invite_required = TRUE
     ) {
       if (!(length(firebase_project_id) == 1 && is.character(firebase_project_id))) {
         stop("invalid `firebase_project_id` argument passed to `global_sessions_config()`", call. = FALSE)
@@ -68,6 +69,10 @@ Sessions <-  R6::R6Class(
       if (!(length(admin_mode) == 1 && is.logical(admin_mode))) {
         stop("invalid `admin_mode` argument passed to `global_sessions_config()`", call. = FALSE)
       }
+      if (!(length(is_invite_required) == 1 && is.logical(is_invite_required))) {
+        stop("invalid `is_invite_required` argument passed to `global_sessions_config()`", call. = FALSE)
+      }
+
 
 
       self$app_name <- app_name
@@ -75,6 +80,7 @@ Sessions <-  R6::R6Class(
       private$authorization_level <- authorization_level
       self$firebase_project_id <- firebase_project_id
       private$admin_mode <- admin_mode
+      self$is_invite_required <- is_invite_required
 
       private$refresh_jwt_pub_key()
 
@@ -106,20 +112,15 @@ Sessions <-  R6::R6Class(
     sign_in = function(firebase_token, hashed_cookie) {
 
       decoded_jwt <- NULL
-      tryCatch({
 
-        # check if the jwt public key has expired or if it is about to expire.  If it
-        # is about to epire, go ahead and refresh to be safe.
-        if (as.numeric(Sys.time()) + private$firebase_token_grace_period_seconds > private$jwt_pub_key_expires) {
-          private$refresh_jwt_pub_key()
-        }
 
-        decoded_jwt <- private$verify_firebase_token(firebase_token)
+      # check if the jwt public key has expired or if it is about to expire.  If it
+      # is about to epire, go ahead and refresh to be safe.
+      if (as.numeric(Sys.time()) + private$firebase_token_grace_period_seconds > private$jwt_pub_key_expires) {
+        private$refresh_jwt_pub_key()
+      }
 
-      }, error = function(e) {
-        print('[polished] error signing in')
-        print(e)
-      })
+      decoded_jwt <- private$verify_firebase_token(firebase_token)
 
 
       new_session <- NULL
@@ -132,23 +133,26 @@ Sessions <-  R6::R6Class(
           email_verified = decoded_jwt$email_verified
         )
 
-        tryCatch({
-          # confirm that user is invited
+
+
+
+        invite <- self$get_invite_by_email(decoded_jwt$email)
+        if (isFALSE(self$is_invite_required) && is.null(invite)) {
+          # if invite is not required, and this is the first time that the user is signing in,
+          # then we need to add their user info to the db
+          create_app_user(self$conn, self$app_name, decoded_jwt$email)
           invite <- self$get_invite_by_email(new_session$email)
+        }
 
-          # find the users roles
-          roles_out <- self$get_roles(invite$user_uid)
+        if (is.null(invite)) {
+          stop("[polished] error checking user invite")
+        }
 
-          new_session$is_admin <- invite$is_admin
-          new_session$user_uid <- invite$user_uid
-          new_session$roles <- roles_out
+        new_session$is_admin <- invite$is_admin
+        new_session$user_uid <- invite$user_uid
 
-        }, error = function(e) {
-
-          print(e)
-          new_session <<- NULL
-        })
-
+        # find the users roles
+        new_session$roles <- self$get_roles(invite$user_uid)
 
 
         new_session$hashed_cookie <- hashed_cookie
@@ -169,24 +173,34 @@ Sessions <-  R6::R6Class(
 
       return(new_session)
     },
+    get_user_by_email = function(email) {
+      user_out <- DBI::dbGetQuery(
+        self$conn,
+        "SELECT * FROM polished.users WHERE email=$1",
+        params = list(
+          email
+        )
+      )
+
+      if (nrow(user_out) == 0) {
+        return(NULL)
+      }
+
+      as.list(user_out)
+    },
     get_invite_by_email = function(email) {
 
       invite <- NULL
+
       DBI::dbWithTransaction(self$conn, {
 
-        user_db <- DBI::dbGetQuery(
-          self$conn,
-          "SELECT * FROM polished.users WHERE email=$1",
-          params = list(
-            email
-          )
-        )
+        user_db <- self$get_user_by_email(email)
 
-        if (nrow(user_db) != 1) {
-          stop(sprintf('unable to find "%s" in "users" table', email))
+        if (!is.null(user_db)) {
+          invite <- self$get_invite_by_uid(user_db$uid)
         }
 
-        invite <- self$get_invite_by_uid(user_db$uid)
+
       })
 
       return(invite)
@@ -218,7 +232,7 @@ Sessions <-  R6::R6Class(
       }
 
       if (nrow(invite) != 1) {
-        stop(sprintf('user "%s" is not authorized to access "%s"', user_uid, self$app_name))
+        return(NULL)
       }
 
       invite
@@ -269,7 +283,7 @@ Sessions <-  R6::R6Class(
 
 
 
-      # confirm that user is invited
+        # confirm that user is invited
         invite <- self$get_invite_by_uid(signed_in_sessions$user_uid[1])
         roles <- self$get_roles(signed_in_sessions$user_uid[1])
 
@@ -280,28 +294,28 @@ Sessions <-  R6::R6Class(
         # return the user session
 
 
-      session_out <- list(
-        "user_uid" = signed_in_sessions$user_uid[1],
-        "email" = signed_in_sessions$email[1],
-        "firebase_uid" = signed_in_sessions$firebase_uid[1],
-        "email_verified" = signed_in_sessions$email_verified[1],
-        "is_admin" = invite$is_admin,
-        "roles" = roles,
-        "hashed_cookie" = hashed_cookie
-      )
+        session_out <- list(
+          "user_uid" = signed_in_sessions$user_uid[1],
+          "email" = signed_in_sessions$email[1],
+          "firebase_uid" = signed_in_sessions$firebase_uid[1],
+          "email_verified" = signed_in_sessions$email_verified[1],
+          "is_admin" = invite$is_admin,
+          "roles" = roles,
+          "hashed_cookie" = hashed_cookie
+        )
 
 
-      if (nrow(app_session) == 0) {
-        # user was signed into another app and came over to this app, so add a session for this app
-        session_out$session_uid <- uuid::UUIDgenerate()
+        if (nrow(app_session) == 0) {
+          # user was signed into another app and came over to this app, so add a session for this app
+          session_out$session_uid <- uuid::UUIDgenerate()
 
-        private$add(session_out)
-        session_out$signed_in_as <- NA
-      } else if (nrow(app_session) == 1) {
+          private$add(session_out)
+          session_out$signed_in_as <- NA
+        } else if (nrow(app_session) == 1) {
 
-        session_out$session_uid <- app_session$session_uid
-        session_out$signed_in_as <- app_session$signed_in_as
-      } else {
+          session_out$session_uid <- app_session$session_uid
+          session_out$signed_in_as <- app_session$signed_in_as
+        } else {
           stop('error: too many sessions')
         }
       }
