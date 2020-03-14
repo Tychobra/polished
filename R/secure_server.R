@@ -38,7 +38,7 @@ secure_server <- function(
       if (isTRUE(.global_sessions$get_admin_mode())) {
         session$userData$user(list(
           session_uid = uuid::UUIDgenerate(),
-          user_uid = "admin",
+          user_uid = "00000000-0000-0000-0000-000000000000",
           email = "admin@tychobra.com",
           is_admin = TRUE,
           roles = character(0),
