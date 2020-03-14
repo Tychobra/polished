@@ -13,7 +13,8 @@
 #' @export
 #'
 admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL,
-  options = default_admin_ui_options()
+  options = default_admin_ui_options(),
+  include_go_to_shiny_app_button = TRUE
 ) {
   ns <- shiny::NS(id)
 
@@ -79,6 +80,22 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL,
     )
   }
 
+  if (isTRUE(include_go_to_shiny_app_button)) {
+    shiny_app_button <- div(
+      style = "position: fixed; bottom: 15px; right: 15px; z-index: 1000;",
+      actionButton(
+        ns("go_to_shiny_app"),
+        "Shiny App",
+        icon = shiny::icon("rocket"),
+        class = "btn-primary btn-lg",
+        style = "color: #FFFFFF;"
+      )
+    )
+  } else {
+    shiny_app_button <- div()
+  }
+
+
 
   body <- shinydashboard::dashboardBody(
     htmltools::tags$head(
@@ -89,16 +106,7 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL,
     shinyjs::useShinyjs(),
     shinytoastr::useToastr(),
 
-    div(
-      style = "position: fixed; bottom: 15px; right: 15px; z-index: 1000;",
-      actionButton(
-        ns("go_to_shiny_app"),
-        "Shiny App",
-        icon = shiny::icon("rocket"),
-        class = "btn-primary btn-lg",
-        style = "color: #FFFFFF;"
-      )
-    ),
+    shiny_app_button,
 
     tab_items,
 

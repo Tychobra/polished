@@ -35,6 +35,26 @@ secure_server <- function(
     shiny::observeEvent(input$hashed_cookie, {
       hashed_cookie <- input$hashed_cookie
 
+      if (isTRUE(.global_sessions$get_admin_mode())) {
+        session$userData$user(list(
+          session_uid = uuid::UUIDgenerate(),
+          user_uid = "admin",
+          email = "admin@tychobra.com",
+          is_admin = TRUE,
+          roles = character(0),
+          hashed_cookie = character(0),
+          email_verified = TRUE
+        ))
+
+        # remove admin_panel=false from query
+        shiny::updateQueryString(
+          queryString = paste0("?page=admin_panel"),
+          session = session,
+          mode = "replace"
+        )
+        return()
+      }
+
       # attempt to find the signed in user.  If user is signed in, `global_user`
       # will be a list of user data.  If the user is not signed in, `global_user`
       # will be `NULL`
@@ -102,7 +122,9 @@ secure_server <- function(
 
       if (isTRUE(session$userData$user()$email_verified)) {
         query_list <- shiny::getQueryString()
-        is_on_admin_page <- if (!is.null(query_list$page) && query_list$page == 'admin_panel') TRUE else FALSE
+        is_on_admin_page <- if (
+          isTRUE(.global_sessions$get_admin_mode()) ||
+          !is.null(query_list$page) && query_list$page == 'admin_panel') TRUE else FALSE
 
 
         if (isTRUE(session$userData$user()$is_admin) && isTRUE(is_on_admin_page)) {

@@ -12,4 +12,3 @@ global_sessions_config(
   firebase_project_id = app_config$firebase$projectId,
   conn = db_conn
 )
-

@@ -46,7 +46,8 @@ Sessions <-  R6::R6Class(
       app_name,
       firebase_project_id,
       conn,
-      authorization_level = 'app'
+      authorization_level = 'app',
+      admin_mode = FALSE
     ) {
       if (!(length(firebase_project_id) == 1 && is.character(firebase_project_id))) {
         stop("invalid `firebase_project_id` argument passed to `global_sessions_config()`", call. = FALSE)
@@ -64,12 +65,16 @@ Sessions <-  R6::R6Class(
       }, error = function(err) {
         stop("invalid `conn` argument passed to `global_sessions_config()`", call. = FALSE)
       })
+      if (!(length(admin_mode) == 1 && is.logical(admin_mode))) {
+        stop("invalid `admin_mode` argument passed to `global_sessions_config()`", call. = FALSE)
+      }
 
 
       self$app_name <- app_name
       self$conn <- conn
       private$authorization_level <- authorization_level
       self$firebase_project_id <- firebase_project_id
+      private$admin_mode <- admin_mode
 
       private$refresh_jwt_pub_key()
 
@@ -454,6 +459,9 @@ Sessions <-  R6::R6Class(
           'sign_out'
         )
       )
+    },
+    get_admin_mode = function() {
+      private$admin_mode
     }
   ),
   private = list(
@@ -543,7 +551,10 @@ Sessions <-  R6::R6Class(
     },
     # Grace period to allow for clock skew between our clock and the server that generates the
     # firebase tokens.
-    firebase_token_grace_period_seconds = 300
+    firebase_token_grace_period_seconds = 300,
+    # when `admin_mode == TRUE` the user will be taken directly to the admin panel and signed in
+    # as a special "admin" user.
+    admin_mode = FALSE
   )
 )
 

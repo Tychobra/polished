@@ -8,7 +8,8 @@ admin_module_ui(
   id,
   firebase_config,
   custom_admin_ui = NULL,
-  options = default_admin_ui_options()
+  options = default_admin_ui_options(),
+  include_go_to_shiny_app_button = TRUE
 )
 }
 \arguments{

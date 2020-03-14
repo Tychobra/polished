@@ -2,7 +2,7 @@
 % Please edit documentation in R/Sessions.R
 \name{Sessions}
 \alias{Sessions}
-\title{R6 class to track the polished sessions}
+\title{R6 class to track polished sessions}
 \description{
 An instance of this class handles the polished user sessions for each Shiny
 app using polished.  The Shiny developer should not need to interact with
@@ -24,6 +24,7 @@ this class directly.
 \item \href{#method-set_inactive}{\code{Sessions$set_inactive()}}
 \item \href{#method-set_active}{\code{Sessions$set_active()}}
 \item \href{#method-sign_out}{\code{Sessions$sign_out()}}
+\item \href{#method-get_admin_mode}{\code{Sessions$get_admin_mode()}}
 \item \href{#method-clone}{\code{Sessions$clone()}}
 }
 }
@@ -37,7 +38,8 @@ polished Sessions configuration function
   app_name,
   firebase_project_id,
   conn,
-  authorization_level = "app"
+  authorization_level = "app",
+  admin_mode = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -193,6 +195,15 @@ NULL if sign in fails. If sign in is successful, a list containing the following
 \subsection{Method \code{sign_out()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_out(user_uid, session_uid)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_admin_mode"></a>}}
+\if{latex}{\out{\hypertarget{method-get_admin_mode}{}}}
+\subsection{Method \code{get_admin_mode()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$get_admin_mode()}\if{html}{\out{</div>}}
 }
 
 }

@@ -33,6 +33,24 @@ secure_ui <- function(
   custom_admin_button_ui <- force(custom_admin_button_ui)
 
   function(request) {
+
+    if (isTRUE(.global_sessions$get_admin_mode())) {
+
+      # go to Admin Panel
+      return(tagList(
+        admin_module_ui(
+          "admin",
+          firebase_config,
+          custom_admin_ui,
+          options = admin_ui_options,
+          include_go_to_shiny_app_button = FALSE
+        ),
+        tags$script(src = "polish/js/polished_session.js?version=2"),
+        tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
+      ))
+
+    }
+
     query <- shiny::parseQueryString(request$QUERY_STRING)
 
     cookie_string <- request$HTTP_COOKIE

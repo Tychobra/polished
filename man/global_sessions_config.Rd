@@ -8,7 +8,8 @@ global_sessions_config(
   app_name,
   firebase_project_id,
   conn,
-  authorization_level = "app"
+  authorization_level = "app",
+  admin_mode = FALSE
 )
 }
 \arguments{
@@ -21,6 +22,10 @@ global_sessions_config(
 \item{authorization_level}{either "app" or "all".  Use "app" to individually authorize users to this
 app.  Use "all" to give all user that have access to any of your apps access to this app.  "all" is
 used by our "apps_dashboard_*".}
+
+\item{admin_mode}{FALSE by default.  Set to TRUE to enter the polished Admin Panel without needing
+to register and sign in.  This is useful during development for inviting the first users to your app.
+Make sure to set `admin_mode` to FALSE before deploying your app.}
 }
 \description{
 configuration for global sessions
