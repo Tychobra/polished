@@ -71,7 +71,7 @@ Sessions <-  R6::R6Class(
 
         # check if the jwt public key has expired or if it is about to expire.  If it
         # is about to epire, go ahead and refresh to be safe.
-        if (Sys.time() + private$firebase_token_grace_period_seconds > private$jwt_pub_key_expires) {
+        if (as.numeric(Sys.time()) + private$firebase_token_grace_period_seconds > private$jwt_pub_key_expires) {
           private$refresh_jwt_pub_key()
         }
 
@@ -462,7 +462,7 @@ Sessions <-  R6::R6Class(
 
           if (length(elem) == 2 && trimws(elem[1]) == "max-age") {
             max_age <- as.numeric(elem[2])
-            private$jwt_pub_key_expires <- as.numeric(Sys.time() + max_age)
+            private$jwt_pub_key_expires <- as.numeric(Sys.time()) + max_age
             break
           }
 
@@ -492,7 +492,7 @@ Sessions <-  R6::R6Class(
         stop("[polished] error decoding JWT")
       }
 
-      curr_time <- Sys.time()
+      curr_time <- as.numeric(Sys.time())
       # Verify the ID token
       # https://firebase.google.com/docs/auth/admin/verify-id-tokens
       if (!(as.numeric(decoded_jwt$exp) + private$firebase_token_grace_period_seconds > curr_time &&
