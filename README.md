@@ -67,21 +67,19 @@ Then you will need to execute the `global_sessions_config()` in "global.R", pass
 
 At this point, when you run your app you should see the sign in page. e.g:
 
-![](https://res.cloudinary.com/dxqnb8xjb/image/upload/v1584201376/Screen_Shot_2020-03-14_at_11.55.40_AM_vxmnds.png)
+<p align="center">
+ <img src="https://res.cloudinary.com/dxqnb8xjb/image/upload/v1584201376/Screen_Shot_2020-03-14_at_11.55.40_AM_vxmnds.png"/>
+</p>
 
 But, if you enter your email and click "Continue", you will see a "Not Authorized -
 You must have an invite to access this app" alert.  By default polished requires users to first be invited before they can access your app.
 
 You can invite yourself (and other users) to access your app by running the app locally in "admin_mode".  To run the app in "admin_mode", set the "admin_mode" argument of `global_sessions_config()` to `TRUE` and restart your R session (make sure to set the "admin_mode" argument back to `FALSE` before you deploy your app!).  When you run your Shiny app in "admin_mode" you will be taken directly to the polished Admin Panel without having to sign in.  You can then go to the "User Access" tab to invite users.  e.g.
 
-<p align="center">
-<img src="https://res.cloudinary.com/dxqnb8xjb/image/upload/v1584199811/user_access_issvjz.png" width="300"/>
-</p>
+<img src="https://res.cloudinary.com/dxqnb8xjb/image/upload/v1584199811/user_access_issvjz.png"/>
 
 Enter the email address of the user you want to invite to your app.  
-<span style="display:block;text-align:center">
 ![](https://res.cloudinary.com/dxqnb8xjb/image/upload/v1584199811/user_access_issvjz.png)
-</span>
 If you set the "Is Admin?" radio button to "Yes", the user will have access to
 your Shiny app and the `polished` Admin Panel (i.e. the user will be able to invite additional
 users and remove existing user from your app).  If "Is Admin?" if set to "No", the user will
