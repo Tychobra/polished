@@ -13,7 +13,7 @@
 #' @export
 #'
 #'
-sign_in_module_ui <- function(id, firebase_config) {
+sign_in_module_ui <- function(id, firebase_config, allow_register = TRUE) {
   ns <- shiny::NS(id)
 
   htmltools::tagList(
@@ -70,13 +70,19 @@ sign_in_module_ui <- function(id, firebase_config) {
       ),
       div(
         style = "text-align: center;",
-        hr(),
-        br(),
-        shiny::actionLink(
-          inputId = ns("go_to_register"),
-          label = "Not a member? Register!"
-        ),
-        br(),
+        if (allow_register) {
+          list(
+            hr(),
+            br(),
+            shiny::actionLink(
+              inputId = ns("go_to_register"),
+              label = "Not a member? Register!"
+            ),
+            br()
+          )
+        } else {
+          list()
+        },
         br(),
         tags$button(
           class = 'btn btn-link btn-small',
