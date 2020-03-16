@@ -36,30 +36,15 @@ this class directly.
 polished Sessions configuration function
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$config(
-  app_name,
-  firebase_project_id,
-  conn,
+  conn = NULL,
+  app_name = NULL,
+  firebase_project_id = NULL,
   authorization_level = "app",
   admin_mode = FALSE,
   is_invite_required = TRUE
 )}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{app_name}}{the name of the app}
-
-\item{\code{firebase_project_id}}{the project ID for the Firebase project}
-
-\item{\code{conn}}{the database connection}
-
-\item{\code{authorization_level}}{whether the app should be accessible to "all" users in the
-"polished.users" table, or if it should only be accessible to users as defined in the
-"app_users" table. Valid options are "app" or "all".  Defaults to "app".}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Details}{
 This function is called via \code{global_sessions_config()} in global.R
 of all Shiny apps using polished.

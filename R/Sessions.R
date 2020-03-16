@@ -35,17 +35,12 @@ Sessions <-  R6::R6Class(
     #' This function is called via `global_sessions_config()` in global.R
     #' of all Shiny apps using polished.
     #'
-    #' @param app_name the name of the app
-    #' @param firebase_project_id the project ID for the Firebase project
-    #' @param conn the database connection
-    #' @param authorization_level whether the app should be accessible to "all" users in the
-    #' "polished.users" table, or if it should only be accessible to users as defined in the
-    #' "app_users" table. Valid options are "app" or "all".  Defaults to "app".
+    #' @inheritParams global_sessions_config
     #'
     config = function(
-      app_name,
-      firebase_project_id,
-      conn,
+      conn = NULL,
+      app_name = NULL,
+      firebase_project_id = NULL,
       authorization_level = 'app',
       admin_mode = FALSE,
       is_invite_required = TRUE

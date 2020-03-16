@@ -5,20 +5,20 @@
 \title{configuration for global sessions}
 \usage{
 global_sessions_config(
-  app_name,
-  firebase_project_id,
-  conn,
+  conn = NULL,
+  app_name = NULL,
+  firebase_project_id = NULL,
   authorization_level = "app",
   admin_mode = FALSE,
   is_invite_required = TRUE
 )
 }
 \arguments{
+\item{conn}{the database connection}
+
 \item{app_name}{the name of the app.}
 
 \item{firebase_project_id}{the Firebase project ID.}
-
-\item{conn}{the database connection}
 
 \item{authorization_level}{either "app" or "all".  Use "app" to individually authorize users to this
 app.  Use "all" to give all user that have access to any of your apps access to this app.  "all" is
