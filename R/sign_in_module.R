@@ -4,6 +4,11 @@
 #'
 #' @param id the Shiny module id
 #' @param firebase_config list of Firebase config
+#' @param allow_register default is `TRUE`.  Whether or not to show the
+#' "Not a Member? Register!" link.  This should only be set to `FALSE` if
+#' you are handling Firebase registration yourself e.g. your are automatically
+#' registering users via Firebase Admin or you are manually registering users
+#' via your Firebase project's web console.
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr
