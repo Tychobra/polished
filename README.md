@@ -79,7 +79,9 @@ You can invite yourself (and other users) to access your app by running the app 
 <img src="https://res.cloudinary.com/dxqnb8xjb/image/upload/v1584199811/user_access_issvjz.png"/>
 
 Enter the email address of the user you want to invite to your app.  
-![](https://res.cloudinary.com/dxqnb8xjb/image/upload/v1584199811/user_access_issvjz.png)
+
+![](https://res.cloudinary.com/dxqnb8xjb/image/upload/v1584199960/Screen_Shot_2020-03-14_at_11.31.45_AM_owpdqh.png)
+
 If you set the "Is Admin?" radio button to "Yes", the user will have access to
 your Shiny app and the `polished` Admin Panel (i.e. the user will be able to invite additional
 users and remove existing user from your app).  If "Is Admin?" if set to "No", the user will
