@@ -59,7 +59,11 @@ Get the following credentials from your Firebase project:
   - authDomain
   - projectId
   
-These Firebase credentials can be found on the "Project settings" page of your Firabse project at console.firebase.google.com.
+**NOTE:** To find `authDomain`, click on the `Add Web App` button at the bottom of General Settings (shown in the screenshot below). Register the App (do NOT need to check box for "Also set up Firebase Hosting for this app") & back at the bottom of the General Settings page where the "Add Web App" button was, you'll see the app just added. You'll find `authDomain` under the 'Firebase SDK snippet' section.  
+
+<img src="inst/assets/images/add_web_app.png" />
+  
+These Firebase credentials can be found on the "Project settings" page of your Firebase project at console.firebase.google.com.
 
 Then you will need to execute the `global_sessions_config()` in "global.R", pass your Shiny ui to `secure_ui()`, and your Shiny server to `secure_server()`.  See the documentation of `global_sessions_config()`, `secure_ui()`, and `secure_server()` for details. 
 
@@ -86,6 +90,8 @@ If you set the "Is Admin?" radio button to "Yes", the user will have access to
 your Shiny app and the `polished` Admin Panel (i.e. the user will be able to invite additional
 users and remove existing user from your app).  If "Is Admin?" if set to "No", the user will
 be able to access your Shiny app, but they will __not__ have access to the `polished` Admin Panel; non admins are not authorized to invite/remove users.
+
+Once the user has been added, restart the app & register the new user on the Polished login page. You'll be redirected to a page which says that user has received an email invitation for registration. Once the link in the email has been clicked, the app can be refreshed and that user is able to sign in!
 
 You can find a few full working example in the "inst/examples/" directory in this package.  
 
