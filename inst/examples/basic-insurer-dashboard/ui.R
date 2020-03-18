@@ -14,7 +14,8 @@ sidebar <- dashboardSidebar(
     startview = "decade"
   ),
   sidebarMenu(
-    menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard"))
+    menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
+    menuItem("Claim Changes", tabName = "changes", icon = icon("balance-scale"))
   )
 )
 
@@ -30,7 +31,8 @@ body <- dashboardBody(
     tags$script(src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js")
   ),
   tabItems(
-    source("ui/01-dashboard-ui.R", local = TRUE)$value
+    source("ui/01-dashboard-ui.R", local = TRUE)$value,
+    source("ui/02-changes-ui.R", local = TRUE)$value
   )
 )
 

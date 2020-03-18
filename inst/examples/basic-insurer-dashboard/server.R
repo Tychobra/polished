@@ -8,5 +8,6 @@ function(input, output, session) {
   })
   
   source("server/01-dashboard-srv.R", local = TRUE)
+  source("server/02-changes-srv.R", local = TRUE)
 
 }
