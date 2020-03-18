@@ -20,21 +20,21 @@ body <- dashboardBody(
   shinyjs::useShinyjs(),
   fluidRow(
     app_box_module_ui(
-      id = "custom_sign_in",
-      app_name = "Custom Sign In",
+      id = "basic_insurer_dashboard",
+      app_name = "Basic Insurer Dashboard",
       width = 6,
-      img_src = "images/t3.png",
+      img_src = "images/basic_insurer_dashboard.png",
       more_info = column(
         12,
         h4(
           style = "line-height: 1.25",
-          "App for tracking contractor time."
+          "Basic Claims Analytics Dashboard."
         ),
         tags$ul(
-          tags$li("Tracks contractor time by client and project"),
-          tags$li("Provides an at-a-glance visualization of hours worked per day"),
-          tags$li("Filter by date range, client, and project"),
-          tags$li("Time entry with customizable client and project codes")
+          tags$li("View insurance claims at different points in time"),
+          tags$li("Filter claims by state and claim status"),
+          tags$li("Analyze frequency, severity, and changes in claim values over time"),
+          tags$li("Download the claims for further analysis on your computer")
         )
       ),
       app_href = "https://apps.tychobra.com/t3_client"

@@ -17,20 +17,11 @@ server <- function(input, output, session) {
   token <- reactive({
     input$firebase_token
   })
-
-  # callModule(
-  #   app_box_module,
-  #   id = "track",
-  #   app_id = "track",
-  #   user_apps = user_apps,
-  #   app_href = "https://tychobra.shinyapps.io/track",
-  #   firebase_token = token
-  # )
-
+  
   callModule(
     app_box_module,
-    id = "custom_sign_in",
-    app_id = "custom_sign_in",
+    id = "basic_insurer_dashboard",
+    app_id = "basic_insurer_dashboard",
     user_apps = user_apps
   )
 
