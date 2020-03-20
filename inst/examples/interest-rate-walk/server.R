@@ -97,42 +97,69 @@ function(input, output, server) {
     )
   })
   
-  output$sims_chart <- renderHighchart({
+  output$sims_chart <- renderApexchart({
     dat <- sims_chart_prep()$dat
     titles <- sims_chart_prep()$titles  
     
-    highchart() %>%
-      hc_chart(
-        zoomType = "y"
-      ) %>%
-      hc_title(text = titles$main) %>%
-      hc_subtitle(text = titles$sub) %>%
-      hc_exporting(
-        enabled = TRUE,
-        buttons = tychobratools::hc_btn_options()
-      ) %>%
-      hc_legend(
-        enabled = FALSE,
-        reversed = TRUE
-      ) %>%
-      hc_plotOptions(
-        series = list(
-          tooltip = list(
-            crosshairs = TRUE,
-            pointFormat = 'Yield: <b>{point.y:,.2f}</b>'
-          ),
-          marker = list(enabled = FALSE)
+    apexchart() %>% 
+      ax_chart(
+        type = 'line',
+        zoom = list(
+          type = 'y',
+          enabled = TRUE,
+          autoScaleYaxis = TRUE
+        ),
+        toolbar = list(
+          autoSelected = 'zoom'
         )
       ) %>%
-      hc_xAxis(
+      ax_series2(
+        dat
+      ) %>%
+      ax_stroke(
+        width = 2
+      ) %>%
+      ax_xaxis(
         categories = 1:isolate({input$num_years}),
         title = list(text = "Simulated Year")
       ) %>%
-      hc_yAxis(
-        title = list(text = "Yield")
+      ax_yaxis(
+        title = list(text = "Yield"),
+        forceNiceScale = TRUE,
+        decimalsInFloat = 0
+        # labels = list(
+        #   formatter = JS(
+        #     "function (val) {
+        #       debugger;
+        #       return Math.round(val);
+        #     }"
+        #   )
+        # )
       ) %>%
-      hc_add_series_list(
-        dat
+      ax_title(
+        text = titles$main,
+        align = 'center',
+        style = list(
+          fontSize = '18px'
+        )
+      ) %>%
+      ax_subtitle(
+        text = titles$sub,
+        align = 'center'
+      ) %>%
+      ax_legend(
+        show = FALSE
+      ) %>%
+      ax_tooltip(
+        shared = FALSE,
+        custom = JS(paste0(
+          "function({series, seriesIndex, dataPointIndex, w}) {
+            var x_val = dataPointIndex + 1;
+            return '<div class=", '"text-center">', "'+ '<b>' + x_val + '</b>' + '</div>' + 
+              'Yield: '+ '<b>' + Math.round(series[seriesIndex][dataPointIndex] * 100) / 100 + '</b>';
+          }"
+        )),
+        theme = "light"
       )
   })
   
@@ -184,60 +211,110 @@ function(input, output, server) {
       )
   }, server = FALSE)
   
-  output$ir_chart <- renderHighchart({
-    highchart(type = "stock") %>%
-      hc_chart(
-        zoomType = "y",
-        type = "line"
+  output$ir_chart_2 <- renderApexchart({
+    
+    apexchart() %>%
+      ax_chart(
+        type = 'line',
+        brush = list(
+          enabled = TRUE,
+          target = 'ir_chart'
+        ),
+        offsetY = -20,
+        selection = list(
+          enabled = TRUE,
+          xaxis = list(
+            # Convert from string (of date) to JS timestamp value
+            min = as.numeric(as.POSIXct(t_bill_10_new$Date[20]))* 1000,
+            max = as.numeric(as.POSIXct(t_bill_10_new$Date[35]))* 1000
+          )
+        ),
+        toolbar = list(
+          autoSelected = 'selection'
+        ),
+        group = 'timeseries'
       ) %>%
-      hc_exporting(
-        enabled = TRUE,
-        buttons = tychobratools::hc_btn_options()
-      ) %>%
-      hc_legend(
-        enabled = TRUE,
-        reversed = TRUE
-        ) %>%
-      hc_rangeSelector(
-        selected = 4,
-        buttons = list(
-          list(type = 'all', text = "ALL"),
-          list(type = 'year', count = 1, text = "1yr"),
-          list(type = 'year', count = 5, text = "5yr"),
-          list(type = 'year', count = 10, text = "10yr"),
-          list(type = 'year', count = 20, text = "20yr"),
-          list(type = 'year', count = 30, text = "30yr")
-        )
-      ) %>%
-      hc_xAxis(
+      ax_xaxis(
         type = 'datetime'
       ) %>%
-      hc_yAxis(
-        title = list(text = "Yield")
+      ax_yaxis(
+        opposite = TRUE,
+        tickAmount = 2,
+        labels = list(
+          formatter = JS(
+            "function(val) {
+              return '';
+            }"
+          )
+        )
       ) %>%
-      hc_add_series(
-        data = t_bill_30,
-        name = "30 Year T-Bill",
-        showInNavigator = FALSE
+      ax_series(
+        list(
+          name = "10 Year T-Bill",
+          data = parse_df(t_bill_10_new)
+        )
+      )
+  })
+  
+  output$ir_chart <- renderApexchart({
+    
+    apexchart() %>%
+      ax_chart(
+        id = 'ir_chart',
+        type = 'line',
+        zoom = list(
+          type = 'xy',
+          enabled = TRUE,
+          autoScaleYaxis = TRUE
+        ),
+        toolbar = list(
+          show = TRUE,
+          autoSelected = 'zoom',
+          offsetX = 15
+        ),
+        group = 'timeseries'
       ) %>%
-      hc_add_series(
-        data = t_bill_20,
-        name = "20 Year T-Bill",
-        visible = FALSE
+      ax_xaxis(
+        type = 'datetime'
       ) %>%
-      hc_add_series(
-        data = t_bill_10,
-        name = "10 Year T-Bill",
-        showInNavigator = TRUE
+      ax_yaxis(
+        title = list(text = "Yield"),
+        forceNiceScale = TRUE,
+        decimalsInFloat = 0,
+        opposite = TRUE
       ) %>%
-      hc_add_series(
-        data = t_bill_5,
-        name = "5 Year T-Bill",
-        visible = FALSE
+      ax_legend(
+        position = 'top'
       ) %>%
-      hc_add_series(
-        data = t_bill_1,
-        name = "1 Year T-Bill"
+      ax_stroke(
+        width = 2
+      ) %>%
+      ax_tooltip(
+        x = list(
+          format = 'yyyy'
+        )
+      ) %>%
+      ax_series(
+        list(
+          name = "1 Year T-Bill",
+          data = parse_df(t_bill_1_new)
+        ),
+        list(
+          name = "5 Year T-Bill",
+          data = parse_df(t_bill_5_new)
+        ),
+        list(
+          name = "10 Year T-Bill",
+          data = parse_df(t_bill_10_new)
+        ),
+        list(
+          name = "20 Year T-Bill",
+          data = parse_df(t_bill_20_new)
+        ),
+        list(
+          name = "30 Year T-Bill",
+          data = parse_df(t_bill_30_new)
+        )
       )
   })
 }

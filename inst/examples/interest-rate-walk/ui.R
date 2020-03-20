@@ -131,7 +131,7 @@ fluidPage(
         tabPanel(
           "Plot",
           br(),
-          highchartOutput("sims_chart", height = 600)
+          apexchartOutput("sims_chart", height = 600)
         ),
         tabPanel(
           "Table",
@@ -163,7 +163,8 @@ fluidPage(
     column(
       width = 6,
       wellPanel(
-        highchartOutput("ir_chart", height = 500)
+        apexchartOutput("ir_chart", height = 400),
+        apexchartOutput("ir_chart_2", height = 100)
       )
     )
   )
