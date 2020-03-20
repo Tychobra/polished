@@ -10,6 +10,7 @@ fluidPage(
   fluidRow(
     headerPanel(
       tags$div(
+        style = "text-align: center;",
         a(
           img(
             src = "https://res.cloudinary.com/dxqnb8xjb/image/upload/v1509563497/tychobra-logo-blue_dacbnz.svg", 
@@ -17,11 +18,7 @@ fluidPage(
           ), 
           href = "https://tychobra.com/shiny"
         ),
-        h1("Interest Rate Walk", style = "display: inline"),
-        a(
-          href = "https://github.com/Tychobra/shiny-insurance-examples/tree/master/interest-rate-walk",
-          icon("github", class="fa-lg pull-right")
-        )
+        h1("Interest Rate Walk", style = "display: inline")
       ), 
       windowTitle = "Interest Rate"
     )
