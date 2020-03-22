@@ -173,7 +173,7 @@ user_edit_module <- function(input, output, session,
       tryCatch({
         DBI::dbWithTransaction(.global_sessions$conn, {
 
-          # add user to app_users
+          # update the app user
           DBI::dbExecute(
             .global_sessions$conn,
             "UPDATE polished.app_users SET is_admin=$1, modified_by=$2, modified_at=$3 WHERE user_uid=$4 AND app_name=$5",
@@ -201,6 +201,7 @@ user_edit_module <- function(input, output, session,
 
             # create table of new roles to insert into "user_roles"
             new_roles <- data.frame(
+              uid = uuid::UUIDgenerate(n = length(input_roles)),
               user_uid = hold_user$user_uid,
               role_uid = input_roles,
               app_name = .global_sessions$app_name,
