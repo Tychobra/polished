@@ -18,7 +18,7 @@
 create_schema <- function(conn) {
 
   create_users_table_query <- "CREATE TABLE polished.users (
-    uid                            UUID PRIMARY KEY,
+    uid                            TEXT PRIMARY KEY,
     email                          TEXT UNIQUE,
     created_by                     TEXT NOT NULL,
     created_at                     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -36,9 +36,9 @@ create_schema <- function(conn) {
   )"
 
   create_app_users_table_query <- "CREATE TABLE polished.app_users (
-    uid                   UUID PRIMARY KEY,
+    uid                   TEXT PRIMARY KEY,
     app_name              TEXT REFERENCES polished.apps(app_name),
-    user_uid              UUID REFERENCES polished.users(uid),
+    user_uid              TEXT REFERENCES polished.users(uid),
     is_admin              BOOLEAN NOT NULL,
     created_by            TEXT NOT NULL,
     created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -47,7 +47,7 @@ create_schema <- function(conn) {
   )"
 
   create_roles_table_query <- "CREATE TABLE polished.roles (
-    uid                   UUID PRIMARY KEY,
+    uid                   TEXT PRIMARY KEY,
     name                  TEXT UNIQUE,
     app_name              TEXT REFERENCES polished.apps(app_name),
     created_by            TEXT NOT NULL,
@@ -57,9 +57,9 @@ create_schema <- function(conn) {
   )"
 
   create_user_roles_table_query <- "CREATE TABLE polished.user_roles (
-    uid                    UUID PRIMARY KEY,
-    user_uid               UUID REFERENCES polished.users(uid),
-    role_uid               UUID REFERENCES polished.roles(uid),
+    uid                    TEXT PRIMARY KEY,
+    user_uid               TEXT REFERENCES polished.users(uid),
+    role_uid               TEXT REFERENCES polished.roles(uid),
     app_name               TEXT REFERENCES polished.apps(app_name),
     created_by             TEXT NOT NULL,
     created_at             TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -67,8 +67,8 @@ create_schema <- function(conn) {
 
 
   create_sessions_table_query <- "CREATE TABLE polished.sessions (
-    uid                   UUID PRIMARY KEY,
-    user_uid              UUID,
+    uid                   TEXT PRIMARY KEY,
+    user_uid              TEXT,
     firebase_uid          TEXT,
     email                 TEXT,
     email_verified        BOOLEAN,
@@ -81,8 +81,8 @@ create_schema <- function(conn) {
   )"
 
   create_session_actions_table_query <- "CREATE TABLE polished.session_actions (
-    uid                  UUID PRIMARY KEY,
-    session_uid          UUID,
+    uid                  TEXT PRIMARY KEY,
+    session_uid          TEXT,
     action               TEXT,
     timestamp            TIMESTAMPTZ NOT NULL DEFAULT NOW()
   )"

@@ -15,6 +15,8 @@
 #'
 #' @importFrom DBI dbWithTransaction dbGetQuery dbExecute dbWriteTable
 #'
+
+#'
 create_app_user <- function(conn, app_name, email, is_admin = FALSE, roles = character(0), created_by = NULL) {
 
   email <- tolower(email)
@@ -116,6 +118,7 @@ create_app_user <- function(conn, app_name, email, is_admin = FALSE, roles = cha
 
       # create table of new roles to insert into "user_roles"
       new_roles <- data.frame(
+        uid = uuid::UUIDgenerate(n = length(roles)),
         user_uid = user_uid,
         role_uid = roles,
         app_name = app_name,
