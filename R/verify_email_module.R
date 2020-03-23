@@ -73,4 +73,10 @@ verify_email_module <- function(input, output, session) {
 
   })
 
+  # sign out triggered from JS
+  shiny::observeEvent(input$sign_out, {
+    sign_out_from_shiny(session)
+    session$reload()
+  })
+
 }

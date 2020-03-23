@@ -28,8 +28,18 @@ const verify_email_module = (ns_prefix) => {
 
     const check_email_verification = () => {
 
-      firebase.auth().currentUser.reload()
-      .then(ok => {
+      // if the current Firebase user was somehow signed out, then sign the user
+      // out from Shiny
+      if (auth.currentUser === null) {
+        Shiny.setInputValue(`${ns_prefix}sign_out`,
+          1,
+          { event: "priority" }
+        )
+        return
+      }
+
+      auth.currentUser.reload()
+      .then(() => {
 
         if (auth.currentUser.emailVerified) {
 

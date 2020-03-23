@@ -14,7 +14,16 @@ var verify_email_module = function verify_email_module(ns_prefix) {
     });
 
     var check_email_verification = function check_email_verification() {
-      firebase.auth().currentUser.reload().then(function (ok) {
+      // if the current Firebase user was somehow signed out, then sign the user
+      // out from Shiny
+      if (auth.currentUser === null) {
+        Shiny.setInputValue("".concat(ns_prefix, "sign_out"), 1, {
+          event: "priority"
+        });
+        return;
+      }
+
+      auth.currentUser.reload().then(function () {
         if (auth.currentUser.emailVerified) {
           auth.currentUser.getIdToken(true).then(function (firebase_token) {
             Shiny.setInputValue("".concat(ns_prefix, "refresh_email_verification"), firebase_token, {
