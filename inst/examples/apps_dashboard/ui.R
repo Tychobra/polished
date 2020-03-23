@@ -21,14 +21,14 @@ body <- dashboardBody(
   fluidRow(
     app_box_module_ui(
       id = "basic_insurer_dashboard",
-      app_name = "Basic Insurer Dashboard",
+      app_name = "Basic Claims Analytics Dashboard",
       width = 6,
       img_src = "images/basic_insurer_dashboard.png",
       more_info = column(
         12,
         h4(
           style = "line-height: 1.25",
-          "Basic Claims Analytics Dashboard."
+          "Basic Claims Analytics Dashboard"
         ),
         tags$ul(
           tags$li("View insurance claims at different points in time"),
@@ -40,20 +40,20 @@ body <- dashboardBody(
       app_href = "https://apps.tychobra.com/t3_client"
     ),
     app_box_module_ui(
-      id = "github_issues",
-      app_name = "GitHub Issues",
+      id = "interest_rate_walk",
+      app_name = "Interest Rate Walk",
       width = 6,
-      img_src = "images/github_issues.png",
+      img_src = "images/interest_rate_walk_dashboard.png",
       more_info = column(
         12,
         h4(
           style = "line-height: 1.25",
-          "Internal app for tracking issues on GitHub."
+          "Interest Rate Walk Dashboard"
         ),
         tags$ul(
-          tags$li("Contractors can see issues currenlty assigned to them"),
-          tags$li("Displays total number of internal and client issues"),
-          tags$li("Shows contractors the status and priorty of assigned issues")
+          tags$li("View visualizations and tables with interest rate data over time"),
+          tags$li("Run a Cox-Ingersoll-Ross random walk or a bootstrap resampling of treasury yield changes"),
+          tags$li("View historical treasury yields to reference for parameter selection during resampling")
         )
       ),
       app_href = "https://apps.tychobra.com/github_issues"

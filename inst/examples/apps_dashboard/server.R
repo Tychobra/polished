@@ -27,8 +27,8 @@ server <- function(input, output, session) {
 
   callModule(
     app_box_module,
-    id = "github_issues",
-    app_id = "github_issues",
+    id = "interest_rate_walk",
+    app_id = "interest_rate_walk",
     user_apps = user_apps
   )
 
