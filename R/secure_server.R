@@ -148,25 +148,6 @@ secure_server <- function(
           verify_email_module,
           "verify"
         )
-        #tryCatch({
-        #   global_user <- .global_sessions$refresh_email_verification(
-        #     global_user$session_uid,
-        #     global_user$firebase_uid
-        #   )$find(hashed_cookie)
-        # }, error = function(err) {
-        #   # set query string to sign in page
-        #
-        #   sign_out_from_shiny(
-        #     session,
-        #     user = list(
-        #       user_uid = global_user$user_uid,
-        #       session_uid = global_user$session_uid
-        #     )
-        #   )
-        #
-        #   print("[polished] error - refreshing email verification")
-        #   session$reload()
-        # })
       }
 
 
@@ -199,7 +180,7 @@ secure_server <- function(
       query_string <- shiny::getQueryString()
 
 
-      if (is.null(query_string$page)) {
+      if (is.null(query_string$page) && session$userData$user()$email_verified) {
         session_uid <- session$userData$user()$session_uid
         server(input, output, session)
 
