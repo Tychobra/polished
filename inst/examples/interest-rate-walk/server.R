@@ -225,8 +225,8 @@ function(input, output, server) {
           enabled = TRUE,
           xaxis = list(
             # Convert from string (of date) to JS timestamp value
-            min = as.numeric(as.POSIXct(t_bill_10_new$Date[20]))* 1000,
-            max = as.numeric(as.POSIXct(t_bill_10_new$Date[35]))* 1000
+            min = format_date(as.POSIXct(t_bill_10_new$Date[20])), #as.numeric(as.POSIXct(t_bill_10_new$Date[20]))* 1000,
+            max = format_date(as.POSIXct(t_bill_10_new$Date[35])) #as.numeric(as.POSIXct(t_bill_10_new$Date[35]))* 1000
           )
         ),
         toolbar = list(
