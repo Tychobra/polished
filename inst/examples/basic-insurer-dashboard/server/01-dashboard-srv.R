@@ -171,7 +171,7 @@ output$ay_plot <- renderApexchart({
   dat <- ay_plot_prep()$dat
   titles <- ay_plot_prep()$titles
   
-  apexchart() %>% 
+  apexchart(auto_update = FALSE) %>% 
     ax_chart(
       type = 'bar', 
       stacked = TRUE,
@@ -197,19 +197,21 @@ output$ay_plot <- renderApexchart({
       title = list(text = "Accident Year")
     ) %>%
     ax_yaxis(
-      title = list(text = titles$y_axis)#,
-      # labels = list(
-      #   formatter = JS(
-      #     "function (val) {
-      #       debugger;
-      #       if (val > 1000 && val < 1000000) {
-      #         return val / 1000 + 'k';
-      #       } else if (val > 1000000) {
-      #         return val / 1000000 + 'M';
-      #       }
-      #     }"
-      #   )
-      # )
+      title = list(text = titles$y_axis),
+      labels = list(
+        formatter = JS(
+          "function (val) {
+            debugger;
+            if (val > 1000 && val < 1000000) {
+              return val / 1000 + 'k';
+            } else if (val > 1000000) {
+              return val / 1000000 + 'M';
+            } else {
+              return val;
+            }
+          }"
+        )
+      )
     ) %>%
     ax_title(
       text = titles$title,
@@ -260,85 +262,3 @@ output$ay_plot <- renderApexchart({
     )
   
 })
-
-observe({
-  dat <- ay_plot_prep()$dat
-  titles <- ay_plot_prep()$titles
-  
-  # browser()
-  
-  apexchartProxy('ay_plot') %>%
-    ax_proxy_options(
-      list(
-        title = list(text = titles$title),
-        subtitle = list(text = titles$subtitle),
-        xaxis = list(
-          categories = dat$year
-        ),
-        yaxis = list(
-          title = list(text = titles$y_axis)#,
-          # labels = list(
-          #   formatter = JS(
-          #     "function (val) {
-          #       debugger;
-          #       if (val > 1000 && val < 1000000) {
-          #         return val / 1000 + 'k';
-          #       } else if (val > 1000000) {
-          #         return val / 1000000 + 'M';
-          #       }
-          #     }"
-          #   )
-          # )
-        )
-      )
-    )
-})
-
-
-# output$ay_plot <- renderHighchart({
-#   req(ay_plot_prep())
-#   
-#   dat <- ay_plot_prep()$dat
-#   titles <- ay_plot_prep()$titles
-#   
-#   browser()
-#   
-#   highchart() %>%
-#     hc_chart(type = "column") %>%
-#     hc_exporting(
-#       enabled = TRUE,
-#       buttons = tychobratools::hc_btn_options()
-#     ) %>%
-#     hc_legend(
-#       reversed = TRUE
-#     ) %>%
-#     hc_title(text = titles$title) %>%
-#     hc_subtitle(text = titles$subtitle) %>%
-#     hc_xAxis(
-#       categories = dat$year,
-#       title = list(text = "Accident Year")
-#     ) %>%
-#     hc_yAxis(
-#       title = list(text = titles$y_axis),
-#       stackLabels = list(
-#         enabled = TRUE,
-#         style = list(
-#           fontWeight = "bold",
-#           color = "#f7a35c",
-#           textOutline = NULL
-#         ),
-#         format = "{total:,.0f}"
-#       )
-#     ) %>%
-#     hc_plotOptions(
-#       column = list(stacking = 'normal')
-#     ) %>%
-#     hc_add_series(
-#       data = round(dat$case, 0),
-#       name = titles$series[2]
-#     ) %>%
-#     hc_add_series(
-#       data = round(dat$paid, 0),
-#       name = titles$series[1]
-#     ) 
-# })
