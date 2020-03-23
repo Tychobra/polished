@@ -280,6 +280,17 @@ sign_in_module <- function(input, output, session) {
     tryCatch({
       invite <- .global_sessions$get_invite_by_email(email)
 
+      if (is.null(invite)) {
+
+        shinyWidgets::sendSweetAlert(
+          session,
+          title = "Not Authorized",
+          text = "You must have an invite to access this app",
+          type = "error"
+        )
+        return()
+      }
+
       # user is invited
       shinyjs::hide("continue_registation")
 
@@ -292,8 +303,8 @@ sign_in_module <- function(input, output, session) {
       print(e)
       shinyWidgets::sendSweetAlert(
         session,
-        title = "Not Authorized",
-        text = "You must have an invite to access this app",
+        title = "Error",
+        text = "Error checking invite",
         type = "error"
       )
     })
