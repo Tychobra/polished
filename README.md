@@ -1,4 +1,4 @@
-# polished <img src="inst/assets/images/logo_transparent.png" align="right" width="120" />
+# polished <img src="inst/assets/images/polished_logo_transparent.png" align="right" width="120" />
 
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![Travis-CI Build Status](https://travis-ci.org/Tychobra/polished.svg?branch=master)](https://travis-ci.org/tychobra/polished)

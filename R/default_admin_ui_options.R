@@ -14,7 +14,7 @@ default_admin_ui_options <- function() {
           tags$a(
             href = "https://polished.tychobra.com",
             tags$img(
-              src="polish/images/logo_transparent.png",
+              src="polish/images/polished_logo_transparent.png",
               height = "50px",
               alt = "Polished Logo",
               style = "margin-top: -20px; float: left;"
