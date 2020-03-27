@@ -14,13 +14,11 @@ default_admin_ui_options <- function() {
           tags$a(
             href = "https://polished.tychobra.com",
             tags$img(
-              src="polish/images/polished_logo_transparent.png",
-              height = "50px",
-              alt = "Polished Logo",
-              style = "margin-top: -20px; float: left;"
+              src="polish/images/polished_logo_transparent_text_2.png",
+              style = "height: 37.5px; width: 180px; padding: 0",
+              alt = "Polished Logo"
             )
-          ),
-          tags$span("Polished", style='float: left; font-size: 37px !important; margin-top: -14px !important; margin-left: 10px; padding-top: 0 !important;')
+          )
         )
       ),
       windowTitle = "Polished"
