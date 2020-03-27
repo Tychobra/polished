@@ -41,7 +41,6 @@ Sessions <-  R6::R6Class(
       conn = NULL,
       app_name = NULL,
       firebase_project_id = NULL,
-      authorization_level = 'app',
       admin_mode = FALSE,
       is_invite_required = TRUE
     ) {
@@ -50,9 +49,6 @@ Sessions <-  R6::R6Class(
       }
       if (!(length(app_name) == 1 && is.character(app_name))) {
         stop("invalid `app_name` argument passed to `global_sessions_config()`", call. = FALSE)
-      }
-      if (!(length(authorization_level) == 1 && is.character(authorization_level))) {
-        stop("invalid `authorization_level` argument passed to `global_sessions_config()`", call. = FALSE)
       }
       tryCatch({
         if (!DBI::dbIsValid(conn)) {
@@ -72,7 +68,6 @@ Sessions <-  R6::R6Class(
 
       self$app_name <- app_name
       self$conn <- conn
-      private$authorization_level <- authorization_level
       self$firebase_project_id <- firebase_project_id
       private$admin_mode <- admin_mode
       self$is_invite_required <- is_invite_required
@@ -187,29 +182,14 @@ Sessions <-  R6::R6Class(
     },
     get_invite_by_uid = function(user_uid) {
 
-      if (private$authorization_level == "app") {
-        # authorization for this user is set at the Shiny app level, so only check this specific app
-        # to see if the user is authorized
-        invite <- DBI::dbGetQuery(
-          self$conn,
-          "SELECT * FROM polished.app_users WHERE user_uid=$1 AND app_name=$2",
-          params = list(
-            user_uid,
-            self$app_name
-          )
+      invite <- DBI::dbGetQuery(
+        self$conn,
+        "SELECT * FROM polished.app_users WHERE user_uid=$1 AND app_name=$2",
+        params = list(
+          user_uid,
+          self$app_name
         )
-      } else if (private$authorization_level == "all") {
-        # if user is authoized to access any apps, they can access this app.
-        # e.g. used for apps_dashboards where we want all users that are allowed to access any app to
-        # be able to access the dashboard.
-        invite <- DBI::dbGetQuery(
-          self$conn,
-          "SELECT * FROM polished.app_users WHERE user_uid=$1 LIMIT 1",
-          params = list(
-            user_uid
-          )
-        )
-      }
+      )
 
       if (nrow(invite) != 1) {
         return(NULL)
@@ -477,7 +457,6 @@ Sessions <-  R6::R6Class(
 
       invisible(self)
     },
-    authorization_level = "app", # or "all"
     refresh_jwt_pub_key = function() {
       google_keys_resp <- httr::GET("https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com")
 

@@ -38,7 +38,6 @@ polished Sessions configuration function
   conn = NULL,
   app_name = NULL,
   firebase_project_id = NULL,
-  authorization_level = "app",
   admin_mode = FALSE,
   is_invite_required = TRUE
 )}\if{html}{\out{</div>}}
