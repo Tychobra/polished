@@ -13,7 +13,6 @@ this class directly.
 \itemize{
 \item \href{#method-config}{\code{Sessions$config()}}
 \item \href{#method-sign_in}{\code{Sessions$sign_in()}}
-\item \href{#method-get_user_by_email}{\code{Sessions$get_user_by_email()}}
 \item \href{#method-get_invite_by_email}{\code{Sessions$get_invite_by_email()}}
 \item \href{#method-get_invite_by_uid}{\code{Sessions$get_invite_by_uid()}}
 \item \href{#method-get_roles}{\code{Sessions$get_roles()}}
@@ -85,15 +84,6 @@ NULL if sign in fails. If sign in is successful, a list containing the following
 \item session_uid
 }
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_user_by_email"></a>}}
-\if{latex}{\out{\hypertarget{method-get_user_by_email}{}}}
-\subsection{Method \code{get_user_by_email()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$get_user_by_email(email)}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_invite_by_email"></a>}}

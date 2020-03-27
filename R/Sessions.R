@@ -168,28 +168,13 @@ Sessions <-  R6::R6Class(
 
       return(new_session)
     },
-    get_user_by_email = function(email) {
-      user_out <- DBI::dbGetQuery(
-        self$conn,
-        "SELECT * FROM polished.users WHERE email=$1",
-        params = list(
-          email
-        )
-      )
-
-      if (nrow(user_out) == 0) {
-        return(NULL)
-      }
-
-      as.list(user_out)
-    },
     get_invite_by_email = function(email) {
 
       invite <- NULL
 
       DBI::dbWithTransaction(self$conn, {
 
-        user_db <- self$get_user_by_email(email)
+        user_db <- get_user_by_email(self$conn, email)
 
         if (!is.null(user_db)) {
           invite <- self$get_invite_by_uid(user_db$uid)
