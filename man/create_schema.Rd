@@ -14,7 +14,6 @@ create all the tables in the "polished" schema.  The "polished" schema contains 
  - users
  - apps
  - app_users
- - roles
- - user_roles
  - sessions
+ - session_actions
 }

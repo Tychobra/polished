@@ -15,7 +15,6 @@ this class directly.
 \item \href{#method-sign_in}{\code{Sessions$sign_in()}}
 \item \href{#method-get_invite_by_email}{\code{Sessions$get_invite_by_email()}}
 \item \href{#method-get_invite_by_uid}{\code{Sessions$get_invite_by_uid()}}
-\item \href{#method-get_roles}{\code{Sessions$get_roles()}}
 \item \href{#method-find}{\code{Sessions$find()}}
 \item \href{#method-refresh_email_verification}{\code{Sessions$refresh_email_verification()}}
 \item \href{#method-set_signed_in_as}{\code{Sessions$set_signed_in_as()}}
@@ -78,7 +77,6 @@ NULL if sign in fails. If sign in is successful, a list containing the following
 \item email_verified
 \item is_admin
 \item user_uid
-\item roles
 \item hashed_cookie
 \item session_uid
 }
@@ -99,15 +97,6 @@ NULL if sign in fails. If sign in is successful, a list containing the following
 \subsection{Method \code{get_invite_by_uid()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$get_invite_by_uid(user_uid)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_roles"></a>}}
-\if{latex}{\out{\hypertarget{method-get_roles}{}}}
-\subsection{Method \code{get_roles()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$get_roles(user_uid)}\if{html}{\out{</div>}}
 }
 
 }

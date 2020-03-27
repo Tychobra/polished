@@ -7,7 +7,6 @@
 #' @param email the email address of the first user.
 #' @param is_admin boolean that defaults to FALSE.  Whether or not the user being created
 #' is an admin.
-#' @param roles A character vector of the new user's roles.  Defaults to `character(0)`
 #' @param created_by uid of the user that creating this user.  If `NULL`, the default, then the
 #' user uid of the user being created will be used.
 #'
@@ -17,7 +16,7 @@
 #'
 
 #'
-create_app_user <- function(conn, app_name, email, is_admin = FALSE, roles = character(0), created_by = NULL) {
+create_app_user <- function(conn, app_name, email, is_admin = FALSE, created_by = NULL) {
 
   email <- tolower(email)
   email <- trimws(email)
@@ -112,29 +111,6 @@ create_app_user <- function(conn, app_name, email, is_admin = FALSE, roles = cha
       )
     )
 
-
-    # add the user roles
-    if (length(roles) > 0) {
-
-      # create table of new roles to insert into "user_roles"
-      new_roles <- data.frame(
-        uid = uuid::UUIDgenerate(n = length(roles)),
-        user_uid = user_uid,
-        role_uid = roles,
-        app_name = app_name,
-        created_by = created_by,
-        stringsAsFactors = FALSE
-      )
-
-      # append new roles to "user_roles" table
-      DBI::dbWriteTable(
-        conn,
-        name = DBI::Id(schema = "polished", table = "user_roles"),
-        value = new_roles,
-        append = TRUE,
-        overwrite = FALSE
-      )
-    }
 
   })
 
