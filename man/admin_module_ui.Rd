@@ -21,6 +21,9 @@ admin_module_ui(
 ui to add addtional `shinydashboard` tabs to the Polished admin panel.}
 
 \item{options}{list of html elements to customize branding of Admin Panel.}
+
+\item{include_go_to_shiny_app_button}{whether or not to include the button to go to
+the Shiny app.  This argument is set to `FALSE` when `polished` is in "admin_mode".}
 }
 \description{
 admin_ui
