@@ -78,12 +78,10 @@ sign_in_module_ui <- function(id, firebase_config, allow_register = TRUE) {
         if (allow_register) {
           list(
             hr(),
-            br(),
             shiny::actionLink(
               inputId = ns("go_to_register"),
               label = "Not a member? Register!"
-            ),
-            br()
+            )
           )
         } else {
           list()
@@ -174,7 +172,6 @@ sign_in_module_ui <- function(id, firebase_config, allow_register = TRUE) {
       div(
         style = "text-align: center",
         hr(),
-        br(),
         shiny::actionLink(
           inputId = ns("go_to_sign_in"),
           label = "Already a member? Sign in!"
