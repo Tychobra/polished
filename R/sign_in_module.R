@@ -3,7 +3,6 @@
 #' UI for the sign in and register panels
 #'
 #' @param id the Shiny module id
-#' @param firebase_config list of Firebase config
 #' @param allow_register default is `TRUE`.  Whether or not to show the
 #' "Not a Member? Register!" link.  This should only be set to `FALSE` if
 #' you are handling Firebase registration yourself e.g. your are automatically
@@ -18,8 +17,11 @@
 #' @export
 #'
 #'
-sign_in_module_ui <- function(id, firebase_config, allow_register = TRUE) {
+sign_in_module_ui <- function(id, allow_register = TRUE) {
   ns <- shiny::NS(id)
+
+  firebase_config <- .global_sessions$firebase_config
+
 
   htmltools::tagList(
     shinyjs::useShinyjs(),

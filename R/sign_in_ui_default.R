@@ -1,6 +1,5 @@
 #' sign_in_ui_default
 #'
-#' @param firebase_config Firebase configuration
 #' @param color hex color for the background and button
 #' @param company_name your company name
 #' @param logo_top html for logo to go above the sign in panel.
@@ -15,7 +14,6 @@
 #' @return the UI for the sign in page
 #'
 sign_in_ui_default <- function(
-  firebase_config,
   color = "#2491EB",
   company_name = "Tychobra LLC",
   logo_top = tags$img(
@@ -29,6 +27,8 @@ sign_in_ui_default <- function(
     style = "width: 200px; margin-bottom: 15px; padding-top: 15px;"
   )
 ) {
+
+  firebase_config <- .global_sessions$firebase_config
 
   shiny::fluidPage(
     style = "height: 100vh;",
@@ -51,7 +51,7 @@ sign_in_ui_default <- function(
           width: 300px;
           max-width: 100%;
           padding: 10px 25px;
-          background: #fff;
+          background-color: #fff;
           color: #080021;
           z-index: 20000;
         }
@@ -69,7 +69,7 @@ sign_in_ui_default <- function(
         }
 
         body {
-          background-color: ${color};
+          background-color: ${color} !important;
         }
 
         /*label {
@@ -87,10 +87,7 @@ sign_in_ui_default <- function(
           style = "width: 300px; max-width: 100%;",
           logo_top
         ),
-        sign_in_module_ui(
-          "sign_in",
-          firebase_config
-        ),
+        sign_in_module_ui("sign_in"),
         tags$div(
           style = "width: 300px; max-width: 100%; background-color: #FFF",
           tags$hr(style="padding: 0; margin: 0;"),

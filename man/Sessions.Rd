@@ -36,7 +36,7 @@ polished Sessions configuration function
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$config(
   conn = NULL,
   app_name = NULL,
-  firebase_project_id = NULL,
+  firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE
 )}\if{html}{\out{</div>}}

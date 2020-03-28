@@ -25,7 +25,7 @@ Sessions <-  R6::R6Class(
   public = list(
     app_name = character(0),
     conn = NULL,
-    firebase_project_id = character(0),
+    firebase_config = NULL,
     is_invite_required = TRUE,
 
     #' @description
@@ -40,12 +40,13 @@ Sessions <-  R6::R6Class(
     config = function(
       conn = NULL,
       app_name = NULL,
-      firebase_project_id = NULL,
+      firebase_config = NULL,
       admin_mode = FALSE,
       is_invite_required = TRUE
     ) {
-      if (!(length(firebase_project_id) == 1 && is.character(firebase_project_id))) {
-        stop("invalid `firebase_project_id` argument passed to `global_sessions_config()`", call. = FALSE)
+      if (length(firebase_config) != 3 ||
+          !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
+        stop("invalid `firebase_config` argument passed to `global_sessions_config()`", call. = FALSE)
       }
       if (!(length(app_name) == 1 && is.character(app_name))) {
         stop("invalid `app_name` argument passed to `global_sessions_config()`", call. = FALSE)
@@ -68,7 +69,7 @@ Sessions <-  R6::R6Class(
 
       self$app_name <- app_name
       self$conn <- conn
-      self$firebase_project_id <- firebase_project_id
+      self$firebase_config <- firebase_config
       private$admin_mode <- admin_mode
       self$is_invite_required <- is_invite_required
 
@@ -474,8 +475,8 @@ Sessions <-  R6::R6Class(
       if (!(as.numeric(decoded_jwt$exp) + private$firebase_token_grace_period_seconds > curr_time &&
             as.numeric(decoded_jwt$iat) < curr_time + private$firebase_token_grace_period_seconds &&
             as.numeric(decoded_jwt$auth_time) < curr_time + private$firebase_token_grace_period_seconds &&
-            decoded_jwt$aud == self$firebase_project_id &&
-            decoded_jwt$iss == paste0("https://securetoken.google.com/", self$firebase_project_id) &&
+            decoded_jwt$aud == self$firebase_config$projectId &&
+            decoded_jwt$iss == paste0("https://securetoken.google.com/", self$firebase_config$projectId) &&
             nchar(decoded_jwt$sub) > 0)) {
 
         stop("[polished] error verifying JWT")

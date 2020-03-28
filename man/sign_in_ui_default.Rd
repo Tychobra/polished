@@ -5,7 +5,6 @@
 \title{sign_in_ui_default}
 \usage{
 sign_in_ui_default(
-  firebase_config,
   color = "#2491EB",
   company_name = "Tychobra LLC",
   logo_top = tags$img(src = "polish/images/polished_logo_transparent_white.png", width
@@ -16,8 +15,6 @@ sign_in_ui_default(
 )
 }
 \arguments{
-\item{firebase_config}{Firebase configuration}
-
 \item{color}{hex color for the background and button}
 
 \item{company_name}{your company name}

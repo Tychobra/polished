@@ -1,7 +1,6 @@
 #' admin_ui
 #'
 #' @param id the Shiny module id
-#' @param firebase_config list of Firebase config
 #' @param custom_admin_ui Either `NULL`, the default, or a list of 2 elements containing custom
 #' ui to add addtional `shinydashboard` tabs to the Polished admin panel.
 #' @param options list of html elements to customize branding of Admin Panel.
@@ -14,7 +13,7 @@
 #'
 #' @export
 #'
-admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL,
+admin_module_ui <- function(id, custom_admin_ui = NULL,
   options = default_admin_ui_options(),
   include_go_to_shiny_app_button = TRUE
 ) {
@@ -101,9 +100,7 @@ admin_module_ui <- function(id, firebase_config, custom_admin_ui = NULL,
 
   body <- shinydashboard::dashboardBody(
     htmltools::tags$head(
-      options$browser_tab_icon,
-      firebase_dependencies(),
-      firebase_init(firebase_config)
+      options$browser_tab_icon
     ),
     shinyjs::useShinyjs(),
     shinytoastr::useToastr(),
