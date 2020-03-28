@@ -4,14 +4,7 @@
 \alias{create_app_user}
 \title{create_app_user}
 \usage{
-create_app_user(
-  conn,
-  app_name,
-  email,
-  is_admin = FALSE,
-  roles = character(0),
-  created_by = NULL
-)
+create_app_user(conn, app_name, email, is_admin = FALSE, created_by = NULL)
 }
 \arguments{
 \item{conn}{the database connection.}
@@ -22,8 +15,6 @@ create_app_user(
 
 \item{is_admin}{boolean that defaults to FALSE.  Whether or not the user being created
 is an admin.}
-
-\item{roles}{A character vector of the new user's roles.  Defaults to `character(0)`}
 
 \item{created_by}{uid of the user that creating this user.  If `NULL`, the default, then the
 user uid of the user being created will be used.}

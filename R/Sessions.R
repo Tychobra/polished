@@ -93,7 +93,6 @@ Sessions <-  R6::R6Class(
     #' * email_verified
     #' * is_admin
     #' * user_uid
-    #' * roles
     #' * hashed_cookie
     #' * session_uid
     #' @md
@@ -140,9 +139,6 @@ Sessions <-  R6::R6Class(
 
         new_session$is_admin <- invite$is_admin
         new_session$user_uid <- invite$user_uid
-
-        # find the users roles
-        new_session$roles <- self$get_roles(invite$user_uid)
 
 
         new_session$hashed_cookie <- hashed_cookie
@@ -197,36 +193,6 @@ Sessions <-  R6::R6Class(
 
       invite
     },
-    # return a character vector of the user's roles
-    get_roles = function(user_uid) {
-      roles <- character(0)
-      DBI::dbWithTransaction(self$conn, {
-
-
-        role_names <- DBI::dbGetQuery(
-          self$conn,
-          "SELECT uid, name FROM polished.roles WHERE app_name=$1",
-          params = list(
-            self$app_name
-          )
-        )
-
-        role_uids <- DBI::dbGetQuery(
-          self$conn,
-          "SELECT role_uid FROM polished.user_roles WHERE user_uid=$1 AND app_name=$2",
-          params = list(
-            user_uid,
-            self$app_name
-          )
-        )$role_uid
-
-        roles <- role_names %>%
-          dplyr::filter(uid %in% role_uids) %>%
-          dplyr::pull(name)
-      })
-
-      roles
-    },
     find = function(hashed_cookie) {
 
       signed_in_sessions <- dbGetQuery(
@@ -245,7 +211,6 @@ Sessions <-  R6::R6Class(
 
         # confirm that user is invited
         invite <- self$get_invite_by_uid(signed_in_sessions$user_uid[1])
-        roles <- self$get_roles(signed_in_sessions$user_uid[1])
 
         app_session <- signed_in_sessions %>%
           filter(.data$app_name == self$app_name)
@@ -260,7 +225,6 @@ Sessions <-  R6::R6Class(
           "firebase_uid" = signed_in_sessions$firebase_uid[1],
           "email_verified" = signed_in_sessions$email_verified[1],
           "is_admin" = invite$is_admin,
-          "roles" = roles,
           "hashed_cookie" = hashed_cookie
         )
 
@@ -360,13 +324,10 @@ Sessions <-  R6::R6Class(
 
       invite <- self$get_invite_by_uid(user_uid)
 
-      roles <- self$get_roles(user_uid)
-
       list(
         user_uid = user_uid,
         email = email,
-        is_admin = invite$is_admin,
-        roles = roles
+        is_admin = invite$is_admin
       )
     },
     set_inactive = function(session_uid) {
