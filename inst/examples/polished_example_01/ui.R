@@ -3,9 +3,19 @@
 ui <- fluidPage(
   fluidRow(
     column(
-      12,
+      6,
       h1("Polished Example 01"),
       br()
+    ),
+    column(
+      6,
+      br(),
+      actionButton(
+        "sign_out",
+        "Sign Out",
+        icon = icon("sign-out-alt"),
+        class = "pull-right"
+      )
     ),
     column(
       12,
