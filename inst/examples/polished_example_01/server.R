@@ -4,6 +4,13 @@ server <- function(input, output, session) {
     session$userData$user()
   })
 
+
+  observeEvent(input$sign_out, {
+
+    sign_out_from_shiny(session)
+    session$reload()
+
+  })
 }
 
 secure_server(server)

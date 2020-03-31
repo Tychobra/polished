@@ -6,7 +6,6 @@
 #' @param modal_title the title for the modal
 #' @param user_to_edit reactive - a one row data frame of the user to edit from the "app_users" table.
 #' @param open_modal_trigger reactive - a trigger to open the modal
-#' @param existing_roles reactive data frame of all roles for this app
 #' @param existing_users reactive data frame of all users of this app.  This is used to check that the user
 #' does not add a user that already exists.
 #'
@@ -21,39 +20,14 @@ user_edit_module <- function(input, output, session,
   modal_title,
   user_to_edit,
   open_modal_trigger,
-  existing_roles,
   existing_users
 ) {
 
   ns <- session$ns
 
 
-
-  role_choices <- reactive({
-    hold_roles <- existing_roles()
-    hold_user <- user_to_edit()
-
-    choices <- hold_roles$uid
-    names(choices) <- hold_roles$name
-
-    if (is.null(hold_user)) {
-      out <- list(
-        choices = choices,
-        selected = NULL
-      )
-    } else {
-      out <- list(
-        choices = choices,
-        selected = hold_user$roles[[1]]$role_uid
-      )
-    }
-
-    out
-  })
-
   shiny::observeEvent(open_modal_trigger(), {
     hold_user <- user_to_edit()
-    hold_role_choices <- role_choices()
 
     if (is.null(hold_user)) {
       is_admin_value  <- "No"
@@ -107,16 +81,6 @@ user_edit_module <- function(input, output, session,
             selected = is_admin_value,
             inline = TRUE
           )
-        ),
-        shinyWidgets::pickerInput(
-          ns("user_custom_role"),
-          "Role",
-          choices = hold_role_choices$choices,
-          multiple = TRUE,
-          selected = hold_role_choices$selected,
-          options = list(
-            `none-selected-text` = "No Roles"
-          )
         )
       )
     )
@@ -132,7 +96,6 @@ user_edit_module <- function(input, output, session,
     session_user <- session$userData$user()$user_uid
     input_email <- input$user_email
     input_is_admin <- input$user_is_admin
-    input_roles <- input$user_custom_role
 
     is_admin_out <- if (input_is_admin == "Yes") TRUE else FALSE
 
@@ -151,7 +114,6 @@ user_edit_module <- function(input, output, session,
           app_name = .global_sessions$app_name,
           email = input_email,
           is_admin = is_admin_out,
-          roles = input_roles,
           created_by = session_user
         )
 
@@ -185,40 +147,6 @@ user_edit_module <- function(input, output, session,
               .global_sessions$app_name       # app_name
             )
           )
-
-          # edit user roles
-          # delete any existing roles for this user
-          DBI::dbExecute(
-            .global_sessions$conn,
-            "DELETE FROM polished.user_roles WHERE user_uid=$1 AND app_name=$2",
-            params = list(
-              hold_user$user_uid, # user_uid
-              .global_sessions$app_name
-            )
-          )
-
-          if (length(input_roles) > 0) {
-
-            # create table of new roles to insert into "user_roles"
-            new_roles <- data.frame(
-              uid = uuid::UUIDgenerate(n = length(input_roles)),
-              user_uid = hold_user$user_uid,
-              role_uid = input_roles,
-              app_name = .global_sessions$app_name,
-              created_by = session_user,
-              stringsAsFactors = FALSE
-            )
-
-            # append new roles to "user_roles" table
-            DBI::dbWriteTable(
-              .global_sessions$conn,
-              name = DBI::Id(schema = "polished", table = "user_roles"),
-              value = new_roles,
-              append = TRUE,
-              overwrite = FALSE
-            )
-          }
-
 
         })
 

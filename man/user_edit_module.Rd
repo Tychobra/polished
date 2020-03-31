@@ -11,7 +11,6 @@ user_edit_module(
   modal_title,
   user_to_edit,
   open_modal_trigger,
-  existing_roles,
   existing_users
 )
 }
@@ -27,8 +26,6 @@ user_edit_module(
 \item{user_to_edit}{reactive - a one row data frame of the user to edit from the "app_users" table.}
 
 \item{open_modal_trigger}{reactive - a trigger to open the modal}
-
-\item{existing_roles}{reactive data frame of all roles for this app}
 
 \item{existing_users}{reactive data frame of all users of this app.  This is used to check that the user
 does not add a user that already exists.}

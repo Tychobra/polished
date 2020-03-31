@@ -45,10 +45,7 @@ fluidPage(
     ),
     column(
       width = 4,
-      sign_in_module_ui(
-        "sign_in",
-        app_config$firebase
-      )
+      sign_in_module_ui("sign_in")
     )
   ),
   fluidRow(

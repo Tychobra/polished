@@ -4,7 +4,6 @@
 #' to sign in and register.
 #'
 #' @param id the Shiny module id
-#' @param firebase_config list of Firebase config
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr
@@ -14,8 +13,10 @@
 #' @export
 #'
 #'
-sign_in_no_invite_module_ui <- function(id, firebase_config) {
+sign_in_no_invite_module_ui <- function(id) {
   ns <- shiny::NS(id)
+
+  firebase_config <- .global_sessions$firebase_config
 
   fluidPage(
     tags$head(

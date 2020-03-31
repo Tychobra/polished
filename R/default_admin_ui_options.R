@@ -8,20 +8,16 @@ default_admin_ui_options <- function() {
   list(
 
 
-    title = shiny::titlePanel(
-      htmltools::HTML(
-        paste0(
-          tags$a(
-            href = "https://polished.tychobra.com",
-            tags$img(
-              src="polish/images/polished_logo_transparent_text_2.png",
-              style = "height: 37.5px; width: 180px; padding: 0",
-              alt = "Polished Logo"
-            )
-          )
+    title = tagList(
+      tags$a(
+        href = "https://polished.tychobra.com",
+        tags$img(
+          src="polish/images/polished_logo_transparent_text_2.png",
+          style = "height: 37.5px; width: 180px; padding: 0",
+          alt = "Polished Logo"
         )
       ),
-      windowTitle = "Polished"
+      htmltools::tags$head(htmltools::tags$title("Polished"))
     ),
 
 
@@ -33,6 +29,9 @@ default_admin_ui_options <- function() {
       )
     ),
 
-    browser_tab_icon = tags$link(rel = "shortcut icon", href = "polish/images/polished_hex.png")
+    browser_tab_icon = tags$link(
+      rel = "shortcut icon",
+      href = "polish/images/polished_logo_transparent.png"
+    )
   )
 }

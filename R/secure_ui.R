@@ -1,7 +1,6 @@
 #' Secure the Shiny Application UI
 #'
 #' @param ui UI of the application.
-#' @param firebase_config Firebase configuration.
 #' @param sign_in_page_ui Either `NULL`, the default, or the HTML, CSS, and JavaScript
 #' to use for the UI of the Sign In page.
 #' @param custom_admin_ui Either `NULL`, the default, or a list of 2 elements containing custom
@@ -22,7 +21,6 @@
 #'
 secure_ui <- function(
   ui,
-  firebase_config,
   sign_in_page_ui = NULL,
   custom_admin_ui = NULL,
   custom_admin_button_ui = admin_button_ui("polished"),
@@ -40,7 +38,6 @@ secure_ui <- function(
       return(tagList(
         admin_module_ui(
           "admin",
-          firebase_config,
           custom_admin_ui,
           options = admin_ui_options,
           include_go_to_shiny_app_button = FALSE
@@ -85,7 +82,7 @@ secure_ui <- function(
 
           # go to default sign in page
           page_out <- tagList(
-            sign_in_ui_default(firebase_config)
+            sign_in_ui_default()
           )
 
         } else {
@@ -118,7 +115,7 @@ secure_ui <- function(
 
             # go to Admin Panel
             page_out <- tagList(
-              admin_module_ui("admin", firebase_config, custom_admin_ui, options = admin_ui_options),
+              admin_module_ui("admin", custom_admin_ui, options = admin_ui_options),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
             )
@@ -150,8 +147,7 @@ secure_ui <- function(
 
         page_out <- tagList(
           verify_email_module_ui(
-            "verify",
-            firebase_config
+            "verify"
           ),
           tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
           tags$script(src = "polish/js/polished_session.js?version=2"),

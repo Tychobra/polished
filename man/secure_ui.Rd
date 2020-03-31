@@ -6,7 +6,6 @@
 \usage{
 secure_ui(
   ui,
-  firebase_config,
   sign_in_page_ui = NULL,
   custom_admin_ui = NULL,
   custom_admin_button_ui = admin_button_ui("polished"),
@@ -15,8 +14,6 @@ secure_ui(
 }
 \arguments{
 \item{ui}{UI of the application.}
-
-\item{firebase_config}{Firebase configuration.}
 
 \item{sign_in_page_ui}{Either `NULL`, the default, or the HTML, CSS, and JavaScript
 to use for the UI of the Sign In page.}

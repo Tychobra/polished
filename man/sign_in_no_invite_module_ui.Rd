@@ -4,12 +4,10 @@
 \alias{sign_in_no_invite_module_ui}
 \title{sign_in_no_invite_module_ui}
 \usage{
-sign_in_no_invite_module_ui(id, firebase_config)
+sign_in_no_invite_module_ui(id)
 }
 \arguments{
 \item{id}{the Shiny module id}
-
-\item{firebase_config}{list of Firebase config}
 }
 \description{
 UI for the sign in and register panels.  User is not required to have an invite

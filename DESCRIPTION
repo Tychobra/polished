@@ -34,7 +34,8 @@ Imports:
     rlang,
     purrr,
     uuid,
-    jose
+    jose,
+    stringr
 Remotes: 
     github::tychobra/tychobratools
 RoxygenNote: 7.1.0

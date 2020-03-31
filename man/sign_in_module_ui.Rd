@@ -4,12 +4,10 @@
 \alias{sign_in_module_ui}
 \title{sign_in_module_ui}
 \usage{
-sign_in_module_ui(id, firebase_config, allow_register = TRUE)
+sign_in_module_ui(id, allow_register = TRUE)
 }
 \arguments{
 \item{id}{the Shiny module id}
-
-\item{firebase_config}{list of Firebase config}
 
 \item{allow_register}{default is `TRUE`.  Whether or not to show the
 "Not a Member? Register!" link.  This should only be set to `FALSE` if

@@ -25,7 +25,7 @@ Sessions <-  R6::R6Class(
   public = list(
     app_name = character(0),
     conn = NULL,
-    firebase_project_id = character(0),
+    firebase_config = NULL,
     is_invite_required = TRUE,
 
     #' @description
@@ -40,19 +40,16 @@ Sessions <-  R6::R6Class(
     config = function(
       conn = NULL,
       app_name = NULL,
-      firebase_project_id = NULL,
-      authorization_level = 'app',
+      firebase_config = NULL,
       admin_mode = FALSE,
       is_invite_required = TRUE
     ) {
-      if (!(length(firebase_project_id) == 1 && is.character(firebase_project_id))) {
-        stop("invalid `firebase_project_id` argument passed to `global_sessions_config()`", call. = FALSE)
+      if (length(firebase_config) != 3 ||
+          !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
+        stop("invalid `firebase_config` argument passed to `global_sessions_config()`", call. = FALSE)
       }
       if (!(length(app_name) == 1 && is.character(app_name))) {
         stop("invalid `app_name` argument passed to `global_sessions_config()`", call. = FALSE)
-      }
-      if (!(length(authorization_level) == 1 && is.character(authorization_level))) {
-        stop("invalid `authorization_level` argument passed to `global_sessions_config()`", call. = FALSE)
       }
       tryCatch({
         if (!DBI::dbIsValid(conn)) {
@@ -72,8 +69,7 @@ Sessions <-  R6::R6Class(
 
       self$app_name <- app_name
       self$conn <- conn
-      private$authorization_level <- authorization_level
-      self$firebase_project_id <- firebase_project_id
+      self$firebase_config <- firebase_config
       private$admin_mode <- admin_mode
       self$is_invite_required <- is_invite_required
 
@@ -98,7 +94,6 @@ Sessions <-  R6::R6Class(
     #' * email_verified
     #' * is_admin
     #' * user_uid
-    #' * roles
     #' * hashed_cookie
     #' * session_uid
     #' @md
@@ -146,9 +141,6 @@ Sessions <-  R6::R6Class(
         new_session$is_admin <- invite$is_admin
         new_session$user_uid <- invite$user_uid
 
-        # find the users roles
-        new_session$roles <- self$get_roles(invite$user_uid)
-
 
         new_session$hashed_cookie <- hashed_cookie
         new_session$session_uid <- uuid::UUIDgenerate()
@@ -168,28 +160,13 @@ Sessions <-  R6::R6Class(
 
       return(new_session)
     },
-    get_user_by_email = function(email) {
-      user_out <- DBI::dbGetQuery(
-        self$conn,
-        "SELECT * FROM polished.users WHERE email=$1",
-        params = list(
-          email
-        )
-      )
-
-      if (nrow(user_out) == 0) {
-        return(NULL)
-      }
-
-      as.list(user_out)
-    },
     get_invite_by_email = function(email) {
 
       invite <- NULL
 
       DBI::dbWithTransaction(self$conn, {
 
-        user_db <- self$get_user_by_email(email)
+        user_db <- get_user_by_email(self$conn, email)
 
         if (!is.null(user_db)) {
           invite <- self$get_invite_by_uid(user_db$uid)
@@ -202,65 +179,20 @@ Sessions <-  R6::R6Class(
     },
     get_invite_by_uid = function(user_uid) {
 
-      if (private$authorization_level == "app") {
-        # authorization for this user is set at the Shiny app level, so only check this specific app
-        # to see if the user is authorized
-        invite <- DBI::dbGetQuery(
-          self$conn,
-          "SELECT * FROM polished.app_users WHERE user_uid=$1 AND app_name=$2",
-          params = list(
-            user_uid,
-            self$app_name
-          )
+      invite <- DBI::dbGetQuery(
+        self$conn,
+        "SELECT * FROM polished.app_users WHERE user_uid=$1 AND app_name=$2",
+        params = list(
+          user_uid,
+          self$app_name
         )
-      } else if (private$authorization_level == "all") {
-        # if user is authoized to access any apps, they can access this app.
-        # e.g. used for apps_dashboards where we want all users that are allowed to access any app to
-        # be able to access the dashboard.
-        invite <- DBI::dbGetQuery(
-          self$conn,
-          "SELECT * FROM polished.app_users WHERE user_uid=$1 LIMIT 1",
-          params = list(
-            user_uid
-          )
-        )
-      }
+      )
 
       if (nrow(invite) != 1) {
         return(NULL)
       }
 
       invite
-    },
-    # return a character vector of the user's roles
-    get_roles = function(user_uid) {
-      roles <- character(0)
-      DBI::dbWithTransaction(self$conn, {
-
-
-        role_names <- DBI::dbGetQuery(
-          self$conn,
-          "SELECT uid, name FROM polished.roles WHERE app_name=$1",
-          params = list(
-            self$app_name
-          )
-        )
-
-        role_uids <- DBI::dbGetQuery(
-          self$conn,
-          "SELECT role_uid FROM polished.user_roles WHERE user_uid=$1 AND app_name=$2",
-          params = list(
-            user_uid,
-            self$app_name
-          )
-        )$role_uid
-
-        roles <- role_names %>%
-          dplyr::filter(uid %in% role_uids) %>%
-          dplyr::pull(name)
-      })
-
-      roles
     },
     find = function(hashed_cookie) {
 
@@ -280,7 +212,6 @@ Sessions <-  R6::R6Class(
 
         # confirm that user is invited
         invite <- self$get_invite_by_uid(signed_in_sessions$user_uid[1])
-        roles <- self$get_roles(signed_in_sessions$user_uid[1])
 
         app_session <- signed_in_sessions %>%
           filter(.data$app_name == self$app_name)
@@ -295,7 +226,6 @@ Sessions <-  R6::R6Class(
           "firebase_uid" = signed_in_sessions$firebase_uid[1],
           "email_verified" = signed_in_sessions$email_verified[1],
           "is_admin" = invite$is_admin,
-          "roles" = roles,
           "hashed_cookie" = hashed_cookie
         )
 
@@ -395,13 +325,10 @@ Sessions <-  R6::R6Class(
 
       invite <- self$get_invite_by_uid(user_uid)
 
-      roles <- self$get_roles(user_uid)
-
       list(
         user_uid = user_uid,
         email = email,
-        is_admin = invite$is_admin,
-        roles = roles
+        is_admin = invite$is_admin
       )
     },
     set_inactive = function(session_uid) {
@@ -492,7 +419,6 @@ Sessions <-  R6::R6Class(
 
       invisible(self)
     },
-    authorization_level = "app", # or "all"
     refresh_jwt_pub_key = function() {
       google_keys_resp <- httr::GET("https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com")
 
@@ -549,8 +475,8 @@ Sessions <-  R6::R6Class(
       if (!(as.numeric(decoded_jwt$exp) + private$firebase_token_grace_period_seconds > curr_time &&
             as.numeric(decoded_jwt$iat) < curr_time + private$firebase_token_grace_period_seconds &&
             as.numeric(decoded_jwt$auth_time) < curr_time + private$firebase_token_grace_period_seconds &&
-            decoded_jwt$aud == self$firebase_project_id &&
-            decoded_jwt$iss == paste0("https://securetoken.google.com/", self$firebase_project_id) &&
+            decoded_jwt$aud == self$firebase_config$projectId &&
+            decoded_jwt$iss == paste0("https://securetoken.google.com/", self$firebase_config$projectId) &&
             nchar(decoded_jwt$sub) > 0)) {
 
         stop("[polished] error verifying JWT")

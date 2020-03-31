@@ -41,7 +41,6 @@ secure_server <- function(
           user_uid = "00000000-0000-0000-0000-000000000000",
           email = "admin@tychobra.com",
           is_admin = TRUE,
-          roles = character(0),
           hashed_cookie = character(0),
           email_verified = TRUE
         ))
@@ -94,7 +93,7 @@ secure_server <- function(
         if (is.na(global_user$signed_in_as)) {
 
           user_out <- global_user[
-            c("session_uid", "user_uid", "email", "is_admin", "roles", "hashed_cookie", "email_verified")
+            c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified")
           ]
 
           session$userData$user(user_out)

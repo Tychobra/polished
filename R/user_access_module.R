@@ -48,26 +48,6 @@ user_access_module_ui <- function(id) {
       )
     ),
 
-    # roles_table_ui
-    shiny::fluidRow(
-      shinydashboard::box(
-        title = "User Roles",
-        width = 6,
-        shiny::actionButton(
-          ns("add_role"),
-          "Add Role",
-          class = "btn-success",
-          style = "color: #fff;",
-          icon = icon("plus")
-        ),
-        DT::DTOutput(ns("roles_table")) %>%
-          shinycssloaders::withSpinner(
-            type = 8,
-            proxy.height = "500px"
-          )
-      )
-    ),
-
     # users table
     tags$script(paste0("
       $(document).on('click', '#", ns('users_table'), " .sign_in_as_btn', function() {
@@ -81,13 +61,6 @@ user_access_module_ui <- function(id) {
       $(document).on('click', '#", ns('users_table'), " .edit_btn', function() {
         $(this).tooltip('hide');
         Shiny.setInputValue('", ns('user_uid_to_edit'), "', this.id, { priority: 'event'});
-      });
-    ")),
-    # roles table
-    tags$script(paste0("
-      $(document).on('click', '#", ns('roles_table'), " .delete_btn', function() {
-        $(this).tooltip('hide');
-        Shiny.setInputValue('", ns('role_uid_to_delete'), "', this.id, { priority: 'event'});
       });
     "))
   )
@@ -137,36 +110,10 @@ user_access_module <- function(input, output, session) {
       left_join(last_active_times, by = 'user_uid')
   })
 
-  user_roles <- reactive({
-    users_trigger()
-    roles_trigger()
-
-    hold_app_name <- .global_sessions$app_name
-
-    .global_sessions$conn %>%
-      dplyr::tbl(dbplyr::in_schema("polished", "user_roles")) %>%
-      dplyr::filter(.data$app_name == hold_app_name) %>%
-      dplyr::select(.data$user_uid, .data$role_uid) %>%
-      dplyr::collect()
-  })
-
-  user_role_names <- reactive({
-    user_roles() %>%
-      dplyr::left_join(roles(), by = c("role_uid" = "uid")) %>%
-      dplyr::select(.data$user_uid, .data$role_uid, role_name = .data$name) %>%
-      tidyr::nest(roles = c(.data$role_uid, .data$role_name))
-  })
-
-
-  users_w_roles <- reactive({
-    users() %>%
-      left_join(user_role_names(), by = "user_uid")
-  })
-
   users_table_prep <- reactiveVal(NULL)
-  observeEvent(users_w_roles(), {
+  observeEvent(users(), {
 
-    out <- users_w_roles()
+    out <- users()
     n_rows <- nrow(out)
 
     if (n_rows == 0) {
@@ -201,19 +148,14 @@ user_access_module <- function(input, output, session) {
       })
 
 
-      roles_out <- lapply(out$roles, function(user_roles) {
-        paste(user_roles$role_name, collapse = ", ")
-      })
-
       out <- cbind(
-        tibble::tibble(actions = unlist(actions)),
+        tibble::tibble(actions = actions),
         out
       ) %>%
         dplyr::mutate(
-          invite_status = ifelse(is.na(.data$last_sign_in_at), "Pending", "Accepted"),
-          role = roles_out
+          invite_status = ifelse(is.na(.data$last_sign_in_at), "Pending", "Accepted")
         ) %>%
-        dplyr::select(.data$actions, .data$email, .data$invite_status, .data$is_admin, .data$role, .data$last_sign_in_at)
+        dplyr::select(.data$actions, .data$email, .data$invite_status, .data$is_admin, .data$last_sign_in_at)
     }
 
     if (is.null(users_table_prep())) {
@@ -236,7 +178,6 @@ user_access_module <- function(input, output, session) {
         "Email",
         "Invite Status",
         "Is Admin?",
-        "Role",
         "Last Sign In"
       ),
       escape = -1,
@@ -249,7 +190,7 @@ user_access_module <- function(input, output, session) {
           list(targets = 0, class = "dt-center"),
           list(targets = 0, width = "105px")
         ),
-        rowCallback = tychobratools::format_dt_time(6)
+        rowCallback = tychobratools::format_dt_time(5)
       )
     )
 
@@ -263,7 +204,6 @@ user_access_module <- function(input, output, session) {
     modal_title = "Add User",
     user_to_edit = function() NULL,
     open_modal_trigger = reactive({input$add_user}),
-    existing_roles = roles,
     existing_users = users
   )
 
@@ -276,7 +216,7 @@ user_access_module <- function(input, output, session) {
   user_to_edit <- reactiveVal(NULL)
   observeEvent(input$user_uid_to_edit, {
 
-    out <- users_w_roles() %>%
+    out <- users() %>%
       dplyr::filter(.data$user_uid == input$user_uid_to_edit)
 
     user_to_edit(out)
@@ -288,7 +228,6 @@ user_access_module <- function(input, output, session) {
     modal_title = "Edit User",
     user_to_edit = user_to_edit,
     open_modal_trigger = reactive({input$user_uid_to_edit}),
-    existing_roles = roles,
     existing_users = users
   )
 
@@ -362,252 +301,13 @@ user_access_module <- function(input, output, session) {
   })
 
 
-
-
-
-
-  shiny::observeEvent(input$add_role, {
-
-    shiny::showModal(
-      shiny::modalDialog(
-        title = "Add Role",
-        footer = list(
-          modalButton("Cancel"),
-          actionButton(
-            ns("submit_role_add"),
-            "Add Role",
-            class = "btn-success",
-            style = "color: white",
-            icon = icon("plus")
-          )
-        ),
-        size = "s",
-        shiny::textInput(
-          inputId = ns("new_user_role"),
-          label = "New Role"
-        )
-      )
-    )
-  })
-
-
-
-
-
-
-  valid_new_role <- shiny::eventReactive(input$submit_role_add, {
-    role_input <- input$new_user_role
-
-    if (role_input %in% roles()$name) {
-
-      tychobratools::show_toast("error", "Role already exists")
-      return(NULL)
-
-    } else if (role_input == "") {
-
-      tychobratools::show_toast("error", "Invalid role name")
-      return(NULL)
-
-    } else {
-      removeModal()
-
-      return(role_input)
-    }
-  })
-
-
-
-  observeEvent(valid_new_role(), {
-    new_role <- valid_new_role()
-    user_uid <- session$userData$user()$user_uid
-
-    tryCatch({
-
-      dbExecute(
-        .global_sessions$conn,
-        "INSERT INTO polished.roles ( uid, name, app_name, created_by, modified_by ) VALUES ( $1, $2, $3, $4, $5 )",
-        params = list(
-          uuid::UUIDgenerate(),
-          new_role,
-          .global_sessions$app_name,
-          user_uid,
-          user_uid
-        )
-      )
-
-      roles_trigger(roles_trigger() + 1)
-      show_toast("success", "Role successfully Added")
-    }, error = function(e) {
-
-      print(e)
-      show_toast("error", "Error adding role")
-    })
-
-
-  })
-
-  roles_trigger <- reactiveVal(0)
-  roles <- reactive({
-    roles_trigger()
-
-    hold_app_name <- .global_sessions$app_name
-
-    .global_sessions$conn %>%
-      dplyr::tbl(dbplyr::in_schema("polished", "roles")) %>%
-      dplyr::filter(.data$app_name == hold_app_name) %>%
-      dplyr::select(.data$uid, .data$name) %>%
-      dplyr::collect()
-  })
-
-
-
-  roles_table_prep <- reactive({
-    shiny::req(roles())
-
-    out <- roles()
-
-    n_rows <- nrow(out)
-
-    if (n_rows == 0) {
-      actions <- character(0)
-    } else {
-      rows <- seq_len(n_rows)
-
-      actions <- purrr::map_chr(rows, function(i) {
-
-        paste0(
-          '<button class="btn btn-danger btn-sm delete_btn" data-toggle="tooltip" data-placement="top" title="Delete Role" id = ',
-          out[i, ]$uid,
-          ' style="margin: 0"><i class="fa fa-trash-o"></i></button></div>'
-        )
-      })
-
-    }
-
-    out <- out %>%
-      select(-.data$uid)
-
-    cbind(
-      tibble::tibble(actions = actions),
-      out
-    )
-  })
-
-
-  output$roles_table <- DT::renderDT({
-    shiny::req(roles_table_prep())
-    out <- roles_table_prep()
-
-    DT::datatable(
-      roles_table_prep(),
-      rownames = FALSE,
-      colnames = c(" ", "Role"),
-      escape = -1,
-      selection = "none",
-      options = list(
-        dom = 'ftp',
-        columnDefs = list(
-          list(targets = 0:1, class = "dt-center"),
-          list(targets = 0, width = "35px")
-        )
-      )
-    )
-  })
-
-
-
-
-  role_to_delete <- reactiveVal(NULL)
-
-  observeEvent(input$role_uid_to_delete, {
-
-    out <- roles() %>%
-      dplyr::filter(.data$uid == input$role_uid_to_delete)
-
-    role_to_delete(out)
-  }, priority = 1)
-
-  observeEvent(input$role_uid_to_delete, {
-    hold_role <- role_to_delete()
-    shiny::req(nrow(hold_role) == 1)
-
-    shiny::showModal(
-      shiny::modalDialog(
-        title = "Delete User",
-        footer = list(
-          modalButton("Cancel"),
-          actionButton(
-            ns("submit_role_delete"),
-            "Delete Role",
-            class = "btn-danger",
-            style = "color: white",
-            icon = icon("times")
-          )
-        ),
-        size = "m",
-        htmltools::br(),
-        h3(
-          style = "line-height: 1.3;",
-          paste0(
-            'Are you sure you want to delete role: "', hold_role$name, '"?  Any ',
-            'users with this role will lose it.'
-          )
-        )
-      )
-    )
-
-  })
-
-
-  shiny::observeEvent(input$submit_role_delete, {
-    shiny::removeModal()
-
-    role_uid <- role_to_delete()$uid
-
-    tryCatch({
-
-      dbWithTransaction(.global_sessions$conn, {
-        DBI::dbExecute(
-          .global_sessions$conn,
-          "DELETE FROM polished.user_roles WHERE role_uid=$1",
-          params = list(role_uid)
-        )
-
-        DBI::dbExecute(
-          .global_sessions$conn,
-          "DELETE FROM polished.roles WHERE uid=$1",
-          params = list(role_uid)
-        )
-      })
-
-      tychobratools::show_toast("success", "Role successfully deleted")
-      roles_trigger(roles_trigger() + 1)
-    }, error = function(e) {
-      tychobratools::show_toast("error", "Error deleting role")
-      print(e)
-    })
-
-
-
-
-  })
-
-
-
   shiny::observeEvent(input$sign_in_as_btn_user_uid, {
     req(!.global_sessions$get_admin_mode())
 
-    user_to_sign_in_as <- users_w_roles() %>%
+    user_to_sign_in_as <- users() %>%
       filter(.data$user_uid == input$sign_in_as_btn_user_uid) %>%
-      dplyr::select(.data$email, .data$is_admin, uid = .data$user_uid, .data$roles) %>%
+      dplyr::select(.data$email, .data$is_admin, uid = .data$user_uid) %>%
       as.list()
-
-    roles_out <- user_to_sign_in_as$roles[[1]]$role_name
-    if (is.null(roles_out)) {
-      user_to_sign_in_as$roles <- character(0)
-    } else {
-      user_to_sign_in_as$roles <- roles_out
-    }
 
     user_to_sign_in_as$hashed_cookie <- session$userData$user()$hashed_cookie
 
