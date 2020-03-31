@@ -59,7 +59,7 @@ Get the following credentials from your Firebase project:
   - authDomain
   - projectId
   
-**NOTE:** To find `authDomain`, click on the `Add Web App` button at the bottom of General Settings (shown in the screenshot below). Register the App (do NOT need to check box for "Also set up Firebase Hosting for this app") & back at the bottom of the General Settings page where the "Add Web App" button was, you'll see the app just added. You'll find `authDomain` under the 'Firebase SDK snippet' section.  
+**NOTE:** To find `authDomain`, click on the `Add Web App` button at the bottom of General Settings (shown in the screenshot below outlined in red). Register the App (do NOT need to check box for "Also set up Firebase Hosting for this app") & back at the bottom of the General Settings page where the "Add Web App" button was, you'll see the app just added. You'll find `authDomain` under the 'Firebase SDK snippet' section.  
 
 <img src="inst/assets/images/add_web_app.png" />
   
