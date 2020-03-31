@@ -1,15 +1,16 @@
 #' verify email page ui
 #'
 #' @param id the Shiny module id
-#' @param firebase_config Firebase configuration
 #'
 #' @importFrom htmltools tags h1
 #' @importFrom shiny fluidPage fluidRow column
 #' @importFrom shinytoastr useToastr
 #'
 #' @export
-verify_email_module_ui <- function(id, firebase_config) {
+verify_email_module_ui <- function(id) {
   ns <- NS(id)
+
+  firebase_config <- .global_sessions$firebase_config
 
   fluidPage(
     tags$head(
