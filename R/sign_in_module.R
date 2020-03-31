@@ -221,6 +221,7 @@ sign_in_module <- function(input, output, session) {
     # check user invite
     invite <- NULL
     tryCatch({
+
       invite <- .global_sessions$get_invite_by_email(email)
 
       if (is.null(invite)) {
@@ -314,14 +315,13 @@ sign_in_module <- function(input, output, session) {
     email <- email_rv()
 
     tryCatch({
-      invite <- .global_sessions$get_invite_by_email(email)
+      #invite <- .global_sessions$get_invite_by_email(email)
 
       # user is invited, so attempt sign in
       new_user <- .global_sessions$sign_in(
         input$check_jwt$jwt,
         digest::digest(input$check_jwt$cookie)
       )
-
 
       if (is.null(new_user)) {
         # show unable to sign in message

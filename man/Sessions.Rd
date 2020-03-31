@@ -14,7 +14,6 @@ this class directly.
 \item \href{#method-config}{\code{Sessions$config()}}
 \item \href{#method-sign_in}{\code{Sessions$sign_in()}}
 \item \href{#method-get_invite_by_email}{\code{Sessions$get_invite_by_email()}}
-\item \href{#method-get_invite_by_uid}{\code{Sessions$get_invite_by_uid()}}
 \item \href{#method-find}{\code{Sessions$find()}}
 \item \href{#method-refresh_email_verification}{\code{Sessions$refresh_email_verification()}}
 \item \href{#method-set_signed_in_as}{\code{Sessions$set_signed_in_as()}}
@@ -34,11 +33,12 @@ this class directly.
 polished Sessions configuration function
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$config(
+  app_name,
   conn = NULL,
-  app_name = NULL,
   firebase_config = NULL,
   admin_mode = FALSE,
-  is_invite_required = TRUE
+  is_invite_required = TRUE,
+  api_key = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -73,7 +73,6 @@ JWT is valid.}
 NULL if sign in fails. If sign in is successful, a list containing the following:
 \itemize{
 \item email
-\item firebase_uid
 \item email_verified
 \item is_admin
 \item user_uid
@@ -88,15 +87,6 @@ NULL if sign in fails. If sign in is successful, a list containing the following
 \subsection{Method \code{get_invite_by_email()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$get_invite_by_email(email)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_invite_by_uid"></a>}}
-\if{latex}{\out{\hypertarget{method-get_invite_by_uid}{}}}
-\subsection{Method \code{get_invite_by_uid()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$get_invite_by_uid(user_uid)}\if{html}{\out{</div>}}
 }
 
 }
@@ -168,7 +158,7 @@ NULL if sign in fails. If sign in is successful, a list containing the following
 \if{latex}{\out{\hypertarget{method-sign_out}{}}}
 \subsection{Method \code{sign_out()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_out(user_uid, session_uid)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_out(hashed_cookie, session_uid)}\if{html}{\out{</div>}}
 }
 
 }

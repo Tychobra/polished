@@ -23,6 +23,7 @@
 Sessions <-  R6::R6Class(
   classname = 'Sessions',
   public = list(
+    hosted_url = "https://api.polished.tech/",
     app_name = character(0),
     conn = NULL,
     firebase_config = NULL,
@@ -38,26 +39,69 @@ Sessions <-  R6::R6Class(
     #' @inheritParams global_sessions_config
     #'
     config = function(
+      app_name,
       conn = NULL,
-      app_name = NULL,
       firebase_config = NULL,
       admin_mode = FALSE,
-      is_invite_required = TRUE
+      is_invite_required = TRUE,
+      api_key = NULL
     ) {
-      if (length(firebase_config) != 3 ||
-          !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
-        stop("invalid `firebase_config` argument passed to `global_sessions_config()`", call. = FALSE)
-      }
+
       if (!(length(app_name) == 1 && is.character(app_name))) {
         stop("invalid `app_name` argument passed to `global_sessions_config()`", call. = FALSE)
       }
-      tryCatch({
-        if (!DBI::dbIsValid(conn)) {
-          stop("invalid `conn` argument passed to `global_sessions_config()`", call. = FALSE)
+
+
+      if (is.null(api_key)) {
+
+        # user is setting up their own database and Firebase project
+        if (length(firebase_config) != 3 ||
+            !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
+          stop("invalid `firebase_config` argument passed to `global_sessions_config()`", call. = FALSE)
         }
-      }, error = function(err) {
-        stop("invalid `conn` argument passed to `global_sessions_config()`", call. = FALSE)
-      })
+        tryCatch({
+          if (!DBI::dbIsValid(conn)) {
+            stop("invalid `conn` argument passed to `global_sessions_config()`", call. = FALSE)
+          }
+        }, error = function(err) {
+          stop("invalid `conn` argument passed to `global_sessions_config()`", call. = FALSE)
+        })
+
+        self$conn <- conn
+        self$firebase_config <- firebase_config
+        self$app_name <- app_name
+      } else {
+        # user is using polished hosted API
+        if (!(length(api_key) == 1 && is.character(api_key))) {
+          stop("invalid `app_name` argument passed to `global_sessions_config()`", call. = FALSE)
+        }
+
+        self$firebase_config <- list(
+          apiKey = "AIzaSyAlrehX1g0irhCKq5MfmOE96z8lNprbbnk",
+          authDomain = "polished-hosted.firebaseapp.com",
+          projectId = "polished-hosted"
+        )
+
+        # get the app uid
+        res <- httr::GET(
+          url = paste0(self$hosted_url, "/apps/", app_name),
+          httr::authenticate(
+            user = self$api_key,
+            password = ""
+          )
+        )
+
+        httr::stop_for_status(res)
+
+        app <- jsonlite::fromJSON(
+          httr::content(res, "text")
+        )
+
+        self$app_name <- app$uid
+
+      }
+
+
       if (!(length(admin_mode) == 1 && is.logical(admin_mode))) {
         stop("invalid `admin_mode` argument passed to `global_sessions_config()`", call. = FALSE)
       }
@@ -66,10 +110,6 @@ Sessions <-  R6::R6Class(
       }
 
 
-
-      self$app_name <- app_name
-      self$conn <- conn
-      self$firebase_config <- firebase_config
       private$admin_mode <- admin_mode
       self$is_invite_required <- is_invite_required
 
@@ -90,7 +130,6 @@ Sessions <-  R6::R6Class(
     #'
     #' @return NULL if sign in fails. If sign in is successful, a list containing the following:
     #' * email
-    #' * firebase_uid
     #' * email_verified
     #' * is_admin
     #' * user_uid
@@ -119,11 +158,10 @@ Sessions <-  R6::R6Class(
 
         new_session <- list(
           email = decoded_jwt$email,
-          firebase_uid = decoded_jwt$user_id,
           email_verified = decoded_jwt$email_verified
         )
 
-
+        browser
 
 
         invite <- self$get_invite_by_email(decoded_jwt$email)
@@ -164,46 +202,73 @@ Sessions <-  R6::R6Class(
 
       invite <- NULL
 
-      DBI::dbWithTransaction(self$conn, {
+      if (is.null(self$api_key)) {
+
 
         user_db <- get_user_by_email(self$conn, email)
 
         if (!is.null(user_db)) {
-          invite <- self$get_invite_by_uid(user_db$uid)
+          invite <- get_invite(self$conn, self$app_name, user_db$uid)
         }
 
 
-      })
+      } else {
+        res <- httr::GET(
+          url = paste0(self$hosted_url, "/invite-by-email"),
+          query = list(
+            email = email,
+            app_uid =
+          ),
+          httr::authenticate(
+            user = self$api_key,
+            password = ""
+          )
+        )
+
+        httr::stop_for_status(res)
+
+        invite <- jsonlite::fromJSON(
+          httr::content(res, "text")
+        )
+
+        # API returns a length 0 list when there is no invite
+        if (length(invite) == 0) {
+          invite <- NULL
+        }
+      }
+
+
 
       return(invite)
     },
-    get_invite_by_uid = function(user_uid) {
-
-      invite <- DBI::dbGetQuery(
-        self$conn,
-        "SELECT * FROM polished.app_users WHERE user_uid=$1 AND app_name=$2",
-        params = list(
-          user_uid,
-          self$app_name
-        )
-      )
-
-      if (nrow(invite) != 1) {
-        return(NULL)
-      }
-
-      invite
-    },
     find = function(hashed_cookie) {
 
-      signed_in_sessions <- dbGetQuery(
-        self$conn,
-        'SELECT uid AS session_uid, user_uid, email, email_verified, firebase_uid, app_name, signed_in_as FROM polished.sessions WHERE hashed_cookie=$1 AND is_signed_in=$2',
-        params = list(
-          hashed_cookie,
-          TRUE
+      if (is.null(self$api_key)) {
+
+        signed_in_sessions <- get_session(self$conn, hashed_cookie)
+
+      } else {
+
+        # TODO: find the user from the sessions table
+        res <- httr::GET(
+          url = paste0(self$hosted_url, "/session-by-cookie"),
+          query = list(
+            cookie = hashed_cookie
+          ),
+          httr::authenticate(
+            user = self$api_key,
+            password = ""
+          )
         )
-      )
+
+        httr::stop_for_status(res)
+
+        signed_in_sessions <- jsonlite::fromJSON(
+          httr::content(res, "text")
+        )
+
+      }
+
 
       session_out <- NULL
       if (nrow(signed_in_sessions) > 0) {
@@ -211,24 +276,19 @@ Sessions <-  R6::R6Class(
 
 
         # confirm that user is invited
-        invite <- self$get_invite_by_uid(signed_in_sessions$user_uid[1])
-
-        app_session <- signed_in_sessions %>%
-          filter(.data$app_name == self$app_name)
-
-        # if user is not invited, the above `get_invite_by_uid()` function will throw an error.  If user is invited,
-        # return the user session
+        invite <- get_invite(self$conn, self$app_name, signed_in_sessions$user_uid[1])
 
 
         session_out <- list(
           "user_uid" = signed_in_sessions$user_uid[1],
           "email" = signed_in_sessions$email[1],
-          "firebase_uid" = signed_in_sessions$firebase_uid[1],
           "email_verified" = signed_in_sessions$email_verified[1],
           "is_admin" = invite$is_admin,
           "hashed_cookie" = hashed_cookie
         )
 
+        app_session <- signed_in_sessions %>%
+          filter(.data$app_name == self$app_name)
 
         if (nrow(app_session) == 0) {
           # user was signed into another app and came over to this app, so add a session for this app
@@ -323,7 +383,11 @@ Sessions <-  R6::R6Class(
         )
       )$email
 
-      invite <- self$get_invite_by_uid(user_uid)
+      invite <- get_invite(
+        self$conn,
+        self$app_name,
+        user_uid
+      )
 
       list(
         user_uid = user_uid,
@@ -373,16 +437,16 @@ Sessions <-  R6::R6Class(
         )
       )
     },
-    sign_out = function(user_uid, session_uid) {
+    sign_out = function(hashed_cookie, session_uid) {
 
 
       dbExecute(
         self$conn,
-        'UPDATE polished.sessions SET is_active=$1, is_signed_in=$2 WHERE user_uid=$3',
+        'UPDATE polished.sessions SET is_active=$1, is_signed_in=$2 WHERE hashed_cookie=$3',
         list(
           FALSE,
           FALSE,
-          user_uid
+          hashed_cookie
         )
       )
 
@@ -403,19 +467,22 @@ Sessions <-  R6::R6Class(
   private = list(
     add = function(session) {
 
-      dbExecute(
-        self$conn,
-        'INSERT INTO polished.sessions (uid, user_uid, firebase_uid, email, email_verified, hashed_cookie, app_name) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-        list(
-          session$session_uid,
-          session$user_uid,
-          session$firebase_uid,
-          session$email,
-          session$email_verified,
-          session$hashed_cookie,
-          self$app_name
+      if (is.null(self$api_key)) {
+        add_session(self$conn, session, self$app_name)
+      } else {
+
+        # add session to "sessions" table via the API
+        httr::POST(
+          url = paste0(self$hosted_url, "sessions"),
+          httr::authenticate(
+            user = self$api_key,
+            password = ""
+          ),
+          body = list(
+            data = session
+          )
         )
-      )
+      }
 
       invisible(self)
     },
