@@ -32,7 +32,7 @@ remotes::install_github("tychobra/polished")
 
 ### Initial Set Up
 
-1. Set up your Firebase project. Go to [https://firebase.google.com/](https://firebase.google.com/) and create a firebase project named "polished-<project_name>".  Open your new Firebase project and:
+1. Set up your Firebase project at [https://firebase.google.com/](https://firebase.google.com/).  Open your new Firebase project and:
    - go to the "Authentication" page "Sign-in method" tab and enable "Email/Password" sign in. See the below screenshot:
    ![](https://res.cloudinary.com/dxqnb8xjb/image/upload/v1573001859/firabse-auth_roq6yv.png)
 
