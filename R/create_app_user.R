@@ -3,7 +3,7 @@
 #' Add the first user to the "polished" schema
 #'
 #' @param conn the database connection.
-#' @param app_name the name of the Shiny app.
+#' @param app_uid the name of the Shiny app.
 #' @param email the email address of the first user.
 #' @param is_admin boolean that defaults to FALSE.  Whether or not the user being created
 #' is an admin.
@@ -14,9 +14,9 @@
 #'
 #' @importFrom DBI dbWithTransaction dbGetQuery dbExecute dbWriteTable
 #'
-
 #'
-create_app_user <- function(conn, app_name, email, is_admin = FALSE, created_by = NULL) {
+create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
+                            created_by = NULL, schema = "polished") {
 
   email <- tolower(email)
   email <- trimws(email)
@@ -26,7 +26,7 @@ create_app_user <- function(conn, app_name, email, is_admin = FALSE, created_by 
 
     existing_user_uid <- DBI::dbGetQuery(
       conn,
-      "SELECT uid FROM polished.users WHERE email=$1",
+      paste0("SELECT uid FROM ", schema, ".users WHERE email=$1"),
       params = list(email)
     )
 
@@ -43,7 +43,7 @@ create_app_user <- function(conn, app_name, email, is_admin = FALSE, created_by 
 
       DBI::dbExecute(
         conn,
-        "INSERT INTO polished.users ( uid, email, created_by, modified_by ) VALUES ( $1, $2, $3, $4 )",
+        paste0("INSERT INTO ", schema, ".users ( uid, email, created_by, modified_by ) VALUES ( $1, $2, $3, $4 )"),
         params = list(
           user_uid,
           email,
@@ -62,16 +62,16 @@ create_app_user <- function(conn, app_name, email, is_admin = FALSE, created_by 
       # check if the user is already authorized to access this app
       existing_app_user <- DBI::dbGetQuery(
         conn,
-        "SELECT user_uid from polished.app_users WHERE user_uid=$1 AND app_name=$2",
+        paste0("SELECT user_uid from ", schema, ".app_users WHERE user_uid=$1 AND app_uid=$2"),
         params = list(
           user_uid,
-          app_name
+          app_uid
         )
       )
 
       # if user is already authorized to access this app, throw an error
       if (nrow(existing_app_user) != 0) {
-        stop(sprintf("%s is already authoized to access %s", email, app_name))
+        stop(sprintf("%s is already authoized to access %s", email, app_uid))
       }
 
     }
@@ -79,17 +79,18 @@ create_app_user <- function(conn, app_name, email, is_admin = FALSE, created_by 
     # check if app already exists
     existing_app_uid <- DBI::dbGetQuery(
       conn,
-      "SELECT app_name FROM polished.apps WHERE app_name=$1",
-      params = list(app_name)
+      paste0("SELECT uid FROM ", schema, ".apps WHERE uid=$1"),
+      params = list(app_uid)
     )
 
     if (nrow(existing_app_uid) == 0) {
       # if app does not exist, then create it
       DBI::dbExecute(
         conn,
-        "INSERT INTO polished.apps ( app_name, created_by, modified_by ) VALUES ( $1, $2, $3 )",
+        paste0("INSERT INTO ", schema, ".apps ( uid, app_name, created_by, modified_by ) VALUES ( $1, $2, $3, $4 )"),
         params = list(
-          app_name,
+          app_uid,
+          app_uid,
           created_by,
           created_by
         )
@@ -100,14 +101,14 @@ create_app_user <- function(conn, app_name, email, is_admin = FALSE, created_by 
     # add user to app_users
     DBI::dbExecute(
       conn,
-      "INSERT INTO polished.app_users ( uid, app_name, user_uid, is_admin, created_by, modified_by) VALUES ( $1, $2, $3, $4, $5, $6 )",
+      paste0("INSERT INTO ", schema, ".app_users ( uid, app_uid, user_uid, is_admin, created_by, modified_by) VALUES ( $1, $2, $3, $4, $5, $6 )"),
       params = list(
         uuid::UUIDgenerate(),
-        app_name, # app_name
-        user_uid, # user_uid
-        is_admin,     # is_admin
-        created_by, # created_by
-        created_by  # modified_by
+        app_uid,
+        user_uid,
+        is_admin,
+        created_by,
+        created_by
       )
     )
 

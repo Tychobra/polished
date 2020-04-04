@@ -26,6 +26,32 @@ api_get_invite_by_email <- function(url, api_key, email, app_uid) {
   invite
 }
 
+api_get_invite <- function(url, api_key, app_uid, user_uid) {
+  res <- httr::GET(
+    url = paste0(url, "/invites"),
+    query = list(
+      app_uid = app_uid,
+      user_uid = user_uid
+    ),
+    httr::authenticate(
+      user = api_key,
+      password = ""
+    )
+  )
+
+  httr::stop_for_status(res)
+
+  invite <- jsonlite::fromJSON(
+    httr::content(res, "text", encoding = "UTF-8")
+  )
+
+  # API returns a length 0 list when there is no invite
+  if (length(invite) == 0) {
+    invite <- NULL
+  }
+
+  invite
+}
 
 #' R6 class to track polished sessions
 #'
@@ -297,8 +323,6 @@ Sessions <-  R6::R6Class(
 
         signed_in_sessions <- get_session(self$conn, hashed_cookie)
 
-        signed_in_sessions <- as.list(signed_in_sessions)
-
       } else {
 
         # TODO: find the user from the sessions table
@@ -327,7 +351,7 @@ Sessions <-  R6::R6Class(
 
 
       session_out <- NULL
-      if (length(signed_in_sessions) > 0) {
+      if (nrow(signed_in_sessions) > 0) {
 
 
         if (is.null(self$api_key)) {
@@ -353,7 +377,7 @@ Sessions <-  R6::R6Class(
         )
 
         app_session <- signed_in_sessions %>%
-          filter(.data$app_name == self$app_name)
+          filter(.data$app_uid == self$app_name)
 
         if (nrow(app_session) == 0) {
           # user was signed into another app and came over to this app, so add a session for this app
@@ -427,32 +451,66 @@ Sessions <-  R6::R6Class(
     },
     clear_signed_in_as = function(session_uid) {
 
-      dbExecute(
-        self$conn,
-        'UPDATE polished.sessions SET signed_in_as=$1 WHERE uid=$2',
-        params = list(
-          NA,
-          session_uid
+      if (is.null(self$api_key)) {
+        DBI::dbExecute(
+          self$conn,
+          'UPDATE polished.sessions SET signed_in_as=$1 WHERE uid=$2',
+          params = list(
+            NA,
+            session_uid
+          )
         )
-      )
+      } else {
+
+        res <- httr::PUT(
+          url = paste0(self$hosted_url, "/sessions"),
+          httr::authenticate(
+            user = self$api_key,
+            password = ""
+          ),
+          body = list(
+            session_uid = session_uid,
+            dat = list(
+              signed_in_as = NA
+            )
+          ),
+          encode = "json"
+        )
+
+        httr::stop_for_status(res)
+      }
+
 
       invisible(self)
     },
     get_signed_in_as_user = function(user_uid) {
 
-      email <- dbGetQuery(
-        self$conn,
-        'SELECT email FROM polished.users WHERE uid=$1',
-        list(
+      if (is.null(self$api_key)) {
+        email <- dbGetQuery(
+          self$conn,
+          'SELECT email FROM polished.users WHERE uid=$1',
+          list(
+            user_uid
+          )
+        )$email
+
+        invite <- get_invite(
+          self$conn,
+          self$app_name,
           user_uid
         )
-      )$email
+      } else {
 
-      invite <- get_invite(
-        self$conn,
-        self$app_name,
-        user_uid
-      )
+        invite <- api_get_invite(
+          self$hosted_url,
+          self$api_key,
+          self$app_name,
+          user_uid
+        )
+
+
+      }
+
 
       list(
         user_uid = user_uid,
@@ -481,6 +539,23 @@ Sessions <-  R6::R6Class(
             'deactivate'
           )
         )
+      } else {
+
+        res <- httr::POST(
+          url = paste0(self$hosted_url, "/actions"),
+          httr::authenticate(
+            user = self$api_key,
+            password = ""
+          ),
+          body = list(
+            type = "set_inactive",
+            session_uid = session_uid
+          ),
+          encode = "json"
+        )
+
+        httr::stop_for_status(res)
+
       }
 
     },
@@ -505,6 +580,21 @@ Sessions <-  R6::R6Class(
             'activate'
           )
         )
+      } else {
+        res <- httr::POST(
+          url = paste0(self$hosted_url, "/actions"),
+          httr::authenticate(
+            user = self$api_key,
+            password = ""
+          ),
+          body = list(
+            type = "set_active",
+            session_uid = session_uid
+          ),
+          encode = "json"
+        )
+
+        httr::stop_for_status(res)
       }
 
     },
@@ -539,6 +629,7 @@ Sessions <-  R6::R6Class(
             password = ""
           ),
           body = list(
+            session_uid = session_uid,
             hashed_cookie = hashed_cookie
           ),
           encode = "json"

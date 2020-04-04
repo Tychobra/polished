@@ -27,7 +27,8 @@ create_schema <- function(conn) {
 
 
   create_apps_table_query <- "CREATE TABLE polished.apps (
-    app_name              TEXT PRIMARY KEY,
+    uid                   TEXT PRIMARY KEY,
+    app_name              TEXT,
     created_by            TEXT NOT NULL,
     created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     modified_by           TEXT NOT NULL,
@@ -36,7 +37,7 @@ create_schema <- function(conn) {
 
   create_app_users_table_query <- "CREATE TABLE polished.app_users (
     uid                   TEXT PRIMARY KEY,
-    app_name              TEXT REFERENCES polished.apps(app_name),
+    app_uid              TEXT REFERENCES polished.apps(uid),
     user_uid              TEXT REFERENCES polished.users(uid),
     is_admin              BOOLEAN NOT NULL,
     created_by            TEXT NOT NULL,
@@ -54,7 +55,7 @@ create_schema <- function(conn) {
     email_verified        BOOLEAN,
     hashed_cookie         TEXT,
     signed_in_as          TEXT,
-    app_name              TEXT,
+    app_uid               TEXT,
     is_active             BOOLEAN DEFAULT true,
     is_signed_in          BOOLEAN DEFAULT true,
     created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW()

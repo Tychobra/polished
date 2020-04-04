@@ -95,16 +95,54 @@ user_access_module <- function(input, output, session) {
 
     hold_app_name <- .global_sessions$app_name
 
-    app_users <- get_app_users(
-      .global_sessions$conn,
-      hold_app_name
-    )
+    if (is.null(.global_sessions$api_key)) {
+      app_users <- get_app_users(
+        .global_sessions$conn,
+        hold_app_name
+      )
+      last_active_times <- get_last_active_session_time(
+        .global_sessions$conn,
+        hold_app_name
+      )
 
-    last_active_times <- get_last_active_session_time(
-      .global_sessions$conn,
-      hold_app_name
-    ) %>%
-      select(.data$user_uid, last_sign_in_at = .data$timestamp)
+    } else {
+      res <- httr::GET(
+        url = paste0(.global_sessions$hosted_url, "/app-users"),
+        query = list(
+          app_uid = hold_app_name
+        ),
+        httr::authenticate(
+          user = .global_sessions$api_key,
+          password = ""
+        )
+      )
+
+      httr::stop_for_status(res)
+
+      app_users <- jsonlite::fromJSON(
+        httr::content(res, "text", encoding = "UTF-8")
+      ) %>%
+        mutate(created_at = as.POSIXct(created_at))
+      res <- httr::GET(
+        url = paste0(.global_sessions$hosted_url, "/last-active-session-time"),
+        query = list(
+          app_uid = hold_app_name
+        ),
+        httr::authenticate(
+          user = .global_sessions$api_key,
+          password = ""
+        )
+      )
+
+      httr::stop_for_status(res)
+
+      last_active_times <- jsonlite::fromJSON(
+        httr::content(res, "text", encoding = "UTF-8")
+      ) %>%
+        mutate(last_sign_in_at = as.POSIXct(last_sign_in_at))
+
+    }
+
 
     app_users %>%
       left_join(last_active_times, by = 'user_uid')

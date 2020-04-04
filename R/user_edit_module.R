@@ -109,13 +109,34 @@ user_edit_module <- function(input, output, session,
     if (is.null(hold_user)) {
       # adding a new user
       tryCatch({
-        create_app_user(
-          conn = .global_sessions$conn,
-          app_name = .global_sessions$app_name,
-          email = input_email,
-          is_admin = is_admin_out,
-          created_by = session_user
-        )
+
+        if (is.null(.global_sessions$api_key)) {
+          create_app_user(
+            conn = .global_sessions$conn,
+            app_uid = .global_sessions$app_name,
+            email = input_email,
+            is_admin = is_admin_out,
+            created_by = session_user
+          )
+        } else {
+          res <- httr::POST(
+            url = paste0(.global_sessions$hosted_url, "/app-users"),
+            body = list(
+              email = input_email,
+              app_uid = .global_sessions$app_name,
+              is_admin = is_admin_out
+            ),
+            httr::authenticate(
+              user = .global_sessions$api_key,
+              password = ""
+            ),
+            encode = "json"
+          )
+          browser()
+          httr::stop_for_status(res)
+
+        }
+
 
         shiny::removeModal()
 
@@ -138,7 +159,7 @@ user_edit_module <- function(input, output, session,
           # update the app user
           DBI::dbExecute(
             .global_sessions$conn,
-            "UPDATE polished.app_users SET is_admin=$1, modified_by=$2, modified_at=$3 WHERE user_uid=$4 AND app_name=$5",
+            "UPDATE polished.app_users SET is_admin=$1, modified_by=$2, modified_at=$3 WHERE user_uid=$4 AND app_uid=$5",
             params = list(
               is_admin_out,                   # is_admin
               session_user,                   # modified_by
