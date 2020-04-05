@@ -334,8 +334,8 @@ user_access_module <- function(input, output, session) {
         res <- httr::DELETE(
           url = paste0(.global_sessions$hosted_url, "/app-users"),
           body = list(
-            user_uid = hold_user$user_uid,
-            app_uid = .global_sessions$app_name
+            user_uid = user_uid,
+            app_uid = app_uid
           ),
           httr::authenticate(
             user = .global_sessions$api_key,
