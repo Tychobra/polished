@@ -344,10 +344,8 @@ user_access_module <- function(input, output, session) {
 
     user_to_sign_in_as <- users() %>%
       filter(.data$user_uid == input$sign_in_as_btn_user_uid) %>%
-      dplyr::select(.data$email, .data$is_admin, uid = .data$user_uid) %>%
-      as.list()
+      dplyr::pull("user_uid")
 
-    user_to_sign_in_as$hashed_cookie <- session$userData$user()$hashed_cookie
 
     session$sendCustomMessage(
       "polish__show_loading",
@@ -358,7 +356,7 @@ user_access_module <- function(input, output, session) {
 
     # sign in as another user
     .global_sessions$set_signed_in_as(
-      session$userData$user()$hashed_cookie,
+      session$userData$user()$session_uid,
       user_to_sign_in_as
     )
 

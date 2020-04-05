@@ -435,33 +435,18 @@ Sessions <-  R6::R6Class(
 
       invisible(self)
     },
-    set_signed_in_as = function(hashed_cookie, signed_in_as) {
-
-      dbExecute(
-        self$conn,
-        'UPDATE polished.sessions SET signed_in_as=$1 WHERE hashed_cookie=$2 AND app_name=$3',
-        params = list(
-          signed_in_as$uid,
-          hashed_cookie,
-          self$app_name
-        )
-      )
-
-      invisible(self)
-    },
-    clear_signed_in_as = function(session_uid) {
+    set_signed_in_as = function(session_uid, signed_in_as) {
 
       if (is.null(self$api_key)) {
-        DBI::dbExecute(
+        dbExecute(
           self$conn,
           'UPDATE polished.sessions SET signed_in_as=$1 WHERE uid=$2',
           params = list(
-            NA,
+            signed_in_as,
             session_uid
           )
         )
       } else {
-
         res <- httr::PUT(
           url = paste0(self$hosted_url, "/sessions"),
           httr::authenticate(
@@ -471,7 +456,7 @@ Sessions <-  R6::R6Class(
           body = list(
             session_uid = session_uid,
             dat = list(
-              signed_in_as = NA
+              signed_in_as = signed_in_as
             )
           ),
           encode = "json"
@@ -508,7 +493,7 @@ Sessions <-  R6::R6Class(
           user_uid
         )
 
-
+        email <- invite$email
       }
 
 
