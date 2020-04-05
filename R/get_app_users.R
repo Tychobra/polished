@@ -1,7 +1,8 @@
 #' get_app_users
 #'
 #' @param conn the database connection
-#' @param app_name_ the name of the app or `NULL` to get all app users. Defaults to NULL.
+#' @param app_uid_ the id of the app
+#' @param schema the database schema
 #'
 #' @return a data frame of the app users from the polished schema.
 #'
@@ -11,23 +12,16 @@
 #' @importFrom dbplyr in_schema
 #' @importFrom rlang !! enquo
 #'
-get_app_users <- function(conn, app_name_ = NULL) {
-  hold_app_name <- rlang::enquo(app_name_)
+get_app_users <- function(conn, app_uid_, schema = "polished") {
+  hold_app_name <- rlang::enquo(app_uid_)
 
   # find all users of the app
   app_users <- conn %>%
-    dplyr::tbl(dbplyr::in_schema("polished", "app_users"))
-
-
-  if (!is.null(app_name_)) {
-    app_users <- app_users %>%
-      dplyr::filter(.data$app_name == !!app_name_)
-  }
-
-  app_users <- app_users %>%
+    dplyr::tbl(dbplyr::in_schema(schema, "app_users")) %>%
+    dplyr::filter(.data$app_uid == !!app_uid_) %>%
     dplyr::select(
-      app_uid = .data$uid,
-      .data$app_name,
+      .data$uid,
+      .data$app_uid,
       .data$user_uid,
       .data$is_admin,
       .data$created_at) %>%
@@ -37,7 +31,7 @@ get_app_users <- function(conn, app_name_ = NULL) {
 
   # find the email address for all users of the app
   app_user_emails <- conn %>%
-    dplyr::tbl(dbplyr::in_schema("polished", "users")) %>%
+    dplyr::tbl(dbplyr::in_schema(schema, "users")) %>%
     dplyr::filter(.data$uid %in% app_user_uids) %>%
     dplyr::select(user_uid = .data$uid, .data$email) %>%
     dplyr::collect()

@@ -95,16 +95,52 @@ user_access_module <- function(input, output, session) {
 
     hold_app_name <- .global_sessions$app_name
 
-    app_users <- get_app_users(
-      .global_sessions$conn,
-      hold_app_name
-    )
+    if (is.null(.global_sessions$api_key)) {
+      app_users <- get_app_users(
+        .global_sessions$conn,
+        hold_app_name
+      )
+      last_active_times <- get_last_active_session_time(
+        .global_sessions$conn,
+        hold_app_name
+      )
 
-    last_active_times <- get_last_active_session_time(
-      .global_sessions$conn,
-      hold_app_name
-    ) %>%
-      select(.data$user_uid, last_sign_in_at = .data$timestamp)
+    } else {
+      res <- httr::GET(
+        url = paste0(.global_sessions$hosted_url, "/app-users"),
+        query = list(
+          app_uid = hold_app_name
+        ),
+        httr::authenticate(
+          user = .global_sessions$api_key,
+          password = ""
+        )
+      )
+
+      httr::stop_for_status(res)
+
+      app_users <- jsonlite::fromJSON(
+        httr::content(res, "text", encoding = "UTF-8")
+      ) %>%
+        mutate(created_at = as.POSIXct(.data$created_at))
+      res <- httr::GET(
+        url = paste0(.global_sessions$hosted_url, "/last-active-session-time"),
+        query = list(
+          app_uid = hold_app_name
+        ),
+        httr::authenticate(
+          user = .global_sessions$api_key,
+          password = ""
+        )
+      )
+
+      httr::stop_for_status(res)
+
+      last_active_times <- jsonlite::fromJSON(
+        httr::content(res, "text", encoding = "UTF-8")
+      )
+
+    }
 
     app_users %>%
       left_join(last_active_times, by = 'user_uid')
@@ -283,13 +319,35 @@ user_access_module <- function(input, output, session) {
     shiny::removeModal()
 
     user_uid <- user_to_delete()$user_uid
+    app_uid <- .global_sessions$app_name
 
     tryCatch({
-      DBI::dbExecute(
-        .global_sessions$conn,
-        "DELETE FROM polished.app_users WHERE user_uid=$1",
-        params = list(user_uid)
-      )
+
+      if (is.null(.global_sessions$api_key)) {
+        delete_app_user(
+          .global_sessions$conn,
+          app_uid_ = app_uid,
+          user_uid = user_uid
+        )
+      } else {
+
+        res <- httr::DELETE(
+          url = paste0(.global_sessions$hosted_url, "/app-users"),
+          body = list(
+            user_uid = user_uid,
+            app_uid = app_uid
+          ),
+          httr::authenticate(
+            user = .global_sessions$api_key,
+            password = ""
+          ),
+          encode = "json"
+        )
+
+        httr::stop_for_status(res)
+
+      }
+
 
       show_toast("success", "User successfully deleted")
       users_trigger(users_trigger() + 1)
@@ -306,10 +364,8 @@ user_access_module <- function(input, output, session) {
 
     user_to_sign_in_as <- users() %>%
       filter(.data$user_uid == input$sign_in_as_btn_user_uid) %>%
-      dplyr::select(.data$email, .data$is_admin, uid = .data$user_uid) %>%
-      as.list()
+      dplyr::pull("user_uid")
 
-    user_to_sign_in_as$hashed_cookie <- session$userData$user()$hashed_cookie
 
     session$sendCustomMessage(
       "polish__show_loading",
@@ -320,7 +376,7 @@ user_access_module <- function(input, output, session) {
 
     # sign in as another user
     .global_sessions$set_signed_in_as(
-      session$userData$user()$hashed_cookie,
+      session$userData$user()$session_uid,
       user_to_sign_in_as
     )
 

@@ -11,7 +11,7 @@ sign_out_from_shiny <- function(session) {
   if (is.null(user)) stop("session$userData$user() does not exist")
 
   # remove the user from `global_users`
-  .global_sessions$sign_out(user$user_uid, user$session_uid)
+  .global_sessions$sign_out(user$hashed_cookie, user$session_uid)
 
   # set query string to sign in page
   shiny::updateQueryString(

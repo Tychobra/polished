@@ -11,4 +11,4 @@ db_conn <- DBI::dbConnect(
   password = db_config$password
 )
 
-polished::create_schema(db_conn)
+create_schema(db_conn)

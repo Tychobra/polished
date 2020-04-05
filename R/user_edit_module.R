@@ -109,13 +109,34 @@ user_edit_module <- function(input, output, session,
     if (is.null(hold_user)) {
       # adding a new user
       tryCatch({
-        create_app_user(
-          conn = .global_sessions$conn,
-          app_name = .global_sessions$app_name,
-          email = input_email,
-          is_admin = is_admin_out,
-          created_by = session_user
-        )
+
+        if (is.null(.global_sessions$api_key)) {
+          create_app_user(
+            conn = .global_sessions$conn,
+            app_uid = .global_sessions$app_name,
+            email = input_email,
+            is_admin = is_admin_out,
+            created_by = session_user
+          )
+        } else {
+          res <- httr::POST(
+            url = paste0(.global_sessions$hosted_url, "/app-users"),
+            body = list(
+              email = input_email,
+              app_uid = .global_sessions$app_name,
+              is_admin = is_admin_out
+            ),
+            httr::authenticate(
+              user = .global_sessions$api_key,
+              password = ""
+            ),
+            encode = "json"
+          )
+
+          httr::stop_for_status(res)
+
+        }
+
 
         shiny::removeModal()
 
@@ -133,22 +154,36 @@ user_edit_module <- function(input, output, session,
       shiny::removeModal()
 
       tryCatch({
-        DBI::dbWithTransaction(.global_sessions$conn, {
 
-          # update the app user
-          DBI::dbExecute(
+
+        # update the app user
+        if (is.null(.global_sessions$api_key)) {
+          update_app_user(
             .global_sessions$conn,
-            "UPDATE polished.app_users SET is_admin=$1, modified_by=$2, modified_at=$3 WHERE user_uid=$4 AND app_name=$5",
-            params = list(
-              is_admin_out,                   # is_admin
-              session_user,                   # modified_by
-              tychobratools::time_now_utc(),  # modified_at
-              hold_user$user_uid,             # user_uid
-              .global_sessions$app_name       # app_name
-            )
+            user_uid = hold_user$user_uid,             # user_uid
+            app_uid = .global_sessions$app_name,
+            is_admin = is_admin_out,
+            modified_by = session_user             # modified_by
+          )
+        } else {
+          res <- httr::PUT(
+            url = paste0(.global_sessions$hosted_url, "/app-users"),
+            body = list(
+              user_uid = hold_user$user_uid,
+              app_uid = .global_sessions$app_name,
+              is_admin = is_admin_out
+            ),
+            httr::authenticate(
+              user = .global_sessions$api_key,
+              password = ""
+            ),
+            encode = "json"
           )
 
-        })
+          httr::stop_for_status(res)
+        }
+
+
 
         users_trigger(users_trigger() + 1)
         tychobratools::show_toast("success", "User successfully edited!")

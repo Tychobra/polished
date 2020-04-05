@@ -4,12 +4,19 @@
 \alias{create_app_user}
 \title{create_app_user}
 \usage{
-create_app_user(conn, app_name, email, is_admin = FALSE, created_by = NULL)
+create_app_user(
+  conn,
+  app_uid,
+  email,
+  is_admin = FALSE,
+  created_by = NULL,
+  schema = "polished"
+)
 }
 \arguments{
 \item{conn}{the database connection.}
 
-\item{app_name}{the name of the Shiny app.}
+\item{app_uid}{the name of the Shiny app.}
 
 \item{email}{the email address of the first user.}
 
@@ -18,6 +25,8 @@ is an admin.}
 
 \item{created_by}{uid of the user that creating this user.  If `NULL`, the default, then the
 user uid of the user being created will be used.}
+
+\item{schema}{the database schema}
 }
 \description{
 Add the first user to the "polished" schema

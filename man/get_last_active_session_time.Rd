@@ -4,12 +4,14 @@
 \alias{get_last_active_session_time}
 \title{get last active session time}
 \usage{
-get_last_active_session_time(conn, app_name_)
+get_last_active_session_time(conn, app_uid_, schema = "polished")
 }
 \arguments{
 \item{conn}{the database connection}
 
-\item{app_name_}{the name of the app}
+\item{app_uid_}{the uid of the app}
+
+\item{schema}{the database schema}
 }
 \value{
 a data frame with 2 columns:

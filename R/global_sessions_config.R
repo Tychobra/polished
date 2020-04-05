@@ -16,6 +16,7 @@
 #' Make sure to set `admin_mode` to FALSE before deploying your app.
 #' @param is_invite_required TRUE by default.  Whether or not to require the user to have an
 #' invite before registering/signing in
+#' @param api_key the API key from Polished hosted
 #'
 #' @export
 #'
@@ -24,7 +25,8 @@ global_sessions_config <- function(
   app_name = NULL,
   firebase_config = NULL,
   admin_mode = FALSE,
-  is_invite_required = TRUE
+  is_invite_required = TRUE,
+  api_key = NULL
 ) {
 
   .global_sessions$config(
@@ -32,7 +34,8 @@ global_sessions_config <- function(
     firebase_config = firebase_config,
     conn = conn,
     admin_mode = admin_mode,
-    is_invite_required = is_invite_required
+    is_invite_required = is_invite_required,
+    api_key = api_key
   )
 
 }
