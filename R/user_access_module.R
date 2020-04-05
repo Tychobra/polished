@@ -319,13 +319,35 @@ user_access_module <- function(input, output, session) {
     shiny::removeModal()
 
     user_uid <- user_to_delete()$user_uid
+    app_uid <- .global_sessions$app_name
 
     tryCatch({
-      DBI::dbExecute(
-        .global_sessions$conn,
-        "DELETE FROM polished.app_users WHERE user_uid=$1",
-        params = list(user_uid)
-      )
+
+      if (is.null(.global_sessions$api_key)) {
+        delete_app_user(
+          .global_sessions$conn,
+          app_uid_ = app_uid,
+          user_uid = user_uid
+        )
+      } else {
+
+        res <- httr::DELETE(
+          url = paste0(.global_sessions$hosted_url, "/app-users"),
+          body = list(
+            user_uid = hold_user$user_uid,
+            app_uid = .global_sessions$app_name
+          ),
+          httr::authenticate(
+            user = .global_sessions$api_key,
+            password = ""
+          ),
+          encode = "json"
+        )
+
+        httr::stop_for_status(res)
+
+      }
+
 
       show_toast("success", "User successfully deleted")
       users_trigger(users_trigger() + 1)
