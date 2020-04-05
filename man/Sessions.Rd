@@ -17,7 +17,6 @@ this class directly.
 \item \href{#method-find}{\code{Sessions$find()}}
 \item \href{#method-refresh_email_verification}{\code{Sessions$refresh_email_verification()}}
 \item \href{#method-set_signed_in_as}{\code{Sessions$set_signed_in_as()}}
-\item \href{#method-clear_signed_in_as}{\code{Sessions$clear_signed_in_as()}}
 \item \href{#method-get_signed_in_as_user}{\code{Sessions$get_signed_in_as_user()}}
 \item \href{#method-set_inactive}{\code{Sessions$set_inactive()}}
 \item \href{#method-set_active}{\code{Sessions$set_active()}}
@@ -113,16 +112,7 @@ NULL if sign in fails. If sign in is successful, a list containing the following
 \if{latex}{\out{\hypertarget{method-set_signed_in_as}{}}}
 \subsection{Method \code{set_signed_in_as()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$set_signed_in_as(hashed_cookie, signed_in_as)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clear_signed_in_as"></a>}}
-\if{latex}{\out{\hypertarget{method-clear_signed_in_as}{}}}
-\subsection{Method \code{clear_signed_in_as()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$clear_signed_in_as(session_uid)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$set_signed_in_as(session_uid, signed_in_as)}\if{html}{\out{</div>}}
 }
 
 }

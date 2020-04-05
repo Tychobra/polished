@@ -4,9 +4,11 @@
 \alias{get_session}
 \title{get session by hashed cookie}
 \usage{
-get_session(conn_, hashed_cookie)
+get_session(conn, hashed_cookie)
 }
 \arguments{
+\item{conn}{the database connection}
+
 \item{hashed_cookie}{the hashed cookie}
 }
 \value{

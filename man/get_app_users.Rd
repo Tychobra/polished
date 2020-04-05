@@ -4,12 +4,14 @@
 \alias{get_app_users}
 \title{get_app_users}
 \usage{
-get_app_users(conn, app_name_ = NULL)
+get_app_users(conn, app_uid_, schema = "polished")
 }
 \arguments{
 \item{conn}{the database connection}
 
-\item{app_name_}{the name of the app or `NULL` to get all app users. Defaults to NULL.}
+\item{app_uid_}{the id of the app}
+
+\item{schema}{the database schema}
 }
 \value{
 a data frame of the app users from the polished schema.

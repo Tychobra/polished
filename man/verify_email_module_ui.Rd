@@ -4,12 +4,10 @@
 \alias{verify_email_module_ui}
 \title{verify email page ui}
 \usage{
-verify_email_module_ui(id, firebase_config)
+verify_email_module_ui(id)
 }
 \arguments{
 \item{id}{the Shiny module id}
-
-\item{firebase_config}{Firebase configuration}
 }
 \description{
 verify email page ui

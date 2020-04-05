@@ -1,7 +1,6 @@
 #' verify email page ui
 #'
 #' @param id the Shiny module id
-#' @param firebase_config Firebase configuration
 #'
 #' @importFrom htmltools tags h1
 #' @importFrom shiny fluidPage fluidRow column

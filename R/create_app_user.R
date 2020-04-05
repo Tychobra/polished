@@ -9,6 +9,7 @@
 #' is an admin.
 #' @param created_by uid of the user that creating this user.  If `NULL`, the default, then the
 #' user uid of the user being created will be used.
+#' @param schema the database schema
 #'
 #' @export
 #'

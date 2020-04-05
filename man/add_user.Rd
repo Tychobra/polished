@@ -4,14 +4,19 @@
 \alias{add_user}
 \title{add_user}
 \usage{
-add_user(conn_, email, created_by)
+add_user(conn, email, created_by, schema = "polished")
 }
 \arguments{
-\item{conn_}{the database connection}
+\item{conn}{the database connection}
 
 \item{email}{the email address of the user to be added}
 
 \item{created_by}{the uid of the user that created this new user}
+
+\item{schema}{the database schema}
+}
+\value{
+the uid of the newly created user or NULL if the user already exists
 }
 \description{
 add_user

@@ -4,7 +4,7 @@
 \alias{add_session}
 \title{add session to the "sessions" table}
 \usage{
-add_session(conn_, session, app_name)
+add_session(conn_, session, app_uid)
 }
 \arguments{
 \item{conn_}{the database connection}
@@ -16,7 +16,7 @@ add_session(conn_, session, app_name)
 - email_verified
 - hashed_cookie}
 
-\item{app_name}{the name of the apps}
+\item{app_uid}{the id of the apps}
 }
 \description{
 add session to the "sessions" table

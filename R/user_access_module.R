@@ -122,7 +122,7 @@ user_access_module <- function(input, output, session) {
       app_users <- jsonlite::fromJSON(
         httr::content(res, "text", encoding = "UTF-8")
       ) %>%
-        mutate(created_at = as.POSIXct(created_at))
+        mutate(created_at = as.POSIXct(.data$created_at))
       res <- httr::GET(
         url = paste0(.global_sessions$hosted_url, "/last-active-session-time"),
         query = list(
@@ -138,11 +138,9 @@ user_access_module <- function(input, output, session) {
 
       last_active_times <- jsonlite::fromJSON(
         httr::content(res, "text", encoding = "UTF-8")
-      ) %>%
-        mutate(last_sign_in_at = as.POSIXct(last_sign_in_at))
+      )
 
     }
-
 
     app_users %>%
       left_join(last_active_times, by = 'user_uid')

@@ -1,7 +1,7 @@
 
 #' add_user
 #'
-#' @param conn_ the database connection
+#' @param conn the database connection
 #' @param email the email address of the user to be added
 #' @param created_by the uid of the user that created this new user
 #' @param schema the database schema
@@ -14,16 +14,16 @@
 #' @export
 #'
 #'
-add_user <- function(conn_, email, created_by, schema = "polished") {
+add_user <- function(conn, email, created_by, schema = "polished") {
 
   user_uid_out <- uuid::UUIDgenerate()
 
   n_row <- DBI::dbExecute(
-    conn_,
+    conn,
     paste0("INSERT INTO ", schema, ".users ( uid, email, created_by, modified_by ) VALUES ( $1, $2, $3, $4 ) ON CONFLICT DO NOTHING"),
     params = list(
       user_uid_out,
-      email_,
+      email,
       created_by,
       created_by
     )
