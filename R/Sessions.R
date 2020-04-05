@@ -74,7 +74,7 @@ api_get_invite <- function(url, api_key, app_uid, user_uid) {
 Sessions <-  R6::R6Class(
   classname = 'Sessions',
   public = list(
-    hosted_url = "http://127.0.0.1:8080",
+    hosted_url = "https://api.polished.tech",
     app_name = character(0),
     conn = NULL,
     firebase_config = NULL,
