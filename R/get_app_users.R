@@ -13,7 +13,7 @@
 #' @importFrom rlang !! enquo
 #'
 get_app_users <- function(conn, app_uid_, schema = "polished") {
-  hold_app_name <- rlang::enquo(app_name_)
+  hold_app_name <- rlang::enquo(app_uid_)
 
   # find all users of the app
   app_users <- conn %>%

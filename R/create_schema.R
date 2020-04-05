@@ -50,7 +50,6 @@ create_schema <- function(conn) {
   create_sessions_table_query <- "CREATE TABLE polished.sessions (
     uid                   TEXT PRIMARY KEY,
     user_uid              TEXT,
-    firebase_uid          TEXT,
     email                 TEXT,
     email_verified        BOOLEAN,
     hashed_cookie         TEXT,
