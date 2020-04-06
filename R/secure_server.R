@@ -178,8 +178,8 @@ secure_server <- function(
     shiny::observeEvent(session$userData$user(), {
       query_string <- shiny::getQueryString()
 
-
-      if (is.null(query_string$page) && session$userData$user()$email_verified) {
+      if (is.null(query_string$page) && session$userData$user()$email_verified &&
+          isFALSE(.global_sessions$get_admin_mode())) {
         session_uid <- session$userData$user()$session_uid
         server(input, output, session)
 
