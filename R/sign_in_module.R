@@ -237,11 +237,18 @@ sign_in_module <- function(input, output, session) {
 
       # user is invited
       shinyjs::hide("submit_continue_sign_in")
-
+      
       shinyjs::show(
         "sign_in_password",
         anim = TRUE
       )
+      
+      # NEED to sleep this exact amount to allow animation (above) to show w/o bug
+      Sys.sleep(.25)
+
+      shinyjs::runjs(paste0("$('#", ns('password'), "').focus()"))
+      
+        
     }, error = function(e) {
       # user is not invited
       print(e)
