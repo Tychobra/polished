@@ -9,10 +9,10 @@
 #'
 #' @importFrom DBI dbGetQuery
 #'
-get_user_by_email <- function(conn_, email) {
+get_user_by_email <- function(conn_, email, schema = "polished") {
   user_out <- DBI::dbGetQuery(
     conn_,
-    "SELECT * FROM polished.users WHERE email=$1",
+    paste0("SELECT * FROM ", schema, ".users WHERE email=$1"),
     params = list(
       email
     )
