@@ -1,5 +1,7 @@
 
 api_get_invite_by_email <- function(url, api_key, email, app_uid) {
+
+
   res <- httr::GET(
     url = paste0(url, "/invite-by-email"),
     query = list(
@@ -318,18 +320,19 @@ Sessions <-  R6::R6Class(
       return(invite)
     },
     find = function(hashed_cookie) {
+      if (nchar(hashed_cookie) == 0) return(NULL)
 
       if (is.null(self$api_key)) {
 
-        signed_in_sessions <- get_session(self$conn, hashed_cookie)
+        session_out <- get_session(self$conn, hashed_cookie, self$app_name)
 
       } else {
 
-        # TODO: find the user from the sessions table
         res <- httr::GET(
           url = paste0(self$hosted_url, "/session-by-cookie"),
           query = list(
-            hashed_cookie = hashed_cookie
+            hashed_cookie = hashed_cookie,
+            app_uid = self$app_name
           ),
           httr::authenticate(
             user = self$api_key,
@@ -339,59 +342,14 @@ Sessions <-  R6::R6Class(
 
         httr::stop_for_status(res)
 
-        signed_in_sessions <- jsonlite::fromJSON(
-          httr::content(res, "text", encoding = "UTF-8")
+        session_out <- jsonlite::fromJSON(
+          httr::content(res, "text", encoding = "json")
         )
 
-        signed_in_sessions <- as.data.frame(
-          signed_in_sessions,
-          stringsAsFactors = FALSE
-        )
-      }
-
-
-      session_out <- NULL
-      if (nrow(signed_in_sessions) > 0) {
-
-
-        if (is.null(self$api_key)) {
-          # confirm that user is invited
-          invite <- get_invite(self$conn, self$app_name, signed_in_sessions$user_uid[1])
-        } else {
-          invite <- api_get_invite_by_email(
-            self$hosted_url,
-            self$api_key,
-            signed_in_sessions$email,
-            self$app_name
-          )
+        if (length(session_out) == 0) {
+          session_out <- NULL
         }
 
-
-
-        session_out <- list(
-          "user_uid" = signed_in_sessions$user_uid[1],
-          "email" = signed_in_sessions$email[1],
-          "email_verified" = signed_in_sessions$email_verified[1],
-          "is_admin" = invite$is_admin,
-          "hashed_cookie" = hashed_cookie
-        )
-
-        app_session <- signed_in_sessions %>%
-          filter(.data$app_uid == self$app_name)
-
-        if (nrow(app_session) == 0) {
-          # user was signed into another app and came over to this app, so add a session for this app
-          session_out$session_uid <- uuid::UUIDgenerate()
-
-          private$add(session_out)
-          session_out$signed_in_as <- NA
-        } else if (nrow(app_session) == 1) {
-
-          session_out$session_uid <- app_session$session_uid
-          session_out$signed_in_as <- app_session$signed_in_as
-        } else {
-          stop('error: too many sessions')
-        }
       }
 
       return(session_out)

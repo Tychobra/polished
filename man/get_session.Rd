@@ -4,12 +4,16 @@
 \alias{get_session}
 \title{get session by hashed cookie}
 \usage{
-get_session(conn, hashed_cookie)
+get_session(conn, hashed_cookie, app_uid, schema = "polished")
 }
 \arguments{
 \item{conn}{the database connection}
 
 \item{hashed_cookie}{the hashed cookie}
+
+\item{app_uid}{the id of the app}
+
+\item{schema}{the database schema}
 }
 \value{
 the signed in user session
