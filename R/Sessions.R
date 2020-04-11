@@ -131,11 +131,25 @@ Sessions <-  R6::R6Class(
 
         self$api_key <- api_key
 
-        self$firebase_config <- list(
-          apiKey = "AIzaSyAlrehX1g0irhCKq5MfmOE96z8lNprbbnk",
-          authDomain = "polished-hosted.firebaseapp.com",
-          projectId = "polished-hosted"
-        )
+        if (is.null(firebase_config)) {
+          # set to the default polished Firebase project if app is using polished
+          # hosted, but no Firebase credentials provided.  This allows users to get up and
+          # running quickly without needing to create a Firebase project, but for
+          # production Shiny apps, the user should
+          self$firebase_config <- list(
+            apiKey = "AIzaSyAlrehX1g0irhCKq5MfmOE96z8lNprbbnk",
+            authDomain = "polished-hosted.firebaseapp.com",
+            projectId = "polished-hosted"
+          )
+
+        } else {
+          if (length(firebase_config) != 3 ||
+              !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
+            stop("invalid `firebase_config` argument passed to `global_sessions_config()`", call. = FALSE)
+          }
+          self$firebase_config <- firebase_config
+        }
+
 
 
         # get the app uid
