@@ -380,14 +380,35 @@ Sessions <-  R6::R6Class(
       if (is.null(email_verified)) {
         stop("email verification user not found")
       } else {
-        dbExecute(
-          self$conn,
-          'UPDATE polished.sessions SET email_verified=$1 WHERE uid=$2',
-          params = list(
-            email_verified,
-            session_uid
+
+        if (is.null(self$api_key)) {
+          dbExecute(
+            self$conn,
+            'UPDATE polished.sessions SET email_verified=$1 WHERE uid=$2',
+            params = list(
+              email_verified,
+              session_uid
+            )
           )
-        )
+        } else {
+          res <- httr::PUT(
+            url = paste0(self$hosted_url, "/sessions"),
+            httr::authenticate(
+              user = self$api_key,
+              password = ""
+            ),
+            body = list(
+              session_uid = session_uid,
+              dat = list(
+                email_verified = email_verified
+              )
+            ),
+            encode = "json"
+          )
+
+          httr::stop_for_status(res)
+        }
+
       }
 
 
