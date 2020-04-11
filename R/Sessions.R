@@ -343,7 +343,7 @@ Sessions <-  R6::R6Class(
         httr::stop_for_status(res)
 
         session_out <- jsonlite::fromJSON(
-          httr::content(res, "text", encoding = "json")
+          httr::content(res, "text", encoding = "UTF-8")
         )
 
         if (length(session_out) == 0) {
@@ -638,7 +638,7 @@ Sessions <-  R6::R6Class(
       httr::stop_for_status(google_keys_resp)
 
       private$jwt_pub_key <- jsonlite::fromJSON(
-        httr::content(google_keys_resp, "text")
+        httr::content(google_keys_resp, "text", encoding = "UTF-8")
       )
 
 
