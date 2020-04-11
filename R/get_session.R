@@ -30,7 +30,16 @@ get_session <- function(conn, hashed_cookie, app_uid, schema = "polished") {
   if (nrow(signed_in_sessions) > 0) {
 
     # confirm that user is invited
-    invite <- get_invite(conn, app_uid, signed_in_sessions$user_uid[1])
+    invite <- get_invite(
+      conn,
+      app_uid,
+      signed_in_sessions$user_uid[1],
+      schema = schema
+    )
+
+    if (is.null(invite)) {
+      stop("[polished] Not Authorized")
+    }
 
     session_out <- list(
       "user_uid" = signed_in_sessions$user_uid[1],
