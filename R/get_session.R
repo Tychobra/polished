@@ -38,7 +38,7 @@ get_session <- function(conn, hashed_cookie, app_uid, schema = "polished") {
     )
 
     if (is.null(invite)) {
-      stop("[polished] Not Authorized")
+      return(NULL)
     }
 
     session_out <- list(
