@@ -27,29 +27,31 @@ var auth_firebase = function auth_firebase(ns_prefix) {
     var password_2 = $("#".concat(ns_prefix, "register_password_verify")).val();
 
     if (password !== password_2) {
+      // Event to reset Register loading button
+      $(document).trigger("tychobratools:reset_loading_button", ["".concat(ns_prefix, "submit_register")]);
       toastr.error("The passwords do not match", null, toast_options);
       console.log("the passwords do not match");
       return;
-    }
+    } // double check that the email is in "invites" collection
 
-    $.LoadingOverlay("show", loading_options); // double check that the email is in "invites" collection
 
     auth.createUserWithEmailAndPassword(email, password).then(function (userCredential) {
       // send verification email
       return userCredential.user.sendEmailVerification()["catch"](function (error) {
         console.error("Error sending email verification", error);
+        $(document).trigger("tychobratools:reset_loading_button", ["".concat(ns_prefix, "submit_register")]);
       });
     }).then(function () {
       return sign_in(email, password)["catch"](function (error) {
-        $.LoadingOverlay("hide");
         toastr.error("Sign in Error: " + error.message, null, toast_options);
         console.log("error: ", error);
+        $(document).trigger("tychobratools:reset_loading_button", ["".concat(ns_prefix, "submit_register")]);
       });
     })["catch"](function (error) {
       toastr.error("" + error, null, toast_options);
-      $.LoadingOverlay("hide");
       console.log("error registering user");
       console.log(error);
+      $(document).trigger("tychobratools:reset_loading_button", ["".concat(ns_prefix, "submit_register")]);
     });
   });
   $(document).on("click", "#".concat(ns_prefix, "reset_password"), function () {
@@ -63,11 +65,9 @@ var auth_firebase = function auth_firebase(ns_prefix) {
     });
   });
   $(document).on("click", "#".concat(ns_prefix, "submit_sign_in"), function () {
-    $.LoadingOverlay("show", loading_options);
     var email = $("#".concat(ns_prefix, "email")).val().toLowerCase();
     var password = $("#".concat(ns_prefix, "password")).val();
     sign_in(email, password)["catch"](function (error) {
-      $.LoadingOverlay("hide");
       toastr.error("Sign in Error: " + error.message, null, toast_options);
       console.log("error: ", error);
     });
