@@ -41,9 +41,9 @@ const auth_firebase = (ns_prefix) => {
     const password_2 = $(`#${ns_prefix}register_password_verify`).val()
 
     if (password !== password_2) {
-      // Event to reset Register loading button
-      $(document).trigger("tychobratools:reset_loading_button_" + `${ns_prefix}submit_register`)
-      
+      // Event to reset Register loading button from loading state back to ready state
+      $(document).trigger(`tychobratools:reset_loading_button_${ns_prefix}submit_register`)
+
       toastr.error("The passwords do not match", null, toast_options)
       console.log("the passwords do not match")
 
@@ -59,23 +59,23 @@ const auth_firebase = (ns_prefix) => {
       // send verification email
       return userCredential.user.sendEmailVerification().catch(error => {
         console.error("Error sending email verification", error)
-        $(document).trigger("tychobratools:reset_loading_button_" + `${ns_prefix}submit_register`)
+        $(document).trigger(`tychobratools:reset_loading_button_${ns_prefix}submit_register`)
       })
 
 
     }).then(() => {
 
       return sign_in(email, password).catch(error => {
-        toastr.error("Sign in Error: " + error.message, null, toast_options)
+        toastr.error(`Sign in Error: ${error.message}`, null, toast_options)
         console.log("error: ", error)
-        $(document).trigger("tychobratools:reset_loading_button_" + `${ns_prefix}submit_sign_in`)
+        $(document).trigger(`tychobratools:reset_loading_button_${ns_prefix}submit_sign_in`)
       })
 
     }).catch((error) => {
       toastr.error("" + error, null, toast_options)
       console.log("error registering user")
       console.log(error)
-      $(document).trigger("tychobratools:reset_loading_button_" + `${ns_prefix}submit_register`)
+      $(document).trigger(`tychobratools:reset_loading_button_${ns_prefix}submit_register`)
     })
 
   })
@@ -86,7 +86,7 @@ const auth_firebase = (ns_prefix) => {
 
     auth.sendPasswordResetEmail(email).then(() => {
       console.log(`Password reset email sent to ${email}`)
-      toastr.success("Password reset email sent to " + email, null, toast_options)
+      toastr.success(`Password reset email sent to ${email}`, null, toast_options)
     }).catch((error) => {
       toastr.error("" + error, null, toast_options)
       console.log("error resetting email: ", error)
@@ -101,8 +101,8 @@ const auth_firebase = (ns_prefix) => {
     sign_in(email, password).catch(error => {
 
       // Event to reset Sign In loading button
-      $(document).trigger("tychobratools:reset_loading_button_" + `${ns_prefix}submit_sign_in`)
-      toastr.error("Sign in Error: " + error.message, null, toast_options)
+      $(document).trigger(`tychobratools:reset_loading_button_${ns_prefix}submit_sign_in`)
+      toastr.error(`Sign in Error: ${error.message}`, null, toast_options)
       console.log("error: ", error)
     })
 
