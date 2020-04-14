@@ -221,6 +221,7 @@ user_access_module <- function(input, output, session) {
     if (is.null(users_table_prep())) {
       users_table_prep(out)
     } else {
+      shinyjs::runjs("$('.btn-sm').tooltip('hide')")
       DT::replaceData(users_proxy, out, resetPaging = FALSE, rownames = FALSE)
     }
 
