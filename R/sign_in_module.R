@@ -61,10 +61,10 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
         tychobratools::loading_button(
           ns("submit_sign_in"),
           label = "Sign In",
-          class = "btn text-center",
-          style = "width: 100%; color: white; background-color: #337AB7; border-color: #2E6DA4;",
+          class = "btn btn-lg text-center",
+          style = "width: 100%; color: white; background-color: #2491EB;",
           loading_label = "Authenticating...",
-          loading_class = "btn text-center",
+          loading_class = "btn btn-lg text-center",
           loading_style = "width: 100%; color: #FFFFFF; background-color: grey; border-color: grey;"
         )
       )),
@@ -168,8 +168,8 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
           tychobratools::loading_button(
             ns("submit_register"),
             label = "Register",
-            class = "btn btn-primary btn-lg",
-            style = "width: 100%; color: white; background-color: #337AB7; border-color: #2E6DA4;",
+            class = "btn btn-lg",
+            style = "width: 100%; color: white; background-color: #2491EB;",
             loading_label = "Registering...",
             loading_class = "btn btn-lg",
             loading_style = "width: 100%; color: #FFFFFF; background-color: grey; border-color: grey;"
@@ -350,8 +350,6 @@ sign_in_module <- function(input, output, session) {
         remove_query_string()
         session$reload()
       }
-
-
 
     }, error = function(e) {
       reset_loading_button('submit_sign_in')
