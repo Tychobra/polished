@@ -59,6 +59,8 @@ sign_in_ui_default <- function(
         .btn-primary {
           background-color: ${color} !important;
           border: none;
+          width: 100%;
+          color: #FFF;
         }
 
         .footer {
@@ -72,9 +74,6 @@ sign_in_ui_default <- function(
           background-color: ${color} !important;
         }
 
-        /*label {
-          text-align: left !important;
-        }*/
       ")
       )
     ),

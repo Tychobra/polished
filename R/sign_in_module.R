@@ -61,11 +61,11 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
         tychobratools::loading_button(
           ns("submit_sign_in"),
           label = "Sign In",
-          class = "btn btn-lg text-center",
-          style = "width: 100%; color: white; background-color: #2491EB;",
+          class = "btn btn-primary btn-lg text-center",
+          style = "",
           loading_label = "Authenticating...",
-          loading_class = "btn btn-lg text-center",
-          loading_style = "width: 100%; color: #FFFFFF; background-color: grey; border-color: grey;"
+          loading_class = "btn btn-primary btn-lg text-center",
+          loading_style = ""
         )
       )),
       div(
@@ -73,7 +73,6 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
         shiny::actionButton(
           inputId = ns("submit_continue_sign_in"),
           label = "Continue",
-          style = "color: white; width: 100%;",
           class = "btn btn-primary btn-lg"
         )
       ),
@@ -125,7 +124,6 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
         shiny::actionButton(
           inputId = ns("submit_continue_register"),
           label = "Continue",
-          style = "color: white; width: 100%;",
           class = "btn btn-primary btn-lg"
         )
       ),
@@ -168,11 +166,11 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
           tychobratools::loading_button(
             ns("submit_register"),
             label = "Register",
-            class = "btn btn-lg",
-            style = "width: 100%; color: white; background-color: #2491EB;",
+            class = "btn btn-primary btn-lg",
+            style = "",
             loading_label = "Registering...",
-            loading_class = "btn btn-lg",
-            loading_style = "width: 100%; color: #FFFFFF; background-color: grey; border-color: grey;"
+            loading_class = "btn btn-primary btn-lg text-center",
+            loading_style = ""
           )
         )
       )),
@@ -240,18 +238,18 @@ sign_in_module <- function(input, output, session) {
 
       # user is invited
       shinyjs::hide("submit_continue_sign_in")
-      
+
       shinyjs::show(
         "sign_in_password",
         anim = TRUE
       )
-      
+
       # NEED to sleep this exact amount to allow animation (above) to show w/o bug
       Sys.sleep(.25)
 
       shinyjs::runjs(paste0("$('#", ns('password'), "').focus()"))
-      
-        
+
+
     }, error = function(e) {
       # user is not invited
       print(e)
@@ -308,12 +306,12 @@ sign_in_module <- function(input, output, session) {
         "register_passwords",
         anim = TRUE
       )
-      
+
       # NEED to sleep this exact amount to allow animation (above) to show w/o bug
       Sys.sleep(.25)
-      
+
       shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
-      
+
     }, error = function(e) {
       # user is not invited
       print(e)
