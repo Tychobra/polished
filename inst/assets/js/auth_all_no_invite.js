@@ -26,7 +26,4 @@ var auth_all_no_invite = function auth_all_no_invite(ns_prefix) {
       $("#".concat(ns_prefix, "submit_register")).click();
     }
   });
-  Shiny.addCustomMessageHandler("".concat(ns_prefix, "remove_loading"), function (message) {
-    $.LoadingOverlay("hide");
-  });
 };

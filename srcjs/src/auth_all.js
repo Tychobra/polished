@@ -59,14 +59,6 @@ const auth_all = (ns_prefix) => {
     }
   })
 
-  Shiny.addCustomMessageHandler(
-    `${ns_prefix}remove_loading`,
-    function(message) {
-
-      $.LoadingOverlay("hide")
-    }
-  )
-
 
 }
 

@@ -58,12 +58,14 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
           )
         ),
         br(),
-        shiny::actionButton(
-          inputId = ns("submit_sign_in"),
+        tychobratools::loading_button(
+          ns("submit_sign_in"),
           label = "Sign In",
-          class = "text-center",
-          style = "color: white; width: 100%;",
-          class = "btn btn-primary btn-lg"
+          class = "btn btn-primary btn-lg text-center",
+          style = "",
+          loading_label = "Authenticating...",
+          loading_class = "btn btn-primary btn-lg text-center",
+          loading_style = ""
         )
       )),
       div(
@@ -71,7 +73,6 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
         shiny::actionButton(
           inputId = ns("submit_continue_sign_in"),
           label = "Continue",
-          style = "color: white; width: 100%;",
           class = "btn btn-primary btn-lg"
         )
       ),
@@ -123,7 +124,6 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
         shiny::actionButton(
           inputId = ns("submit_continue_register"),
           label = "Continue",
-          style = "color: white; width: 100%;",
           class = "btn btn-primary btn-lg"
         )
       ),
@@ -163,11 +163,14 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
         br(),
         div(
           style = "text-align: center;",
-          actionButton(
-            inputId = ns("submit_register"),
+          tychobratools::loading_button(
+            ns("submit_register"),
             label = "Register",
-            style = "color: white; width: 100%;",
-            class = "btn btn-primary btn-lg"
+            class = "btn btn-primary btn-lg",
+            style = "",
+            loading_label = "Registering...",
+            loading_class = "btn btn-primary btn-lg text-center",
+            loading_style = ""
           )
         )
       )),
@@ -183,10 +186,8 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
       )
     )),
 
-    tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
     firebase_dependencies(),
     firebase_init(firebase_config),
-    tags$script(src = "polish/js/loading_options.js"),
     tags$script(src = "polish/js/toast_options.js"),
     tags$script(src = "polish/js/auth_all.js"),
     tags$script(paste0("auth_all('", ns(''), "')")),
@@ -203,7 +204,7 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
 #' @param session the Shiny session
 #'
 #' @importFrom shiny observeEvent
-#' @importFrom tychobratools show_toast
+#' @importFrom tychobratools show_toast reset_loading_button
 #' @importFrom shinyjs show hide
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom digest digest
@@ -242,6 +243,13 @@ sign_in_module <- function(input, output, session) {
         "sign_in_password",
         anim = TRUE
       )
+
+      # NEED to sleep this exact amount to allow animation (above) to show w/o bug
+      Sys.sleep(.25)
+
+      shinyjs::runjs(paste0("$('#", ns('password'), "').focus()"))
+
+
     }, error = function(e) {
       # user is not invited
       print(e)
@@ -298,6 +306,12 @@ sign_in_module <- function(input, output, session) {
         "register_passwords",
         anim = TRUE
       )
+
+      # NEED to sleep this exact amount to allow animation (above) to show w/o bug
+      Sys.sleep(.25)
+
+      shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
+
     }, error = function(e) {
       # user is not invited
       print(e)
@@ -324,6 +338,7 @@ sign_in_module <- function(input, output, session) {
       )
 
       if (is.null(new_user)) {
+        tychobratools::reset_loading_button('submit_sign_in')
         # show unable to sign in message
         tychobratools::show_toast('error', 'sign in error')
         stop('sign_in_module: sign in error')
@@ -334,14 +349,8 @@ sign_in_module <- function(input, output, session) {
         session$reload()
       }
 
-
-
     }, error = function(e) {
-      # user is not invited
-      session$sendCustomMessage(
-        ns('remove_loading'),
-        message = list()
-      )
+      tychobratools::reset_loading_button('submit_sign_in')
       print(e)
       shinyWidgets::sendSweetAlert(
         session,

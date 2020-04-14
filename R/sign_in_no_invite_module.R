@@ -19,20 +19,6 @@ sign_in_no_invite_module_ui <- function(id) {
   firebase_config <- .global_sessions$firebase_config
 
   fluidPage(
-    tags$head(
-      tags$style("
-        .auth_panel {
-          width: 350px;
-          max-width: 100%;
-          margin: 0 auto;
-          margin-top: 75px;
-          border: 2px solid #eee;
-          border-radius: 25px;
-          padding: 30px;
-          background: #f9f9f9;
-        }
-      ")
-    ),
     fluidRow(
       shinyjs::useShinyjs(),
       shinytoastr::useToastr(),
@@ -68,12 +54,14 @@ sign_in_no_invite_module_ui <- function(id) {
             )
           ),
           br(),
-          shiny::actionButton(
-            inputId = ns("submit_sign_in"),
+          tychobratools::loading_button(
+            ns("submit_sign_in"),
             label = "Sign In",
-            class = "text-center",
-            style = "color: white; width: 100%;",
-            class = "btn btn-primary btn-lg"
+            class = "btn btn-primary btn-lg text-center",
+            style = "",
+            loading_label = "Authenticating...",
+            loading_class = "btn btn-primary btn-lg text-center",
+            loading_style = ""
           )
         ),
         div(
@@ -150,11 +138,14 @@ sign_in_no_invite_module_ui <- function(id) {
           br(),
           div(
             style = "text-align: center;",
-            actionButton(
-              inputId = ns("submit_register"),
+            tychobratools::loading_button(
+              ns("submit_register"),
               label = "Register",
-              style = "color: white; width: 100%;",
-              class = "btn btn-primary btn-lg"
+              class = "btn btn-primary btn-lg",
+              style = "",
+              loading_label = "Registering...",
+              loading_class = "btn btn-primary btn-lg text-center",
+              loading_style = ""
             )
           )
         ),
@@ -172,10 +163,8 @@ sign_in_no_invite_module_ui <- function(id) {
       )
     )),
 
-    tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
     firebase_dependencies(),
     firebase_init(firebase_config),
-    tags$script(src = "polish/js/loading_options.js"),
     tags$script(src = "polish/js/toast_options.js"),
     tags$script(src = "polish/js/auth_all_no_invite.js"),
     tags$script(paste0("auth_all_no_invite('", ns(''), "')")),
@@ -192,7 +181,7 @@ sign_in_no_invite_module_ui <- function(id) {
 #' @param session the Shiny session
 #'
 #' @importFrom shiny observeEvent
-#' @importFrom tychobratools show_toast
+#' @importFrom tychobratools show_toast reset_loading_button
 #' @importFrom shinyjs show hide
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom digest digest
@@ -222,6 +211,7 @@ sign_in_no_invite_module <- function(input, output, session) {
       )
 
       if (is.null(new_user)) {
+        tychobratools::reset_loading_button('submit_sign_in')
         # show unable to sign in message
         tychobratools::show_toast('error', 'sign in error')
         stop('sign_in_module: sign in error')
@@ -235,11 +225,8 @@ sign_in_no_invite_module <- function(input, output, session) {
 
 
     }, error = function(e) {
+      tychobratools::reset_loading_button('submit_sign_in')
       # user is not invited
-      session$sendCustomMessage(
-        ns('remove_loading'),
-        message = list()
-      )
       print(e)
       shinyWidgets::sendSweetAlert(
         session,

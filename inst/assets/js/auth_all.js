@@ -34,7 +34,4 @@ var auth_all = function auth_all(ns_prefix) {
       $("#".concat(ns_prefix, "submit_register")).click();
     }
   });
-  Shiny.addCustomMessageHandler("".concat(ns_prefix, "remove_loading"), function (message) {
-    $.LoadingOverlay("hide");
-  });
 };

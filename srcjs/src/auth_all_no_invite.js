@@ -32,13 +32,5 @@ const auth_all_no_invite = (ns_prefix) => {
     }
   })
 
-  Shiny.addCustomMessageHandler(
-    `${ns_prefix}remove_loading`,
-    function(message) {
-
-      $.LoadingOverlay("hide")
-    }
-  )
-
 
 }

@@ -107,10 +107,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 
     shiny_app_button,
 
-    tab_items,
-
-
-    tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js")
+    tab_items
   )
 
 
