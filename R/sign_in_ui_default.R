@@ -1,5 +1,6 @@
 #' sign_in_ui_default
 #'
+#' @param sign_in_module UI module for the sign-in page
 #' @param color hex color for the background and button
 #' @param company_name your company name
 #' @param logo_top html for logo to go above the sign in panel.
@@ -14,6 +15,7 @@
 #' @return the UI for the sign in page
 #'
 sign_in_ui_default <- function(
+  sign_in_module = sign_in_module_ui("sign_in"),
   color = "#2491EB",
   company_name = "Tychobra LLC",
   logo_top = tags$img(
@@ -86,7 +88,7 @@ sign_in_ui_default <- function(
           style = "width: 300px; max-width: 100%;",
           logo_top
         ),
-        sign_in_module_ui("sign_in"),
+        sign_in_module,
         tags$div(
           style = "width: 300px; max-width: 100%; background-color: #FFF",
           tags$hr(style="padding: 0; margin: 0;"),
