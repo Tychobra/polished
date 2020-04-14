@@ -19,20 +19,6 @@ sign_in_no_invite_module_ui <- function(id) {
   firebase_config <- .global_sessions$firebase_config
 
   fluidPage(
-    tags$head(
-      tags$style("
-        .auth_panel {
-          width: 350px;
-          max-width: 100%;
-          margin: 0 auto;
-          margin-top: 75px;
-          border: 2px solid #eee;
-          border-radius: 25px;
-          padding: 30px;
-          background: #f9f9f9;
-        }
-      ")
-    ),
     fluidRow(
       shinyjs::useShinyjs(),
       shinytoastr::useToastr(),
