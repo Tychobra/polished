@@ -149,7 +149,6 @@ secure_ui <- function(
           verify_email_module_ui(
             "verify"
           ),
-          tags$script(src = "https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"),
           tags$script(src = "polish/js/polished_session.js?version=2"),
           tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
         )
