@@ -50,10 +50,6 @@ const auth_firebase = (ns_prefix) => {
       return
     }
 
-    // double check that the email is in "invites" collection
-
-
-
     auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
 
       // send verification email

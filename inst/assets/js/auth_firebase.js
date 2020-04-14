@@ -32,8 +32,7 @@ var auth_firebase = function auth_firebase(ns_prefix) {
       toastr.error("The passwords do not match", null, toast_options);
       console.log("the passwords do not match");
       return;
-    } // double check that the email is in "invites" collection
-
+    }
 
     auth.createUserWithEmailAndPassword(email, password).then(function (userCredential) {
       // send verification email
