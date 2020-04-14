@@ -1,5 +1,7 @@
 
 api_get_invite_by_email <- function(url, api_key, email, app_uid) {
+
+
   res <- httr::GET(
     url = paste0(url, "/invite-by-email"),
     query = list(
@@ -129,11 +131,25 @@ Sessions <-  R6::R6Class(
 
         self$api_key <- api_key
 
-        self$firebase_config <- list(
-          apiKey = "AIzaSyAlrehX1g0irhCKq5MfmOE96z8lNprbbnk",
-          authDomain = "polished-hosted.firebaseapp.com",
-          projectId = "polished-hosted"
-        )
+        if (is.null(firebase_config)) {
+          # set to the default polished Firebase project if app is using polished
+          # hosted, but no Firebase credentials provided.  This allows users to get up and
+          # running quickly without needing to create a Firebase project, but for
+          # production Shiny apps, the user should
+          self$firebase_config <- list(
+            apiKey = "AIzaSyAlrehX1g0irhCKq5MfmOE96z8lNprbbnk",
+            authDomain = "polished-hosted.firebaseapp.com",
+            projectId = "polished-hosted"
+          )
+
+        } else {
+          if (length(firebase_config) != 3 ||
+              !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
+            stop("invalid `firebase_config` argument passed to `global_sessions_config()`", call. = FALSE)
+          }
+          self$firebase_config <- firebase_config
+        }
+
 
 
         # get the app uid
@@ -318,18 +334,19 @@ Sessions <-  R6::R6Class(
       return(invite)
     },
     find = function(hashed_cookie) {
+      if (nchar(hashed_cookie) == 0) return(NULL)
 
       if (is.null(self$api_key)) {
 
-        signed_in_sessions <- get_session(self$conn, hashed_cookie)
+        session_out <- get_session(self$conn, hashed_cookie, self$app_name)
 
       } else {
 
-        # TODO: find the user from the sessions table
         res <- httr::GET(
           url = paste0(self$hosted_url, "/session-by-cookie"),
           query = list(
-            hashed_cookie = hashed_cookie
+            hashed_cookie = hashed_cookie,
+            app_uid = self$app_name
           ),
           httr::authenticate(
             user = self$api_key,
@@ -339,59 +356,14 @@ Sessions <-  R6::R6Class(
 
         httr::stop_for_status(res)
 
-        signed_in_sessions <- jsonlite::fromJSON(
+        session_out <- jsonlite::fromJSON(
           httr::content(res, "text", encoding = "UTF-8")
         )
 
-        signed_in_sessions <- as.data.frame(
-          signed_in_sessions,
-          stringsAsFactors = FALSE
-        )
-      }
-
-
-      session_out <- NULL
-      if (nrow(signed_in_sessions) > 0) {
-
-
-        if (is.null(self$api_key)) {
-          # confirm that user is invited
-          invite <- get_invite(self$conn, self$app_name, signed_in_sessions$user_uid[1])
-        } else {
-          invite <- api_get_invite_by_email(
-            self$hosted_url,
-            self$api_key,
-            signed_in_sessions$email,
-            self$app_name
-          )
+        if (length(session_out) == 0) {
+          session_out <- NULL
         }
 
-
-
-        session_out <- list(
-          "user_uid" = signed_in_sessions$user_uid[1],
-          "email" = signed_in_sessions$email[1],
-          "email_verified" = signed_in_sessions$email_verified[1],
-          "is_admin" = invite$is_admin,
-          "hashed_cookie" = hashed_cookie
-        )
-
-        app_session <- signed_in_sessions %>%
-          filter(.data$app_uid == self$app_name)
-
-        if (nrow(app_session) == 0) {
-          # user was signed into another app and came over to this app, so add a session for this app
-          session_out$session_uid <- uuid::UUIDgenerate()
-
-          private$add(session_out)
-          session_out$signed_in_as <- NA
-        } else if (nrow(app_session) == 1) {
-
-          session_out$session_uid <- app_session$session_uid
-          session_out$signed_in_as <- app_session$signed_in_as
-        } else {
-          stop('error: too many sessions')
-        }
       }
 
       return(session_out)
@@ -422,14 +394,35 @@ Sessions <-  R6::R6Class(
       if (is.null(email_verified)) {
         stop("email verification user not found")
       } else {
-        dbExecute(
-          self$conn,
-          'UPDATE polished.sessions SET email_verified=$1 WHERE uid=$2',
-          params = list(
-            email_verified,
-            session_uid
+
+        if (is.null(self$api_key)) {
+          dbExecute(
+            self$conn,
+            'UPDATE polished.sessions SET email_verified=$1 WHERE uid=$2',
+            params = list(
+              email_verified,
+              session_uid
+            )
           )
-        )
+        } else {
+          res <- httr::PUT(
+            url = paste0(self$hosted_url, "/sessions"),
+            httr::authenticate(
+              user = self$api_key,
+              password = ""
+            ),
+            body = list(
+              session_uid = session_uid,
+              dat = list(
+                email_verified = email_verified
+              )
+            ),
+            encode = "json"
+          )
+
+          httr::stop_for_status(res)
+        }
+
       }
 
 
@@ -659,7 +652,7 @@ Sessions <-  R6::R6Class(
       httr::stop_for_status(google_keys_resp)
 
       private$jwt_pub_key <- jsonlite::fromJSON(
-        httr::content(google_keys_resp, "text")
+        httr::content(google_keys_resp, "text", encoding = "UTF-8")
       )
 
 

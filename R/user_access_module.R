@@ -106,6 +106,7 @@ user_access_module <- function(input, output, session) {
       )
 
     } else {
+
       res <- httr::GET(
         url = paste0(.global_sessions$hosted_url, "/app-users"),
         query = list(
@@ -121,8 +122,24 @@ user_access_module <- function(input, output, session) {
 
       app_users <- jsonlite::fromJSON(
         httr::content(res, "text", encoding = "UTF-8")
-      ) %>%
-        mutate(created_at = as.POSIXct(.data$created_at))
+      )
+
+
+      if (length(app_users) == 0) {
+        app_users <- tibble::tibble(
+          "uid" = character(0),
+          "app_uid" = character(0),
+          "user_uid" = character(0),
+          "is_admin" = logical(0),
+          "created_at" = as.POSIXct(character(0)),
+          "email" = character(0)
+        )
+      } else {
+        app_users <- app_users %>%
+          mutate(created_at = as.POSIXct(.data$created_at))
+      }
+
+
       res <- httr::GET(
         url = paste0(.global_sessions$hosted_url, "/last-active-session-time"),
         query = list(
@@ -140,6 +157,13 @@ user_access_module <- function(input, output, session) {
         httr::content(res, "text", encoding = "UTF-8")
       )
 
+
+      if (length(last_active_times) == 0) {
+        last_active_times <- tibble::tibble(
+          user_uid = character(0),
+          last_sign_in_at = as.POSIXct(character(0))
+        )
+      }
     }
 
     app_users %>%

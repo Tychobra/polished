@@ -59,11 +59,9 @@ Get the following credentials from your Firebase project:
   - authDomain
   - projectId
   
-**NOTE:** To find `authDomain`, click on the `Add Web App` button at the bottom of General Settings (shown in the screenshot below outlined in red). Register the App (do NOT need to check box for "Also set up Firebase Hosting for this app") & back at the bottom of the General Settings page where the "Add Web App" button was, you'll see the app just added. You'll find `authDomain` under the 'Firebase SDK snippet' section.  
+**NOTE:** To find the above credentials, click on the `Add Web App` button at the bottom of General Settings (shown in the screenshot below outlined in red). Register the App (you do NOT need to check the box for "Also set up Firebase Hosting for this app"), and back at the bottom of the General Settings page your Firebase credentials will be where the "Add Web App" button was.  
 
 <img src="inst/assets/images/add_web_app.png" />
-  
-These Firebase credentials can be found on the "Project settings" page of your Firebase project at console.firebase.google.com.
 
 Then you will need to execute the `global_sessions_config()` in "global.R", pass your Shiny ui to `secure_ui()`, and your Shiny server to `secure_server()`.  See the documentation of `global_sessions_config()`, `secure_ui()`, and `secure_server()` for details. 
 
@@ -91,32 +89,6 @@ your Shiny app and the `polished` Admin Panel (i.e. the user will be able to inv
 users and remove existing user from your app).  If "Is Admin?" if set to "No", the user will
 be able to access your Shiny app, but they will __not__ have access to the `polished` Admin Panel; non admins are not authorized to invite/remove users.
 
-Once the user has been added, restart the app & register the new user on the Polished login page. You'll be redirected to a page which says that user has received an email invitation for registration. Once the link in the email has been clicked, the app can be refreshed and that user is able to sign in!
+Once the user has been added, restart the app and register the new user on the Polished sign in page. After registration, you'll be sent a verification email, and you will be redirected to an email verification page. Once the link in the verification email has been clicked, you will be redirected to your Shiny app!
 
-You can find a few full working example in the "inst/examples/" directory in this package.  
-
-### Additional Options
-
-#### 1. Customize the Sign In / Register UI
-
-Companies often want to add their logos and branding to the sign in and register pages.  With polished, you can easily customize these pages.  Just pass your custom UI to the `sign_in_page_ui` argument of `secure_ui()`.  
-
-Sign in to a [Live Example](https://tychobra.shinyapps.io/custom_sign_in) with the following:
-
- - email: demo@tychobra.com
- - password: polished
-
-The code for the above example is available in the "inst/examples/custom_sign_in/" directory.  To get this example working, you will need to update the "config.yml" with your Firebase credentials. 
-
-#### 2. Do not require invite for sign in / register
-
-Allow anyone to register and sign in to your app (i.e. no invite required).  See the code of a simple example in "inst/examples/no_invite_required" and the [live demo here](https://tychobra.shinyapps.io/custom_sign_in). 
-
-#### 3. Add custom tabs to the Polished Admin shinydashboard
-
-You can add custom tabs to the admin dashboard by passing the ui and server code to the `secure_ui()` and `secure_server()` functions.  Example coming soon.
-
-#### 4. Apps Dashboard
-
-Create a Shiny dashboard of your Shiny dashboards/apps.  Example coming soon.
-
+You can find a few full working examples and examples of various configuration options in [polisehed_examples_repo](https://github.com/Tychobra/polished_example_apps).  

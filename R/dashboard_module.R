@@ -120,8 +120,19 @@ dashboard_module <- function(input, output, session) {
 
       out <- jsonlite::fromJSON(
         httr::content(res, "text", encoding = "UTF-8")
-      ) %>%
-        mutate(date = as.Date(date))
+      )
+
+      if (length(out) == 0) {
+        out <- tibble::tibble(
+          date = as.Date(character(0)),
+          user_uid = character(0),
+          n = integer(0)
+        )
+      } else {
+        out <- out %>%
+          mutate(date = as.Date(date))
+      }
+
     }
 
 
@@ -231,7 +242,8 @@ dashboard_module <- function(input, output, session) {
 
         out <- jsonlite::fromJSON(
           httr::content(res, "text", encoding = "UTF-8")
-        )
+        ) %>%
+          tibble::as_tibble()
       }
 
       out
@@ -282,7 +294,7 @@ dashboard_module <- function(input, output, session) {
 
   output$daily_users_chart <- apexcharter::renderApexchart({
     dat <- daily_users_chart_prep()
-
+    
     ax_out <- apexcharter::apexchart() %>%
       apexcharter::ax_title(
         "Unique Daily Users",
@@ -316,6 +328,7 @@ dashboard_module <- function(input, output, session) {
         )
       ) %>%
       apexcharter::ax_xaxis(
+        type = 'datetime',
         categories = dat$date_out
       ) %>%
       apexcharter::ax_stroke(show = TRUE, curve = "straight") %>%
@@ -367,6 +380,7 @@ dashboard_module <- function(input, output, session) {
   )
 
   output$active_users_table <- DT::renderDT({
+    req(length(poll_global_users()) > 0)
     out <- poll_global_users()
 
     DT::datatable(

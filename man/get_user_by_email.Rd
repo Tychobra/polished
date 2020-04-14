@@ -4,7 +4,7 @@
 \alias{get_user_by_email}
 \title{get user by email address}
 \usage{
-get_user_by_email(conn_, email)
+get_user_by_email(conn_, email, schema = "polished")
 }
 \arguments{
 \item{conn_}{the database connection}
