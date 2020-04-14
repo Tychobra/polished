@@ -1,6 +1,5 @@
 library(shiny)
 library(polished)
-# devtools::load_all("../../../../polished")
 library(tychobratools)
 library(config)
 
