@@ -42,7 +42,7 @@ const auth_firebase = (ns_prefix) => {
 
     if (password !== password_2) {
       // Event to reset Register loading button
-      $(document).trigger("tychobratools:reset_loading_button", [`${ns_prefix}submit_register`])
+      $(document).trigger("tychobratools:reset_loading_button_" + `${ns_prefix}submit_register`)
       
       toastr.error("The passwords do not match", null, toast_options)
       console.log("the passwords do not match")
@@ -59,7 +59,7 @@ const auth_firebase = (ns_prefix) => {
       // send verification email
       return userCredential.user.sendEmailVerification().catch(error => {
         console.error("Error sending email verification", error)
-        $(document).trigger("tychobratools:reset_loading_button", [`${ns_prefix}submit_register`])
+        $(document).trigger("tychobratools:reset_loading_button_" + `${ns_prefix}submit_register`)
       })
 
 
@@ -68,14 +68,14 @@ const auth_firebase = (ns_prefix) => {
       return sign_in(email, password).catch(error => {
         toastr.error("Sign in Error: " + error.message, null, toast_options)
         console.log("error: ", error)
-        $(document).trigger("tychobratools:reset_loading_button", [`${ns_prefix}submit_register`])
+        $(document).trigger("tychobratools:reset_loading_button_" + `${ns_prefix}submit_sign_in`)
       })
 
     }).catch((error) => {
       toastr.error("" + error, null, toast_options)
       console.log("error registering user")
       console.log(error)
-      $(document).trigger("tychobratools:reset_loading_button", [`${ns_prefix}submit_register`])
+      $(document).trigger("tychobratools:reset_loading_button_" + `${ns_prefix}submit_register`)
     })
 
   })
@@ -100,6 +100,8 @@ const auth_firebase = (ns_prefix) => {
 
     sign_in(email, password).catch(error => {
 
+      // Event to reset Sign In loading button
+      $(document).trigger("tychobratools:reset_loading_button_" + `${ns_prefix}submit_sign_in`)
       toastr.error("Sign in Error: " + error.message, null, toast_options)
       console.log("error: ", error)
     })
