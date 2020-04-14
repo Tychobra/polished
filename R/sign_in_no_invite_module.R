@@ -181,7 +181,7 @@ sign_in_no_invite_module_ui <- function(id) {
 #' @param session the Shiny session
 #'
 #' @importFrom shiny observeEvent
-#' @importFrom tychobratools show_toast
+#' @importFrom tychobratools show_toast reset_loading_button
 #' @importFrom shinyjs show hide
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom digest digest
@@ -211,7 +211,7 @@ sign_in_no_invite_module <- function(input, output, session) {
       )
 
       if (is.null(new_user)) {
-        reset_loading_button('submit_sign_in')
+        tychobratools::reset_loading_button('submit_sign_in')
         # show unable to sign in message
         tychobratools::show_toast('error', 'sign in error')
         stop('sign_in_module: sign in error')
@@ -225,7 +225,7 @@ sign_in_no_invite_module <- function(input, output, session) {
 
 
     }, error = function(e) {
-      reset_loading_button('submit_sign_in')
+      tychobratools::reset_loading_button('submit_sign_in')
       # user is not invited
       print(e)
       shinyWidgets::sendSweetAlert(

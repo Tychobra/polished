@@ -5,6 +5,7 @@
 \title{sign_in_ui_default}
 \usage{
 sign_in_ui_default(
+  sign_in_module = sign_in_module_ui("sign_in"),
   color = "#2491EB",
   company_name = "Tychobra LLC",
   logo_top = tags$img(src = "polish/images/polished_logo_transparent_white.png", width
@@ -15,6 +16,8 @@ sign_in_ui_default(
 )
 }
 \arguments{
+\item{sign_in_module}{UI module for the sign-in page}
+
 \item{color}{hex color for the background and button}
 
 \item{company_name}{your company name}
