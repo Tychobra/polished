@@ -5,6 +5,7 @@
 #' @param company_name your company name
 #' @param logo_top html for logo to go above the sign in panel.
 #' @param logo_bottom html for the logo below the sign in panel.
+#' @param icon_href the url/path to the browser tab icon
 #'
 #' @export
 #'
@@ -27,7 +28,8 @@ sign_in_ui_default <- function(
     src = "polish/images/polished_logo_transparent_text_2.png",
     alt = "Polished Logo",
     style = "width: 200px; margin-bottom: 15px; padding-top: 15px;"
-  )
+  ),
+  icon_href = "polish/images/polished_icon.png"
 ) {
 
   firebase_config <- .global_sessions$firebase_config
@@ -36,7 +38,7 @@ sign_in_ui_default <- function(
     style = "height: 100vh;",
     tags$head(
       tags$title("Polished"),
-      tags$link(rel = "shortcut icon", href = "images/polished_logo_transparent.png"),
+      tags$link(rel = "shortcut icon", href = icon_href),
       tags$meta(
         name = "viewport",
         content = "
