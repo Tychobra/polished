@@ -47,22 +47,9 @@ user_access_module_ui <- function(id) {
         )
       )
     ),
-
     # users table
-    tags$script(paste0("
-      $(document).on('click', '#", ns('users_table'), " .sign_in_as_btn', function() {
-        $(this).tooltip('hide');
-        Shiny.setInputValue('", ns('sign_in_as_btn_user_uid'), "', this.id, { priority: 'event'});
-      });
-      $(document).on('click', '#", ns('users_table'), " .delete_btn', function() {
-        $(this).tooltip('hide');
-        Shiny.setInputValue('", ns('user_uid_to_delete'), "', this.id, { priority: 'event'});
-      });
-      $(document).on('click', '#", ns('users_table'), " .edit_btn', function() {
-        $(this).tooltip('hide');
-        Shiny.setInputValue('", ns('user_uid_to_edit'), "', this.id, { priority: 'event'});
-      });
-    "))
+    tags$script(src = "polish/js/user_access_module.js"),
+    tags$script(paste0("user_access_module('", ns(''), "')"))
   )
 }
 
@@ -221,6 +208,7 @@ user_access_module <- function(input, output, session) {
     if (is.null(users_table_prep())) {
       users_table_prep(out)
     } else {
+      shinyjs::runjs("$('.btn-sm').tooltip('hide')")
       DT::replaceData(users_proxy, out, resetPaging = FALSE, rownames = FALSE)
     }
 
