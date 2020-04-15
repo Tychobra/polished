@@ -4,7 +4,7 @@
 \alias{add_session}
 \title{add session to the "sessions" table}
 \usage{
-add_session(conn_, session, app_uid)
+add_session(conn_, session, app_uid, schema = "polished")
 }
 \arguments{
 \item{conn_}{the database connection}
@@ -17,6 +17,8 @@ add_session(conn_, session, app_uid)
 - hashed_cookie}
 
 \item{app_uid}{the id of the apps}
+
+\item{schema}{the database schema}
 }
 \description{
 add session to the "sessions" table

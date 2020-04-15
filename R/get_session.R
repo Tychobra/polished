@@ -56,7 +56,7 @@ get_session <- function(conn, hashed_cookie, app_uid, schema = "polished") {
       # user was signed into another app and came over to this app, so add a session for this app
       session_out$session_uid <- uuid::UUIDgenerate()
 
-      add_session(conn, session_out, app_uid)
+      add_session(conn, session_out, app_uid, schema = schema)
 
       session_out$signed_in_as <- NA
     } else if (nrow(app_session) == 1) {
