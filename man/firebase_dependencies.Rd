@@ -4,11 +4,13 @@
 \alias{firebase_dependencies}
 \title{load the Firebase dependencies into the ui}
 \usage{
-firebase_dependencies(services = c("auth"))
+firebase_dependencies(services = c("auth"), firebase_version = "7.14.0")
 }
 \arguments{
 \item{services}{character vector of Firebase services to load into the ui.  Valid strings are
 "auth", "firestore", "functions", "messaging", and "storage"}
+
+\item{firebase_version}{character string of the Firebase version.  Defaults to 7.14.0.}
 }
 \value{
 the html <script> tabs with the firebase dependencies

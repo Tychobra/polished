@@ -22,7 +22,6 @@ firebase_init
 my_config <- list(
   apiKey = "your Firebase API key",
   authDomain = "your Firebase auth domain",
-  databaseURL = "your Firebase database URL",
   projectId = "your Firebase Project ID"
 )
 

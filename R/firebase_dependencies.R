@@ -3,6 +3,7 @@
 #'
 #' @param services character vector of Firebase services to load into the ui.  Valid strings are
 #' "auth", "firestore", "functions", "messaging", and "storage"
+#' @param firebase_version character string of the Firebase version.  Defaults to 7.14.0.
 #'
 #' @export
 #'
@@ -14,17 +15,17 @@
 #'
 #' firebase_dependencies()
 #'
-firebase_dependencies <- function(services = c("auth")) {
+firebase_dependencies <- function(services = c("auth"), firebase_version = "7.14.0") {
 
   services <- unique(services)
 
   stopifnot(all(services %in% c("auth", "firestore", "functions", "messaging", "storage")))
 
 
-  scripts_to_load <- paste0("https://www.gstatic.com/firebasejs/7.10.0/firebase-", services, ".js")
+  scripts_to_load <- paste0("https://www.gstatic.com/firebasejs/", firebase_version, "/firebase-", services, ".js")
 
   htmltools::tagList(
-    tags$script(src = "https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"),
+    tags$script(src = paste0("https://www.gstatic.com/firebasejs/", firebase_version, "/firebase-app.js")),
     lapply(scripts_to_load, function(script_src) {
       htmltools::tags$script(src = script_src)
     })
