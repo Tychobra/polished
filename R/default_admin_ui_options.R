@@ -31,7 +31,7 @@ default_admin_ui_options <- function() {
 
     browser_tab_icon = tags$link(
       rel = "shortcut icon",
-      href = "polish/images/polished_logo_transparent.png"
+      href = "polish/images/polished_icon.png"
     )
   )
 }
