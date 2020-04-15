@@ -37,7 +37,8 @@ polished Sessions configuration function
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
-  api_key = NULL
+  api_key = NULL,
+  api_version = "prod"
 )}\if{html}{\out{</div>}}
 }
 

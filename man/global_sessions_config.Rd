@@ -10,7 +10,8 @@ global_sessions_config(
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
-  api_key = NULL
+  api_key = NULL,
+  api_version = "prod"
 )
 }
 \arguments{
@@ -34,6 +35,9 @@ Make sure to set `admin_mode` to FALSE before deploying your app.}
 invite before registering/signing in}
 
 \item{api_key}{the API key from Polished hosted}
+
+\item{api_version}{the API version.  Either "prod", "dev", or a specific polished
+hosted API version}
 }
 \description{
 configuration for global sessions

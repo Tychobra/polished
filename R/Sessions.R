@@ -76,7 +76,7 @@ api_get_invite <- function(url, api_key, app_uid, user_uid) {
 Sessions <-  R6::R6Class(
   classname = 'Sessions',
   public = list(
-    hosted_url = "https://api.polished.tech",
+    hosted_url = character(0),
     app_name = character(0),
     conn = NULL,
     firebase_config = NULL,
@@ -97,7 +97,8 @@ Sessions <-  R6::R6Class(
       firebase_config = NULL,
       admin_mode = FALSE,
       is_invite_required = TRUE,
-      api_key = NULL
+      api_key = NULL,
+      api_version = "prod"
     ) {
 
       if (!(length(app_name) == 1 && is.character(app_name))) {
@@ -128,6 +129,14 @@ Sessions <-  R6::R6Class(
         # user is using polished hosted API
         if (!(length(api_key) == 1 && is.character(api_key))) {
           stop("invalid `app_name` argument passed to `global_sessions_config()`", call. = FALSE)
+        }
+
+        if (identical(api_version, "prod")) {
+          self$hosted_url <- "https://api.polished.tech"
+        } else if (identical(api_version, "dev")) {
+          self$hosted_url <- "https://api-dev.polished.tech"
+        } else {
+          stop("invalid `api_version` argument passed to `global_sessions_config()`", call. = FALSE)
         }
 
         if (!is.null(conn)) {

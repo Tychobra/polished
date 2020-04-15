@@ -17,6 +17,8 @@
 #' @param is_invite_required TRUE by default.  Whether or not to require the user to have an
 #' invite before registering/signing in
 #' @param api_key the API key from Polished hosted
+#' @param api_version the API version.  Either "prod", "dev", or a specific polished
+#' hosted API version
 #'
 #' @export
 #'
@@ -26,7 +28,8 @@ global_sessions_config <- function(
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
-  api_key = NULL
+  api_key = NULL,
+  api_version = "prod"
 ) {
 
   .global_sessions$config(
@@ -35,7 +38,8 @@ global_sessions_config <- function(
     conn = conn,
     admin_mode = admin_mode,
     is_invite_required = is_invite_required,
-    api_key = api_key
+    api_key = api_key,
+    api_version = api_version
   )
 
 }
