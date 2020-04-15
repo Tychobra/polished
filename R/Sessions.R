@@ -123,12 +123,18 @@ Sessions <-  R6::R6Class(
         self$conn <- conn
         self$firebase_config <- firebase_config
         self$app_name <- app_name
+        self$api_key <- NULL
       } else {
         # user is using polished hosted API
         if (!(length(api_key) == 1 && is.character(api_key))) {
           stop("invalid `app_name` argument passed to `global_sessions_config()`", call. = FALSE)
         }
 
+        if (!is.null(conn)) {
+          stop("when `api_key` is provided `conn` must be set to `NULL`", call. = FALSE)
+        }
+
+        self$conn <- NULL
         self$api_key <- api_key
 
         if (is.null(firebase_config)) {
