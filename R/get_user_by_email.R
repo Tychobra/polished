@@ -2,6 +2,7 @@
 #'
 #' @param conn_ the database connection
 #' @param email the user's email address
+#' @param schema the database schema
 #'
 #' @return a list of user info if the user is found or `NULL`
 #'

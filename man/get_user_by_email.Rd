@@ -10,6 +10,8 @@ get_user_by_email(conn_, email, schema = "polished")
 \item{conn_}{the database connection}
 
 \item{email}{the user's email address}
+
+\item{schema}{the database schema}
 }
 \value{
 a list of user info if the user is found or `NULL`
