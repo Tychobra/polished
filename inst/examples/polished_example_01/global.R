@@ -1,15 +1,30 @@
 library(shiny)
 library(polished)
-library(tychobratools)
 library(config)
 
 
 
 app_config <- config::get()
 
-db_conn <- tychobratools::db_connect(app_config$db)
 
+# isolate database credentials
+db_config <- app_config$db
 
+# create database connection
+db_conn <- DBI::dbConnect(
+  RPostgres::Postgres(),
+  dbname = db_config$dbname,
+  user = db_config$user,
+  host = db_config$host,
+  password = db_config$password
+)
+
+# clean up database connection when app stops
+shiny::onStop(function() {
+  DBI::dbDisconnect(conn)
+})
+
+# configure polished
 global_sessions_config(
   app_name = app_config$app_name,
   conn = db_conn,
