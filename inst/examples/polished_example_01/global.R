@@ -19,10 +19,6 @@ db_conn <- DBI::dbConnect(
   password = db_config$password
 )
 
-# clean up database connection when app stops
-shiny::onStop(function() {
-  DBI::dbDisconnect(conn)
-})
 
 # configure polished
 global_sessions_config(
