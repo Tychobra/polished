@@ -166,10 +166,10 @@ sign_in_no_invite_module_ui <- function(id) {
     firebase_dependencies(),
     firebase_init(firebase_config),
     tags$script(src = "polish/js/toast_options.js"),
-    tags$script(src = "polish/js/auth_all_no_invite.js"),
+    tags$script(src = "polish/js/auth_all_no_invite.js?version=2"),
     tags$script(paste0("auth_all_no_invite('", ns(''), "')")),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-    tags$script(src = "polish/js/auth_firebase.js?version=2"),
+    tags$script(src = "polish/js/auth_firebase.js?version=3"),
     tags$script(paste0("auth_firebase('", ns(''), "')"))
   )
 }

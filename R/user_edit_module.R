@@ -82,7 +82,7 @@ user_edit_module <- function(input, output, session,
             inline = TRUE
           )
         ),
-        tags$script(src = "polish/js/user_edit_module.js"),
+        tags$script(src = "polish/js/user_edit_module.js?version=2"),
         tags$script(paste0("user_edit_module('", ns(''), "')"))
       )
     )
