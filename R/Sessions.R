@@ -281,7 +281,7 @@ Sessions <-  R6::R6Class(
             # if invite is not required, and this is the first time that the user is signing in,
             # then we need to add their user info to the db
 
-            # TODO: create API endpoint to create app user
+
             invite <- api_get_invite_by_email(
               self$hosted_url,
               self$api_key,
