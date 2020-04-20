@@ -594,25 +594,13 @@ Sessions <-  R6::R6Class(
     sign_out = function(hashed_cookie, session_uid) {
 
       if (is.null(self$api_key)) {
-        dbExecute(
+
+        sign_out(
           self$conn,
-          'UPDATE polished.sessions SET is_active=$1, is_signed_in=$2 WHERE hashed_cookie=$3',
-          list(
-            FALSE,
-            FALSE,
-            hashed_cookie
-          )
+          hashed_cookie,
+          session_uid
         )
 
-        dbExecute(
-          self$conn,
-          "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
-          list(
-            uuid::UUIDgenerate(),
-            session_uid,
-            'sign_out'
-          )
-        )
       } else {
 
         res <- httr::POST(
@@ -622,8 +610,8 @@ Sessions <-  R6::R6Class(
             password = ""
           ),
           body = list(
-            session_uid = session_uid,
-            hashed_cookie = hashed_cookie
+            hashed_cookie = hashed_cookie,
+            session_uid = session_uid
           ),
           encode = "json"
         )
