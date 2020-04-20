@@ -7,8 +7,10 @@
 #' @param email the email address of the first user.
 #' @param is_admin boolean that defaults to FALSE.  Whether or not the user being created
 #' is an admin.
-#' @param created_by uid of the user that creating this user.  If `NULL`, the default, then the
+#' @param created_by uid of the user creating this user.  If `NULL`, the default, then the
 #' user uid of the user being created will be used.
+#' @param modified_by uid of the user creating this user.  If `NULL`, the default, then the
+#' value of `created_by` will be used.
 #' @param schema the database schema
 #'
 #' @export
@@ -17,7 +19,7 @@
 #'
 #'
 create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
-                            created_by = NULL, schema = "polished") {
+                            created_by = NULL, modified_by = NULL, schema = "polished") {
 
   email <- tolower(email)
   email <- trimws(email)
@@ -36,21 +38,22 @@ create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
     # if user does not exist, add the user to the users table
     if (nrow(existing_user_uid) == 0) {
 
-      user_uid <- uuid::UUIDgenerate()
+      #user_uid <- uuid::UUIDgenerate()
 
       if (is.null(created_by)) {
         created_by <- user_uid
       }
 
-      DBI::dbExecute(
+      if (is.null(modified_by)) {
+        modified_by <- created_by
+      }
+
+      user_uid <- add_user(
         conn,
-        paste0("INSERT INTO ", schema, ".users ( uid, email, created_by, modified_by ) VALUES ( $1, $2, $3, $4 )"),
-        params = list(
-          user_uid,
-          email,
-          created_by,
-          created_by
-        )
+        email,
+        created_by,
+        modified_by,
+        schema = schema
       )
 
     } else {

@@ -10,6 +10,7 @@ create_app_user(
   email,
   is_admin = FALSE,
   created_by = NULL,
+  modified_by = NULL,
   schema = "polished"
 )
 }
@@ -23,8 +24,11 @@ create_app_user(
 \item{is_admin}{boolean that defaults to FALSE.  Whether or not the user being created
 is an admin.}
 
-\item{created_by}{uid of the user that creating this user.  If `NULL`, the default, then the
+\item{created_by}{uid of the user creating this user.  If `NULL`, the default, then the
 user uid of the user being created will be used.}
+
+\item{modified_by}{uid of the user creating this user.  If `NULL`, the default, then the
+value of `created_by` will be used.}
 
 \item{schema}{the database schema}
 }

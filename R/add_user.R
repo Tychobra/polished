@@ -4,6 +4,7 @@
 #' @param conn the database connection
 #' @param email the email address of the user to be added
 #' @param created_by the uid of the user that created this new user
+#' @param modified_by the uid of the user that last modified this user
 #' @param schema the database schema
 #'
 #' @importFrom DBI dbExecute
@@ -14,7 +15,9 @@
 #' @export
 #'
 #'
-add_user <- function(conn, email, created_by, schema = "polished") {
+add_user <- function(conn, email, created_by, modified_by = NULL, schema = "polished") {
+
+  if (is.null(modified_by)) modified_by <- created_by
 
   user_uid_out <- uuid::UUIDgenerate()
 
@@ -25,7 +28,7 @@ add_user <- function(conn, email, created_by, schema = "polished") {
       user_uid_out,
       email,
       created_by,
-      created_by
+      modified_by
     )
   )
 
