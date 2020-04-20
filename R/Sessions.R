@@ -279,8 +279,22 @@ Sessions <-  R6::R6Class(
 
           if (isFALSE(self$is_invite_required) && is.null(invite)) {
             # if invite is not required, and this is the first time that the user is signing in,
-            # then we need to add their user info to the db
+            # then create the app_users
+            res <- httr::POST(
+              url = paste0(.global_sessions$hosted_url, "/app-users"),
+              body = list(
+                email = new_session$email,
+                app_uid = self$app_name,
+                is_admin = FALSE
+              ),
+              httr::authenticate(
+                user = .global_sessions$api_key,
+                password = ""
+              ),
+              encode = "json"
+            )
 
+            httr::stop_for_status(res)
 
             invite <- api_get_invite_by_email(
               self$hosted_url,
