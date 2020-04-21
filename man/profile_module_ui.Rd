@@ -4,10 +4,14 @@
 \alias{profile_module_ui}
 \title{verify email page ui}
 \usage{
-profile_module_ui(id)
+profile_module_ui(id, other_lis = NULL)
 }
 \arguments{
 \item{id}{the Shiny module id}
+
+\item{other_lis}{additional <li> html tags to place between the email address
+and the Sign out button in the user profile dropdown.  This is often used to
+add a user "My Account" page/app where the user can set their account settings.}
 }
 \description{
 verify email page ui

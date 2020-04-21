@@ -1,12 +1,15 @@
 #' verify email page ui
 #'
 #' @param id the Shiny module id
+#' @param other_lis additional <li> html tags to place between the email address
+#' and the Sign out button in the user profile dropdown.  This is often used to
+#' add a user "My Account" page/app where the user can set their account settings.
 #'
 #' @importFrom htmltools tags
 #' @importFrom shiny textOutput actionLink
 #'
 #' @export
-profile_module_ui <- function(id) {
+profile_module_ui <- function(id, other_lis = NULL) {
   ns <- NS(id)
 
   htmltools::tags$li(
@@ -25,6 +28,10 @@ profile_module_ui <- function(id) {
         shiny::textOutput(ns("auth_user")),
         style='padding: 3px 20px;'
       ),
+      # Other links that can be used to link anything.  Often used to take the
+      # user to their "Account" app/page.
+      other_lis,
+
       htmltools::tags$li(
         shiny::actionLink(
           ns("polish__sign_out"),
