@@ -62,10 +62,10 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
           ns("submit_sign_in"),
           label = "Sign In",
           class = "btn btn-primary btn-lg text-center",
-          style = "",
+          style = "width: 100%",
           loading_label = "Authenticating...",
           loading_class = "btn btn-primary btn-lg text-center",
-          loading_style = ""
+          loading_style = "width: 100%"
         )
       )),
       div(
@@ -73,6 +73,7 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
         shiny::actionButton(
           inputId = ns("submit_continue_sign_in"),
           label = "Continue",
+          width = "100%",
           class = "btn btn-primary btn-lg"
         )
       ),
@@ -124,6 +125,7 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
         shiny::actionButton(
           inputId = ns("submit_continue_register"),
           label = "Continue",
+          width = "100%",
           class = "btn btn-primary btn-lg"
         )
       ),
@@ -167,10 +169,10 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
             ns("submit_register"),
             label = "Register",
             class = "btn btn-primary btn-lg",
-            style = "",
+            style = "width: 100%;",
             loading_label = "Registering...",
             loading_class = "btn btn-primary btn-lg text-center",
-            loading_style = ""
+            loading_style = "width: 100%;"
           )
         )
       )),
