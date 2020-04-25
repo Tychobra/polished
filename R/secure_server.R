@@ -22,6 +22,7 @@ secure_server <- function(
   allow_reconnect = FALSE
 ) {
 
+  server <- force(server)
 
   function(input, output, session) {
     session$userData$user <- reactiveVal(NULL)
