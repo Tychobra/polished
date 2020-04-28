@@ -275,8 +275,6 @@ Sessions <-  R6::R6Class(
             self$app_name
           )
 
-          if (length(invite) == 0) invite <- NULL
-
           if (isFALSE(self$is_invite_required) && is.null(invite)) {
             # if invite is not required, and this is the first time that the user is signing in,
             # then create the app_users
@@ -302,7 +300,7 @@ Sessions <-  R6::R6Class(
               new_session$email,
               self$app_name
             )
-            if (length(invite) == 0) invite <- NULL
+
           }
 
           if (is.null(invite)) {
