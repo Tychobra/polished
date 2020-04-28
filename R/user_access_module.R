@@ -67,7 +67,7 @@ user_access_module_ui <- function(id) {
 #' @importFrom DBI dbExecute dbWithTransaction
 #' @importFrom dplyr tbl filter select %>% left_join arrange collect mutate
 #' @importFrom tibble tibble
-#' @importFrom tychobratools show_toast format_dt_time
+#' @importFrom shinyFeedback showToast
 #' @importFrom purrr map_chr
 #'
 #' @export
@@ -237,11 +237,10 @@ user_access_module <- function(input, output, session) {
           list(targets = 0, orderable = FALSE),
           list(targets = 0, class = "dt-center"),
           list(targets = 0, width = "105px")
-        ),
-        rowCallback = tychobratools::format_dt_time(5)
+        )
       )
-    )
-
+    ) %>%
+      DT::formatDate(5, method = "toLocaleString")
   })
 
   users_proxy <- DT::dataTableProxy("users_table")
@@ -361,10 +360,10 @@ user_access_module <- function(input, output, session) {
       }
 
 
-      show_toast("success", "User successfully deleted")
+      shinyFeedback::showToast("success", "User successfully deleted")
       users_trigger(users_trigger() + 1)
     }, error = function(e) {
-      show_toast("error", "Error deleting user")
+      shinyFeedback::showToast("error", "Error deleting user")
       print(e)
     })
 

@@ -24,18 +24,15 @@ Imports:
     htmltools,
     lubridate,
     tibble,
-    tychobratools,
     htmlwidgets,
     DBI,
     dbplyr,
     digest,
-    shinytoastr,
+    shinyFeedback,
     shinyWidgets,
     rlang,
     purrr,
     uuid,
     jose,
     stringr
-Remotes: 
-    github::tychobra/tychobratools
 RoxygenNote: 7.1.0

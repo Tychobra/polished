@@ -11,7 +11,7 @@
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr
-#' @importFrom shinytoastr useToastr
+#' @importFrom shinyFeedback useShinyFeedback
 #' @importFrom shinyjs useShinyjs hidden
 #'
 #' @export
@@ -25,7 +25,7 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
 
   htmltools::tagList(
     shinyjs::useShinyjs(),
-    shinytoastr::useToastr(),
+    shinyFeedback::useShinyFeedback(feedback = FALSE),
     shiny::div(
       id = ns("sign_in_panel"),
       class = "auth_panel",
@@ -58,14 +58,14 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
           )
         ),
         br(),
-        tychobratools::loading_button(
+        shinyFeedback::loadingButton(
           ns("submit_sign_in"),
           label = "Sign In",
           class = "btn btn-primary btn-lg text-center",
           style = "width: 100%",
-          loading_label = "Authenticating...",
-          loading_class = "btn btn-primary btn-lg text-center",
-          loading_style = "width: 100%"
+          loadingLabel = "Authenticating...",
+          loadingClass = "btn btn-primary btn-lg text-center",
+          loadingStyle = "width: 100%"
         )
       )),
       div(
@@ -165,14 +165,14 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
         br(),
         div(
           style = "text-align: center;",
-          tychobratools::loading_button(
+          shinyFeedback::loadingButton(
             ns("submit_register"),
             label = "Register",
             class = "btn btn-primary btn-lg",
             style = "width: 100%;",
-            loading_label = "Registering...",
-            loading_class = "btn btn-primary btn-lg text-center",
-            loading_style = "width: 100%;"
+            loadingLabel = "Registering...",
+            loadingClass = "btn btn-primary btn-lg text-center",
+            loadingStyle = "width: 100%;"
           )
         )
       )),
@@ -194,7 +194,7 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
     tags$script(src = "polish/js/auth_all.js"),
     tags$script(paste0("auth_all('", ns(''), "')")),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-    tags$script(src = "polish/js/auth_firebase.js?version=3"),
+    tags$script(src = "polish/js/auth_firebase.js?version=5"),
     tags$script(paste0("auth_firebase('", ns(''), "')"))
   )
 }
@@ -206,7 +206,7 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
 #' @param session the Shiny session
 #'
 #' @importFrom shiny observeEvent
-#' @importFrom tychobratools show_toast reset_loading_button
+#' @importFrom shinyFeedback showToast resetLoadingButton
 #' @importFrom shinyjs show hide
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom digest digest
@@ -340,9 +340,9 @@ sign_in_module <- function(input, output, session) {
       )
 
       if (is.null(new_user)) {
-        tychobratools::reset_loading_button('submit_sign_in')
+        shinyFeedback::resetLoadingButton('submit_sign_in')
         # show unable to sign in message
-        tychobratools::show_toast('error', 'sign in error')
+        shinyFeedback::showToast('error', 'sign in error')
         stop('sign_in_module: sign in error')
 
       } else {
@@ -352,7 +352,7 @@ sign_in_module <- function(input, output, session) {
       }
 
     }, error = function(e) {
-      tychobratools::reset_loading_button('submit_sign_in')
+      shinyFeedback::resetLoadingButton('submit_sign_in')
       print(e)
       shinyWidgets::sendSweetAlert(
         session,

@@ -103,7 +103,6 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
       options$browser_tab_icon
     ),
     shinyjs::useShinyjs(),
-    shinytoastr::useToastr(),
 
     shiny_app_button,
 

@@ -14,7 +14,7 @@
 #' @importFrom shiny reactive observeEvent showModal modalDialog modalButton removeModal
 #' @importFrom DBI dbExecute dbWithTransaction
 #' @importFrom shinyWidgets pickerInput
-#' @importFrom tychobratools show_toast
+#' @importFrom shinyFeedback showToast
 #'
 user_edit_module <- function(input, output, session,
   modal_title,
@@ -144,9 +144,9 @@ user_edit_module <- function(input, output, session,
 
 
         users_trigger(users_trigger() + 1)
-        tychobratools::show_toast("success", "User successfully added!")
+        shinyFeedback::showToast("success", "User successfully added!")
       }, error = function(e) {
-        tychobratools::show_toast("error", "Error adding user")
+        shinyFeedback::showToast("error", "Error adding user")
         print(e)
       })
 
@@ -188,10 +188,10 @@ user_edit_module <- function(input, output, session,
 
 
         users_trigger(users_trigger() + 1)
-        tychobratools::show_toast("success", "User successfully edited!")
+        shinyFeedback::showToast("success", "User successfully edited!")
       }, error = function(e) {
 
-        tychobratools::show_toast("error", "Error editing user")
+        shinyFeedback::showToast("error", "Error editing user")
         print(e)
 
       })

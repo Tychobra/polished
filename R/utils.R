@@ -44,3 +44,10 @@ get_cookie <- function(cookie_string, name) {
     dplyr::filter(.data$key == name) %>%
     dplyr::pull("value")
 }
+
+
+#' @importFrom lubridate with_tz
+time_now_utc <- function() {
+  lubridate::with_tz(Sys.time(), tzone = "UTC")
+}
+

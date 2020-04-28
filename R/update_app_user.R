@@ -13,7 +13,6 @@
 #' @export
 #'
 #' @importFrom DBI dbExecute
-#' @importFrom tychobratools time_now_utc
 #'
 update_app_user <- function(conn, user_uid, app_uid, is_admin, modified_by, schema = "polished") {
   DBI::dbExecute(
@@ -22,7 +21,7 @@ update_app_user <- function(conn, user_uid, app_uid, is_admin, modified_by, sche
     params = list(
       is_admin,                   # is_admin
       modified_by,                   # modified_by
-      tychobratools::time_now_utc(),  # modified_at
+      time_now_utc(),  # modified_at
       user_uid,             # user_uid
       app_uid       # app_name
     )

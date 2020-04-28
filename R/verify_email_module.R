@@ -4,7 +4,7 @@
 #'
 #' @importFrom htmltools tags h1
 #' @importFrom shiny fluidPage fluidRow column
-#' @importFrom shinytoastr useToastr
+#' @importFrom shinyFeedback useShinyFeedback
 #'
 #' @export
 verify_email_module_ui <- function(id) {
@@ -16,7 +16,7 @@ verify_email_module_ui <- function(id) {
     tags$head(
       tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png")
     ),
-    shinytoastr::useToastr(),
+    shinyFeedback::useShinyFeedback(),
     fluidRow(
       column(
         12,

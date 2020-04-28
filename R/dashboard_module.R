@@ -7,7 +7,7 @@
 #' @importFrom apexcharter apexchartOutput
 #' @importFrom DT DTOutput
 #' @importFrom shinycssloaders withSpinner
-#' @importFrom tychobratools value_box_module_ui
+#' @importFrom shinyFeedback valueBoxModuleUI
 #' @importFrom htmlwidgets JS
 #'
 #' @export
@@ -20,20 +20,23 @@ dashboard_module_ui <- function(id) {
       shiny::column(
         width = 9,
         shiny::fluidRow(
-          tychobratools::value_box_module_ui(
+          shinyFeedback::valueBoxModuleUI(
             ns("dau_box"),
+            subtitle = "Average Daily Users",
             icon = icon("users"),
             backgroundColor = "#0277BD",
             width = 4
           ),
-          tychobratools::value_box_module_ui(
+          shinyFeedback::valueBoxModuleUI(
             ns("mau_box"),
+            subtitle = "Average Monthly Users",
             icon = icon("users"),
             backgroundColor = "#2b908f",
             width = 4
           ),
-          tychobratools::value_box_module_ui(
+          shinyFeedback::valueBoxModuleUI(
             ns("das_box"),
+            subtitle = "Average Daily Sessions",
             icon = icon("users"),
             backgroundColor = "#434348",
             width = 4
@@ -50,8 +53,9 @@ dashboard_module_ui <- function(id) {
       shiny::column(
         3,
         fluidRow(
-          tychobratools::value_box_module_ui(
+          shinyFeedback::valueBoxModuleUI(
             ns("active_users"),
+            subtitle = "Current Active Users",
             icon = icon("users"),
             backgroundColor = "#f7a35c",
             width = 12
@@ -80,7 +84,7 @@ dashboard_module_ui <- function(id) {
 #' @importFrom tibble tibble
 #' @importFrom apexcharter apexchart ax_title ax_chart ax_tooltip ax_xaxis ax_stroke ax_dataLabels ax_fill ax_series ax_yaxis
 #' @importFrom DT renderDT datatable
-#' @importFrom tychobratools value_box_module
+#' @importFrom shinyFeedback valueBoxModule
 #'
 #' @export
 dashboard_module <- function(input, output, session) {
@@ -162,10 +166,9 @@ dashboard_module <- function(input, output, session) {
   })
 
   shiny::callModule(
-    tychobratools::value_box_module,
+    shinyFeedback::valueBoxModule,
     "dau_box",
-    dau_box_prep,
-    reactive("Average Daily Users")
+    dau_box_prep
   )
 
   # calculate and format the Monthly Average Users for the value box
@@ -183,10 +186,9 @@ dashboard_module <- function(input, output, session) {
   })
 
   shiny::callModule(
-    tychobratools::value_box_module,
+    shinyFeedback::valueBoxModule,
     "mau_box",
-    mau_box_prep,
-    shiny::reactive("Average Monthly Users")
+    mau_box_prep
   )
 
   # calculate and format the Monthly Average Sessions for the value box
@@ -202,10 +204,9 @@ dashboard_module <- function(input, output, session) {
   })
 
   shiny::callModule(
-    tychobratools::value_box_module,
+    shinyFeedback::valueBoxModule,
     "das_box",
-    das_box_prep,
-    shiny::reactive("Average Daily Sessions")
+    das_box_prep
   )
 
   # poll the active sessions from the `.global_sessions` object
@@ -260,10 +261,9 @@ dashboard_module <- function(input, output, session) {
   })
 
   shiny::callModule(
-    tychobratools::value_box_module,
+    shinyFeedback::valueBoxModule,
     "active_users",
-    active_users_number_prep,
-    reactive("Current Active Users")
+    active_users_number_prep
   )
 
 
@@ -294,7 +294,7 @@ dashboard_module <- function(input, output, session) {
 
   output$daily_users_chart <- apexcharter::renderApexchart({
     dat <- daily_users_chart_prep()
-    
+
     ax_out <- apexcharter::apexchart() %>%
       apexcharter::ax_title(
         "Unique Daily Users",
