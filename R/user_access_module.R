@@ -148,9 +148,13 @@ user_access_module <- function(input, output, session) {
       if (length(last_active_times) == 0) {
         last_active_times <- tibble::tibble(
           user_uid = character(0),
-          last_sign_in_at = as.POSIXct(character(0))
+          last_sign_in_at = character(0)
         )
       }
+
+      last_active_times <- last_active_times %>%
+        mutate(last_sign_in_at = lubridate::force_tz(as.POSIXct(last_sign_in_at), tzone = "UTC"))
+
     }
 
     app_users %>%
