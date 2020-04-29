@@ -160,9 +160,15 @@ dashboard_module <- function(input, output, session) {
 
   # calculate an format Daily Average Users for the value box
   dau_box_prep <- shiny::reactive({
-    mean(daily_users()$n) %>%
+    out <- mean(daily_users()$n) %>%
       round(1) %>%
       format(big.mark = ",")
+    
+    if (is.nan(out)) {
+      out <- 0
+    }
+    
+    out
   })
 
   shiny::callModule(
@@ -180,9 +186,15 @@ dashboard_module <- function(input, output, session) {
       dplyr::summarize(n = dplyr::n()) %>%
       dplyr::ungroup()
 
-    mean(by_month$n) %>%
+    out <- mean(by_month$n) %>%
       round(1) %>%
       format(big.mark = ",")
+    
+    if (is.nan(out)) {
+      out <- 0
+    }
+    
+    out
   })
 
   shiny::callModule(
@@ -193,7 +205,7 @@ dashboard_module <- function(input, output, session) {
 
   # calculate and format the Monthly Average Sessions for the value box
   das_box_prep <- shiny::reactive({
-    daily_user_sessions() %>%
+    out <- daily_user_sessions() %>%
       dplyr::group_by(.data$date) %>%
       summarize(n_sessions = sum(n)) %>%
       ungroup() %>%
@@ -201,6 +213,12 @@ dashboard_module <- function(input, output, session) {
       mean() %>%
       round(1) %>%
       format(big.mark = ",")
+    
+    if (is.nan(out)) {
+      out <- 0
+    }
+    
+    out
   })
 
   shiny::callModule(
