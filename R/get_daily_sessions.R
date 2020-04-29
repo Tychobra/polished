@@ -1,18 +1,19 @@
 #' get daily sessions
 #'
 #' @param conn the database connection
-#' @param app_uid_ the app id
+#' @param app_uid the app id
 #' @param start_date the start date for the query
 #' @param schema the database schema
 #'
 #' @importFrom dbplyr in_schema
 #' @importFrom dplyr filter select collect mutate group_by ungroup summarize left_join
+#' @importFrom rlang .env
 #'
 #' @export
 #'
 get_daily_sessions <- function(
   conn,
-  app_uid_,
+  app_uid,
   start_date,
   schema = "polished"
 ) {
@@ -20,7 +21,7 @@ get_daily_sessions <- function(
   # find all sessions for this app
   dat_sessions <- conn %>%
     dplyr::tbl(dbplyr::in_schema(schema, "sessions")) %>%
-    dplyr::filter(.data$app_uid == app_uid_) %>%
+    dplyr::filter(.data$app_uid == .env$app_uid) %>%
     dplyr::select(.data$user_uid, .data$email, .data$is_active, .data$uid) %>%
     collect()
 

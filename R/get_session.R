@@ -8,6 +8,7 @@
 #'
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr filter
+#' @importFrom rlang .env
 #'
 #' @export
 #'
@@ -50,7 +51,7 @@ get_session <- function(conn, hashed_cookie, app_uid, schema = "polished") {
     )
 
     app_session <- signed_in_sessions %>%
-      dplyr::filter(.data$app_uid == app_uid)
+      dplyr::filter(.data$app_uid == .env$app_uid)
 
     if (nrow(app_session) == 0) {
       # user was signed into another app and came over to this app, so add a session for this app

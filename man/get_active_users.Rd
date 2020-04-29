@@ -4,12 +4,12 @@
 \alias{get_active_users}
 \title{get active users}
 \usage{
-get_active_users(conn, app_uid_, schema = "polished")
+get_active_users(conn, app_uid, schema = "polished")
 }
 \arguments{
 \item{conn}{the database connection}
 
-\item{app_uid_}{the app id}
+\item{app_uid}{the app id}
 
 \item{schema}{the name of the schema}
 }

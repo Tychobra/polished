@@ -80,7 +80,7 @@ dashboard_module_ui <- function(id) {
 #'
 #' @importFrom shiny reactive callModule reactivePoll
 #' @importFrom lubridate days today month
-#' @importFrom dplyr tbl filter select collect mutate group_by summarize ungroup left_join %>% bind_rows distinct .data n
+#' @importFrom dplyr tbl select collect mutate group_by summarize ungroup left_join %>% bind_rows distinct .data n
 #' @importFrom tibble tibble
 #' @importFrom apexcharter apexchart ax_title ax_chart ax_tooltip ax_xaxis ax_stroke ax_dataLabels ax_fill ax_series ax_yaxis
 #' @importFrom DT renderDT datatable
@@ -105,7 +105,7 @@ dashboard_module <- function(input, output, session) {
       # find all sessions for this app
       out <- get_daily_sessions(
         .global_sessions$conn,
-        app_uid_ = hold_app_uid,
+        app_uid = hold_app_uid,
         start_date = start_date,
       )
     } else {
@@ -163,11 +163,11 @@ dashboard_module <- function(input, output, session) {
     out <- mean(daily_users()$n) %>%
       round(1) %>%
       format(big.mark = ",")
-    
+
     if (is.nan(out)) {
       out <- 0
     }
-    
+
     out
   })
 
@@ -189,11 +189,11 @@ dashboard_module <- function(input, output, session) {
     out <- mean(by_month$n) %>%
       round(1) %>%
       format(big.mark = ",")
-    
+
     if (is.nan(out)) {
       out <- 0
     }
-    
+
     out
   })
 
@@ -213,11 +213,11 @@ dashboard_module <- function(input, output, session) {
       mean() %>%
       round(1) %>%
       format(big.mark = ",")
-    
+
     if (is.nan(out)) {
       out <- 0
     }
-    
+
     out
   })
 

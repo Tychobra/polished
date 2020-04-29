@@ -22,7 +22,7 @@ db_conn <- DBI::dbConnect(
 
 # configure polished
 global_sessions_config(
-  app_name = "polished_example_01",
+  app_name = "polished_example_02",
   conn = db_conn,
   firebase_config = app_config$firebase
 )

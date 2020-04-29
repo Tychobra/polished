@@ -342,7 +342,7 @@ user_access_module <- function(input, output, session) {
       if (is.null(.global_sessions$api_key)) {
         delete_app_user(
           .global_sessions$conn,
-          app_uid_ = app_uid,
+          app_uid = app_uid,
           user_uid = user_uid
         )
       } else {

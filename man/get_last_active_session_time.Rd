@@ -4,12 +4,12 @@
 \alias{get_last_active_session_time}
 \title{get last active session time}
 \usage{
-get_last_active_session_time(conn, app_uid_, schema = "polished")
+get_last_active_session_time(conn, app_uid, schema = "polished")
 }
 \arguments{
 \item{conn}{the database connection}
 
-\item{app_uid_}{the uid of the app}
+\item{app_uid}{the uid of the app}
 
 \item{schema}{the database schema}
 }

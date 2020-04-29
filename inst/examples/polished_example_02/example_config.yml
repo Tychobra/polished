@@ -1,0 +1,12 @@
+default:
+  app_name: "polished_example_01"
+  firebase:
+    apiKey: "<your Firebase project API Key>"
+    authDomain: "<your Firebase project auth domain>"
+    projectId: "<your Firebase project Id>"
+  db:
+    dbname: "<your database name>"
+    host: "<your database host>"
+    port: 5432
+    user: "<your database user>"
+    password: "<your database password>"

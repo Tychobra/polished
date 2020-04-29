@@ -4,12 +4,12 @@
 \alias{delete_app_user}
 \title{delete app user}
 \usage{
-delete_app_user(conn, app_uid_, user_uid, schema = "polished")
+delete_app_user(conn, app_uid, user_uid, schema = "polished")
 }
 \arguments{
 \item{conn}{the database connection}
 
-\item{app_uid_}{the app uid}
+\item{app_uid}{the app uid}
 
 \item{user_uid}{the user uid}
 

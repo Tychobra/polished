@@ -4,12 +4,12 @@
 \alias{get_daily_sessions}
 \title{get daily sessions}
 \usage{
-get_daily_sessions(conn, app_uid_, start_date, schema = "polished")
+get_daily_sessions(conn, app_uid, start_date, schema = "polished")
 }
 \arguments{
 \item{conn}{the database connection}
 
-\item{app_uid_}{the app id}
+\item{app_uid}{the app id}
 
 \item{start_date}{the start date for the query}
 
