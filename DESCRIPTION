@@ -35,6 +35,4 @@ Imports:
     tidyr,
     uuid,
     xts
-Remotes: 
-    github::merlinoa/shinyFeedback
 RoxygenNote: 7.1.0
