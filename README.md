@@ -26,9 +26,10 @@ Warning: there will be many breaking changes before this package matures to vers
 ```
 # R
 
-remotes::install_github("merlinoa/shinyFeedback")
 remotes::install_github("tychobra/polished")
 ```
+
+**NOTE:** If you already have an older version of the package `shinyFeedback` installed, be sure to install the latest CRAN version when prompted by the install above or Polished **will not work**
 
 ### Initial Set Up
 
