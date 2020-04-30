@@ -26,7 +26,7 @@ Warning: there will be many breaking changes before this package matures to vers
 ```
 # R
 
-remotes::install_github("tychobra/tychobratools")
+remotes::install_github("merlinoa/shinyFeedback")
 remotes::install_github("tychobra/polished")
 ```
 
