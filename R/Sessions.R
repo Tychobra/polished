@@ -68,7 +68,7 @@ api_get_invite <- function(url, api_key, app_uid, user_uid) {
 #' @importFrom httr GET content warn_for_status POST
 #' @importFrom jsonlite fromJSON
 #' @importFrom digest digest
-#' @importFrom DBI dbGetQuery dbWithTransaction dbExecute dbIsValid
+#' @importFrom DBI dbGetQuery dbExecute dbIsValid
 #' @importFrom jose jwt_decode_sig
 #' @importFrom lubridate with_tz minutes
 #'

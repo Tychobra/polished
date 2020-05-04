@@ -6,7 +6,7 @@
 #' @importFrom shinydashboard tabItem box
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom htmltools br tags
-#' @importFrom DT DTOutput replaceData
+#' @importFrom DT DTOutput
 #'
 #'
 #' @export
@@ -61,11 +61,8 @@ user_access_module_ui <- function(id) {
 #'
 #' @importFrom shiny showModal modalDialog removeModal reactiveVal reactive observeEvent callModule req eventReactive
 #' @importFrom htmltools br div h3
-#' @importFrom DT renderDT datatable dataTableProxy formatDate
-#' @importFrom dbplyr in_schema
-#' @importFrom tidyr nest
-#' @importFrom DBI dbExecute dbWithTransaction
-#' @importFrom dplyr tbl filter select %>% left_join arrange collect mutate
+#' @importFrom DT renderDT datatable dataTableProxy formatDate replaceData
+#' @importFrom dplyr filter select %>% left_join mutate
 #' @importFrom tibble tibble
 #' @importFrom shinyFeedback showToast
 #' @importFrom purrr map_chr

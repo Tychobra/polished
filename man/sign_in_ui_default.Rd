@@ -6,13 +6,14 @@
 \usage{
 sign_in_ui_default(
   sign_in_module = sign_in_module_ui("sign_in"),
-  color = "#2491EB",
-  company_name = "Tychobra LLC",
-  logo_top = tags$img(src = "polish/images/polished_logo_transparent_white.png", width
-    = "100px", style = "padding-top: 15px; padding-bottom: 15px;"),
-  logo_bottom = tags$img(src = "polish/images/polished_logo_transparent_text_2.png",
-    alt = "Polished Logo", style =
-    "width: 200px; margin-bottom: 15px; padding-top: 15px;"),
+  color = "#AAA",
+  company_name = "Your Brand Here",
+  logo_top = div(class = "text-center", style = "color: #FFF;", h1("Your", style =
+    "margin-bottom: 0; margin-top: 30px;"), h1("Brand", style =
+    "margin-bottom: 0; margin-top: 10px;"), h1("Here", style =
+    "margin-bottom: 15px; margin-top: 10px;")),
+  logo_bottom = tags$img(src = "polish/images/placeholder_company_logo.jpg", alt =
+    "Placeholder Logo", style = "width: 200px; margin-bottom: 15px; padding-top: 15px;"),
   icon_href = "polish/images/polished_icon.png"
 )
 }
