@@ -235,9 +235,9 @@ user_access_module <- function(input, output, session) {
       ),
       escape = -1,
       selection = "none",
+      callback = JS("$( table.table().container() ).addClass( 'table-responsive' ); return table;"),
       options = list(
         dom = 'ftp',
-        scrollX = TRUE,
         columnDefs = list(
           list(targets = 0, orderable = FALSE),
           list(targets = 0, class = "dt-center"),

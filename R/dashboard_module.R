@@ -406,9 +406,9 @@ dashboard_module <- function(input, output, session) {
       rownames = FALSE,
       container = container,
       selection = "none",
+      callback = JS("$( table.table().container() ).addClass( 'table-responsive' ); return table;"),
       options = list(
         dom = "t",
-        scrollX = TRUE,
         language = list(
           emptyTable = "No Active Users"
         )

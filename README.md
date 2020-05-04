@@ -5,14 +5,23 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www
 
 Authentication and user administration for Shiny apps.  `polished` provides a way to secure your Shiny application behind an authentication layer.  It also provides a UI for controlling user access. 
 
+Warning: there will be many breaking changes before this package matures to version 1.0.0
+
+### Live Demo
+
 Sign in to a [Live Demo Shiny App](https://tychobra.shinyapps.io/polished_example_01) with the following:
 
  - email: demo@tychobra.com
  - password: polished
 
-Check out the [introducing polished blog post](https://www.tychobra.com/posts/2019_08_27_announcing_polished/) for a high level overview and video.
+### Data Storage Options
 
-Warning: there will be many breaking changes before this package matures to version 1.0.0
+Polished provides 2 options for data storage:
+
+1. Using the [polished.tech API](https://polished.tech). The polished.tech API is the easiest way to deploy polished.  It does not require database setup; we maintain the database.  Simply copy and paste your API key from polished.tech and you are ready to add polished to your Shiny app.  
+2. Using your own database.  This naturally requires you to set up and maintain a database.  Polished provides functions to help make this as easy as possible, but it does require database knowledge.
+
+If you want to use the [polished.tech API](https://polished.tech), go to polished.tech and follow the [Get Started](https://polished.tech/get-started) instructions.  If you want to use your own database, continue reading this README. 
 
 ### Requirements
 
@@ -26,9 +35,10 @@ Warning: there will be many breaking changes before this package matures to vers
 ```
 # R
 
-remotes::install_github("tychobra/tychobratools")
 remotes::install_github("tychobra/polished")
 ```
+
+**NOTE:** If you already have an older version of the package `shinyFeedback` installed, be sure to install the latest CRAN version when prompted by the install above or Polished **will not work**
 
 ### Initial Set Up
 
