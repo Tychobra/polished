@@ -60,7 +60,7 @@ user_access_module_ui <- function(id) {
 #' @param session the Shiny server session
 #'
 #' @importFrom shiny showModal modalDialog removeModal reactiveVal reactive observeEvent callModule req eventReactive
-#' @importFrom htmltools br div h3
+#' @importFrom htmltools tags
 #' @importFrom DT renderDT datatable dataTableProxy formatDate replaceData
 #' @importFrom dplyr filter select %>% left_join mutate
 #' @importFrom tibble tibble
@@ -320,8 +320,17 @@ user_access_module <- function(input, output, session) {
         size = "m",
 
         # modal content
-        htmltools::br(),
-        h3(paste0("Are you sure you want to delete ", hold_user$email, "?"))
+        tags$div(
+          class = "text-center",
+          style = "padding: 30px;",
+          tags$h3(
+            style = "line-height: 1.5;",
+            HTML(paste0(
+            "Are you sure you want to delete ", tags$b(hold_user$email), "?"
+            ))
+          ),
+          tags$br()
+        )
       )
     )
 
