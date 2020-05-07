@@ -10,6 +10,8 @@
 #' @importFrom shiny NS icon
 #' @importFrom shinydashboard dashboardHeader dashboardSidebar dashboardBody dashboardPage sidebarMenu menuItem tabItems
 #' @importFrom htmltools HTML tags
+#' @importFrom shinyjs useShinyjs
+#' @importFrom shinyFeedback useShinyFeedback
 #'
 #' @export
 #'
@@ -103,6 +105,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
       options$browser_tab_icon
     ),
     shinyjs::useShinyjs(),
+    shinyFeedback::useShinyFeedback(),
 
     shiny_app_button,
 
