@@ -6,7 +6,7 @@
 \usage{
 sign_in_ui_default(
   sign_in_module = sign_in_module_ui("sign_in"),
-  color = "#AAA",
+  color = "#5ec7dd",
   company_name = "Your Brand Here",
   logo_top = div(class = "text-center", style = "color: #FFF;", h1("Your", style =
     "margin-bottom: 0; margin-top: 30px;"), h1("Brand", style =
