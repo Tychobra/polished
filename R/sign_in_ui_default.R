@@ -19,9 +19,9 @@ sign_in_ui_default <- function(
   sign_in_module = sign_in_module_ui("sign_in"),
   color = "#5ec7dd",
   company_name = "Your Brand Here",
-  logo_top = div(
+  logo_top = tags$div(
+    style = "width: 300px; max-width: 100%; color: #FFF;",
     class = "text-center",
-    style = "color: #FFF;",
     h1("Your", style = "margin-bottom: 0; margin-top: 30px;"),
     h1("Brand", style = "margin-bottom: 0; margin-top: 10px;"),
     h1("Here", style = "margin-bottom: 15px; margin-top: 10px;")
@@ -88,10 +88,7 @@ sign_in_ui_default <- function(
       shiny::column(
         width = 12,
         align = "center",
-        tags$div(
-          style = "width: 300px; max-width: 100%;",
-          logo_top
-        ),
+        logo_top,
         sign_in_module,
         tags$div(
           style = "width: 300px; max-width: 100%; background-color: #FFF",
