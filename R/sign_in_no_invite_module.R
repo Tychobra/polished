@@ -7,7 +7,7 @@
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr
-#' @importFrom shinyjs useShinyjs
+#' @importFrom shinyjs useShinyjs hidden
 #' @importFrom shinyFeedback loadingButton useShinyFeedback
 #'
 #' @export
@@ -64,14 +64,14 @@ sign_in_no_invite_module_ui <- function(id) {
             loadingStyle = "width: 100%"
           )
         ),
-        div(
+        tags$div(
           style = "text-align: center;",
-          hr(),
+          tags$hr(),
           shiny::actionLink(
             inputId = ns("go_to_register"),
             label = "Not a member? Register!"
           ),
-          br(),
+          tags$br(),
           tags$button(
             class = 'btn btn-link btn-small',
             id = ns("reset_password"),
@@ -82,16 +82,16 @@ sign_in_no_invite_module_ui <- function(id) {
 
 
 
-      hidden(div(
+      shinyjs::hidden(div(
         id = ns("register_panel"),
         class = "auth_panel",
-        h1(
+        tags$h1(
           class = "text-center",
           style = "padding-top: 0;",
           "Register"
         ),
-        br(),
-        div(
+        tags$br(),
+        tags$div(
           class = "form-group",
           style = "width: 100%",
           email_input(
@@ -100,10 +100,10 @@ sign_in_no_invite_module_ui <- function(id) {
             value = ""
           )
         ),
-        div(
+        tags$div(
           id = ns("register_passwords"),
-          br(),
-          div(
+          tags$br(),
+          tags$div(
             class = "form-group",
             style = "width: 100%",
             tags$label(
@@ -117,8 +117,8 @@ sign_in_no_invite_module_ui <- function(id) {
               value = ""
             )
           ),
-          br(),
-          div(
+          tags$br(),
+          tags$div(
             class = "form-group shiny-input-container",
             style = "width: 100%",
             tags$label(
@@ -132,8 +132,8 @@ sign_in_no_invite_module_ui <- function(id) {
               value = ""
             )
           ),
-          br(),
-          div(
+          tags$br(),
+          tags$div(
             style = "text-align: center;",
             shinyFeedback::loadingButton(
               ns("submit_register"),
@@ -146,14 +146,14 @@ sign_in_no_invite_module_ui <- function(id) {
             )
           )
         ),
-        div(
+        tags$div(
           style = "text-align: center",
-          hr(),
+          tags$hr(),
           shiny::actionLink(
             inputId = ns("go_to_sign_in"),
             label = "Already a member? Sign in!"
           ),
-          br()
+          tags$br()
         )
       )
     )),

@@ -8,9 +8,9 @@ sign_in_ui_default(
   sign_in_module = sign_in_module_ui("sign_in"),
   color = "#5ec7dd",
   company_name = "Your Brand Here",
-  logo_top = div(class = "text-center", style = "color: #FFF;", h1("Your", style =
-    "margin-bottom: 0; margin-top: 30px;"), h1("Brand", style =
-    "margin-bottom: 0; margin-top: 10px;"), h1("Here", style =
+  logo_top = tags$div(style = "width: 300px; max-width: 100\%; color: #FFF;", class =
+    "text-center", h1("Your", style = "margin-bottom: 0; margin-top: 30px;"), h1("Brand",
+    style = "margin-bottom: 0; margin-top: 10px;"), h1("Here", style =
     "margin-bottom: 15px; margin-top: 10px;")),
   logo_bottom = tags$img(src = "polish/images/placeholder_company_logo.jpg", alt =
     "Placeholder Logo", style = "width: 200px; margin-bottom: 15px; padding-top: 15px;"),
