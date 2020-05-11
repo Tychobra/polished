@@ -3,6 +3,8 @@
 #' @param server A Shiny server function (e.g `function(input, output, session) {}`)
 #' @param custom_admin_server Either NULL, the default, or a Shiny server function containing your custom admin
 #' server functionality.
+#' @param custom_sign_in_server Either NULL, the default, or a Shiny module server containing your custom
+#' sign in server logic.
 #' @param allow_reconnect argument to pass to Shiny's `session$allowReconnect()` function. Defaults to
 #' `FALSE`.  Set to `TRUE` to allow reconnect with shiny-server and Rstudio Connect.  Set to "force"
 #' for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.html} for more information.
@@ -18,6 +20,7 @@
 #'
 secure_server <- function(
   server,
+  custom_sign_in_server = NULL,
   custom_admin_server = NULL,
   allow_reconnect = FALSE
 ) {
@@ -160,17 +163,27 @@ secure_server <- function(
       "polished"
     )
 
-    if (isTRUE(.global_sessions$is_invite_required)) {
-      shiny::callModule(
-        sign_in_module,
-        "sign_in"
-      )
+    if (is.null(custom_sign_in_server)) {
+      if (isTRUE(.global_sessions$is_invite_required)) {
+        shiny::callModule(
+          sign_in_module,
+          "sign_in"
+        )
+      } else {
+        shiny::callModule(
+          sign_in_no_invite_module,
+          "sign_in"
+        )
+      }
     } else {
+
       shiny::callModule(
-        sign_in_no_invite_module,
+        custom_sign_in_server,
         "sign_in"
       )
+
     }
+
 
 
 

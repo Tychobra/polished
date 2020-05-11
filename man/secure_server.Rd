@@ -4,10 +4,18 @@
 \alias{secure_server}
 \title{secure_server}
 \usage{
-secure_server(server, custom_admin_server = NULL, allow_reconnect = FALSE)
+secure_server(
+  server,
+  custom_sign_in_server = NULL,
+  custom_admin_server = NULL,
+  allow_reconnect = FALSE
+)
 }
 \arguments{
 \item{server}{A Shiny server function (e.g `function(input, output, session) {}`)}
+
+\item{custom_sign_in_server}{Either NULL, the default, or a Shiny module server containing your custom
+sign in server logic.}
 
 \item{custom_admin_server}{Either NULL, the default, or a Shiny server function containing your custom admin
 server functionality.}
