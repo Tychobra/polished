@@ -34,8 +34,6 @@ sign_in_ui_default <- function(
   icon_href = "polish/images/polished_icon.png"
 ) {
 
-  firebase_config <- .global_sessions$firebase_config
-
   shiny::fluidPage(
     style = "height: 100vh;",
     tags$head(
