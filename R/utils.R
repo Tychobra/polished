@@ -4,6 +4,8 @@
 #'
 #' @param session the Shiny session
 #'
+#' @export
+#'
 #' @importFrom shiny updateQueryString getDefaultReactiveDomain
 #'
 remove_query_string <- function(session = shiny::getDefaultReactiveDomain()) {
