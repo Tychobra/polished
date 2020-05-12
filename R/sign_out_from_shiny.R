@@ -4,7 +4,9 @@
 #'
 #' @export
 #'
-sign_out_from_shiny <- function(session) {
+#' @importFrom shiny updateQueryString getDefaultReactiveDomain
+#'
+sign_out_from_shiny <- function(session = shiny::getDefaultReactiveDomain()) {
 
   user <- session$userData$user()
 

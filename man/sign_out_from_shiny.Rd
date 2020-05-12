@@ -4,7 +4,7 @@
 \alias{sign_out_from_shiny}
 \title{sign_out_from_shiny}
 \usage{
-sign_out_from_shiny(session)
+sign_out_from_shiny(session = shiny::getDefaultReactiveDomain())
 }
 \arguments{
 \item{session}{the Shiny session}
