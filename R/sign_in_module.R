@@ -205,7 +205,7 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
 #' @param output the Shiny output
 #' @param session the Shiny session
 #'
-#' @importFrom shiny observeEvent
+#' @importFrom shiny observeEvent observe getQueryString
 #' @importFrom shinyFeedback showToast resetLoadingButton
 #' @importFrom shinyjs show hide
 #' @importFrom shinyWidgets sendSweetAlert
@@ -213,6 +213,16 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
 #'
 sign_in_module <- function(input, output, session) {
   ns <- session$ns
+
+  # if query parameter "register" == TRUE, then go directly to registration page
+  observe({
+    query_string <- shiny::getQueryString()
+
+    if (identical(query_string$register, "TRUE")) {
+      shinyjs::hide("sign_in_panel")
+      shinyjs::show("register_panel")
+    }
+  })
 
   email_rv <- reactiveVal("")
 

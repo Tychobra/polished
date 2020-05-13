@@ -175,7 +175,7 @@ sign_in_no_invite_module_ui <- function(id) {
 #' @param output the Shiny output
 #' @param session the Shiny session
 #'
-#' @importFrom shiny observeEvent
+#' @importFrom shiny observeEvent getQueryString observe
 #' @importFrom shinyFeedback showToast resetLoadingButton
 #' @importFrom shinyjs show hide
 #' @importFrom shinyWidgets sendSweetAlert
@@ -183,6 +183,16 @@ sign_in_no_invite_module_ui <- function(id) {
 #'
 sign_in_no_invite_module <- function(input, output, session) {
   ns <- session$ns
+
+  # if query parameter "register" == TRUE, then go directly to registration page
+  shiny::observe({
+    query_string <- shiny::getQueryString()
+
+    if (identical(query_string$register, "TRUE")) {
+      shinyjs::hide("sign_in_panel")
+      shinyjs::show("register_panel")
+    }
+  })
 
   shiny::observeEvent(input$go_to_register, {
     shinyjs::hide("sign_in_panel")
