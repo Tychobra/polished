@@ -11,7 +11,8 @@ create_app_user(
   is_admin = FALSE,
   created_by = NULL,
   modified_by = NULL,
-  schema = "polished"
+  schema = "polished",
+  unique_user_limit = NULL
 )
 }
 \arguments{
@@ -31,6 +32,9 @@ user uid of the user being created will be used.}
 value of `created_by` will be used.}
 
 \item{schema}{the database schema}
+
+\item{unique_user_limit}{a limit for the number of unique users allowed for the
+account.  This is used with the polished.tech API.  Defaults to \code{NULL}.}
 }
 \description{
 Add the first user to the "polished" schema

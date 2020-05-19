@@ -4,7 +4,14 @@
 \alias{add_user}
 \title{add_user}
 \usage{
-add_user(conn, email, created_by, modified_by = NULL, schema = "polished")
+add_user(
+  conn,
+  email,
+  created_by,
+  modified_by = NULL,
+  schema = "polished",
+  unique_user_limit = NULL
+)
 }
 \arguments{
 \item{conn}{the database connection}
@@ -16,6 +23,9 @@ add_user(conn, email, created_by, modified_by = NULL, schema = "polished")
 \item{modified_by}{the uid of the user that last modified this user}
 
 \item{schema}{the database schema}
+
+\item{unique_user_limit}{a limit for the number of unique users allowed for the
+account.  This is used with the polished.tech API.  Defaults to \code{NULL}.}
 }
 \value{
 the uid of the newly created user or NULL if the user already exists

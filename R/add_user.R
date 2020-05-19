@@ -6,6 +6,8 @@
 #' @param created_by the uid of the user that created this new user
 #' @param modified_by the uid of the user that last modified this user
 #' @param schema the database schema
+#' @param unique_user_limit a limit for the number of unique users allowed for the
+#' account.  This is used with the polished.tech API.  Defaults to \code{NULL}.
 #'
 #' @importFrom DBI dbExecute
 #' @importFrom uuid UUIDgenerate
@@ -15,7 +17,27 @@
 #' @export
 #'
 #'
-add_user <- function(conn, email, created_by, modified_by = NULL, schema = "polished") {
+add_user <- function(conn, email, created_by, modified_by = NULL, schema = "polished", unique_user_limit = NULL) {
+
+
+  if (!is.null(unique_user_limit)) {
+
+    # check if the unique user limit has been exceeded
+    n_users <- DBI::dbGetQuery(
+      conn,
+      "SELECT COUNT(uid) FROM public.users WHERE created_by=$1",
+      params = list(
+        created_by
+      )
+    )$count
+
+    if (n_users >= unique_user_limit) {
+      stop("unique user limit exceeded", call. = FALSE)
+    }
+
+
+  }
+
 
   if (is.null(modified_by)) modified_by <- created_by
 

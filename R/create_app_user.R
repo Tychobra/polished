@@ -12,6 +12,8 @@
 #' @param modified_by uid of the user creating this user.  If `NULL`, the default, then the
 #' value of `created_by` will be used.
 #' @param schema the database schema
+#' @param unique_user_limit a limit for the number of unique users allowed for the
+#' account.  This is used with the polished.tech API.  Defaults to \code{NULL}.
 #'
 #' @export
 #'
@@ -19,7 +21,8 @@
 #'
 #'
 create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
-                            created_by = NULL, modified_by = NULL, schema = "polished") {
+                            created_by = NULL, modified_by = NULL, schema = "polished",
+                            unique_user_limit = NULL) {
 
   email <- tolower(email)
   email <- trimws(email)
@@ -53,7 +56,8 @@ create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
         email,
         created_by,
         modified_by,
-        schema = schema
+        schema = schema,
+        unique_user_limit = unique_user_limit
       )
 
     } else {
@@ -75,7 +79,7 @@ create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
 
       # if user is already authorized to access this app, throw an error
       if (nrow(existing_app_user) != 0) {
-        stop(sprintf("%s is already authoized to access %s", email, app_uid))
+        stop(sprintf("%s is already authorized to access %s", email, app_uid))
       }
 
     }
