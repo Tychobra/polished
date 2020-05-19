@@ -30,18 +30,30 @@ create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
   DBI::dbWithTransaction(conn, {
 
 
-    existing_user_uid <- DBI::dbGetQuery(
-      conn,
-      paste0("SELECT uid FROM ", schema, ".users WHERE email=$1"),
-      params = list(email)
-    )
+    # temporary fix to check if we using the API or not
+    if (schema == "public") {
+      existing_user_uid <- DBI::dbGetQuery(
+        conn,
+        paste0("SELECT uid FROM ", schema, ".users WHERE email=$1"),
+        params = list(email)
+      )
+    } else {
+      existing_user_uid <- DBI::dbGetQuery(
+        conn,
+        paste0("SELECT uid FROM ", schema, ".users WHERE email=$1 AND created_by=$2"),
+        params = list(
+          email,
+          created_by
+        )
+      )
+    }
+
 
 
 
     # if user does not exist, add the user to the users table
     if (nrow(existing_user_uid) == 0) {
 
-      #user_uid <- uuid::UUIDgenerate()
 
       if (is.null(created_by)) {
         created_by <- user_uid
@@ -79,7 +91,7 @@ create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
 
       # if user is already authorized to access this app, throw an error
       if (nrow(existing_app_user) != 0) {
-        stop(sprintf("%s is already authorized to access %s", email, app_uid), call. = FALSE)
+        stop("user is already authorized to access app", call. = FALSE)
       }
 
     }
