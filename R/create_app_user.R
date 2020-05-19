@@ -34,17 +34,17 @@ create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
     if (schema == "public") {
       existing_user_uid <- DBI::dbGetQuery(
         conn,
-        paste0("SELECT uid FROM ", schema, ".users WHERE email=$1"),
-        params = list(email)
-      )
-    } else {
-      existing_user_uid <- DBI::dbGetQuery(
-        conn,
         paste0("SELECT uid FROM ", schema, ".users WHERE email=$1 AND created_by=$2"),
         params = list(
           email,
           created_by
         )
+      )
+    } else {
+      existing_user_uid <- DBI::dbGetQuery(
+        conn,
+        paste0("SELECT uid FROM ", schema, ".users WHERE email=$1"),
+        params = list(email)
       )
     }
 
