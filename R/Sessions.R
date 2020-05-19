@@ -179,15 +179,16 @@ Sessions <-  R6::R6Class(
           )
         )
 
-        httr::stop_for_status(res)
-
         app <- jsonlite::fromJSON(
           httr::content(res, "text", encoding = "UTF-8")
         )
 
-        if (is.null(app$app_uid)) {
-          stop("app not found in polished hosted", call. = FALSE)
+        status_out <- httr::status_code(res)
+
+        if (!identical(status_out, 200L)) {
+          stop(app, call. = FALSE)
         }
+
 
         self$app_name <- app$app_uid
 
