@@ -134,7 +134,7 @@ Sessions <-  R6::R6Class(
         if (identical(api_version, "prod")) {
           self$hosted_url <- "https://api.polished.tech"
         } else if (identical(api_version, "dev")) {
-          self$hosted_url <- "https://api-dev.polished.tech"
+          self$hosted_url <- "http://localhost:8080"
         } else {
           stop("invalid `api_version` argument passed to `global_sessions_config()`", call. = FALSE)
         }
