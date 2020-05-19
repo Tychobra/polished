@@ -135,6 +135,19 @@ user_edit_module <- function(input, output, session,
             encode = "json"
           )
 
+          if (res$status_code != 200) {
+
+            err <- jsonlite::fromJSON(
+              httr::content(res, "text", encoding = "UTF-8")
+            )
+
+            stop(err, call. = FALSE)
+          }
+
+
+
+
+
           httr::stop_for_status(res)
 
         }
@@ -146,6 +159,7 @@ user_edit_module <- function(input, output, session,
         users_trigger(users_trigger() + 1)
         shinyFeedback::showToast("success", "User successfully added!")
       }, error = function(e) {
+
         shinyFeedback::showToast("error", "Error adding user")
         print(e)
       })
