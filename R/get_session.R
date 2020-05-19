@@ -65,7 +65,7 @@ get_session <- function(conn, hashed_cookie, app_uid, schema = "polished") {
       session_out$session_uid <- app_session$session_uid
       session_out$signed_in_as <- app_session$signed_in_as
     } else {
-      stop('error: too many sessions')
+      stop('error: too many sessions', call. = FALSE)
     }
   }
 

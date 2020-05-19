@@ -186,7 +186,7 @@ Sessions <-  R6::R6Class(
         )
 
         if (is.null(app$app_uid)) {
-          stop("app not found in polished hosted")
+          stop("app not found in polished hosted", call. = FALSE)
         }
 
         self$app_name <- app$app_uid
@@ -265,7 +265,7 @@ Sessions <-  R6::R6Class(
           }
 
           if (is.null(invite)) {
-            stop("[polished] error checking user invite")
+            stop("[polished] error checking user invite", call. = FALSE)
           }
         } else {
           invite <- api_get_invite_by_email(
@@ -304,7 +304,7 @@ Sessions <-  R6::R6Class(
           }
 
           if (is.null(invite)) {
-            stop("[polished] error checking user invite")
+            stop("[polished] error checking user invite", call. = FALSE)
           }
         }
 
@@ -419,7 +419,7 @@ Sessions <-  R6::R6Class(
       })
 
       if (is.null(email_verified)) {
-        stop("email verification user not found")
+        stop("email verification user not found", call. = FALSE)
       } else {
 
         if (is.null(self$api_key)) {
@@ -707,7 +707,7 @@ Sessions <-  R6::R6Class(
       }
 
       if (is.null(decoded_jwt)) {
-        stop("[polished] error decoding JWT")
+        stop("[polished] error decoding JWT", call. = FALSE)
       }
 
       curr_time <- as.numeric(Sys.time())
@@ -720,7 +720,7 @@ Sessions <-  R6::R6Class(
             decoded_jwt$iss == paste0("https://securetoken.google.com/", self$firebase_config$projectId) &&
             nchar(decoded_jwt$sub) > 0)) {
 
-        stop("[polished] error verifying JWT")
+        stop("[polished] error verifying JWT", call. = FALSE)
       }
 
       decoded_jwt

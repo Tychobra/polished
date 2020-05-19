@@ -79,7 +79,7 @@ create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
 
       # if user is already authorized to access this app, throw an error
       if (nrow(existing_app_user) != 0) {
-        stop(sprintf("%s is already authorized to access %s", email, app_uid))
+        stop(sprintf("%s is already authorized to access %s", email, app_uid), call. = FALSE)
       }
 
     }

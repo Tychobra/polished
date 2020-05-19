@@ -13,7 +13,10 @@
 #'
 #'
 set_config_env <- function(override = NULL) {
-  stopifnot(is.null(override) || override %in% c("default", "production"))
+
+  if (!(is.null(override) || override %in% c("default", "production"))) {
+    stop("invalid `override` argument passed to `set_config_env`", call. = FALSE)
+  }
 
   if (is.null(override)) {
     if (isTRUE(Sys.getenv('SHINY_PORT') == "")) {

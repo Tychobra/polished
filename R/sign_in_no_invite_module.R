@@ -219,7 +219,7 @@ sign_in_no_invite_module <- function(input, output, session) {
         shinyFeedback::resetLoadingButton('submit_sign_in')
         # show unable to sign in message
         shinyFeedback::showToast('error', 'sign in error')
-        stop('sign_in_module: sign in error')
+        stop('sign_in_module: sign in error', call. = FALSE)
 
       } else {
         # sign in success
