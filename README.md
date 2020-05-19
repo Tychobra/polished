@@ -38,8 +38,6 @@ If you want to use the [polished.tech API](https://polished.tech), go to polishe
 remotes::install_github("tychobra/polished")
 ```
 
-**NOTE:** If you already have an older version of the package `shinyFeedback` installed, be sure to install the latest CRAN version when prompted by the install above or Polished **will not work**
-
 ### Initial Set Up
 
 1. Set up your Firebase project at [https://firebase.google.com/](https://firebase.google.com/).  Open your new Firebase project and:

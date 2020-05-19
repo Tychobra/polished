@@ -163,8 +163,8 @@ dashboard_module <- function(input, output, session) {
     out <- mean(daily_users()$n) %>%
       round(1) %>%
       format(big.mark = ",")
-
-    if (is.nan(out)) {
+    
+    if (out == "NaN") {
       out <- 0
     }
 
@@ -185,12 +185,12 @@ dashboard_module <- function(input, output, session) {
       dplyr::group_by(.data$month_) %>%
       dplyr::summarize(n = dplyr::n()) %>%
       dplyr::ungroup()
-
+    
     out <- mean(by_month$n) %>%
       round(1) %>%
       format(big.mark = ",")
 
-    if (is.nan(out)) {
+    if (out == "NaN") {
       out <- 0
     }
 
@@ -213,8 +213,8 @@ dashboard_module <- function(input, output, session) {
       mean() %>%
       round(1) %>%
       format(big.mark = ",")
-
-    if (is.nan(out)) {
+    
+    if (out == "NaN") {
       out <- 0
     }
 
