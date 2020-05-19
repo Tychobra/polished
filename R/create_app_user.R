@@ -30,8 +30,17 @@ create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
   DBI::dbWithTransaction(conn, {
 
 
-    # temporary fix to check if we using the API or not
-    if (schema == "public") {
+
+    if (is.null(.global_sessions$api_key)) {
+      existing_user_uid <- DBI::dbGetQuery(
+        conn,
+        paste0("SELECT uid FROM ", schema, ".users WHERE email=$1"),
+        params = list(email)
+      )
+    } else {
+
+      # API selects unique users by email and the `create_by` column which works as the
+      # account uid
       existing_user_uid <- DBI::dbGetQuery(
         conn,
         paste0("SELECT uid FROM ", schema, ".users WHERE email=$1 AND created_by=$2"),
@@ -39,12 +48,6 @@ create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
           email,
           created_by
         )
-      )
-    } else {
-      existing_user_uid <- DBI::dbGetQuery(
-        conn,
-        paste0("SELECT uid FROM ", schema, ".users WHERE email=$1"),
-        params = list(email)
       )
     }
 
