@@ -57,6 +57,7 @@ create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
     # if user does not exist, add the user to the users table
     if (nrow(existing_user_uid) == 0) {
 
+      user_uid <- uuid::UUIDgenerate()
 
       if (is.null(created_by)) {
         created_by <- user_uid
@@ -108,16 +109,11 @@ create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
 
     if (nrow(existing_app_uid) == 0) {
       # if app does not exist, then create it
-      DBI::dbExecute(
-        conn,
-        paste0("INSERT INTO ", schema, ".apps ( uid, app_name, created_by, modified_by ) VALUES ( $1, $2, $3, $4 )"),
-        params = list(
-          app_uid,
-          app_uid,
-          created_by,
-          created_by
-        )
-      )
+      add_app(
+        app_uid,
+        app_uid,
+              created_by,
+              created_by)
     }
 
 
