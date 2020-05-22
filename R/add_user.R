@@ -55,7 +55,7 @@ add_user <- function(conn, email, created_by, modified_by = NULL, schema = "poli
   )
 
   # log message of successful user add for API
-  if (!is.null(unique_user_limit)) cat("[polished] user invite sent")
+  if (!is.null(.global_sessions$api_key)) cat("[polished] user invite sent")
 
   if (n_row == 1) user_uid_out else NULL
 }
