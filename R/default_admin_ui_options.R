@@ -10,7 +10,7 @@ default_admin_ui_options <- function() {
 
     title = tagList(
       tags$a(
-        href = "https://polished.tychobra.com",
+        href = "https://polished.tech/",
         tags$img(
           src="polish/images/polished_logo_transparent_text_2.png",
           style = "height: 37.5px; width: 180px; padding: 0",
