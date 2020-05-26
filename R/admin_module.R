@@ -8,10 +8,11 @@
 #' the Shiny app.  This argument is set to `FALSE` when `polished` is in "admin_mode".
 #'
 #' @importFrom shiny NS icon
-#' @importFrom shinydashboard dashboardHeader dashboardSidebar dashboardBody dashboardPage sidebarMenu menuItem tabItems
+#' @importFrom shinydashboard dashboardSidebar dashboardBody sidebarMenu menuItem tabItems
 #' @importFrom htmltools HTML tags
 #' @importFrom shinyjs useShinyjs
 #' @importFrom shinyFeedback useShinyFeedback
+#' @importFrom shinydashboardPlus dashboardHeaderPlus dashboardPagePlus
 #'
 #' @export
 #'
