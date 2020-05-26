@@ -110,10 +110,12 @@ create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
     if (nrow(existing_app_uid) == 0) {
       # if app does not exist, then create it
       add_app(
-        app_uid,
-        app_uid,
-              created_by,
-              created_by)
+        conn = conn,
+        app_uid = app_uid,
+        app_name = app_uid,
+        created_by = created_by,
+        modified_by = created_by
+      )
     }
 
 
