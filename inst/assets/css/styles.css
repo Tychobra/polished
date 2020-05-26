@@ -1,0 +1,8 @@
+
+/* Correct position for Polished logo w/ dashboardHeaderPlus */
+.logo {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  /* Hides top bar (& logo) when screen becomes too narrow (i.e. mobile) */
+  position: absolute;
+}
