@@ -26,11 +26,11 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 
   # don't show profile dropdown if in Admin mode.  User cannot log out of admin mode.
   if (isTRUE(.global_sessions$get_admin_mode())) {
-    head <- shinydashboard::dashboardHeader(
+    head <- shinydashboardPlus::dashboardHeaderPlus(
       title = options$title
     )
   } else {
-    head <- shinydashboard::dashboardHeader(
+    head <- shinydashboardPlus::dashboardHeaderPlus(
       title = options$title,
       profile_module_ui(ns("polish__profile"))
     )
@@ -125,10 +125,11 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 
 
 
-  shinydashboard::dashboardPage(
+  shinydashboardPlus::dashboardPagePlus(
     head,
     sidebar,
     body,
+    title = "Polished",
     skin = "black"
   )
 }
