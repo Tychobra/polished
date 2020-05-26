@@ -20,7 +20,7 @@ user_access_module_ui <- function(id) {
         width = 12,
         title = "Users",
         #style = "min-height: 500px;",
-        collapsible = TRUE,
+        # collapsible = TRUE,
         shiny::fluidRow(
           shiny::column(
             12,
