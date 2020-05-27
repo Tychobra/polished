@@ -33,12 +33,11 @@ polished Sessions configuration function
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$config(
   app_name,
-  conn = NULL,
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
   api_key = NULL,
-  api_version = "prod"
+  api_url = "https://api.polished.tech"
 )}\if{html}{\out{</div>}}
 }
 
