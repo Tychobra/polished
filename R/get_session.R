@@ -2,6 +2,7 @@
 #' get session by hashed cookie
 #'
 #' @param conn the database connection
+#' @param account_uid the account uid
 #' @param hashed_cookie the hashed cookie
 #' @param app_uid the id of the app
 #' @param schema the database schema
@@ -15,15 +16,16 @@
 #' @return the signed in user session
 #'
 #'
-get_session <- function(conn, hashed_cookie, app_uid, schema = "polished") {
+get_session <- function(conn, account_uid, hashed_cookie, app_uid, schema = "polished") {
 
   signed_in_sessions <- DBI::dbGetQuery(
     conn,
     paste0('SELECT uid AS session_uid, user_uid, email, email_verified, app_uid, signed_in_as FROM ',
-    schema, '.sessions WHERE hashed_cookie=$1 AND is_signed_in=$2'),
+    schema, '.sessions WHERE hashed_cookie=$1 AND is_signed_in=$2 AND account_uid=$3'),
     params = list(
       hashed_cookie,
-      TRUE
+      TRUE,
+      accout_uid
     )
   )
 

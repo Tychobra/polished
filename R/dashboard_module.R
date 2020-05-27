@@ -96,7 +96,7 @@ dashboard_module <- function(input, output, session) {
   # - "n" the number of sessions
   #
   daily_user_sessions <- shiny::reactive({
-
+    req(FALSE)
     hold_app_uid = .global_sessions$app_name
 
     start_date <- lubridate::today(tzone = "America/New_York") - lubridate::days(30)
@@ -163,7 +163,7 @@ dashboard_module <- function(input, output, session) {
     out <- mean(daily_users()$n) %>%
       round(1) %>%
       format(big.mark = ",")
-    
+
     if (out == "NaN") {
       out <- 0
     }
@@ -185,7 +185,7 @@ dashboard_module <- function(input, output, session) {
       dplyr::group_by(.data$month_) %>%
       dplyr::summarize(n = dplyr::n()) %>%
       dplyr::ungroup()
-    
+
     out <- mean(by_month$n) %>%
       round(1) %>%
       format(big.mark = ",")
@@ -213,7 +213,7 @@ dashboard_module <- function(input, output, session) {
       mean() %>%
       round(1) %>%
       format(big.mark = ",")
-    
+
     if (out == "NaN") {
       out <- 0
     }

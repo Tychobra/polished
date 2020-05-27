@@ -85,10 +85,10 @@ user_access_module <- function(input, output, session) {
         .global_sessions$conn,
         hold_app_name
       )
-      last_active_times <- get_last_active_session_time(
-        .global_sessions$conn,
-        hold_app_name
-      )
+      # last_active_times <- get_last_active_session_time(
+      #   .global_sessions$conn,
+      #   hold_app_name
+      # )
 
     } else {
 
@@ -125,30 +125,30 @@ user_access_module <- function(input, output, session) {
       }
 
 
-      res <- httr::GET(
-        url = paste0(.global_sessions$hosted_url, "/last-active-session-time"),
-        query = list(
-          app_uid = hold_app_name
-        ),
-        httr::authenticate(
-          user = .global_sessions$api_key,
-          password = ""
-        )
-      )
-
-      httr::stop_for_status(res)
-
-      last_active_times <- jsonlite::fromJSON(
-        httr::content(res, "text", encoding = "UTF-8")
-      )
-
-
-      if (length(last_active_times) == 0) {
-        last_active_times <- tibble::tibble(
-          user_uid = character(0),
-          last_sign_in_at = character(0)
-        )
-      }
+      # res <- httr::GET(
+      #   url = paste0(.global_sessions$hosted_url, "/last-active-session-time"),
+      #   query = list(
+      #     app_uid = hold_app_name
+      #   ),
+      #   httr::authenticate(
+      #     user = .global_sessions$api_key,
+      #     password = ""
+      #   )
+      # )
+      #
+      # httr::stop_for_status(res)
+      #
+      # last_active_times <- jsonlite::fromJSON(
+      #   httr::content(res, "text", encoding = "UTF-8")
+      # )
+      #
+      #
+      # if (length(last_active_times) == 0) {
+      #   last_active_times <- tibble::tibble(
+      #     user_uid = character(0),
+      #     last_sign_in_at = character(0)
+      #   )
+      # }
 
       last_active_times <- last_active_times %>%
         mutate(last_sign_in_at = lubridate::force_tz(as.POSIXct(.data$last_sign_in_at), tzone = "UTC"))

@@ -93,12 +93,12 @@ Sessions <-  R6::R6Class(
     #'
     config = function(
       app_name,
-      conn = NULL,
+      #conn = NULL,
       firebase_config = NULL,
       admin_mode = FALSE,
       is_invite_required = TRUE,
       api_key = NULL,
-      api_version = "prod"
+      api_url = "https://api.polished.tech"
     ) {
 
       if (!(length(app_name) == 1 && is.character(app_name))) {
@@ -106,93 +106,88 @@ Sessions <-  R6::R6Class(
       }
 
 
-      if (is.null(api_key)) {
+      # if (is.null(api_key)) {
+      #
+      #   # user is setting up their own database and Firebase project
+      #   if (length(firebase_config) != 3 ||
+      #       !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
+      #     stop("invalid `firebase_config` argument passed to `global_sessions_config()`", call. = FALSE)
+      #   }
+      #   tryCatch({
+      #     if (!DBI::dbIsValid(conn)) {
+      #       stop("invalid `conn` argument passed to `global_sessions_config()`", call. = FALSE)
+      #     }
+      #   }, error = function(err) {
+      #     stop("invalid `conn` argument passed to `global_sessions_config()`", call. = FALSE)
+      #   })
+      #
+      #   self$conn <- conn
+      #   self$firebase_config <- firebase_config
+      #   self$app_name <- app_name
+      #   self$api_key <- NULL
+      # } else {
+        # user is using polished hosted API
+      if (!(length(api_key) == 1 && is.character(api_key))) {
+        stop("invalid `app_name` argument passed to `global_sessions_config()`", call. = FALSE)
+      }
 
-        # user is setting up their own database and Firebase project
+      if (!(length(api_url) == 1 && is.character(api_url))) {
+        stop("invalid `api_url` argument passed to `global_sessions_config()`", call. = FALSE)
+      }
+
+        #if (!is.null(conn)) {
+        #  stop("when `api_key` is provided `conn` must be set to `NULL`", call. = FALSE)
+        #}
+
+        #self$conn <- NULL
+      self$api_key <- api_key
+      self$hosted_url <- api_url
+
+      if (is.null(firebase_config)) {
+        # set to the default polished Firebase project if app is using polished
+        # hosted, but no Firebase credentials provided.  This allows users to get up and
+        # running quickly without needing to create a Firebase project, but for
+        # production Shiny apps, the user should
+        self$firebase_config <- list(
+          apiKey = "AIzaSyAlrehX1g0irhCKq5MfmOE96z8lNprbbnk",
+          authDomain = "polished-hosted.firebaseapp.com",
+          projectId = "polished-hosted"
+        )
+
+      } else {
         if (length(firebase_config) != 3 ||
             !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
           stop("invalid `firebase_config` argument passed to `global_sessions_config()`", call. = FALSE)
         }
-        tryCatch({
-          if (!DBI::dbIsValid(conn)) {
-            stop("invalid `conn` argument passed to `global_sessions_config()`", call. = FALSE)
-          }
-        }, error = function(err) {
-          stop("invalid `conn` argument passed to `global_sessions_config()`", call. = FALSE)
-        })
-
-        self$conn <- conn
         self$firebase_config <- firebase_config
-        self$app_name <- app_name
-        self$api_key <- NULL
-      } else {
-        # user is using polished hosted API
-        if (!(length(api_key) == 1 && is.character(api_key))) {
-          stop("invalid `app_name` argument passed to `global_sessions_config()`", call. = FALSE)
-        }
-
-        if (identical(api_version, "prod")) {
-          self$hosted_url <- "https://api.polished.tech"
-        } else if (identical(api_version, "dev")) {
-          self$hosted_url <- "http://localhost:8080"
-        } else {
-          stop("invalid `api_version` argument passed to `global_sessions_config()`", call. = FALSE)
-        }
-
-        if (!is.null(conn)) {
-          stop("when `api_key` is provided `conn` must be set to `NULL`", call. = FALSE)
-        }
-
-        self$conn <- NULL
-        self$api_key <- api_key
-
-        if (is.null(firebase_config)) {
-          # set to the default polished Firebase project if app is using polished
-          # hosted, but no Firebase credentials provided.  This allows users to get up and
-          # running quickly without needing to create a Firebase project, but for
-          # production Shiny apps, the user should
-          self$firebase_config <- list(
-            apiKey = "AIzaSyAlrehX1g0irhCKq5MfmOE96z8lNprbbnk",
-            authDomain = "polished-hosted.firebaseapp.com",
-            projectId = "polished-hosted"
-          )
-
-        } else {
-          if (length(firebase_config) != 3 ||
-              !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
-            stop("invalid `firebase_config` argument passed to `global_sessions_config()`", call. = FALSE)
-          }
-          self$firebase_config <- firebase_config
-        }
-
-
-
-        # get the app uid
-        res <- httr::GET(
-          url = paste0(self$hosted_url, "/app-by-name"),
-          query = list(
-            app_name = app_name
-          ),
-          httr::authenticate(
-            user = self$api_key,
-            password = ""
-          )
-        )
-
-        app <- jsonlite::fromJSON(
-          httr::content(res, "text", encoding = "UTF-8")
-        )
-
-        status_out <- httr::status_code(res)
-
-        if (!identical(status_out, 200L)) {
-          stop(app, call. = FALSE)
-        }
-
-
-        self$app_name <- app$app_uid
-
       }
+
+
+
+      # get the app uid
+      res <- httr::GET(
+        url = paste0(self$hosted_url, "/app-by-name"),
+        query = list(
+          app_name = app_name
+        ),
+        httr::authenticate(
+          user = self$api_key,
+          password = ""
+        )
+      )
+
+      app <- jsonlite::fromJSON(
+        httr::content(res, "text", encoding = "UTF-8")
+      )
+
+      status_out <- httr::status_code(res)
+
+      if (!identical(status_out, 200L)) {
+        stop(app, call. = FALSE)
+      }
+
+      self$app_name <- app$app_uid
+
 
 
       if (!(length(admin_mode) == 1 && is.logical(admin_mode))) {
@@ -256,19 +251,19 @@ Sessions <-  R6::R6Class(
 
 
 
-        if (is.null(self$api_key)) {
-          invite <- self$get_invite_by_email(decoded_jwt$email)
-          if (isFALSE(self$is_invite_required) && is.null(invite)) {
-            # if invite is not required, and this is the first time that the user is signing in,
-            # then we need to add their user info to the db
-            create_app_user(self$conn, self$app_name, decoded_jwt$email)
-            invite <- self$get_invite_by_email(new_session$email)
-          }
-
-          if (is.null(invite)) {
-            stop("[polished] error checking user invite", call. = FALSE)
-          }
-        } else {
+        # if (is.null(self$api_key)) {
+        #   invite <- self$get_invite_by_email(decoded_jwt$email)
+        #   if (isFALSE(self$is_invite_required) && is.null(invite)) {
+        #     # if invite is not required, and this is the first time that the user is signing in,
+        #     # then we need to add their user info to the db
+        #     create_app_user(self$conn, self$app_name, decoded_jwt$email)
+        #     invite <- self$get_invite_by_email(new_session$email)
+        #   }
+        #
+        #   if (is.null(invite)) {
+        #     stop("[polished] error checking user invite", call. = FALSE)
+        #   }
+        # } else {
           invite <- api_get_invite_by_email(
             self$hosted_url,
             self$api_key,
@@ -307,7 +302,7 @@ Sessions <-  R6::R6Class(
           if (is.null(invite)) {
             stop("[polished] error checking user invite", call. = FALSE)
           }
-        }
+        #}
 
         new_session$is_admin <- invite$is_admin
         new_session$user_uid <- invite$user_uid
@@ -318,17 +313,17 @@ Sessions <-  R6::R6Class(
         # add the session to the 'sessions' table
         private$add(new_session)
 
-        if (is.null(self$api_key)) {
-          dbExecute(
-            self$conn,
-            "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
-            list(
-              uuid::UUIDgenerate(),
-              new_session$session_uid,
-              'sign_in'
-            )
-          )
-        }
+        # if (is.null(self$api_key)) {
+        #   dbExecute(
+        #     self$conn,
+        #     "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
+        #     list(
+        #       uuid::UUIDgenerate(),
+        #       new_session$session_uid,
+        #       'sign_in'
+        #     )
+        #   )
+        # }
 
       }
 
@@ -338,24 +333,24 @@ Sessions <-  R6::R6Class(
 
       invite <- NULL
 
-      if (is.null(self$api_key)) {
-
-
-        user_db <- get_user_by_email(self$conn, email)
-
-        if (!is.null(user_db)) {
-          invite <- get_invite(self$conn, self$app_name, user_db$uid)
-        }
-
-
-      } else {
+      # if (is.null(self$api_key)) {
+      #
+      #
+      #   user_db <- get_user_by_email(self$conn, email)
+      #
+      #   if (!is.null(user_db)) {
+      #     invite <- get_invite(self$conn, self$app_name, user_db$uid)
+      #   }
+      #
+      #
+      # } else {
         invite <- api_get_invite_by_email(
           self$hosted_url,
           self$api_key,
           email,
           self$app_name
         )
-      }
+      #}
 
 
 
@@ -364,11 +359,11 @@ Sessions <-  R6::R6Class(
     find = function(hashed_cookie) {
       if (nchar(hashed_cookie) == 0) return(NULL)
 
-      if (is.null(self$api_key)) {
-
-        session_out <- get_session(self$conn, hashed_cookie, self$app_name)
-
-      } else {
+      # if (is.null(self$api_key)) {
+      #
+      #   session_out <- get_session(self$conn, hashed_cookie, self$app_name)
+      #
+      # } else {
 
         res <- httr::GET(
           url = paste0(self$hosted_url, "/session-by-cookie"),
@@ -392,7 +387,7 @@ Sessions <-  R6::R6Class(
           session_out <- NULL
         }
 
-      }
+      #}
 
       return(session_out)
     },
@@ -423,16 +418,16 @@ Sessions <-  R6::R6Class(
         stop("email verification user not found", call. = FALSE)
       } else {
 
-        if (is.null(self$api_key)) {
-          dbExecute(
-            self$conn,
-            'UPDATE polished.sessions SET email_verified=$1 WHERE uid=$2',
-            params = list(
-              email_verified,
-              session_uid
-            )
-          )
-        } else {
+        #if (is.null(self$api_key)) {
+          # dbExecute(
+          #   self$conn,
+          #   'UPDATE polished.sessions SET email_verified=$1 WHERE uid=$2',
+          #   params = list(
+          #     email_verified,
+          #     session_uid
+          #   )
+          # )
+        #} else {
           res <- httr::PUT(
             url = paste0(self$hosted_url, "/sessions"),
             httr::authenticate(
@@ -449,7 +444,7 @@ Sessions <-  R6::R6Class(
           )
 
           httr::stop_for_status(res)
-        }
+        #}
 
       }
 
@@ -458,16 +453,16 @@ Sessions <-  R6::R6Class(
     },
     set_signed_in_as = function(session_uid, signed_in_as) {
 
-      if (is.null(self$api_key)) {
-        dbExecute(
-          self$conn,
-          'UPDATE polished.sessions SET signed_in_as=$1 WHERE uid=$2',
-          params = list(
-            signed_in_as,
-            session_uid
-          )
-        )
-      } else {
+      # if (is.null(self$api_key)) {
+      #   dbExecute(
+      #     self$conn,
+      #     'UPDATE polished.sessions SET signed_in_as=$1 WHERE uid=$2',
+      #     params = list(
+      #       signed_in_as,
+      #       session_uid
+      #     )
+      #   )
+      # } else {
         res <- httr::PUT(
           url = paste0(self$hosted_url, "/sessions"),
           httr::authenticate(
@@ -484,28 +479,28 @@ Sessions <-  R6::R6Class(
         )
 
         httr::stop_for_status(res)
-      }
+      #}
 
 
       invisible(self)
     },
     get_signed_in_as_user = function(user_uid) {
 
-      if (is.null(self$api_key)) {
-        email <- dbGetQuery(
-          self$conn,
-          'SELECT email FROM polished.users WHERE uid=$1',
-          list(
-            user_uid
-          )
-        )$email
-
-        invite <- get_invite(
-          self$conn,
-          self$app_name,
-          user_uid
-        )
-      } else {
+      # if (is.null(self$api_key)) {
+      #   email <- dbGetQuery(
+      #     self$conn,
+      #     'SELECT email FROM polished.users WHERE uid=$1',
+      #     list(
+      #       user_uid
+      #     )
+      #   )$email
+      #
+      #   invite <- get_invite(
+      #     self$conn,
+      #     self$app_name,
+      #     user_uid
+      #   )
+      # } else {
 
         invite <- api_get_invite(
           self$hosted_url,
@@ -515,7 +510,7 @@ Sessions <-  R6::R6Class(
         )
 
         email <- invite$email
-      }
+      #}
 
 
       list(
@@ -526,26 +521,26 @@ Sessions <-  R6::R6Class(
     },
     set_inactive = function(session_uid) {
 
-      if (is.null(self$api_key)) {
-        dbExecute(
-          self$conn,
-          'UPDATE polished.sessions SET is_active=$1 WHERE uid=$2',
-          list(
-            FALSE,
-            session_uid
-          )
-        )
-
-        dbExecute(
-          self$conn,
-          "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
-          list(
-            uuid::UUIDgenerate(),
-            session_uid,
-            'deactivate'
-          )
-        )
-      } else {
+      # if (is.null(self$api_key)) {
+      #   dbExecute(
+      #     self$conn,
+      #     'UPDATE polished.sessions SET is_active=$1 WHERE uid=$2',
+      #     list(
+      #       FALSE,
+      #       session_uid
+      #     )
+      #   )
+      #
+      #   # dbExecute(
+      #   #   self$conn,
+      #   #   "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
+      #   #   list(
+      #   #     uuid::UUIDgenerate(),
+      #   #     session_uid,
+      #   #     'deactivate'
+      #   #   )
+      #   # )
+      # } else {
 
         res <- httr::POST(
           url = paste0(self$hosted_url, "/actions"),
@@ -562,31 +557,31 @@ Sessions <-  R6::R6Class(
 
         httr::stop_for_status(res)
 
-      }
+      #}
 
     },
     set_active = function(session_uid) {
 
-      if (is.null(self$api_key)) {
-        dbExecute(
-          self$conn,
-          'UPDATE polished.sessions SET is_active=$1 WHERE uid=$2',
-          list(
-            TRUE,
-            session_uid
-          )
-        )
-
-        dbExecute(
-          self$conn,
-          "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
-          list(
-            uuid::UUIDgenerate(),
-            session_uid,
-            'activate'
-          )
-        )
-      } else {
+      # if (is.null(self$api_key)) {
+      #   dbExecute(
+      #     self$conn,
+      #     'UPDATE polished.sessions SET is_active=$1 WHERE uid=$2',
+      #     list(
+      #       TRUE,
+      #       session_uid
+      #     )
+      #   )
+      #
+      #   # dbExecute(
+      #   #   self$conn,
+      #   #   "INSERT INTO polished.session_actions (uid, session_uid, action) VALUES ($1, $2, $3)",
+      #   #   list(
+      #   #     uuid::UUIDgenerate(),
+      #   #     session_uid,
+      #   #     'activate'
+      #   #   )
+      #   # )
+      # } else {
         res <- httr::POST(
           url = paste0(self$hosted_url, "/actions"),
           httr::authenticate(
@@ -601,20 +596,20 @@ Sessions <-  R6::R6Class(
         )
 
         httr::stop_for_status(res)
-      }
+      #}
 
     },
     sign_out = function(hashed_cookie, session_uid) {
 
-      if (is.null(self$api_key)) {
-
-        sign_out(
-          self$conn,
-          hashed_cookie,
-          session_uid
-        )
-
-      } else {
+      # if (is.null(self$api_key)) {
+      #
+      #   sign_out(
+      #     self$conn,
+      #     hashed_cookie,
+      #     session_uid
+      #   )
+      #
+      # } else {
 
         res <- httr::POST(
           url = paste0(self$hosted_url, "/sign-out"),
@@ -630,7 +625,7 @@ Sessions <-  R6::R6Class(
         )
 
         httr::stop_for_status(res)
-      }
+      #}
 
     },
     get_admin_mode = function() {
@@ -640,9 +635,9 @@ Sessions <-  R6::R6Class(
   private = list(
     add = function(session_data) {
 
-      if (is.null(self$api_key)) {
-        add_session(self$conn, session_data, self$app_name)
-      } else {
+      # if (is.null(self$api_key)) {
+      #   add_session(self$conn, session_data, self$app_name)
+      # } else {
 
         # add session to "sessions" table via the API
         httr::POST(
@@ -657,7 +652,7 @@ Sessions <-  R6::R6Class(
           ),
           encode = "json"
         )
-      }
+      #}
 
       invisible(self)
     },

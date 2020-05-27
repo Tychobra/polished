@@ -23,23 +23,23 @@
 #' @export
 #'
 global_sessions_config <- function(
-  conn = NULL,
+  #conn = NULL,
   app_name = NULL,
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
   api_key = NULL,
-  api_version = "prod"
+  api_url = "https://api.polished.tech"
 ) {
 
   .global_sessions$config(
     app_name = app_name,
     firebase_config = firebase_config,
-    conn = conn,
+    #conn = conn,
     admin_mode = admin_mode,
     is_invite_required = is_invite_required,
     api_key = api_key,
-    api_version = api_version
+    api_url = api_url
   )
 
 }
