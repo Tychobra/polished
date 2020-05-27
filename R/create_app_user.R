@@ -101,22 +101,22 @@ create_app_user <- function(conn, app_uid, email, is_admin = FALSE,
     }
 
     # check if app already exists
-    existing_app_uid <- DBI::dbGetQuery(
-      conn,
-      paste0("SELECT uid FROM ", schema, ".apps WHERE uid=$1"),
-      params = list(app_uid)
-    )
+    # existing_app_uid <- DBI::dbGetQuery(
+    #   conn,
+    #   paste0("SELECT uid FROM ", schema, ".apps WHERE uid=$1"),
+    #   params = list(app_uid)
+    # )
 
-    if (nrow(existing_app_uid) == 0) {
+    #if (nrow(existing_app_uid) == 0) {
       # if app does not exist, then create it
-      add_app(
-        conn = conn,
-        app_uid = app_uid,
-        app_name = app_uid,
-        created_by = created_by,
-        modified_by = created_by
-      )
-    }
+      # add_app(
+      #   conn = conn,
+      #   app_uid = app_uid,
+      #   app_name = app_uid,
+      #   created_by = created_by,
+      #   modified_by = created_by
+      # )
+    #}
 
 
     # add user to app_users

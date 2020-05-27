@@ -356,7 +356,8 @@ user_access_module <- function(input, output, session) {
           url = paste0(.global_sessions$hosted_url, "/app-users"),
           body = list(
             user_uid = user_uid,
-            app_uid = app_uid
+            app_uid = app_uid,
+            req_user_uid = session$userData$user()$user_uid
           ),
           httr::authenticate(
             user = .global_sessions$api_key,
