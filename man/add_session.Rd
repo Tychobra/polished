@@ -4,10 +4,12 @@
 \alias{add_session}
 \title{add session to the "sessions" table}
 \usage{
-add_session(conn_, session, app_uid, schema = "polished")
+add_session(conn_, account_uid, session, app_uid, schema = "polished")
 }
 \arguments{
 \item{conn_}{the database connection}
+
+\item{account_uid}{the account uid}
 
 \item{session}{list containing session data with the following elements:
 - session_uid

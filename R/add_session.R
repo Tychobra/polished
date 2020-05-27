@@ -1,6 +1,7 @@
 #' add session to the "sessions" table
 #'
 #' @param conn_ the database connection
+#' @param account_uid the account uid
 #' @param session list containing session data with the following elements:
 #' - session_uid
 #' - user_uid
@@ -16,13 +17,14 @@
 #'
 #'
 #'
-add_session <- function(conn_, session, app_uid, schema = "polished") {
+add_session <- function(conn_, account_uid, session, app_uid, schema = "polished") {
   DBI::dbExecute(
     conn_,
-    paste0('INSERT INTO ', schema, '.sessions (uid, user_uid, email, email_verified,
-    hashed_cookie, app_uid) VALUES ($1, $2, $3, $4, $5, $6)'),
+    paste0('INSERT INTO ', schema, '.sessions (uid, account_uid, user_uid, email, email_verified,
+    hashed_cookie, app_uid) VALUES ($1, $2, $3, $4, $5, $6, $7)'),
     list(
       session$session_uid,
+      account_uid,
       session$user_uid,
       session$email,
       session$email_verified,
