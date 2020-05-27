@@ -25,7 +25,7 @@ get_session <- function(conn, account_uid, hashed_cookie, app_uid, schema = "pol
     params = list(
       hashed_cookie,
       TRUE,
-      accout_uid
+      account_uid
     )
   )
 
