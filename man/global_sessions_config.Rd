@@ -33,10 +33,7 @@ invite before registering/signing in}
 
 \item{api_key}{the API key from Polished hosted}
 
-\item{conn}{the database connection}
-
-\item{api_version}{the API version.  Either "prod", "dev", or a specific polished
-hosted API version}
+\item{api_url}{the API url.  Defaults to "https://api.polished.tech".}
 }
 \description{
 configuration for global sessions

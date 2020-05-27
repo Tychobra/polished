@@ -344,32 +344,21 @@ user_access_module <- function(input, output, session) {
 
     tryCatch({
 
-      if (is.null(.global_sessions$api_key)) {
-        delete_app_user(
-          .global_sessions$conn,
+      res <- httr::DELETE(
+        url = paste0(.global_sessions$hosted_url, "/app-users"),
+        body = list(
+          user_uid = user_uid,
           app_uid = app_uid,
-          user_uid = user_uid
-        )
-      } else {
+          req_user_uid = session$userData$user()$user_uid
+        ),
+        httr::authenticate(
+          user = .global_sessions$api_key,
+          password = ""
+        ),
+        encode = "json"
+      )
 
-        res <- httr::DELETE(
-          url = paste0(.global_sessions$hosted_url, "/app-users"),
-          body = list(
-            user_uid = user_uid,
-            app_uid = app_uid,
-            req_user_uid = session$userData$user()$user_uid
-          ),
-          httr::authenticate(
-            user = .global_sessions$api_key,
-            password = ""
-          ),
-          encode = "json"
-        )
-
-        httr::stop_for_status(res)
-
-      }
-
+      httr::stop_for_status(res)
 
       shinyFeedback::showToast("success", "User successfully deleted")
       users_trigger(users_trigger() + 1)
