@@ -6,6 +6,7 @@
 \usage{
 add_user(
   conn,
+  account_uid,
   email,
   created_by,
   modified_by = NULL,
@@ -15,6 +16,8 @@ add_user(
 }
 \arguments{
 \item{conn}{the database connection}
+
+\item{account_uid}{the account uid}
 
 \item{email}{the email address of the user to be added}
 

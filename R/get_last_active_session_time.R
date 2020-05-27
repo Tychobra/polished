@@ -24,36 +24,16 @@
 get_last_active_session_time <- function(conn, app_uid, schema = "polished") {
 
   # find the most recent session for each user.  Users who have not yet signed in
-  # will not have any sessions, so they won't have a row in the `last_user_app_sessions` table
-  last_user_app_sessions <- conn %>%
+  # will not have any sessions, so they won't have a row in the below data frame
+  conn %>%
     dplyr::tbl(dbplyr::in_schema(schema, "sessions")) %>%
     dplyr::filter(.data$app_uid == .env$app_uid) %>%
     dplyr::collect() %>%
     dplyr::group_by(.data$user_uid) %>%
-    dplyr::filter(.data$created_at == max(.data$created_at, na.rm = TRUE)) %>%
+    dplyr::filter(.data$modified_at == max(.data$modified_at, na.rm = TRUE)) %>%
     dplyr::ungroup() %>%
     select(
       session_uid = .data$uid,
       .data$user_uid
     )
-
-  # session_uids <- last_user_app_sessions$session_uid
-  #
-  # # find the timestamp of the most recent time each user has accesses the app.
-  # # This timestamp is the 'last active session time'
-  # last_active_times <- conn %>%
-  #   dplyr::tbl(dbplyr::in_schema(schema, 'session_actions')) %>%
-  #   dplyr::filter(
-  #     .data$session_uid %in% session_uids,
-  #     .data$action == 'activate'
-  #   ) %>%
-  #   dplyr::group_by(.data$session_uid) %>%
-  #   dplyr::filter(.data$timestamp == max(.data$timestamp, na.rm = TRUE)) %>%
-  #   dplyr::ungroup() %>%
-  #   dplyr::collect() %>%
-  #   select(.data$session_uid, .data$timestamp)
-  #
-  # last_user_app_sessions %>%
-  #   left_join(last_active_times, by = 'session_uid') %>%
-  #   select(.data$user_uid, last_sign_in_at = .data$timestamp)
 }
