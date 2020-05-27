@@ -4,10 +4,10 @@
 \alias{get_invite}
 \title{get invite}
 \usage{
-get_invite(conn_, app_uid, user_uid, schema = "polished")
+get_invite(conn, app_uid, user_uid, schema = "polished")
 }
 \arguments{
-\item{conn_}{the database connection}
+\item{conn}{the database connection}
 
 \item{app_uid}{the id of the app}
 

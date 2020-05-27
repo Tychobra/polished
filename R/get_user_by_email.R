@@ -1,6 +1,7 @@
 #' get user by email address
 #'
-#' @param conn_ the database connection
+#' @param conn the database connection
+#' @param account_uid the account uid
 #' @param email the user's email address
 #' @param schema the database schema
 #'
@@ -10,11 +11,14 @@
 #'
 #' @importFrom DBI dbGetQuery
 #'
-get_user_by_email <- function(conn_, email, schema = "polished") {
+get_user_by_email <- function(conn, account_uid, email, schema = "polished") {
+
+
   user_out <- DBI::dbGetQuery(
-    conn_,
-    paste0("SELECT * FROM ", schema, ".users WHERE email=$1"),
+    conn,
+    paste0("SELECT * FROM ", schema, ".users WHERE account_uid=$1 AND email=$2"),
     params = list(
+      account_uid,
       email
     )
   )

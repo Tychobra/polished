@@ -1,7 +1,7 @@
 
 #' get invite
 #'
-#' @param conn_ the database connection
+#' @param conn the database connection
 #' @param app_uid the id of the app
 #' @param user_uid the user uid
 #' @param schema the name of the schema
@@ -12,10 +12,10 @@
 #'
 #' @export
 #'
-get_invite <- function(conn_, app_uid, user_uid, schema = "polished") {
+get_invite <- function(conn, app_uid, user_uid, schema = "polished") {
 
   invite <- DBI::dbGetQuery(
-    conn_,
+    conn,
     paste0("SELECT * FROM ", schema, ".app_users WHERE user_uid=$1 AND app_uid=$2"),
     params = list(
       user_uid,
