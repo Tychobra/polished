@@ -112,46 +112,32 @@ user_edit_module <- function(input, output, session,
       # adding a new user
       tryCatch({
 
-        if (is.null(.global_sessions$api_key)) {
-          create_app_user(
-            conn = .global_sessions$conn,
-            app_uid = .global_sessions$app_name,
+        res <- httr::POST(
+          url = paste0(.global_sessions$hosted_url, "/app-users"),
+          body = list(
             email = input_email,
+            app_uid = .global_sessions$app_name,
             is_admin = is_admin_out,
-            created_by = session_user
-          )
-        } else {
-          res <- httr::POST(
-            url = paste0(.global_sessions$hosted_url, "/app-users"),
-            body = list(
-              email = input_email,
-              app_uid = .global_sessions$app_name,
-              is_admin = is_admin_out,
-              req_user_uid = session$userData$user()$user_uid
-            ),
-            httr::authenticate(
-              user = .global_sessions$api_key,
-              password = ""
-            ),
-            encode = "json"
+            req_user_uid = session$userData$user()$user_uid
+          ),
+          httr::authenticate(
+            user = .global_sessions$api_key,
+            password = ""
+          ),
+          encode = "json"
+        )
+
+        if (res$status_code != 200) {
+
+          err <- jsonlite::fromJSON(
+            httr::content(res, "text", encoding = "UTF-8")
           )
 
-          if (res$status_code != 200) {
-
-            err <- jsonlite::fromJSON(
-              httr::content(res, "text", encoding = "UTF-8")
-            )
-
-            stop(err, call. = FALSE)
-          }
-
-
-
-
-
-          httr::stop_for_status(res)
-
+          stop(err, call. = FALSE)
         }
+
+
+        httr::stop_for_status(res)
 
 
         shiny::removeModal()
@@ -174,33 +160,31 @@ user_edit_module <- function(input, output, session,
 
 
         # update the app user
-        if (is.null(.global_sessions$api_key)) {
-          update_app_user(
-            .global_sessions$conn,
-            user_uid = hold_user$user_uid,             # user_uid
+        res <- httr::PUT(
+          url = paste0(.global_sessions$hosted_url, "/app-users"),
+          body = list(
+            user_uid = hold_user$user_uid,
             app_uid = .global_sessions$app_name,
             is_admin = is_admin_out,
-            modified_by = session_user             # modified_by
-          )
-        } else {
-          res <- httr::PUT(
-            url = paste0(.global_sessions$hosted_url, "/app-users"),
-            body = list(
-              user_uid = hold_user$user_uid,
-              app_uid = .global_sessions$app_name,
-              is_admin = is_admin_out,
-              req_user_uid = session$userData$user()$user_uid
-            ),
-            httr::authenticate(
-              user = .global_sessions$api_key,
-              password = ""
-            ),
-            encode = "json"
+            req_user_uid = session$userData$user()$user_uid
+          ),
+          httr::authenticate(
+            user = .global_sessions$api_key,
+            password = ""
+          ),
+          encode = "json"
+        )
+
+        if (res$status_code != 200) {
+
+          err <- jsonlite::fromJSON(
+            httr::content(res, "text", encoding = "UTF-8")
           )
 
-          httr::stop_for_status(res)
+          stop(err, call. = FALSE)
         }
 
+        httr::stop_for_status(res)
 
 
         users_trigger(users_trigger() + 1)
@@ -213,9 +197,6 @@ user_edit_module <- function(input, output, session,
       })
 
     }
-
-
-
 
 
   }, ignoreInit = TRUE)

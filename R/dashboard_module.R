@@ -101,42 +101,34 @@ dashboard_module <- function(input, output, session) {
 
     start_date <- lubridate::today(tzone = "America/New_York") - lubridate::days(30)
 
-    if (is.null(.global_sessions$api_key)) {
-      # find all sessions for this app
-      out <- get_daily_sessions(
-        .global_sessions$conn,
-        app_uid = hold_app_uid,
-        start_date = start_date,
+
+    # TODO: need to update this API endpoint to work with our new logging system
+    res <- httr::GET(
+      url = paste0(.global_sessions$hosted_url, "/daily-sessions"),
+      query = list(
+        app_uid = hold_app_uid
+      ),
+      httr::authenticate(
+        user = .global_sessions$api_key,
+        password = ""
+      )
+    )
+
+    httr::stop_for_status(res)
+
+    out <- jsonlite::fromJSON(
+      httr::content(res, "text", encoding = "UTF-8")
+    )
+
+    if (length(out) == 0) {
+      out <- tibble::tibble(
+        date = as.Date(character(0)),
+        user_uid = character(0),
+        n = integer(0)
       )
     } else {
-      res <- httr::GET(
-        url = paste0(.global_sessions$hosted_url, "/daily-sessions"),
-        query = list(
-          app_uid = hold_app_uid
-        ),
-        httr::authenticate(
-          user = .global_sessions$api_key,
-          password = ""
-        )
-      )
-
-      httr::stop_for_status(res)
-
-      out <- jsonlite::fromJSON(
-        httr::content(res, "text", encoding = "UTF-8")
-      )
-
-      if (length(out) == 0) {
-        out <- tibble::tibble(
-          date = as.Date(character(0)),
-          user_uid = character(0),
-          n = integer(0)
-        )
-      } else {
-        out <- out %>%
-          mutate(date = as.Date(date))
-      }
-
+      out <- out %>%
+        mutate(date = as.Date(date))
     }
 
 
@@ -239,31 +231,23 @@ dashboard_module <- function(input, output, session) {
     valueFunc = function() {
       hold_app_uid = .global_sessions$app_name
 
-      if (is.null(.global_sessions$api_key)) {
-        out <- get_active_users(
-          .global_sessions$conn,
-          hold_app_uid
+      res <- httr::GET(
+        url = paste0(.global_sessions$hosted_url, "/active-users"),
+        query = list(
+          app_uid = hold_app_uid
+        ),
+        httr::authenticate(
+          user = .global_sessions$api_key,
+          password = ""
         )
+      )
 
-      } else {
-        res <- httr::GET(
-          url = paste0(.global_sessions$hosted_url, "/active-users"),
-          query = list(
-            app_uid = hold_app_uid
-          ),
-          httr::authenticate(
-            user = .global_sessions$api_key,
-            password = ""
-          )
-        )
+      httr::stop_for_status(res)
 
-        httr::stop_for_status(res)
-
-        out <- jsonlite::fromJSON(
-          httr::content(res, "text", encoding = "UTF-8")
-        ) %>%
-          tibble::as_tibble()
-      }
+      out <- jsonlite::fromJSON(
+        httr::content(res, "text", encoding = "UTF-8")
+      ) %>%
+        tibble::as_tibble()
 
       out
   })
