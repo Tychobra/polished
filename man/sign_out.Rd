@@ -4,10 +4,12 @@
 \alias{sign_out}
 \title{sign_out}
 \usage{
-sign_out(conn, hashed_cookie, session_uid, schema = "polished")
+sign_out(conn, account_uid, hashed_cookie, session_uid, schema = "polished")
 }
 \arguments{
 \item{conn}{the database connection}
+
+\item{account_uid}{the account uid}
 
 \item{hashed_cookie}{the user's hashed browser cookie}
 

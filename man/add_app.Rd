@@ -4,18 +4,16 @@
 \alias{add_app}
 \title{add_app}
 \usage{
-add_app(conn, app_uid, app_name, created_by, modified_by, schema = "polished")
+add_app(conn, account_uid, app_uid, app_name, schema = "polished")
 }
 \arguments{
 \item{conn}{the database connection}
 
+\item{account_uid}{the account uid}
+
 \item{app_uid}{the app uid}
 
 \item{app_name}{the app name}
-
-\item{created_by}{user_uid for user who created the app}
-
-\item{modified_by}{user_uid for the user who modified the app}
 
 \item{schema}{the database schema}
 }

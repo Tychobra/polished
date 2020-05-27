@@ -5,18 +5,15 @@
 \title{configuration for global sessions}
 \usage{
 global_sessions_config(
-  conn = NULL,
   app_name = NULL,
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
   api_key = NULL,
-  api_version = "prod"
+  api_url = "https://api.polished.tech"
 )
 }
 \arguments{
-\item{conn}{the database connection}
-
 \item{app_name}{the name of the app.}
 
 \item{firebase_config}{a list containing your Firebase project configuration.  This list should have the
@@ -35,6 +32,8 @@ Make sure to set `admin_mode` to FALSE before deploying your app.}
 invite before registering/signing in}
 
 \item{api_key}{the API key from Polished hosted}
+
+\item{conn}{the database connection}
 
 \item{api_version}{the API version.  Either "prod", "dev", or a specific polished
 hosted API version}
