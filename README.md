@@ -18,10 +18,10 @@ Sign in to a [Live Demo Shiny App](https://tychobra.shinyapps.io/polished_exampl
 
 Polished provides 2 options for data storage:
 
-1. Using the [polished.tech API](https://polished.tech). The polished.tech API is the easiest way to deploy polished.  It does not require database setup; we maintain the database.  Simply copy and paste your API key from polished.tech and you are ready to add polished to your Shiny app.  
-2. Using your own database.  This naturally requires you to set up and maintain a database.  Polished provides functions to help make this as easy as possible, but it does require database knowledge.
+1. Using the [polished.tech API](https://polished.tech). The polished.tech API is the easiest way to deploy polished.  It does not require database setup or API hosting; we maintain the database and host the API.  Simply copy and paste your API key from polished.tech and you are ready to add polished to your Shiny app.  
+2. Using your own database and hosting the polished API on your own server.  This naturally requires you to set up and maintain a database and API hosting server.  Polished provides functions to help make this as easy as possible, but it does require database and server knowledge and continued maintenace.
 
-If you want to use the [polished.tech API](https://polished.tech), go to polished.tech and follow the [Get Started](https://polished.tech/get-started) instructions.  If you want to use your own database, continue reading this README. 
+If you want to use the [polished.tech API](https://polished.tech), go to polished.tech and follow the [Get Started](https://polished.tech/get-started) instructions.  If you want to use your own database and API srver, continue reading this README.
 
 ### Requirements
 
@@ -29,6 +29,7 @@ If you want to use the [polished.tech API](https://polished.tech), go to polishe
 - one or more Shiny apps
 - a [Firebase](https://firebase.google.com/) account
 - a PostgreSQL database
+- A server that can host a Docker container for the API
 
 ### `polished` installation
 

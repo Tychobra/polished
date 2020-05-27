@@ -14,7 +14,8 @@
 #'
 #' @importFrom DBI dbGetQuery
 #'
-get_user_by_email_api <- function(conn_, email, account_uid, schema = "polished") {
+get_user_by_email <- function(conn_, email, account_uid, schema = "polished") {
+
   user_out <- DBI::dbGetQuery(
     conn_,
     paste0("SELECT * FROM ", schema, ".users WHERE account_uid=$1 AND email=$2"),
