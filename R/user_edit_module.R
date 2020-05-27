@@ -127,7 +127,7 @@ user_edit_module <- function(input, output, session,
               email = input_email,
               app_uid = .global_sessions$app_name,
               is_admin = is_admin_out,
-              req_user_uid = sessions$userData$user()$user_uid
+              req_user_uid = session$userData$user()$user_uid
             ),
             httr::authenticate(
               user = .global_sessions$api_key,
