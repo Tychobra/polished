@@ -582,7 +582,7 @@ function(req, res, user_uid, app_uid, req_user_uid) {
     )
   )
 
-  write_log(type = "info", message = "app user deleted")
+  write_log(req, type = "info", message = "app user deleted")
 
   return(list(
     status = "success"
@@ -616,9 +616,9 @@ function(req, res, app_uid, email) {
 
   if (isTRUE(verbose)) {
     if (is.null(invite)) {
-      write_log(type = "info", message = "invite is null")
+      write_log(req, type = "info", message = "invite is null")
     } else {
-      write_log(type = "info", message = "invite found")
+      write_log(req, type = "info", message = "invite found")
     }
   }
 
@@ -861,7 +861,7 @@ function(req, res, type, session_uid) {
   }
 
   # log the action
-  write_log(type = "info", message = type)
+  write_log(req, type = "info", message = type)
 
   return(list(
     session_action_update = "success"
