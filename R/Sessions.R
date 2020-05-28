@@ -93,19 +93,14 @@ Sessions <-  R6::R6Class(
     #'
     config = function(
       app_name,
-      #conn = NULL,
+      api_key,
       firebase_config = NULL,
       admin_mode = FALSE,
       is_invite_required = TRUE,
-      api_key = NULL,
       api_url = "https://api.polished.tech"
     ) {
 
       if (!(length(app_name) == 1 && is.character(app_name))) {
-        stop("invalid `app_name` argument passed to `global_sessions_config()`", call. = FALSE)
-      }
-
-      if (!(length(api_key) == 1 && is.character(api_key))) {
         stop("invalid `app_name` argument passed to `global_sessions_config()`", call. = FALSE)
       }
 
@@ -140,7 +135,7 @@ Sessions <-  R6::R6Class(
 
       # get the app uid
       res <- httr::GET(
-        url = paste0(self$hosted_url, "/app-by-name"),
+        url = paste0(self$hosted_url, "/apps"),
         query = list(
           app_name = app_name
         ),
@@ -160,7 +155,7 @@ Sessions <-  R6::R6Class(
         stop(app, call. = FALSE)
       }
 
-      self$app_name <- app$app_uid
+      self$app_name <- app$uid
 
 
 

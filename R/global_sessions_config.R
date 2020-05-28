@@ -2,6 +2,8 @@
 #'
 #'
 #' @param app_name the name of the app.
+#' @param api_key the API key. Either from polished.tech or your on premise polished API
+#' deployment.
 #' @param firebase_config a list containing your Firebase project configuration.  This list should have the
 #' following named elements:
 #' \itemize{
@@ -14,17 +16,16 @@
 #' Make sure to set `admin_mode` to FALSE before deploying your app.
 #' @param is_invite_required TRUE by default.  Whether or not to require the user to have an
 #' invite before registering/signing in
-#' @param api_key the API key from Polished hosted
 #' @param api_url the API url.  Defaults to "https://api.polished.tech".
 #'
 #' @export
 #'
 global_sessions_config <- function(
-  app_name = NULL,
+  app_name,
+  api_key,
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
-  api_key = NULL,
   api_url = "https://api.polished.tech"
 ) {
 

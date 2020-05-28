@@ -1,13 +1,16 @@
 library(dplyr)
+library(dbplyr)
 # run the docker container locally for testing
 # $ docker run --rm -p 8080:8080 polished_api
 
 url_ <- "http://localhost:8080"
 #url <- "https://api.polished.tech"
 
+schema <- "polished"
+
 test_email <- "andy.merlino@tychobra.com"
 
-app_name_ <- "polished_hosted_example"
+app_name_ <- "test_app"
 secret_key <- config::get(file = "test/config.yml")$api_key
 
 # db connection for interactive queries
@@ -21,12 +24,25 @@ conn <- tychobratools::db_connect(db_config)
 #  dplyr::filter(.data$app_name == "test_app")
 
 
-source("test/test_app-by-name.R", local = TRUE)
+#source("test/test_app-by-name.R", local = TRUE)
 
 
 #source("test/apps.R")
 
 source("test/test_users.R")
+
+
+res <- httr::GET(
+  url = paste0(url_, "/daily-sessions"),
+  query = list(
+    app_uid = app_uid
+  ),
+  httr::authenticate(
+    user = .global_sessions$api_key,
+    password = ""
+  )
+)
+
 
 
 

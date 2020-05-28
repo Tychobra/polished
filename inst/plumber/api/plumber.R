@@ -19,6 +19,7 @@ conn <- create_conn()
 source("count_n_users.R")
 source("get_user_by_email.R")
 source("get_invite.R")
+source("add_user.R")
 
 # API requests from polished hosted come with this secret key
 polished_hosted_secret <- config::get()$polished_hosted_secret
@@ -26,7 +27,21 @@ polished_hosted_secret <- config::get()$polished_hosted_secret
 # the user limit for the free plan
 free_plan_user_limit <- 10
 
+
+log_file <- config::get()$log_file
+
+# write the logs to the specified log file or standard out
+if (!identical(log_file, "stdout")) {
+
+  if (!is.character(log_file) && length(log_file) == 1) {
+    stop("invalid `log_file`")
+  }
+
+  sink(log_file, append = TRUE)
+}
+
 write_log <- function(req) {
+
   cat(
     req$REQUEST_METHOD,
     ":",
@@ -175,86 +190,127 @@ function(req, res, account_uid = NULL) {
 #' }
 
 
-#' get the app by app name
+##' get the app by app name
+##'
+##' @get /app-by-name
+##'
+#
+# function(req, res, app_name) {
+#
+#   app <- DBI::dbGetQuery(
+#     conn,
+#     paste0("SELECT uid FROM ", schema, ".apps WHERE app_name=$1 AND account_uid=$2"),
+#     params = list(
+#       app_name,
+#       req$account_uid
+#     )
+#   )
+#
+#   if (nrow(app) == 0) {
+#     res$status <- 404
+#     return(list(
+#       error = "`global_sessions_config()` `app_name` not found"
+#     ))
+#   }
+#
+#   list(
+#     app_uid = app$uid
+#   )
+# }
+
+#' get apps
 #'
-#' @get /app-by-name
+#' returns a data frame of all apps for an account or, if the app_uid argument
+#' is supplied, returns the row only for that specific app.
 #'
+#' @get /apps
+#'
+function(req, res, app_uid = NULL, app_name = NULL) {
+
+  # 1 or both of app_uid and app_name must be NULL
+  if (!is.null(app_uid) || !is.null(app_name)) {
+    res$status <- 400 #
+    return(list(
+      error = "Invalid query parameters"
+    ))
+  }
+
+  if (is.null(app_uid) && is.null(app_name)) {
+    # return data frame of all apps
+    out <- DBI::dbGetQuery(
+      conn,
+      paste0("SELECT * FROM ", schema, ".apps WHERE account_uid=$1"),
+      params = list(
+        req$account_uid
+      )
+    )
+  } else {
+
+    if (is.null(app_name)) {
+      out <- DBI::dbGetQuery(
+        conn,
+        paste0("SELECT * FROM ", schema, ".apps WHERE account_uid=$1 AND app_uid=$2"),
+        params = list(
+          req$account_uid,
+          app_uid
+        )
+      )
+    } else {
+      out <- DBI::dbGetQuery(
+        conn,
+        paste0("SELECT * FROM ", schema, ".apps WHERE account_uid=$1 AND app_name=$2"),
+        params = list(
+          req$account_uid,
+          app_name
+        )
+      )
+    }
+
+
+  }
+
+  out
+}
+#' create an app for a user
+#'
+#' @post /apps
 #'
 function(req, res, app_name) {
 
-  app <- DBI::dbGetQuery(
+  DBI::dbExecute(
     conn,
-    paste0("SELECT uid FROM ", schema, ".apps WHERE app_name=$1 AND account_uid=$2"),
+    paste0("INSERT INTO ", schema, ".apps ( app_name, account_uid ) VALUES ( $1, $2 )"),
     params = list(
       app_name,
       req$account_uid
     )
   )
 
-  if (nrow(app) == 0) {
-    res$status <- 404
-    return(list(
-      error = "`global_sessions_config()` `app_name` not found"
-    ))
-  }
-
-  list(
-    app_uid = app$uid
-  )
+  return(list(
+    status = "success"
+  ))
 }
+#' delete an app for a user
+#'
+#' @delete /apps
+#'
+function(req, res, app_uid) {
 
-#' #' get all apps for an user
-#' #'
-#' #' @get /apps
-#' #'
-#' function(req, res) {
-#'
-#'   DBI::dbGetQuery(
-#'     conn,
-#'     "SELECT * FROM apps WHERE created_by=$1",
-#'     req$user_uid
-#'   )
-#' }
-#' #' create an app for a user
-#' #'
-#' #' @post /apps
-#' #'
-#' function(req, res, app_uid, app_name) {
-#'
-#'   hold_app_uid <- uuid::UUIDgenerate()
-#'
-#'   DBI::dbExecute(
-#'     conn,
-#'     paste0("INSERT INTO ", schema, ".apps ( uid, app_name, created_by, modified_by ) VALUES ( $1, $2, $3, $4 )"),
-#'     params = list(
-#'       app_uid,
-#'       app_name,
-#'       created_by,
-#'       created_by
-#'     )
-#'   )
-#' }
-#' #' delete an app for a user
-#' #'
-#' #' @delete /apps
-#' #'
-#' function(req, res, app_uid) {
-#'
-#'   # all app_users will of the app will be deleted from the app_users table in
-#'   # an SQL CASCADE
-#'   DBI::dbExecute(
-#'     conn,
-#'     "DELETE FROM apps WHERE uid=$1 AND created_by=$2",
-#'     params = list(
-#'       app_uid,
-#'       req$user_uid
-#'     )
-#'   )
-#'
-#'   return(list(
-#'     status = "success"
-#'   ))
-#' }
+  # When the below SQL is executed, all app_users of the app will also be deleted
+  # from the app_users table in an SQL CASCADE
+  DBI::dbExecute(
+    conn,
+    paste0("DELETE FROM ", schema, ".apps WHERE uid=$1 AND account_uid=$2"),
+    params = list(
+      app_uid,
+      req$account_uid
+    )
+  )
+
+  return(list(
+    status = "success"
+  ))
+}
 
 #' create a user for an account
 #'
@@ -271,7 +327,7 @@ function(req, res, email) {
   #  user_limit <- free_plan_user_limit
   #}
 
-  polished::add_user(
+  add_user(
     conn,
     email,
     created_by,
@@ -812,9 +868,16 @@ function(req, res, app_uid) {
 
   start_date <- lubridate::today(tzone = "America/New_York") - lubridate::days(30)
 
-  # TODO: this needs to be updated for our new logging method for tracking user
-  # actions
 
+  if (identical(log_file, "stdout")) {
+    # TODO: this needs to be updated for our new logging method for tracking user
+    # actions
+
+  } else {
+    out <- read.table(file = log_file)
+  }
+
+  out
 }
 
 #' get the last active time for all app users
