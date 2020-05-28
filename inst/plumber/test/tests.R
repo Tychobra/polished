@@ -32,15 +32,40 @@ conn <- tychobratools::db_connect(db_config)
 source("test/test_users.R")
 
 
+##### test /daily-users
+
+# recreate an app for testing next enpoints
+res <- httr::GET(
+  paste0(url_, "/apps"),
+  httr::authenticate(
+    user = secret_key,
+    password = ""
+  ),
+  query = list(
+    app_name = app_name_
+  ),
+  encode = "json"
+)
+
+app <- jsonlite::fromJSON(
+  httr::content(res, "text", encoding = "UTF-8")
+)
+
+app_uid_ <- app$uid
+
 res <- httr::GET(
   url = paste0(url_, "/daily-sessions"),
   query = list(
-    app_uid = app_uid
+    app_uid = app_uid_
   ),
   httr::authenticate(
-    user = .global_sessions$api_key,
+    user = secret_key,
     password = ""
   )
+)
+
+dat <- jsonlite::fromJSON(
+  httr::content(res, "text", encoding = "UTF-8")
 )
 
 

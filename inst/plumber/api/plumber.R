@@ -20,6 +20,7 @@ source("count_n_users.R")
 source("get_user_by_email.R")
 source("get_invite.R")
 source("add_user.R")
+source("parse_logs.R")
 
 # API requests from polished hosted come with this secret key
 polished_hosted_secret <- config::get()$polished_hosted_secret
@@ -135,10 +136,10 @@ function(req, res, account_uid = NULL, user_uid = NULL, app_uid = NULL) {
 
   if (is.null(error)) {
     req$account_uid <- from_db$uid
-    write_log(req, user_uid, app_uid)
+    write_log(req, message = "auth success")
     plumber::forward()
   } else {
-    write_log(req, user_uid, app_uid)
+    write_log(req, message = "auth error")
     res$status <- 401 # Unauthorized
     return(list(
       error = "Authentication Error"
@@ -635,16 +636,33 @@ function(req, res, app_uid, user_uid) {
 #'
 #' @get /session-by-cookie
 #'
-function(req, res, hashed_cookie, app_uid) {
+function(req, res, hashed_cookie, app_uid, page) {
+
+
 
   # get the session
   signed_in_sessions <- DBI::dbGetQuery(
     conn,
-    paste0('SELECT uid AS session_uid, user_uid, email, email_verified, app_uid, signed_in_as FROM ',
+    paste0('SELECT uid AS session_uid, user_uid, email, email_verified, app_uid, signed_in_as, is_active FROM ',
            schema, '.sessions WHERE hashed_cookie=$1 AND is_signed_in=$2 AND account_uid=$3'),
     params = list(
       hashed_cookie,
       TRUE,
+      req$account_uid
+    )
+  )
+
+  if (substr(page, 1, 6) == "server") {
+
+
+  }
+
+  DBI::dbExecute(
+    conn,
+    paste0("UPDATE ", schema, ".sessions SET is_active=$1 WHERE uid=$2 AND account_uid=$3"),
+    list(
+      TRUE,
+      session_uid,
       req$account_uid
     )
   )
@@ -849,7 +867,7 @@ function(req, res, type, session_uid) {
 #'
 function(req, res, app_uid) {
 
-  start_date <- lubridate::today(tzone = "America/New_York") - lubridate::days(30)
+  #start_date <- lubridate::today(tzone = "America/New_York") - lubridate::days(30)
 
 
   if (identical(log_file, "stdout")) {
@@ -857,7 +875,8 @@ function(req, res, app_uid) {
     # actions
 
   } else {
-    out <- read.table(file = log_file)
+    out <- readLines(con = log_file)
+    out <- parse_logs(out)
   }
 
   out
