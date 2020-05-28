@@ -20,7 +20,7 @@ RUN R -e "remotes::install_version('dplyr', version = '0.8.5')"
 RUN R -e "remotes::install_version('dbplyr', version = '1.4.4')"
 RUN R -e "remotes::install_version('DBI', version = '1.1.0')"
 
-RUN R -e "remotes::install_github('tychobra/polished', ref = '86fcd349d0a0ba57519335bf028e3f67186c2e0a')"
+#RUN R -e "remotes::install_github('tychobra/polished', ref = 'fa9004208c54369b0288198f9e7fb60558f4147b')"
 
 # remove R packages that are not used at run time
 #RUN R -e "remove.packages('remotes')"
