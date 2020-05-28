@@ -40,7 +40,16 @@ if (!identical(log_file, "stdout")) {
   sink(log_file, append = TRUE)
 }
 
-write_log <- function(req, user_uid, app_uid) {
+
+#' write_log
+#'
+#' @param req the API request
+#' @param type the log type.  Valid values are "request", "info", and "error"
+#' @param message a custom message to include with the log
+#'
+#' @return JSON formatted character string of the log message
+#'
+write_log <- function(req, type = "request", message = "") {
 
 
   log_msg <- jsonlite::toJSON(
@@ -48,8 +57,10 @@ write_log <- function(req, user_uid, app_uid) {
       request_method = req$REQUEST_METHOD,
       path_info      = req$PATH_INFO,
       account_uid    = req$account_uid,
-      user_uid       = user_uid,
-      app_uid        = app_uid
+      user_uid       = req$user_uid,
+      app_uid        = req$app_uid,
+      type           = type,
+      message        = message
     )
   )
 
@@ -80,7 +91,7 @@ function(req, res, user_uid = NULL, app_uid = NULL) {
       print("successfully reconnection")
       plumber::forward()
     } else {
-      write_log(req, user_uid, app_uid)
+      write_log(req, type = "error", message = "database connection error")
       res$status <- 500 # Unauthorized
       return(list(
         error = "Database Connection Error"
@@ -99,8 +110,11 @@ function(req, res, user_uid = NULL, app_uid = NULL) {
 function(req, res, account_uid = NULL, user_uid = NULL, app_uid = NULL) {
 
   auth_header <- req[["HTTP_AUTHORIZATION"]]
-  req$user_uid <- NULL
+  req$account_uid <- NULL
 
+  # attach user_uid and app_uid to the request so that they can always be logged later
+  req$user_uid <- user_uid
+  req$app_uid <- app_uid
 
   error <- NULL
   password_from_db <- NULL
@@ -568,7 +582,7 @@ function(req, res, user_uid, app_uid, req_user_uid) {
     )
   )
 
-  cat("[ polished ] app_user deleted")
+  write_log(type = "info", message = "app user deleted")
 
   return(list(
     status = "success"
@@ -602,9 +616,9 @@ function(req, res, app_uid, email) {
 
   if (isTRUE(verbose)) {
     if (is.null(invite)) {
-      cat("[polished] invite-by-email : invite is null\n")
+      write_log(type = "info", message = "invite is null")
     } else {
-      cat("[polished] invite-by-email : invite found\n")
+      write_log(type = "info", message = "invite found")
     }
   }
 
@@ -787,12 +801,6 @@ function(req, res, session_uid, dat) {
 #'
 function(req, res, hashed_cookie, session_uid) {
 
-  # polished::sign_out(
-  #   conn,
-  #   hashed_cookie = hashed_cookie,
-  #   session_uid = session_uid,
-  #   schema = schema
-  # )
   # sign the user out of all sessions with this cookie.  This will cause the user
   # to be signed out of all apps that they are signed into in the browser that they
   # have open
@@ -853,8 +861,7 @@ function(req, res, type, session_uid) {
   }
 
   # log the action
-  cat(paste0("[polished] action : ", type, "\n"))
-
+  write_log(type = "info", message = type)
 
   return(list(
     session_action_update = "success"
