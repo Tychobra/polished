@@ -40,18 +40,22 @@ if (!identical(log_file, "stdout")) {
   sink(log_file, append = TRUE)
 }
 
-write_log <- function(req) {
+write_log <- function(req, user_uid, app_uid) {
+
+
+  log_msg <- jsonlite::toJSON(
+    list(
+      request_method = req$REQUEST_METHOD,
+      path_info      = req$PATH_INFO,
+      account_uid    = req$account_uid,
+      user_uid       = user_uid,
+      app_uid        = app_uid
+    )
+  )
+
 
   cat(
-    req$REQUEST_METHOD,
-    ":",
-    req$PATH_INFO,
-    ":",
-    req$HTTP_USER_AGENT,
-    ":",
-    req$REMOTE_ADDR,
-    ":",
-    req$account_uid,
+    log_msg,
     "\n"
   )
 }
@@ -64,7 +68,7 @@ write_log <- function(req) {
 #'
 #' @filter check_connection
 #'
-function(req, res) {
+function(req, res, user_uid = NULL, app_uid = NULL) {
 
   if (isTRUE(DBI::dbIsValid(conn))) {
     plumber::forward()
@@ -76,7 +80,7 @@ function(req, res) {
       print("successfully reconnection")
       plumber::forward()
     } else {
-      write_log(req)
+      write_log(req, user_uid, app_uid)
       res$status <- 500 # Unauthorized
       return(list(
         error = "Database Connection Error"
@@ -92,7 +96,7 @@ function(req, res) {
 #'
 #' @filter auth
 #'
-function(req, res, account_uid = NULL) {
+function(req, res, account_uid = NULL, user_uid = NULL, app_uid = NULL) {
 
   auth_header <- req[["HTTP_AUTHORIZATION"]]
   req$user_uid <- NULL
@@ -145,10 +149,10 @@ function(req, res, account_uid = NULL) {
 
   if (is.null(error)) {
     req$account_uid <- from_db$uid
-    write_log(req)
+    write_log(req, user_uid, app_uid)
     plumber::forward()
   } else {
-    write_log(req)
+    write_log(req, user_uid, app_uid)
     res$status <- 401 # Unauthorized
     return(list(
       error = "Authentication Error"
@@ -228,7 +232,7 @@ function(req, res, account_uid = NULL) {
 function(req, res, app_uid = NULL, app_name = NULL) {
 
   # 1 or both of app_uid and app_name must be NULL
-  if (!is.null(app_uid) || !is.null(app_name)) {
+  if (!is.null(app_uid) && !is.null(app_name)) {
     res$status <- 400 #
     return(list(
       error = "Invalid query parameters"
