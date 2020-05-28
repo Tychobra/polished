@@ -372,6 +372,7 @@ user_access_module <- function(input, output, session) {
 
   shiny::observeEvent(input$sign_in_as_btn_user_uid, {
     req(!.global_sessions$get_admin_mode())
+    hold_user <- session$userData$user()
 
     user_to_sign_in_as <- users() %>%
       filter(.data$user_uid == input$sign_in_as_btn_user_uid) %>%
@@ -387,8 +388,9 @@ user_access_module <- function(input, output, session) {
 
     # sign in as another user
     .global_sessions$set_signed_in_as(
-      session$userData$user()$session_uid,
-      user_to_sign_in_as
+      hold_user$session_uid,
+      user_to_sign_in_as,
+      user_uid = hold_user$user_uid
     )
 
     # to to the Shiny app

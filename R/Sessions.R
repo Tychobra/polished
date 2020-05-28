@@ -362,7 +362,7 @@ Sessions <-  R6::R6Class(
 
       invisible(self)
     },
-    set_signed_in_as = function(session_uid, signed_in_as) {
+    set_signed_in_as = function(session_uid, signed_in_as, user_uid = NULL) {
 
       res <- httr::PUT(
         url = paste0(self$hosted_url, "/sessions"),
@@ -374,7 +374,8 @@ Sessions <-  R6::R6Class(
           session_uid = session_uid,
           dat = list(
             signed_in_as = signed_in_as
-          )
+          ),
+          user_uid = user_uid
         ),
         encode = "json"
       )
