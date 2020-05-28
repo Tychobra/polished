@@ -65,7 +65,7 @@ add_user <- function(conn, account_uid, email, created_by, modified_by = NULL, s
 
   if (n_row == 1) {
     # log message of successful user add for API
-    cat("[polished] user invite sent\n")
+    write_log(type = "info", message = "user invite sent")
 
     out <- user_uid_out
   } else {
