@@ -26,6 +26,11 @@ docker tag polished_api gcr.io/postgres-db-189513/polished_api
 docker push gcr.io/postgres-db-189513/polished_api
 ```
 
+Open bach shell inside running docker container.  This is useful for debugging.
+
+```
+docker exec -it $(docker ps -q) /bin/bash
+```
 
 
 Notes on running locally.  You can run the API directly from your local computer with the following
