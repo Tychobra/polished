@@ -49,7 +49,7 @@ secure_ui <- function(
     }
 
     query <- shiny::parseQueryString(request$QUERY_STRING)
-
+    page_query <- query$page
     cookie_string <- request$HTTP_COOKIE
 
     hashed_cookie <- NULL
@@ -62,7 +62,7 @@ secure_ui <- function(
     user <- NULL
     if (!is.null(hashed_cookie) && length(hashed_cookie) > 0) {
       tryCatch({
-        user <- .global_sessions$find(hashed_cookie)
+        user <- .global_sessions$find(hashed_cookie, paste0("ui:", page_query))
       }, error = function(error) {
         print("sign_in_ui_1")
         print(error)
@@ -74,7 +74,7 @@ secure_ui <- function(
 
     if (is.null(user)) {
 
-      page_query <- query$page
+
 
       if (identical(page_query, "sign_in")) {
         # go to the sign in page
@@ -109,7 +109,6 @@ secure_ui <- function(
 
         if (isTRUE(user$is_admin)) {
 
-          page_query <- query$page
 
           if (identical(page_query, "admin_panel")) {
 

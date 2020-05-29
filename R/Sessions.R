@@ -286,14 +286,15 @@ Sessions <-  R6::R6Class(
 
       return(invite)
     },
-    find = function(hashed_cookie) {
+    find = function(hashed_cookie, page) {
       if (nchar(hashed_cookie) == 0) return(NULL)
 
       res <- httr::GET(
         url = paste0(self$hosted_url, "/session-by-cookie"),
         query = list(
           hashed_cookie = hashed_cookie,
-          app_uid = self$app_name
+          app_uid = self$app_name,
+          page = page
         ),
         httr::authenticate(
           user = self$api_key,
@@ -401,7 +402,7 @@ Sessions <-  R6::R6Class(
         is_admin = invite$is_admin
       )
     },
-    set_inactive = function(session_uid) {
+    set_inactive = function(session_uid, user_uid) {
 
 
 
@@ -413,30 +414,31 @@ Sessions <-  R6::R6Class(
         ),
         body = list(
           type = "set_inactive",
-          session_uid = session_uid
+          session_uid = session_uid,
+          user_uid = user_uid
         ),
         encode = "json"
       )
 
       httr::stop_for_status(res)
     },
-    set_active = function(session_uid) {
-
-      res <- httr::POST(
-        url = paste0(self$hosted_url, "/actions"),
-        httr::authenticate(
-          user = self$api_key,
-          password = ""
-        ),
-        body = list(
-          type = "set_active",
-          session_uid = session_uid
-        ),
-        encode = "json"
-      )
-
-      httr::stop_for_status(res)
-    },
+    # set_active = function(session_uid) {
+    #
+    #   res <- httr::POST(
+    #     url = paste0(self$hosted_url, "/actions"),
+    #     httr::authenticate(
+    #       user = self$api_key,
+    #       password = ""
+    #     ),
+    #     body = list(
+    #       type = "set_active",
+    #       session_uid = session_uid
+    #     ),
+    #     encode = "json"
+    #   )
+    #
+    #   httr::stop_for_status(res)
+    # },
     sign_out = function(hashed_cookie, session_uid) {
 
       res <- httr::POST(
