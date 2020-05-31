@@ -5,16 +5,19 @@
 \title{configuration for global sessions}
 \usage{
 global_sessions_config(
-  app_name = NULL,
+  app_name,
+  api_key,
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
-  api_key = NULL,
   api_url = "https://api.polished.tech"
 )
 }
 \arguments{
 \item{app_name}{the name of the app.}
+
+\item{api_key}{the API key. Either from polished.tech or your on premise polished API
+deployment.}
 
 \item{firebase_config}{a list containing your Firebase project configuration.  This list should have the
 following named elements:
@@ -30,8 +33,6 @@ Make sure to set `admin_mode` to FALSE before deploying your app.}
 
 \item{is_invite_required}{TRUE by default.  Whether or not to require the user to have an
 invite before registering/signing in}
-
-\item{api_key}{the API key from Polished hosted}
 
 \item{api_url}{the API url.  Defaults to "https://api.polished.tech".}
 }
