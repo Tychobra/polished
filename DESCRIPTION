@@ -11,8 +11,6 @@ LazyData: true
 Imports:
     apexcharter,
     digest,
-    DBI,
-    dbplyr,
     dplyr,
     DT,
     htmltools,

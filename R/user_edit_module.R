@@ -12,7 +12,6 @@
 #' @export
 #'
 #' @importFrom shiny reactive observeEvent showModal modalDialog modalButton removeModal
-#' @importFrom DBI dbExecute dbWithTransaction
 #' @importFrom shinyWidgets pickerInput
 #' @importFrom shinyFeedback showToast
 #'
