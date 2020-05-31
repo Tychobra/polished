@@ -18,7 +18,7 @@ Sign in to a [Live Demo Shiny App](https://tychobra.shinyapps.io/polished_exampl
 
 polished requires the [polishedapi](https://github.com/Tychobra/polishedapi).  There are two ways to use the `polishedapi`.
 
-1. Using [polished.tech](https://polished.tech). The polished.tech is our hosted offering of the polishedapi.  It is the easieat way to use polished.  It does not require database setup or API hosting.  
+1. [polished.tech](https://polished.tech): polished.tech is our hosted offering of the `polishedapi`.  It is the easieat way to use `polished`.  It does not require database setup or API hosting.  
 
 2. On Premise: Deploy the `polishedapi` on your own servers.  This naturally requires you to set up and maintain a database and API hosting server.
 
