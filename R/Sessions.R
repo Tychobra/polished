@@ -422,23 +422,6 @@ Sessions <-  R6::R6Class(
 
       httr::stop_for_status(res)
     },
-    # set_active = function(session_uid) {
-    #
-    #   res <- httr::POST(
-    #     url = paste0(self$hosted_url, "/actions"),
-    #     httr::authenticate(
-    #       user = self$api_key,
-    #       password = ""
-    #     ),
-    #     body = list(
-    #       type = "set_active",
-    #       session_uid = session_uid
-    #     ),
-    #     encode = "json"
-    #   )
-    #
-    #   httr::stop_for_status(res)
-    # },
     sign_out = function(hashed_cookie, session_uid) {
 
       res <- httr::POST(

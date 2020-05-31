@@ -19,7 +19,6 @@ this class directly.
 \item \href{#method-set_signed_in_as}{\code{Sessions$set_signed_in_as()}}
 \item \href{#method-get_signed_in_as_user}{\code{Sessions$get_signed_in_as_user()}}
 \item \href{#method-set_inactive}{\code{Sessions$set_inactive()}}
-\item \href{#method-set_active}{\code{Sessions$set_active()}}
 \item \href{#method-sign_out}{\code{Sessions$sign_out()}}
 \item \href{#method-get_admin_mode}{\code{Sessions$get_admin_mode()}}
 \item \href{#method-clone}{\code{Sessions$clone()}}
@@ -33,10 +32,10 @@ polished Sessions configuration function
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$config(
   app_name,
+  api_key,
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
-  api_key = NULL,
   api_url = "https://api.polished.tech"
 )}\if{html}{\out{</div>}}
 }
@@ -94,7 +93,7 @@ NULL if sign in fails. If sign in is successful, a list containing the following
 \if{latex}{\out{\hypertarget{method-find}{}}}
 \subsection{Method \code{find()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$find(hashed_cookie)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$find(hashed_cookie, page)}\if{html}{\out{</div>}}
 }
 
 }
@@ -112,7 +111,7 @@ NULL if sign in fails. If sign in is successful, a list containing the following
 \if{latex}{\out{\hypertarget{method-set_signed_in_as}{}}}
 \subsection{Method \code{set_signed_in_as()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$set_signed_in_as(session_uid, signed_in_as)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$set_signed_in_as(session_uid, signed_in_as, user_uid = NULL)}\if{html}{\out{</div>}}
 }
 
 }
@@ -130,16 +129,7 @@ NULL if sign in fails. If sign in is successful, a list containing the following
 \if{latex}{\out{\hypertarget{method-set_inactive}{}}}
 \subsection{Method \code{set_inactive()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$set_inactive(session_uid)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_active"></a>}}
-\if{latex}{\out{\hypertarget{method-set_active}{}}}
-\subsection{Method \code{set_active()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$set_active(session_uid)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$set_inactive(session_uid, user_uid)}\if{html}{\out{</div>}}
 }
 
 }
