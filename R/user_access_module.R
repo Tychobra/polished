@@ -80,17 +80,8 @@ user_access_module <- function(input, output, session) {
 
     hold_app_name <- .global_sessions$app_name
 
-    if (is.null(.global_sessions$api_key)) {
-      app_users <- get_app_users(
-        .global_sessions$conn,
-        hold_app_name
-      )
-      last_active_times <- get_last_active_session_time(
-        .global_sessions$conn,
-        hold_app_name
-      )
-
-    } else {
+    out <- NULL
+    tryCatch({
 
       res <- httr::GET(
         url = paste0(.global_sessions$hosted_url, "/app-users"),
@@ -153,10 +144,18 @@ user_access_module <- function(input, output, session) {
       last_active_times <- last_active_times %>%
         mutate(last_sign_in_at = lubridate::force_tz(as.POSIXct(.data$last_sign_in_at), tzone = "UTC"))
 
-    }
+      out <- app_users %>%
+        left_join(last_active_times, by = 'user_uid')
 
-    app_users %>%
-      left_join(last_active_times, by = 'user_uid')
+    }, error = function(err) {
+
+      print("[polished] error")
+      print(err)
+
+      showToast("error", "Error retrieving app users from API")
+    })
+
+    out
   })
 
   users_table_prep <- reactiveVal(NULL)
@@ -345,31 +344,21 @@ user_access_module <- function(input, output, session) {
 
     tryCatch({
 
-      if (is.null(.global_sessions$api_key)) {
-        delete_app_user(
-          .global_sessions$conn,
+      res <- httr::DELETE(
+        url = paste0(.global_sessions$hosted_url, "/app-users"),
+        body = list(
+          user_uid = user_uid,
           app_uid = app_uid,
-          user_uid = user_uid
-        )
-      } else {
+          req_user_uid = session$userData$user()$user_uid
+        ),
+        httr::authenticate(
+          user = .global_sessions$api_key,
+          password = ""
+        ),
+        encode = "json"
+      )
 
-        res <- httr::DELETE(
-          url = paste0(.global_sessions$hosted_url, "/app-users"),
-          body = list(
-            user_uid = user_uid,
-            app_uid = app_uid
-          ),
-          httr::authenticate(
-            user = .global_sessions$api_key,
-            password = ""
-          ),
-          encode = "json"
-        )
-
-        httr::stop_for_status(res)
-
-      }
-
+      httr::stop_for_status(res)
 
       shinyFeedback::showToast("success", "User successfully deleted")
       users_trigger(users_trigger() + 1)
@@ -383,6 +372,7 @@ user_access_module <- function(input, output, session) {
 
   shiny::observeEvent(input$sign_in_as_btn_user_uid, {
     req(!.global_sessions$get_admin_mode())
+    hold_user <- session$userData$user()
 
     user_to_sign_in_as <- users() %>%
       filter(.data$user_uid == input$sign_in_as_btn_user_uid) %>%
@@ -398,8 +388,9 @@ user_access_module <- function(input, output, session) {
 
     # sign in as another user
     .global_sessions$set_signed_in_as(
-      session$userData$user()$session_uid,
-      user_to_sign_in_as
+      hold_user$session_uid,
+      user_to_sign_in_as,
+      user_uid = hold_user$user_uid
     )
 
     # to to the Shiny app

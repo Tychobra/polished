@@ -61,14 +61,15 @@ secure_server <- function(
       # attempt to find the signed in user.  If user is signed in, `global_user`
       # will be a list of user data.  If the user is not signed in, `global_user`
       # will be `NULL`
-      global_user <- .global_sessions$find(hashed_cookie)
-      query_list <- shiny::getQueryString(session)
+      query_list <- shiny::getQueryString()
+      page <- query_list$page
+      global_user <- .global_sessions$find(hashed_cookie, paste0("server:", page))
 
       if (is.null(global_user)) {
         # user is not signed in
 
         # if the user is not on the sign in page, redirect to sign in and reload
-        if (is.null(query_list$page) || query_list$page != "sign_in") {
+        if (is.null(page) || !identical(page, "sign_in")) {
           shiny::updateQueryString(
             queryString = paste0("?page=sign_in"),
             session = session,
@@ -88,7 +89,7 @@ secure_server <- function(
 
         # if the user somehow ends up on the sign_in page, redirect them to the
         # Shiny app and reload
-        if (!is.null(query_list$page) && query_list$page == "sign_in") {
+        if (!is.null(page) && identical(query_list$page, "sign_in")) {
           remove_query_string()
           session$reload()
         }
@@ -125,6 +126,7 @@ secure_server <- function(
 
       if (isTRUE(session$userData$user()$email_verified)) {
         query_list <- shiny::getQueryString()
+
         is_on_admin_page <- if (
           isTRUE(.global_sessions$get_admin_mode()) ||
           !is.null(query_list$page) && query_list$page == 'admin_panel') TRUE else FALSE
@@ -190,22 +192,25 @@ secure_server <- function(
 
     # custom app server.  Requires signed in user to access
     shiny::observeEvent(session$userData$user(), {
-      query_string <- shiny::getQueryString()
+      query_list <- shiny::getQueryString()
 
-      if (is.null(query_string$page) && session$userData$user()$email_verified &&
+      if (is.null(query_list$page) && session$userData$user()$email_verified &&
           isFALSE(.global_sessions$get_admin_mode())) {
-        session_uid <- session$userData$user()$session_uid
+        hold_user <- session$userData$user()
         server(input, output, session)
 
         # set the session from inactive to active
-        .global_sessions$set_active(session_uid)
+        #.global_sessions$set_active(session_uid)
 
         # set the session to inactive when the session ends
         shiny::onStop(fun = function() {
 
           tryCatch({
 
-            .global_sessions$set_inactive(session_uid)
+            .global_sessions$set_inactive(
+              session_uid = hold_user$session_uid,
+              user_uid = hold_user$user_uid
+            )
 
           }, catch = function(err) {
             print('error setting the session to incative')

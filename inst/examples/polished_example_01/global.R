@@ -1,28 +1,16 @@
 library(shiny)
+#detach("package:polished", unload=TRUE)
+#remotes::install_github('tychobra/polished', ref = 'fa9004208c54369b0288198f9e7fb60558f4147b')
 library(polished)
 library(config)
 
 
-
 app_config <- config::get()
-
-
-# isolate database credentials
-db_config <- app_config$db
-
-# create database connection
-db_conn <- DBI::dbConnect(
-  RPostgres::Postgres(),
-  dbname = db_config$dbname,
-  user = db_config$user,
-  host = db_config$host,
-  password = db_config$password
-)
-
 
 # configure polished
 global_sessions_config(
   app_name = "polished_example_01",
-  conn = db_conn,
+  api_key = app_config$api_key,
+  api_url = "http://localhost:8080",
   firebase_config = app_config$firebase
 )

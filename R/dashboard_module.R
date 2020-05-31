@@ -92,23 +92,17 @@ dashboard_module <- function(input, output, session) {
 
   #  Returns a data frame with 3 columns:
   # - "date" in the "America/New_York" time zone
-  # - "user_uid"
-  # - "n" the number of sessions
+  # - "daily_sessions" the daily number of sessions
+  # - "daily_users" the daily number of users
   #
   daily_user_sessions <- shiny::reactive({
-
     hold_app_uid = .global_sessions$app_name
 
     start_date <- lubridate::today(tzone = "America/New_York") - lubridate::days(30)
 
-    if (is.null(.global_sessions$api_key)) {
-      # find all sessions for this app
-      out <- get_daily_sessions(
-        .global_sessions$conn,
-        app_uid = hold_app_uid,
-        start_date = start_date,
-      )
-    } else {
+
+    out <- list()
+    tryCatch({
       res <- httr::GET(
         url = paste0(.global_sessions$hosted_url, "/daily-sessions"),
         query = list(
@@ -125,20 +119,18 @@ dashboard_module <- function(input, output, session) {
       out <- jsonlite::fromJSON(
         httr::content(res, "text", encoding = "UTF-8")
       )
+    })
 
-      if (length(out) == 0) {
-        out <- tibble::tibble(
-          date = as.Date(character(0)),
-          user_uid = character(0),
-          n = integer(0)
-        )
-      } else {
-        out <- out %>%
-          mutate(date = as.Date(date))
-      }
-
+    if (length(out) == 0) {
+      out <- tibble::tibble(
+        date = as.Date(character(0)),
+        daily_sessions = integer(0),
+        daily_users = integer(0)
+      )
+    } else {
+      out <- out %>%
+        mutate(date = as.Date(date))
     }
-
 
     out
   })
@@ -149,10 +141,7 @@ dashboard_module <- function(input, output, session) {
   daily_users <- reactive({
 
     daily_user_sessions() %>%
-      dplyr::distinct(.data$date, .data$user_uid) %>%
-      dplyr::group_by(.data$date) %>%
-      dplyr::summarize(n = dplyr::n()) %>%
-      dplyr::ungroup()
+      select(date, n = daily_users)
 
   })
 
@@ -163,7 +152,7 @@ dashboard_module <- function(input, output, session) {
     out <- mean(daily_users()$n) %>%
       round(1) %>%
       format(big.mark = ",")
-    
+
     if (out == "NaN") {
       out <- 0
     }
@@ -181,11 +170,10 @@ dashboard_module <- function(input, output, session) {
   mau_box_prep <- shiny::reactive({
     by_month <- daily_user_sessions() %>%
       dplyr::mutate(month_ = lubridate::month(.data$date)) %>%
-      dplyr::distinct(.data$month_, .data$user_uid) %>%
       dplyr::group_by(.data$month_) %>%
-      dplyr::summarize(n = dplyr::n()) %>%
+      dplyr::summarize(n = sum(daily_users)) %>%
       dplyr::ungroup()
-    
+
     out <- mean(by_month$n) %>%
       round(1) %>%
       format(big.mark = ",")
@@ -203,17 +191,14 @@ dashboard_module <- function(input, output, session) {
     mau_box_prep
   )
 
-  # calculate and format the Monthly Average Sessions for the value box
+  # calculate and format the Daily Average Sessions for the value box
   das_box_prep <- shiny::reactive({
     out <- daily_user_sessions() %>%
-      dplyr::group_by(.data$date) %>%
-      summarize(n_sessions = sum(n)) %>%
-      ungroup() %>%
-      pull("n_sessions") %>%
+      pull("daily_sessions") %>%
       mean() %>%
       round(1) %>%
       format(big.mark = ",")
-    
+
     if (out == "NaN") {
       out <- 0
     }
@@ -239,31 +224,23 @@ dashboard_module <- function(input, output, session) {
     valueFunc = function() {
       hold_app_uid = .global_sessions$app_name
 
-      if (is.null(.global_sessions$api_key)) {
-        out <- get_active_users(
-          .global_sessions$conn,
-          hold_app_uid
+      res <- httr::GET(
+        url = paste0(.global_sessions$hosted_url, "/active-users"),
+        query = list(
+          app_uid = hold_app_uid
+        ),
+        httr::authenticate(
+          user = .global_sessions$api_key,
+          password = ""
         )
+      )
 
-      } else {
-        res <- httr::GET(
-          url = paste0(.global_sessions$hosted_url, "/active-users"),
-          query = list(
-            app_uid = hold_app_uid
-          ),
-          httr::authenticate(
-            user = .global_sessions$api_key,
-            password = ""
-          )
-        )
+      httr::stop_for_status(res)
 
-        httr::stop_for_status(res)
-
-        out <- jsonlite::fromJSON(
-          httr::content(res, "text", encoding = "UTF-8")
-        ) %>%
-          tibble::as_tibble()
-      }
+      out <- jsonlite::fromJSON(
+        httr::content(res, "text", encoding = "UTF-8")
+      ) %>%
+        tibble::as_tibble()
 
       out
   })
