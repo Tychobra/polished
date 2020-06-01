@@ -235,7 +235,8 @@ Sessions <-  R6::R6Class(
             body = list(
               email = new_session$email,
               app_uid = self$app_name,
-              is_admin = FALSE
+              is_admin = FALSE,
+              req_user_uid = "00000000-0000-0000-0000-000000000000"
             ),
             httr::authenticate(
               user = .global_sessions$api_key,
