@@ -62,7 +62,7 @@ secure_ui <- function(
     user <- NULL
     if (!is.null(hashed_cookie) && length(hashed_cookie) > 0) {
       tryCatch({
-        user <- .global_sessions$find(hashed_cookie, paste0("ui:", page_query))
+        user <- .global_sessions$find(hashed_cookie, paste0("ui-", page_query))
       }, error = function(error) {
         print("sign_in_ui_1")
         print(error)

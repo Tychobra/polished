@@ -63,7 +63,7 @@ secure_server <- function(
       # will be `NULL`
       query_list <- shiny::getQueryString()
       page <- query_list$page
-      global_user <- .global_sessions$find(hashed_cookie, paste0("server:", page))
+      global_user <- .global_sessions$find(hashed_cookie, paste0("server-", page))
 
       if (is.null(global_user)) {
         # user is not signed in
