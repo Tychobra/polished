@@ -4,16 +4,14 @@
 \alias{sign_in_module_ui}
 \title{sign_in_module_ui}
 \usage{
-sign_in_module_ui(id, allow_register = TRUE)
+sign_in_module_ui(id, register_link = "First time user? Register here!")
 }
 \arguments{
 \item{id}{the Shiny module id}
 
-\item{allow_register}{default is `TRUE`.  Whether or not to show the
-"Not a Member? Register!" link.  This should only be set to `FALSE` if
-you are handling Firebase registration yourself e.g. your are automatically
-registering users via Firebase Admin or you are manually registering users
-via your Firebase project's web console.}
+\item{register_link}{default is "First time user? Register here!".  The text that
+will be used in the link to go to the user registration page.  Set to \code{NULL}
+if you don't want to use the registration page.}
 }
 \description{
 UI for the sign in and register panels

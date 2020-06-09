@@ -3,11 +3,9 @@
 #' UI for the sign in and register panels
 #'
 #' @param id the Shiny module id
-#' @param allow_register default is `TRUE`.  Whether or not to show the
-#' "Not a Member? Register!" link.  This should only be set to `FALSE` if
-#' you are handling Firebase registration yourself e.g. your are automatically
-#' registering users via Firebase Admin or you are manually registering users
-#' via your Firebase project's web console.
+#' @param register_link default is "First time user? Register here!".  The text that
+#' will be used in the link to go to the user registration page.  Set to \code{NULL}
+#' if you don't want to use the registration page.
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr
@@ -17,7 +15,7 @@
 #' @export
 #'
 #'
-sign_in_module_ui <- function(id, allow_register = TRUE) {
+sign_in_module_ui <- function(id, register_link = "First time user? Register here!") {
   ns <- shiny::NS(id)
 
   firebase_config <- .global_sessions$firebase_config
@@ -79,16 +77,16 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
       ),
       div(
         style = "text-align: center;",
-        if (allow_register) {
+        if (is.null(register_link)) {
+          list()
+        } else {
           list(
             hr(),
             shiny::actionLink(
               inputId = ns("go_to_register"),
-              label = "Not a member? Register!"
+              label = register_link
             )
           )
-        } else {
-          list()
         },
         br(),
         tags$button(
@@ -181,7 +179,7 @@ sign_in_module_ui <- function(id, allow_register = TRUE) {
         hr(),
         shiny::actionLink(
           inputId = ns("go_to_sign_in"),
-          label = "Already a member? Sign in!"
+          label = "Already a user? Sign in!"
         ),
         br(),
         br()
