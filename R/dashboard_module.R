@@ -16,6 +16,15 @@ dashboard_module_ui <- function(id) {
 
   tabItem(
     tabName = "dashboard",
+    shiny::tags$head(
+      shiny::tags$style(
+        paste0(
+          "#", ns('daily_users_chart'), " {
+            overflow: hidden;
+          }"
+        )
+      )
+    ),
     shiny::fluidRow(
       shiny::column(
         width = 9,
