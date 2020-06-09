@@ -324,7 +324,7 @@ dashboard_module <- function(input, output, session) {
       ) %>%
       apexcharter::ax_xaxis(
         type = 'datetime',
-        categories = dat$date_out
+        categories = dat$date
       ) %>%
       apexcharter::ax_stroke(show = TRUE, curve = "straight") %>%
       apexcharter::ax_dataLabels(enabled = FALSE) %>%
