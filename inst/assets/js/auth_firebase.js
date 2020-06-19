@@ -22,7 +22,7 @@ var auth_firebase = function auth_firebase(ns_prefix) {
   };
 
   $(document).on("click", "#".concat(ns_prefix, "submit_register"), function () {
-    var email = $("#".concat(ns_prefix, "register_email")).val().toLowerCase();
+    var email = $("#".concat(ns_prefix, "email")).val().toLowerCase();
     var password = $("#".concat(ns_prefix, "register_password")).val();
     var password_2 = $("#".concat(ns_prefix, "register_password_verify")).val();
 
@@ -71,6 +71,29 @@ var auth_firebase = function auth_firebase(ns_prefix) {
       loadingButtons.resetLoading("".concat(ns_prefix, "submit_sign_in"));
       toastr.error("Sign in Error: ".concat(error.message), null, toast_options);
       console.log("error: ", error);
+    });
+  });
+  $(document).on("shiny:sessioninitialized", function () {
+    console.log("i ran"); // check if the email address is already register
+
+    Shiny.addCustomMessageHandler("".concat(ns_prefix, "check_registered"), function (message) {
+      auth.fetchSignInMethodsForEmail(message.email).then(function (res) {
+        debugger;
+        var is_registered = false;
+
+        if (res.length > 0) {
+          is_registered = true;
+        }
+
+        Shiny.setInputValue("".concat(ns_prefix, "check_registered_res"), is_registered, {
+          priority: "event"
+        });
+      })["catch"](function (err) {
+        Shiny.setInputValue("".concat(ns_prefix, "check_registered_res"), err, {
+          priority: "event"
+        });
+        console.log("error: ", err);
+      });
     });
   });
 };

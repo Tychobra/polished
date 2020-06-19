@@ -36,7 +36,7 @@ const auth_firebase = (ns_prefix) => {
   }
 
   $(document).on("click", `#${ns_prefix}submit_register`, () => {
-    const email = $(`#${ns_prefix}register_email`).val().toLowerCase()
+    const email = $(`#${ns_prefix}email`).val().toLowerCase()
     const password = $(`#${ns_prefix}register_password`).val()
     const password_2 = $(`#${ns_prefix}register_password_verify`).val()
 
@@ -104,6 +104,34 @@ const auth_firebase = (ns_prefix) => {
 
   })
 
-}
+  $(document).on("shiny:sessioninitialized", () => {
+    console.log("i ran")
+    // check if the email address is already register
+    Shiny.addCustomMessageHandler(
+      `${ns_prefix}check_registered`,
+      (message) => {
 
+        auth.fetchSignInMethodsForEmail(message.email).then(res => {
+          debugger;
+
+          let is_registered = false
+          if (res.length > 0) {
+            is_registered = true
+          }
+
+          Shiny.setInputValue(`${ns_prefix}check_registered_res`, is_registered, { priority: "event" })
+
+        }).catch(err => {
+
+          Shiny.setInputValue(`${ns_prefix}check_registered_res`, err, { priority: "event" })
+          console.log("error: ", err)
+
+        })
+
+      }
+    )
+
+  })
+
+}
 
