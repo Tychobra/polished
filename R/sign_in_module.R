@@ -215,13 +215,20 @@ sign_in_module_ui <- function(id, register_link = "First time user? Register her
 sign_in_module <- function(input, output, session) {
   ns <- session$ns
 
+  go_to_registration_page <- function() {
+    # go to the user registration page
+    shinyjs::hide("sign_in_panel_top")
+    shinyjs::hide("sign_in_panel_bottom")
+    shinyjs::show("register_panel_top")
+    shinyjs::show("register_panel_bottom")
+  }
+
   # if query parameter "register" == TRUE, then go directly to registration page
   observe({
     query_string <- shiny::getQueryString()
 
     if (identical(query_string$register, "TRUE")) {
-      shinyjs::hide("sign_in_panel")
-      shinyjs::show("register_panel")
+      go_to_registration_page()
     }
   })
 
@@ -301,10 +308,7 @@ sign_in_module <- function(input, output, session) {
     } else if (isFALSE(is_registered)) {
 
       # go to the user registration page
-      shinyjs::hide("sign_in_panel_top")
-      shinyjs::hide("sign_in_panel_bottom")
-      shinyjs::show("register_panel_top")
-      shinyjs::show("register_panel_bottom")
+      go_to_registration_page()
 
       # open the passwords to continue user registration
       submit_continue_register_rv(submit_continue_register_rv() + 1)
@@ -327,10 +331,7 @@ sign_in_module <- function(input, output, session) {
 
 
   shiny::observeEvent(input$go_to_register, {
-    shinyjs::hide("sign_in_panel_top")
-    shinyjs::hide("sign_in_panel_bottom")
-    shinyjs::show("register_panel_top")
-    shinyjs::show("register_panel_bottom")
+    go_to_registration_page()
   })
 
   shiny::observeEvent(input$go_to_sign_in, {
