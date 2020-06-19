@@ -22,4 +22,4 @@ polished requires the [polishedapi](https://github.com/Tychobra/polishedapi).  T
 
 2. On Premise: Deploy the `polishedapi` on your own servers.  This naturally requires you to set up and maintain a database and API hosting server.
 
-If you want to use [polished.tech](https://polished.tech), go to the polished.tech website and follow the [Get Started](https://polished.tech/get-started) instructions.  If you want to deploy the polishedapi on premise, check out the [polishedapi README](https://github.com/Tychobra/polishedapi/blob/master/README.md).
+If you want to use [polished.tech](https://polished.tech), go to the polished.tech website and follow the [Get Started](https://polished.tech/docs/get-started) instructions.  If you want to deploy the polishedapi on premise, check out the [polishedapi README](https://github.com/Tychobra/polishedapi/blob/master/README.md).
