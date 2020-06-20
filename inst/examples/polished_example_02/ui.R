@@ -24,4 +24,10 @@ ui <- fluidPage(
   )
 )
 
-secure_ui(ui)
+secure_ui(
+  ui,
+  sign_in_page_ui = sign_in_ui_default(
+    sign_in_no_invite_module_ui("sign_in")
+  )
+)
+

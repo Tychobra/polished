@@ -24,4 +24,6 @@ ui <- fluidPage(
   )
 )
 
-secure_ui(ui)
+secure_ui(
+  ui
+)
