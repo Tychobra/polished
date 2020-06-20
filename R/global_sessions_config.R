@@ -17,6 +17,8 @@
 #' @param is_invite_required TRUE by default.  Whether or not to require the user to have an
 #' invite before registering/signing in
 #' @param api_url the API url.  Defaults to "https://api.polished.tech".
+#' @param sign_in_providers the sign in providers to enable.  Valid values are "google"
+#' and/or "email".
 #'
 #' @export
 #'
@@ -26,7 +28,11 @@ global_sessions_config <- function(
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
-  api_url = "https://api.polished.tech"
+  api_url = "https://api.polished.tech",
+  sign_in_providers = c(
+    "google",
+    "email"
+  )
 ) {
 
   .global_sessions$config(
@@ -35,7 +41,8 @@ global_sessions_config <- function(
     admin_mode = admin_mode,
     is_invite_required = is_invite_required,
     api_key = api_key,
-    api_url = api_url
+    api_url = api_url,
+    sign_in_providers = sign_in_providers
   )
 
 }

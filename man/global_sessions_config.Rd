@@ -10,7 +10,8 @@ global_sessions_config(
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
-  api_url = "https://api.polished.tech"
+  api_url = "https://api.polished.tech",
+  sign_in_providers = c("google", "email")
 )
 }
 \arguments{
@@ -35,6 +36,9 @@ Make sure to set `admin_mode` to FALSE before deploying your app.}
 invite before registering/signing in}
 
 \item{api_url}{the API url.  Defaults to "https://api.polished.tech".}
+
+\item{sign_in_providers}{the sign in providers to enable.  Valid values are "google"
+and/or "email".}
 }
 \description{
 configuration for global sessions

@@ -36,7 +36,8 @@ polished Sessions configuration function
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
-  api_url = "https://api.polished.tech"
+  api_url = "https://api.polished.tech",
+  sign_in_providers = c("google", "email")
 )}\if{html}{\out{</div>}}
 }
 

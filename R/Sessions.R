@@ -81,6 +81,7 @@ Sessions <-  R6::R6Class(
     firebase_config = NULL,
     is_invite_required = TRUE,
     api_key = NULL,
+    sign_in_providers = character(0),
     #' @description
     #' polished Sessions configuration function
     #'
@@ -96,7 +97,11 @@ Sessions <-  R6::R6Class(
       firebase_config = NULL,
       admin_mode = FALSE,
       is_invite_required = TRUE,
-      api_url = "https://api.polished.tech"
+      api_url = "https://api.polished.tech",
+      sign_in_providers = c(
+        "google",
+        "email"
+      )
     ) {
 
       if (!(length(app_name) == 1 && is.character(app_name))) {
@@ -107,9 +112,14 @@ Sessions <-  R6::R6Class(
         stop("invalid `api_url` argument passed to `global_sessions_config()`", call. = FALSE)
       }
 
+      if (!(length(sign_in_providers) >= 1 && is.character(sign_in_providers))) {
+        stop("invalid `sign_in_providers` argument passed to `global_sessions_config()`", call. = FALSE)
+      }
+
 
       self$api_key <- api_key
       self$hosted_url <- api_url
+      self$sign_in_providers <- sign_in_providers
 
       if (is.null(firebase_config)) {
         # set to the default polished Firebase project if app is using polished
