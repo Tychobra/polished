@@ -20,6 +20,7 @@ sign_in_no_invite_module_ui <- function(id) {
   providers <- .global_sessions$sign_in_providers
 
   email_ui <- tags$div(
+    id = ns("email_ui"),
     tags$div(
       id = ns("sign_in_panel"),
       htmltools::h1(
@@ -202,6 +203,11 @@ sign_in_no_invite_module_ui <- function(id) {
 #'
 sign_in_no_invite_module <- function(input, output, session) {
   ns <- session$ns
+
+  observeEvent(input$sign_in_with_email, {
+    shinyjs::show("email_ui")
+    shinyjs::hide("providers_ui")
+  })
 
   # if query parameter "register" == TRUE, then go directly to registration page
   shiny::observe({
