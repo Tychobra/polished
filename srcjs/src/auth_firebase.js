@@ -106,14 +106,12 @@ const auth_firebase = (ns_prefix) => {
   })
 
   $(document).on("shiny:sessioninitialized", () => {
-    console.log("i ran")
     // check if the email address is already register
     Shiny.addCustomMessageHandler(
       `${ns_prefix}check_registered`,
       (message) => {
 
         auth.fetchSignInMethodsForEmail(message.email).then(res => {
-          debugger;
 
           let is_registered = false
           if (res.length > 0) {
