@@ -133,7 +133,7 @@ const auth_firebase = (ns_prefix) => {
   })
 
 
-  // Google sign in
+  // Google Sign In
   const provider_google = new firebase.auth.GoogleAuthProvider();
 
   $(document).on("click", `#${ns_prefix}sign_in_with_google`, () => {
@@ -146,6 +146,7 @@ const auth_firebase = (ns_prefix) => {
     })
   })
 
+  // Microsoft Sign In
   var provider_microsoft = new firebase.auth.OAuthProvider('microsoft.com');
   $(document).on("click", `#${ns_prefix}sign_in_with_microsoft`, () => {
     auth.signInWithPopup(provider_microsoft).then(function(result) {

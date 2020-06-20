@@ -17,146 +17,165 @@ sign_in_no_invite_module_ui <- function(id) {
   ns <- shiny::NS(id)
 
   firebase_config <- .global_sessions$firebase_config
+  providers <- .global_sessions$sign_in_providers
 
-  fluidPage(
-    fluidRow(
-      shinyjs::useShinyjs(),
-      shinyFeedback::useShinyFeedback(feedback = FALSE),
-      shiny::div(
-        id = ns("sign_in_panel"),
-        class = "auth_panel",
-        htmltools::h1(
-          class = "text-center",
-          style = "padding-top: 0;",
-          "Sign In"
-        ),
-        br(),
-        email_input(
-          inputId = ns("email"),
-          label = tagList(icon("envelope"), "email"),
-          value = ""
-        ),
-        br(),
+  email_ui <- tags$div(
+    tags$div(
+      id = ns("sign_in_panel"),
+      htmltools::h1(
+        class = "text-center",
+        style = "padding-top: 0;",
+        "Sign In"
+      ),
+      br(),
+      email_input(
+        inputId = ns("email"),
+        label = tagList(icon("envelope"), "email"),
+        value = ""
+      ),
+      br(),
+      div(
+        id = ns("sign_in_password"),
         div(
-          id = ns("sign_in_password"),
-          div(
-            class = "form-group",
-            style = "width: 100%;",
-            tags$label(
-              tagList(icon("unlock-alt"), "password"),
-              `for` = "password"
-            ),
-            tags$input(
-              id = ns("password"),
-              type = "password",
-              class = "form-control",
-              value = ""
-            )
+          class = "form-group",
+          style = "width: 100%;",
+          tags$label(
+            tagList(icon("unlock-alt"), "password"),
+            `for` = "password"
           ),
-          br(),
-          shinyFeedback::loadingButton(
-            ns("submit_sign_in"),
-            label = "Sign In",
-            class = "btn btn-primary btn-lg text-center",
-            style = "width: 100%",
-            loadingLabel = "Authenticating...",
-            loadingClass = "btn btn-primary btn-lg text-center",
-            loadingStyle = "width: 100%"
+          tags$input(
+            id = ns("password"),
+            type = "password",
+            class = "form-control",
+            value = ""
           )
         ),
-        tags$div(
-          style = "text-align: center;",
-          tags$hr(),
-          shiny::actionLink(
-            inputId = ns("go_to_register"),
-            label = "Not a member? Register!"
-          ),
-          tags$br(),
-          tags$button(
-            class = 'btn btn-link btn-small',
-            id = ns("reset_password"),
-            "Forgot your password?"
-          )
+        br(),
+        shinyFeedback::loadingButton(
+          ns("submit_sign_in"),
+          label = "Sign In",
+          class = "btn btn-primary btn-lg text-center",
+          style = "width: 100%",
+          loadingLabel = "Authenticating...",
+          loadingClass = "btn btn-primary btn-lg text-center",
+          loadingStyle = "width: 100%"
         )
       ),
-
-
-
-      shinyjs::hidden(div(
-        id = ns("register_panel"),
-        class = "auth_panel",
-        tags$h1(
-          class = "text-center",
-          style = "padding-top: 0;",
-          "Register"
+      tags$div(
+        style = "text-align: center;",
+        tags$hr(),
+        shiny::actionLink(
+          inputId = ns("go_to_register"),
+          label = "Not a member? Register!"
         ),
+        tags$br(),
+        tags$button(
+          class = 'btn btn-link btn-small',
+          id = ns("reset_password"),
+          "Forgot your password?"
+        )
+      )
+    ),
+
+
+
+    shinyjs::hidden(div(
+      id = ns("register_panel"),
+      tags$h1(
+        class = "text-center",
+        style = "padding-top: 0;",
+        "Register"
+      ),
+      tags$br(),
+      tags$div(
+        class = "form-group",
+        style = "width: 100%",
+        email_input(
+          inputId = ns("register_email"),
+          label = tagList(shiny::icon("envelope"), "email"),
+          value = ""
+        )
+      ),
+      tags$div(
+        id = ns("register_passwords"),
         tags$br(),
         tags$div(
           class = "form-group",
           style = "width: 100%",
-          email_input(
-            inputId = ns("register_email"),
-            label = tagList(shiny::icon("envelope"), "email"),
+          tags$label(
+            tagList(icon("unlock-alt"), "password"),
+            `for` = ns("register_password")
+          ),
+          tags$input(
+            id = ns("register_password"),
+            type = "password",
+            class = "form-control",
             value = ""
           )
         ),
+        tags$br(),
         tags$div(
-          id = ns("register_passwords"),
-          tags$br(),
-          tags$div(
-            class = "form-group",
-            style = "width: 100%",
-            tags$label(
-              tagList(icon("unlock-alt"), "password"),
-              `for` = ns("register_password")
-            ),
-            tags$input(
-              id = ns("register_password"),
-              type = "password",
-              class = "form-control",
-              value = ""
-            )
+          class = "form-group shiny-input-container",
+          style = "width: 100%",
+          tags$label(
+            tagList(shiny::icon("unlock-alt"), "verify password"),
+            `for` = ns("register_password_verify")
           ),
-          tags$br(),
-          tags$div(
-            class = "form-group shiny-input-container",
-            style = "width: 100%",
-            tags$label(
-              tagList(shiny::icon("unlock-alt"), "verify password"),
-              `for` = ns("register_password_verify")
-            ),
-            tags$input(
-              id = ns("register_password_verify"),
-              type = "password",
-              class = "form-control",
-              value = ""
-            )
-          ),
-          tags$br(),
-          tags$div(
-            style = "text-align: center;",
-            shinyFeedback::loadingButton(
-              ns("submit_register"),
-              label = "Register",
-              class = "btn btn-primary btn-lg",
-              style = "width: 100%",
-              loadingLabel = "Registering...",
-              loadingClass = "btn btn-primary btn-lg text-center",
-              loadingStyle = "width: 100%"
-            )
+          tags$input(
+            id = ns("register_password_verify"),
+            type = "password",
+            class = "form-control",
+            value = ""
           )
         ),
+        tags$br(),
         tags$div(
-          style = "text-align: center",
-          tags$hr(),
-          shiny::actionLink(
-            inputId = ns("go_to_sign_in"),
-            label = "Already a member? Sign in!"
-          ),
-          tags$br()
+          style = "text-align: center;",
+          shinyFeedback::loadingButton(
+            ns("submit_register"),
+            label = "Register",
+            class = "btn btn-primary btn-lg",
+            style = "width: 100%",
+            loadingLabel = "Registering...",
+            loadingClass = "btn btn-primary btn-lg text-center",
+            loadingStyle = "width: 100%"
+          )
         )
+      ),
+      tags$div(
+        style = "text-align: center",
+        tags$hr(),
+        shiny::actionLink(
+          inputId = ns("go_to_sign_in"),
+          label = "Already a member? Sign in!"
+        ),
+        tags$br()
       )
-    )),
+    ))
+  )
+
+  if (length(providers) == 1 && providers == "email") {
+    ui_out <- email_ui
+  } else {
+    hold_providers_ui <- providers_ui(ns)
+
+    email_ui <- shinyjs::hidden(email_ui)
+
+    ui_out <-  tagList(
+      hold_providers_ui,
+      email_ui
+    )
+
+  }
+  fluidPage(
+    fluidRow(
+      shinyjs::useShinyjs(),
+      shinyFeedback::useShinyFeedback(feedback = FALSE),
+      tags$div(
+        class = "auth_panel",
+        ui_out
+      )
+    ),
 
     firebase_dependencies(),
     firebase_init(firebase_config),
@@ -164,7 +183,7 @@ sign_in_no_invite_module_ui <- function(id) {
     tags$script(src = "polish/js/auth_all_no_invite.js?version=2"),
     tags$script(paste0("auth_all_no_invite('", ns(''), "')")),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-    tags$script(src = "polish/js/auth_firebase.js?version=5"),
+    tags$script(src = "polish/js/auth_firebase.js?version=6"),
     tags$script(paste0("auth_firebase('", ns(''), "')"))
   )
 }
