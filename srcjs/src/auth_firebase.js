@@ -158,5 +158,17 @@ const auth_firebase = (ns_prefix) => {
     })
   })
 
+  // Facebook Sign In
+  var provider_facebook = new firebase.auth.FacebookAuthProvider();
+  $(document).on("click", `#${ns_prefix}sign_in_with_facebook`, () => {
+    auth.signInWithPopup(provider_facebook).then(function(result) {
+
+      return send_token_to_shiny(result.user)
+    }).catch(function(error) {
+
+      console.log(error)
+    })
+  })
+
 }
 

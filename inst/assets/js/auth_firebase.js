@@ -97,7 +97,7 @@ var auth_firebase = function auth_firebase(ns_prefix) {
         console.log("error: ", err);
       });
     });
-  }); // Google sign in
+  }); // Google Sign In
 
   var provider_google = new firebase.auth.GoogleAuthProvider();
   $(document).on("click", "#".concat(ns_prefix, "sign_in_with_google"), function () {
@@ -106,10 +106,20 @@ var auth_firebase = function auth_firebase(ns_prefix) {
     })["catch"](function (error) {
       console.log(error);
     });
-  });
+  }); // Microsoft Sign In
+
   var provider_microsoft = new firebase.auth.OAuthProvider('microsoft.com');
   $(document).on("click", "#".concat(ns_prefix, "sign_in_with_microsoft"), function () {
     auth.signInWithPopup(provider_microsoft).then(function (result) {
+      return send_token_to_shiny(result.user);
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  }); // Facebook Sign In
+
+  var provider_facebook = new firebase.auth.FacebookAuthProvider();
+  $(document).on("click", "#".concat(ns_prefix, "sign_in_with_facebook"), function () {
+    auth.signInWithPopup(provider_facebook).then(function (result) {
       return send_token_to_shiny(result.user);
     })["catch"](function (error) {
       console.log(error);

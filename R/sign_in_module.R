@@ -192,7 +192,10 @@ sign_in_module_ui <- function(
     ui_out <- email_ui
   } else {
 
-    hold_providers_ui <- providers_ui(ns)
+    hold_providers_ui <- providers_ui(
+      ns,
+      providers
+    )
 
     email_ui <- shinyjs::hidden(email_ui)
 

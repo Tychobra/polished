@@ -158,7 +158,10 @@ sign_in_no_invite_module_ui <- function(id) {
   if (length(providers) == 1 && providers == "email") {
     ui_out <- email_ui
   } else {
-    hold_providers_ui <- providers_ui(ns)
+    hold_providers_ui <- providers_ui(
+      ns,
+      providers
+    )
 
     email_ui <- shinyjs::hidden(email_ui)
 
