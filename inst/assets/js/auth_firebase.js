@@ -103,8 +103,9 @@ var auth_firebase = function auth_firebase(ns_prefix) {
   $(document).on("click", "#".concat(ns_prefix, "sign_in_with_google"), function () {
     auth.signInWithPopup(provider_google).then(function (result) {
       return send_token_to_shiny(result.user);
-    })["catch"](function (error) {
+    })["catch"](function (err) {
       console.log(error);
+      toastr.error("Sign in Error: ".concat(err.message), null, toast_options);
     });
   }); // Microsoft Sign In
 
@@ -112,8 +113,9 @@ var auth_firebase = function auth_firebase(ns_prefix) {
   $(document).on("click", "#".concat(ns_prefix, "sign_in_with_microsoft"), function () {
     auth.signInWithPopup(provider_microsoft).then(function (result) {
       return send_token_to_shiny(result.user);
-    })["catch"](function (error) {
-      console.log(error);
+    })["catch"](function (err) {
+      console.log(err);
+      toastr.error("Sign in Error: ".concat(err.message), null, toast_options);
     });
   }); // Facebook Sign In
 
@@ -121,8 +123,9 @@ var auth_firebase = function auth_firebase(ns_prefix) {
   $(document).on("click", "#".concat(ns_prefix, "sign_in_with_facebook"), function () {
     auth.signInWithPopup(provider_facebook).then(function (result) {
       return send_token_to_shiny(result.user);
-    })["catch"](function (error) {
-      console.log(error);
+    })["catch"](function (err) {
+      console.log(err);
+      toastr.error("Sign in Error: ".concat(err.message), null, toast_options);
     });
   });
 };

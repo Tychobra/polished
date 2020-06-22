@@ -140,9 +140,11 @@ const auth_firebase = (ns_prefix) => {
     auth.signInWithPopup(provider_google).then(function(result) {
 
       return send_token_to_shiny(result.user)
-    }).catch(function(error) {
+    }).catch(function(err) {
 
       console.log(error)
+
+      toastr.error(`Sign in Error: ${err.message}`, null, toast_options)
     })
   })
 
@@ -152,9 +154,11 @@ const auth_firebase = (ns_prefix) => {
     auth.signInWithPopup(provider_microsoft).then(function(result) {
 
       return send_token_to_shiny(result.user)
-    }).catch(function(error) {
+    }).catch(err => {
 
-      console.log(error)
+      console.log(err)
+
+      toastr.error(`Sign in Error: ${err.message}`, null, toast_options)
     })
   })
 
@@ -164,9 +168,11 @@ const auth_firebase = (ns_prefix) => {
     auth.signInWithPopup(provider_facebook).then(function(result) {
 
       return send_token_to_shiny(result.user)
-    }).catch(function(error) {
+    }).catch(err => {
 
-      console.log(error)
+      console.log(err)
+
+      toastr.error(`Sign in Error: ${err.message}`, null, toast_options)
     })
   })
 
