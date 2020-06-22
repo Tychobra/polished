@@ -2,16 +2,7 @@ library(shiny)
 library(polished)
 library(config)
 
-
-
 app_config <- config::get()
-
-
-# isolate database credentials
-db_config <- app_config$db
-
-# create database connection
-
 
 # configure polished
 global_sessions_config(
