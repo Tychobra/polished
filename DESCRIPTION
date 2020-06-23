@@ -1,11 +1,14 @@
 Package: polished
 Type: Package
-Title: Authentication and Administration for Shiny apps
-Version: 0.0.5.9003
-Author: person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre"))
+Title: Authentication and Administration for Shiny Apps
+Version: 0.1.0
+Authors@R: person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre"))
 Maintainer: Andy Merlino <andy.merlino@tychobra.com>
 Description: Authentication and Administration for Shiny apps.
 License: file LICENSE
+URL: https://github.com/tychobra/polished,
+    https://polished.tech
+BugReports: https://github.com/tychobra/polished/issues
 Encoding: UTF-8
 LazyData: true
 Imports:

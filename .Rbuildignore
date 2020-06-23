@@ -5,3 +5,4 @@ srcjs/
 .travis.yml
 rsconnect/
 .firebaserc
+cran-comments.md
