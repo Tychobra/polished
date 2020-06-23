@@ -38,7 +38,7 @@ invite before registering/signing in}
 \item{api_url}{the API url.  Defaults to "https://api.polished.tech".}
 
 \item{sign_in_providers}{the sign in providers to enable.  Valid values are "google"
-and/or "email".}
+"email", "microsoft", and/or "facebook". Defaults to \code{c("google", "email")}.}
 }
 \description{
 configuration for global sessions

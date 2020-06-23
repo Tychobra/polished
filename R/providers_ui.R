@@ -1,6 +1,16 @@
 
 
-#' @noRd
+#' providers_ui
+#'
+#' Creates the html UI of the "Sign in with *" buttons.
+#'
+#' @param ns the module namespce function
+#'
+#' @inheritParams global_sessions_config
+#'
+#' @export
+#'
+#'
 providers_ui <- function(ns, sign_in_providers = c(
   "google",
   "email"

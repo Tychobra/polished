@@ -18,7 +18,7 @@
 #' invite before registering/signing in
 #' @param api_url the API url.  Defaults to "https://api.polished.tech".
 #' @param sign_in_providers the sign in providers to enable.  Valid values are "google"
-#' and/or "email".
+#' "email", "microsoft", and/or "facebook". Defaults to \code{c("google", "email")}.
 #'
 #' @export
 #'
