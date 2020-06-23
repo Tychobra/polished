@@ -2,7 +2,7 @@
 #'
 #' @param id the Shiny module id
 #' @param custom_admin_ui Either `NULL`, the default, or a list of 2 elements containing custom
-#' ui to add addtional `shinydashboard` tabs to the Polished admin panel.
+#' ui to add additional `shinydashboard` tabs to the Polished admin panel.
 #' @param options list of html elements to customize branding of Admin Panel.
 #' @param include_go_to_shiny_app_button whether or not to include the button to go to
 #' the Shiny app.  This argument is set to `FALSE` when `polished` is in "admin_mode".
