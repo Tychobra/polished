@@ -112,6 +112,14 @@ sign_in_module_ui <- function(
           class = 'btn btn-link btn-small',
           id = ns("reset_password"),
           "Forgot your password?"
+        ),
+        tags$hr(),
+        shiny::actionButton(
+          ns("back_to_providers"),
+          label = "Back to Sign In Providers",
+          icon = icon('arrow-left'),
+          width = '100%',
+          class = "btn btn-primary btn-lg text-center"
         )
       )
     ),
@@ -247,6 +255,10 @@ sign_in_module <- function(input, output, session) {
     shinyjs::hide("providers_ui")
   })
 
+  observeEvent(input$back_to_providers, {
+    shinyjs::show("providers_ui")
+    shinyjs::hide("email_ui")
+  })
 
   go_to_registration_page <- function() {
     # go to the user registration page

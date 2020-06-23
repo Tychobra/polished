@@ -74,6 +74,14 @@ sign_in_no_invite_module_ui <- function(id) {
           class = 'btn btn-link btn-small',
           id = ns("reset_password"),
           "Forgot your password?"
+        ),
+        tags$hr(),
+        shiny::actionButton(
+          ns("back_to_providers"),
+          label = "Back to Sign In Providers",
+          icon = icon('arrow-left'),
+          width = '100%',
+          class = "btn btn-primary btn-lg text-center"
         )
       )
     ),
@@ -210,6 +218,11 @@ sign_in_no_invite_module <- function(input, output, session) {
   observeEvent(input$sign_in_with_email, {
     shinyjs::show("email_ui")
     shinyjs::hide("providers_ui")
+  })
+  
+  observeEvent(input$back_to_providers, {
+    shinyjs::show("providers_ui")
+    shinyjs::hide("email_ui")
   })
 
   # if query parameter "register" == TRUE, then go directly to registration page
