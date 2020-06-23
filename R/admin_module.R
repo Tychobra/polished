@@ -132,7 +132,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
     sidebar,
     body,
     title = "Polished",
-    skin = "black"
+    skin = "black-light"
   )
 }
 
