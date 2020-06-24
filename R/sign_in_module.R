@@ -221,7 +221,7 @@ sign_in_module_ui <- function(
     firebase_dependencies(),
     firebase_init(firebase_config),
     tags$script(src = "polish/js/toast_options.js"),
-    tags$script(src = "polish/js/auth_all.js"),
+    tags$script(src = "polish/js/auth_all?version=1.js"),
     tags$script(paste0("auth_all('", ns(''), "')")),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
     tags$script(src = "polish/js/auth_firebase.js?version=6"),
