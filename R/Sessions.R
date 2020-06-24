@@ -132,6 +132,16 @@ Sessions <-  R6::R6Class(
           projectId = "polished-hosted"
         )
 
+        # print warning message to user that they need to create their own Firebase
+        # project for polished before deploying to production.
+        warning("
+          You are using the default Firebase project with polished.
+          You must confiure polished with your own Firebase project
+          before using polished in production.
+          Instruction here - https://polished.tech/docs/firebase-setup
+        ")
+
+
       } else {
         if (length(firebase_config) != 3 ||
             !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
