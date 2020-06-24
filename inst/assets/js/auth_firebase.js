@@ -104,7 +104,7 @@ var auth_firebase = function auth_firebase(ns_prefix) {
     auth.signInWithPopup(provider_google).then(function (result) {
       return send_token_to_shiny(result.user);
     })["catch"](function (err) {
-      console.log(error);
+      console.log(err);
       toastr.error("Sign in Error: ".concat(err.message), null, toast_options);
     });
   }); // Microsoft Sign In

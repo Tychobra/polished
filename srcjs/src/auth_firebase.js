@@ -142,7 +142,7 @@ const auth_firebase = (ns_prefix) => {
       return send_token_to_shiny(result.user)
     }).catch(function(err) {
 
-      console.log(error)
+      console.log(err)
 
       toastr.error(`Sign in Error: ${err.message}`, null, toast_options)
     })
