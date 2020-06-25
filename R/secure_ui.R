@@ -81,9 +81,17 @@ secure_ui <- function(
         if (is.null(sign_in_page_ui)) {
 
           # go to default sign in page
-          page_out <- tagList(
-            sign_in_ui_default()
-          )
+          if (isTRUE(.global_sessions$is_invite_required)) {
+            page_out <- tagList(
+              sign_in_ui_default()
+            )
+          } else {
+            page_out <- tagList(
+              sign_in_ui_default(
+                sign_in_module = sign_in_no_invite_module_ui("sign_in")
+              )
+            )
+          }
 
         } else {
 
