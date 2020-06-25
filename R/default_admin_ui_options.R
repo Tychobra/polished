@@ -21,12 +21,13 @@ default_admin_ui_options <- function() {
     ),
 
 
-    sidebar_branding = tags$a(
-      href = "https://www.tychobra.com/",
-      tags$img(
+    sidebar_branding = menuItem(
+      text = tags$img(
         style = "position: fixed; bottom: 0; left: 0; width: 230px;",
         src = "polish/images/tychobra_logo_blue_co_name.png"
-      )
+      ),
+      href = "https://www.tychobra.com/",
+      expandedName = NULL
     ),
 
     browser_tab_icon = tags$link(
