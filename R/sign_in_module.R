@@ -36,7 +36,7 @@ sign_in_module_ui <- function(
         class = "text-center",
         style = "padding-top: 0;",
         "Sign In"
-      ),
+      )
     ),
     shinyjs::hidden(div(
       id = ns("register_panel_top"),
@@ -46,7 +46,7 @@ sign_in_module_ui <- function(
         style = "padding-top: 0;",
         "Register"
       ),
-      br(),
+      br()
     )),
 
 
