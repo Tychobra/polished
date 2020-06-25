@@ -53,9 +53,14 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
           tabName = "user_access",
           icon = shiny::icon("users")
         ),
-
-
-        options$sidebar_branding
+        menuItem(
+          text = tags$img(
+            style = "position: fixed; bottom: 0; left: 0; width: 230px;",
+            src = "polish/images/tychobra_logo_blue_co_name.png"
+          ),
+          href = "https://www.tychobra.com/",
+          expandedName = NULL
+        )
       )
     )
   } else {
@@ -75,7 +80,14 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 
         custom_admin_ui$menu_items,
 
-        options$sidebar_branding
+        menuItem(
+          text = tags$img(
+            style = "position: fixed; bottom: 0; left: 0; width: 230px;",
+            src = "polish/images/tychobra_logo_blue_co_name.png"
+          ),
+          href = "https://www.tychobra.com/",
+          expandedName = NULL
+        )
       )
     )
   }
