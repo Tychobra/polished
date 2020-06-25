@@ -20,6 +20,15 @@ default_admin_ui_options <- function() {
       htmltools::tags$head(htmltools::tags$title("Polished"))
     ),
 
+
+    sidebar_branding = tags$a(
+      href = "https://www.tychobra.com/",
+      tags$img(
+        style = "position: fixed; bottom: 0; left: 0; width: 230px;",
+        src = "polish/images/tychobra_logo_blue_co_name.png"
+      )
+    ),
+
     browser_tab_icon = tags$link(
       rel = "shortcut icon",
       href = "polish/images/polished_icon.png"
