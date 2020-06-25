@@ -104,6 +104,46 @@ const auth_firebase = (ns_prefix) => {
     })
 
   })
+  
+  // Multi-factor authentication w/ Email & Phone
+  // 1) Set up reCAPTCHA verifier
+  window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(`${ns_prefix}submit_sign_in`, {
+    'size': 'invisible',
+    'callback': function(response) {
+      // reCAPTCHA solved, you can proceed with phoneAuthProvider.verifyPhoneNumber(...).
+        // Need to show modal where user enters phone number 
+      onSolvedRecaptcha();
+    }
+  });
+  
+  // 2) Enroll 2nd factor (e.g. Phone)
+  var appVerifier = new firebase.auth.RecaptchaVerifier(container);
+    user.multiFactor.getSession().then(function(multiFactorSession) {
+      // Specify the phone number and pass the MFA session.
+      var phoneInfoOptions = {
+        phoneNumber: phoneNumber,
+        session: multiFactorSession
+      };
+      var phoneAuthProvider = new firebase.auth.PhoneAuthProvider();
+      // Send SMS verification code.
+      return phoneAuthProvider.verifyPhoneNumber(
+          phoneInfoOptions, appVerifier);
+    })
+    .then(function(verificationId) {
+      // Ask user for the verification code.
+      var cred = firebase.auth.PhoneAuthProvider.credential(verificationId, verificationCode);
+      var multiFactorAssertion = firebase.auth.PhoneMultiFactorGenerator.assertion(cred);
+      // Complete enrollment.
+      return user.multiFactor.enroll(multiFactorAssertion, mfaDisplayName);
+  });
+  
+  // Reference: https://cloud.google.com/identity-platform/docs/web/mfa#enrolling_a_second_factor
+  // Options:
+  //    1) Register w/ 2nd factor
+  //      - Offer option to register w/ 2nd factor
+  //      - Offer optoin to add 2nd factor later on (in-app)
+  //    2) Sign-in w/ 2nd factor 
+  
 
   $(document).on("shiny:sessioninitialized", () => {
     // check if the email address is already register
@@ -142,7 +182,7 @@ const auth_firebase = (ns_prefix) => {
       return send_token_to_shiny(result.user)
     }).catch(function(err) {
 
-      console.log(err)
+      console.log(error)
 
       toastr.error(`Sign in Error: ${err.message}`, null, toast_options)
     })
