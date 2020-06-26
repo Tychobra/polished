@@ -387,6 +387,7 @@ dashboard_module <- function(input, output, session) {
   
   shiny::observe({
     shiny::req(length(poll_global_users()) > 0)
+    out <- poll_global_users()
     
     if (is.null(active_users_table_prep())) {
       active_users_table_prep(out)
