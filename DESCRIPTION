@@ -5,7 +5,7 @@ Version: 0.1.0
 Authors@R: person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre"))
 Maintainer: Andy Merlino <andy.merlino@tychobra.com>
 Description: Authentication and Administration for Shiny apps.
-License: file LICENSE
+License: GPL-3 + file LICENSE
 URL: https://github.com/tychobra/polished,
     https://polished.tech
 BugReports: https://github.com/tychobra/polished/issues
