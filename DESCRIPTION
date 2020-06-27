@@ -2,7 +2,9 @@ Package: polished
 Type: Package
 Title: Authentication and Administration for Shiny Apps
 Version: 0.1.0
-Authors@R: person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre"))
+Authors@R: c(
+  person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre")),
+  person("Patrick", "Howard", email = "patrick.howard@tychobra.com", role = c("aut")))
 Maintainer: Andy Merlino <andy.merlino@tychobra.com>
 Description: Authentication and Administration for Shiny apps.
 License: GPL-3 + file LICENSE
