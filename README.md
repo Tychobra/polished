@@ -7,10 +7,7 @@ Authentication and user administration for Shiny apps.  `polished` provides a wa
 
 ### Live Demo
 
-Sign in to a [Live Demo Shiny App](https://tychobra.shinyapps.io/polished_example_01) with the following:
-
- - email: demo@tychobra.com
- - password: polished
+Register and sign in to a [live Shiny app using polished](https://tychobra.shinyapps.io/polished_example_01).
 
 ### Polished API
 
