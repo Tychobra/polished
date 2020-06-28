@@ -16,10 +16,8 @@ Duration: 40.7s
 Maintainer: 'Andy Merlino <andy.merlino@tychobra.com>'
   
   New submission
-  
-  Non-FOSS package license (file LICENSE)
 
-0 errors ✓ | 0 warnings ✓ | 2 note x
+0 errors ✓ | 0 warnings ✓ | 1 note x
 
 ## Reverse dependencies
 

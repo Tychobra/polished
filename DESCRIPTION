@@ -7,7 +7,7 @@ Authors@R: c(
   person("Patrick", "Howard", email = "patrick.howard@tychobra.com", role = c("aut")))
 Maintainer: Andy Merlino <andy.merlino@tychobra.com>
 Description: Authentication and Administration for Shiny apps.
-License: GPL-3 + file LICENSE
+License: MIT + file LICENSE
 URL: https://github.com/tychobra/polished,
     https://polished.tech
 BugReports: https://github.com/tychobra/polished/issues
