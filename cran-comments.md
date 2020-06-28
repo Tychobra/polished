@@ -12,11 +12,6 @@ Duration: 40.7s
   them becoming unavailable.  Move as many as possible to Suggests and
   use conditionally.
 
-> checking CRAN incoming feasibility ... NOTE
-Maintainer: 'Andy Merlino <andy.merlino@tychobra.com>'
-  
-  New submission
-
 0 errors ✓ | 0 warnings ✓ | 1 note x
 
 ## Reverse dependencies
