@@ -25,5 +25,7 @@ server functionality.}
 for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.html} for more information.}
 }
 \description{
-secure_server
+This function is used to secure your 'shiny' app's server function.  Make sure to pass
+your 'shiny' app's server function as the first argument to \code{secure_server()} at
+the bottom of your 'shiny' app's "server.R" file.
 }

@@ -1,4 +1,8 @@
-#' Secure the Shiny Application UI
+#' secure_ui
+#'
+#' This function is used to secure your 'shiny' app's UI.  Make sure to pass
+#' your 'shiny' app's UI as the first argument to \code{secure_ui()} at
+#' the bottom of your 'shiny' app's "ui.R" file.
 #'
 #' @param ui UI of the application.
 #' @param sign_in_page_ui Either `NULL`, the default, or the HTML, CSS, and JavaScript

@@ -1,5 +1,9 @@
 #' secure_server
 #'
+#' This function is used to secure your 'shiny' app's server function.  Make sure to pass
+#' your 'shiny' app's server function as the first argument to \code{secure_server()} at
+#' the bottom of your 'shiny' app's "server.R" file.
+#'
 #' @param server A Shiny server function (e.g \code{function(input, output, session) {}})
 #' @param custom_admin_server Either \code{NULL}, the default, or a Shiny server function containing your custom admin
 #' server functionality.

@@ -13,5 +13,5 @@ dashboard_module_ui(id)
 the UI for the "Dashboard" page of the "Admin Panel".
 }
 \description{
-The 'shiny' module UI for the Dashboard page of the Admin Panel.
+The 'shiny' module UI for the "Dashboard" page of the "Admin Panel".
 }

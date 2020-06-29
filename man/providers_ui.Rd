@@ -12,6 +12,9 @@ providers_ui(ns, sign_in_providers = c("google", "email"))
 \item{sign_in_providers}{the sign in providers to enable.  Valid values are "google"
 "email", "microsoft", and/or "facebook". Defaults to \code{c("google", "email")}.}
 }
+\value{
+the html UI of the "Sign in with *" buttons.
+}
 \description{
 Creates the html UI of the "Sign in with *" buttons.
 }

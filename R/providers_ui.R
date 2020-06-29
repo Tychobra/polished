@@ -10,6 +10,7 @@
 #'
 #' @export
 #'
+#' @return the html UI of the "Sign in with *" buttons.
 #'
 providers_ui <- function(ns, sign_in_providers = c(
   "google",

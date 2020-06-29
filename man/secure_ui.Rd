@@ -2,7 +2,7 @@
 % Please edit documentation in R/secure_ui.R
 \name{secure_ui}
 \alias{secure_ui}
-\title{Secure the Shiny Application UI}
+\title{secure_ui}
 \usage{
 secure_ui(
   ui,
@@ -30,5 +30,7 @@ ui to take admins from the custom Shiny app to the Admin panel.}
 Secured Shiny app ui
 }
 \description{
-Secure the Shiny Application UI
+This function is used to secure your 'shiny' app's UI.  Make sure to pass
+your 'shiny' app's UI as the first argument to \code{secure_ui()} at
+the bottom of your 'shiny' app's "ui.R" file.
 }

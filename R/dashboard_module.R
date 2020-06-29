@@ -1,6 +1,6 @@
 #' dashboard_module_ui
 #'
-#' The 'shiny' module UI for the Dashboard page of the Admin Panel.
+#' The 'shiny' module UI for the "Dashboard" page of the "Admin Panel".
 #'
 #' @param id the module id
 #'
@@ -86,7 +86,7 @@ dashboard_module_ui <- function(id) {
 
 #' dashboard_module
 #'
-#' The 'shiny' module server logic for the Dashboard page of the Admin Panel.
+#' The 'shiny' module server logic for the "Dashboard" page of the "Admin Panel".
 #'
 #' @param input the Shiny server input
 #' @param output the Shiny server output
