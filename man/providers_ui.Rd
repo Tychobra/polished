@@ -7,7 +7,7 @@
 providers_ui(ns, sign_in_providers = c("google", "email"))
 }
 \arguments{
-\item{ns}{the module namespce function}
+\item{ns}{the 'shiny' namespce function created with \code{shiny::NS()}.}
 
 \item{sign_in_providers}{the sign in providers to enable.  Valid values are "google"
 "email", "microsoft", and/or "facebook". Defaults to \code{c("google", "email")}.}

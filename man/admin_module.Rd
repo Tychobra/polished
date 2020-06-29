@@ -14,5 +14,5 @@ admin_module(input, output, session)
 \item{session}{the Shiny server session}
 }
 \description{
-admin_module
+The 'shiny' module server logic for the Admin Panel.
 }

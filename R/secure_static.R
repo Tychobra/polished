@@ -1,7 +1,7 @@
 #' secure_static
 #'
 #' Secure a static html page.  \code{secure_static()} can be used to secure any html
-#' page using polished.  It is often used to add polished to ".Rmd" htmloutput
+#' page using 'polished'.  It is often used to add 'polished' to ".Rmd" htmloutput
 #' and flexdashboards.
 #'
 #' @param html_file_path the path the to html file.  See the details for more info.

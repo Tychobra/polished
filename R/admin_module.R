@@ -1,5 +1,7 @@
 #' admin_ui
 #'
+#' The 'shiny' module UI for the Admin Panel.
+#'
 #' @param id the Shiny module id
 #' @param custom_admin_ui Either `NULL`, the default, or a list of 2 elements containing custom
 #' ui to add additional `shinydashboard` tabs to the Polished admin panel.
@@ -14,7 +16,6 @@
 #' @importFrom shinyFeedback useShinyFeedback
 #' @importFrom shinydashboardPlus dashboardHeaderPlus dashboardPagePlus
 #'
-#' @export
 #'
 admin_module_ui <- function(id, custom_admin_ui = NULL,
   options = default_admin_ui_options(),
@@ -139,13 +140,14 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 
 #' admin_module
 #'
+#' The 'shiny' module server logic for the Admin Panel.
+#'
 #' @param input the Shiny server input
 #' @param output the Shiny server output
 #' @param session the Shiny server session
 #'
 #' @importFrom shiny callModule observeEvent
 #'
-#' @export
 #'
 admin_module <- function(input, output, session) {
   ns <- session$ns

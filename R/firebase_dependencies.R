@@ -1,13 +1,12 @@
-#' load the Firebase dependencies into the ui
-#'
+#' load the Firebase JavaScript dependencies into the ui
 #'
 #' @param services character vector of Firebase services to load into the ui.  Valid strings are
 #' "auth", "firestore", "functions", "messaging", and "storage"
-#' @param firebase_version character string of the Firebase version.  Defaults to 7.14.0.
+#' @param firebase_version character string of the Firebase version.  Defaults to 7.15.5.
 #'
 #' @export
 #'
-#' @return the html <script> tabs with the firebase dependencies
+#' @return the html <script> tags for the Firebase JavaScript dependencies
 #'
 #' @importFrom htmltools tagList tags
 #'
@@ -15,7 +14,7 @@
 #'
 #' firebase_dependencies()
 #'
-firebase_dependencies <- function(services = c("auth"), firebase_version = "7.14.0") {
+firebase_dependencies <- function(services = c("auth"), firebase_version = "7.15.5") {
 
   services <- unique(services)
 

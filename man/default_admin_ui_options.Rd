@@ -2,7 +2,7 @@
 % Please edit documentation in R/default_admin_ui_options.R
 \name{default_admin_ui_options}
 \alias{default_admin_ui_options}
-\title{options for the Admin UI}
+\title{default options for the Admin UI}
 \usage{
 default_admin_ui_options()
 }
@@ -10,5 +10,5 @@ default_admin_ui_options()
 a list of html for branding the Admin UI
 }
 \description{
-options for the Admin UI
+default options for the Admin UI
 }

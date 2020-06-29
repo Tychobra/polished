@@ -14,5 +14,5 @@ profile_module(input, output, session)
 \item{session}{the Shiny server session}
 }
 \description{
-profile module server
+The server logic to accompany the  \code{\link{profile_module_ui}}.
 }

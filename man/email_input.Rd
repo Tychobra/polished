@@ -2,7 +2,7 @@
 % Please edit documentation in R/email_input.R
 \name{email_input}
 \alias{email_input}
-\title{email input}
+\title{email_input}
 \usage{
 email_input(inputId, label, value = "", width = NULL, placeholder = NULL)
 }
@@ -19,6 +19,6 @@ email_input(inputId, label, value = "", width = NULL, placeholder = NULL)
 into the control. Internet Explorer 8 and 9 do not support this option.}
 }
 \description{
-set the "type" of the input tag to "email" rather than "text" to get the
-correct email input browser behavior
+This is a replica of 'shiny::textInput()' with the html input "type"
+attribute set to "email" rather than "text".
 }

@@ -14,5 +14,5 @@ dashboard_module(input, output, session)
 \item{session}{the Shiny server session}
 }
 \description{
-dashboard_module
+The 'shiny' module server logic for the Dashboard page of the Admin Panel.
 }

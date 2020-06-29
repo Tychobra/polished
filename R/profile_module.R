@@ -1,4 +1,7 @@
-#' verify email page ui
+#' Profile Module UI
+#'
+#' Generates the UI for the a user profile dropdown button to be used with the
+#' 'shinydashboard' package.
 #'
 #' @param id the Shiny module id
 #' @param other_lis additional <li> html tags to place between the email address
@@ -44,6 +47,8 @@ profile_module_ui <- function(id, other_lis = NULL) {
 }
 
 #' profile module server
+#'
+#' The server logic to accompany the  \code{\link{profile_module_ui}}.
 #'
 #' @param input the Shiny server input
 #' @param output the Shiny server output

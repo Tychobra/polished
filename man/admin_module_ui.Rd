@@ -23,5 +23,5 @@ ui to add additional `shinydashboard` tabs to the Polished admin panel.}
 the Shiny app.  This argument is set to `FALSE` when `polished` is in "admin_mode".}
 }
 \description{
-admin_ui
+The 'shiny' module UI for the Admin Panel.
 }

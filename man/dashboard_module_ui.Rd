@@ -10,5 +10,5 @@ dashboard_module_ui(id)
 \item{id}{the module id}
 }
 \description{
-dashboard_module_ui
+The 'shiny' module UI for the Dashboard page of the Admin Panel.
 }

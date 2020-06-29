@@ -2,21 +2,21 @@
 % Please edit documentation in R/firebase_dependencies.R
 \name{firebase_dependencies}
 \alias{firebase_dependencies}
-\title{load the Firebase dependencies into the ui}
+\title{load the Firebase JavaScript dependencies into the ui}
 \usage{
-firebase_dependencies(services = c("auth"), firebase_version = "7.14.0")
+firebase_dependencies(services = c("auth"), firebase_version = "7.15.5")
 }
 \arguments{
 \item{services}{character vector of Firebase services to load into the ui.  Valid strings are
 "auth", "firestore", "functions", "messaging", and "storage"}
 
-\item{firebase_version}{character string of the Firebase version.  Defaults to 7.14.0.}
+\item{firebase_version}{character string of the Firebase version.  Defaults to 7.15.5.}
 }
 \value{
-the html <script> tabs with the firebase dependencies
+the html <script> tags for the Firebase JavaScript dependencies
 }
 \description{
-load the Firebase dependencies into the ui
+load the Firebase JavaScript dependencies into the ui
 }
 \examples{
 

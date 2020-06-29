@@ -16,7 +16,7 @@ a Shiny app object
 }
 \description{
 Secure a static html page.  \code{secure_static()} can be used to secure any html
-page using polished.  It is often used to add polished to ".Rmd" htmloutput
+page using 'polished'.  It is often used to add 'polished' to ".Rmd" htmloutput
 and flexdashboards.
 }
 \details{

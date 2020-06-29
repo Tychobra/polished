@@ -1,6 +1,6 @@
 #' admin_button_ui
 #'
-#' The default UI for the admin button
+#' The default UI for the admin button 'shiny' module.
 #'
 #' @param id the Shiny module id.
 #'
@@ -8,7 +8,6 @@
 #'
 #' @return admin button UI
 #'
-#' @export
 #'
 admin_button_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -24,7 +23,7 @@ admin_button_ui <- function(id) {
 
 #' admin_button
 #'
-#' the server logic for the admin button
+#' The server logic for the admin button 'shiny' module.
 #'
 #' @param input the Shiny server input
 #' @param output the Shiny server output

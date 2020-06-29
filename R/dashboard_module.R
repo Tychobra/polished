@@ -1,5 +1,7 @@
 #' dashboard_module_ui
 #'
+#' The 'shiny' module UI for the Dashboard page of the Admin Panel.
+#'
 #' @param id the module id
 #'
 #' @importFrom shiny NS fluidRow column
@@ -10,7 +12,6 @@
 #' @importFrom shinyFeedback valueBoxModuleUI
 #' @importFrom htmlwidgets JS
 #'
-#' @export
 dashboard_module_ui <- function(id) {
   ns <- NS(id)
 
@@ -83,6 +84,8 @@ dashboard_module_ui <- function(id) {
 
 #' dashboard_module
 #'
+#' The 'shiny' module server logic for the Dashboard page of the Admin Panel.
+#'
 #' @param input the Shiny server input
 #' @param output the Shiny server output
 #' @param session the Shiny server session
@@ -95,7 +98,6 @@ dashboard_module_ui <- function(id) {
 #' @importFrom DT renderDT datatable
 #' @importFrom shinyFeedback valueBoxModule
 #'
-#' @export
 dashboard_module <- function(input, output, session) {
   ns <- session$ns
 

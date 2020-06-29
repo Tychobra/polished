@@ -1,8 +1,8 @@
-#' options for the Admin UI
+#' default options for the Admin UI
+#'
 #'
 #' @return a list of html for branding the Admin UI
 #'
-#' @export
 #'
 default_admin_ui_options <- function() {
   list(

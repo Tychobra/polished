@@ -4,7 +4,7 @@
 #'
 #' Creates the html UI of the "Sign in with *" buttons.
 #'
-#' @param ns the module namespce function
+#' @param ns the 'shiny' namespce function created with \code{shiny::NS()}.
 #'
 #' @inheritParams global_sessions_config
 #'

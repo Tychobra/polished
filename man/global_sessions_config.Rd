@@ -43,3 +43,16 @@ invite before registering/signing in}
 \description{
 configuration for global sessions
 }
+\examples{
+
+\dontrun{
+# global.R
+
+global_sessions_config(
+  app_name = "<your app name>",
+  api_key = "<your API key>"
+)
+
+}
+
+}

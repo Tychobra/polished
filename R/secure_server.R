@@ -1,12 +1,12 @@
 #' secure_server
 #'
-#' @param server A Shiny server function (e.g `function(input, output, session) {}`)
-#' @param custom_admin_server Either NULL, the default, or a Shiny server function containing your custom admin
+#' @param server A Shiny server function (e.g \code{function(input, output, session) {}})
+#' @param custom_admin_server Either \code{NULL}, the default, or a Shiny server function containing your custom admin
 #' server functionality.
-#' @param custom_sign_in_server Either NULL, the default, or a Shiny module server containing your custom
+#' @param custom_sign_in_server Either \code{NULL}, the default, or a Shiny module server containing your custom
 #' sign in server logic.
-#' @param allow_reconnect argument to pass to Shiny's `session$allowReconnect()` function. Defaults to
-#' `FALSE`.  Set to `TRUE` to allow reconnect with shiny-server and Rstudio Connect.  Set to "force"
+#' @param allow_reconnect argument to pass to the 'shiny' \code{session$allowReconnect()} function. Defaults to
+#' \code{FALSE}.  Set to \code{TRUE} to allow reconnect with shiny-server and Rstudio Connect.  Set to "force"
 #' for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.html} for more information.
 #'
 #' @export
@@ -14,9 +14,6 @@
 #' @importFrom shiny observeEvent getQueryString callModule
 #' @importFrom digest digest
 #'
-#' @return session session object with new reactive session$userData$current_user which
-#' is set to NULL if user is not signed in or a list with user data if the user is
-#' signed in
 #'
 secure_server <- function(
   server,

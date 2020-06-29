@@ -13,5 +13,5 @@ admin_button_ui(id)
 admin button UI
 }
 \description{
-The default UI for the admin button
+The default UI for the admin button 'shiny' module.
 }

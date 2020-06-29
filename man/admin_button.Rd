@@ -14,5 +14,5 @@ admin_button(input, output, session)
 \item{session}{the Shiny server session}
 }
 \description{
-the server logic for the admin button
+The server logic for the admin button 'shiny' module.
 }

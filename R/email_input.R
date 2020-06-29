@@ -1,7 +1,7 @@
-#' email input
+#' email_input
 #'
-#' set the "type" of the input tag to "email" rather than "text" to get the
-#' correct email input browser behavior
+#' This is a replica of 'shiny::textInput()' with the html input "type"
+#' attribute set to "email" rather than "text".
 #'
 #' @param inputId The input slot that will be used to access the value.
 #' @param label Display label for the control, or NULL for no label.

@@ -22,6 +22,18 @@
 #'
 #' @export
 #'
+#' @examples
+#'
+#' \dontrun{
+#' # global.R
+#'
+#' global_sessions_config(
+#'   app_name = "<your app name>",
+#'   api_key = "<your API key>"
+#' )
+#'
+#' }
+#'
 global_sessions_config <- function(
   app_name,
   api_key,
