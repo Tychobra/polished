@@ -9,7 +9,6 @@
 #' @param existing_users reactive data frame of all users of this app.  This is used to check that the user
 #' does not add a user that already exists.
 #'
-#' @export
 #'
 #' @importFrom shiny reactive observeEvent showModal modalDialog modalButton removeModal
 #' @importFrom shinyWidgets pickerInput

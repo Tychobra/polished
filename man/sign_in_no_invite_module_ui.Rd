@@ -10,6 +10,8 @@ sign_in_no_invite_module_ui(id)
 \item{id}{the Shiny module id}
 }
 \description{
-UI for the sign in and register panels.  User is not required to have an invite
-to sign in and register.
+UI for the sign in and registration pages. \code{sign_in_no_invite_module} does not
+require your users to be invited to your 'shiny' app before registering and signing
+in.  See \code{\link{sign_in_module}} if you wish to limit access to only invited
+users.
 }

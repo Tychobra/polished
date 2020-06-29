@@ -1,11 +1,13 @@
 #' sign_in_module_ui
 #'
-#' UI for the sign in and register panels
+#' UI for the sign in and register pages when a user invite is required to register and
+#' sign in.  See \code{\link{sing_in_no_invite_module}} if you do not require your
+#' users to sign in and register to access your 'shiny' app.
 #'
 #' @param id the Shiny module id
-#' @param register_link default is "First time user? Register here!".  The text that
-#' will be used in the link to go to the user registration page.  Set to \code{NULL}
-#' if you don't want to use the registration page.
+#' @param register_link The text that will be displayed in the link to go to the
+#' user registration page.  The default is "First time user? Register here!".
+#' Set to \code{NULL} if you don't want to use the registration page.
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr

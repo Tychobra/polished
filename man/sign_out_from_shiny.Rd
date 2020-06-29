@@ -10,5 +10,9 @@ sign_out_from_shiny(session = shiny::getDefaultReactiveDomain())
 \item{session}{the Shiny session}
 }
 \description{
-sign_out_from_shiny
+Call this function to sign a user out of your 'shiny' app.  This function should
+be called inside the server function of your 'shiny' app.  See
+\url{https://github.com/Tychobra/polished/blob/master/inst/examples/polished_example_01/server.R}
+For an example of this function being called after the user clicks a "Sign Out"
+button.
 }

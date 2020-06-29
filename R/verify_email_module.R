@@ -6,7 +6,6 @@
 #' @importFrom shiny fluidPage fluidRow column
 #' @importFrom shinyFeedback useShinyFeedback
 #'
-#' @export
 verify_email_module_ui <- function(id) {
   ns <- NS(id)
 
@@ -46,8 +45,6 @@ verify_email_module_ui <- function(id) {
 #' @param session the Shiny server session
 #'
 #' @importFrom shiny observeEvent
-#'
-#' @export
 #'
 #'
 verify_email_module <- function(input, output, session) {

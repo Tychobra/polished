@@ -1,11 +1,15 @@
 #' sign_in_ui_default
 #'
-#' @param sign_in_module UI module for the sign-in page
-#' @param color hex color for the background and button
-#' @param company_name your company name
+#' Default styling for the sign in and registration pages.  Update the \code{sign_in_ui_default()}
+#' arguments with your brand and colors to quickly style the sign in and registration
+#' pages to match your brand.
+#'
+#' @param sign_in_module UI module for the sign in and registration pages.
+#' @param color hex color for the background and button.
+#' @param company_name your company name.
 #' @param logo_top html for logo to go above the sign in panel.
 #' @param logo_bottom html for the logo below the sign in panel.
-#' @param icon_href the url/path to the browser tab icon
+#' @param icon_href the url/path to the browser tab icon.
 #'
 #' @export
 #'

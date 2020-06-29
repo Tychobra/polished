@@ -1,9 +1,11 @@
 #' sign_in_no_invite_module_ui
 #'
-#' UI for the sign in and register panels.  User is not required to have an invite
-#' to sign in and register.
+#' UI for the sign in and registration pages. \code{sign_in_no_invite_module} does not
+#' require your users to be invited to your 'shiny' app before registering and signing
+#' in.  See \code{\link{sign_in_module}} if you wish to limit access to only invited
+#' users.
 #'
-#' @param id the Shiny module id
+#' @inheritParams sign_in_module_ui
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr

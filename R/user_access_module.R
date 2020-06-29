@@ -9,7 +9,6 @@
 #' @importFrom DT DTOutput
 #'
 #'
-#' @export
 user_access_module_ui <- function(id) {
   ns <- shiny::NS(id)
 
@@ -68,7 +67,6 @@ user_access_module_ui <- function(id) {
 #' @importFrom purrr map_chr
 #' @importFrom lubridate force_tz
 #'
-#' @export
 #'
 user_access_module <- function(input, output, session) {
   ns <- session$ns

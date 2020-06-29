@@ -18,21 +18,23 @@ sign_in_ui_default(
 )
 }
 \arguments{
-\item{sign_in_module}{UI module for the sign-in page}
+\item{sign_in_module}{UI module for the sign in and registration pages.}
 
-\item{color}{hex color for the background and button}
+\item{color}{hex color for the background and button.}
 
-\item{company_name}{your company name}
+\item{company_name}{your company name.}
 
 \item{logo_top}{html for logo to go above the sign in panel.}
 
 \item{logo_bottom}{html for the logo below the sign in panel.}
 
-\item{icon_href}{the url/path to the browser tab icon}
+\item{icon_href}{the url/path to the browser tab icon.}
 }
 \value{
 the UI for the sign in page
 }
 \description{
-sign_in_ui_default
+Default styling for the sign in and registration pages.  Update the \code{sign_in_ui_default()}
+arguments with your brand and colors to quickly style the sign in and registration
+pages to match your brand.
 }

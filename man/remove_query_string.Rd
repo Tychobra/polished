@@ -10,5 +10,6 @@ remove_query_string(session = shiny::getDefaultReactiveDomain())
 \item{session}{the Shiny session}
 }
 \description{
-Remove the entire query string
+Remove the entire query string from the url.  This function should be called
+inside the server function of your 'shiny' app.
 }

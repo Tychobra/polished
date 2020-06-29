@@ -1,6 +1,7 @@
 #' remove_query_string
 #'
-#' Remove the entire query string
+#' Remove the entire query string from the url.  This function should be called
+#' inside the server function of your 'shiny' app.
 #'
 #' @param session the Shiny session
 #'
@@ -27,8 +28,6 @@ remove_query_string <- function(session = shiny::getDefaultReactiveDomain()) {
 #' @importFrom dplyr filter pull %>%
 #' @importFrom tidyr separate
 #' @importFrom tibble tibble
-#'
-#' @export
 #'
 #' @examples
 #' cookies <- "cookie_name=cookie-value; cookie_name_2=cookie-value-2; cookie_name_3=cookie-with=sign"
