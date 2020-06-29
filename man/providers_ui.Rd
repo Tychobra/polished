@@ -2,12 +2,12 @@
 % Please edit documentation in R/providers_ui.R
 \name{providers_ui}
 \alias{providers_ui}
-\title{providers_ui}
+\title{UI for the Firebase authentication providers buttons}
 \usage{
 providers_ui(ns, sign_in_providers = c("google", "email"))
 }
 \arguments{
-\item{ns}{the 'shiny' namespce function created with \code{shiny::NS()}.}
+\item{ns}{the 'shiny' namespace function created with \code{shiny::NS()}.}
 
 \item{sign_in_providers}{the sign in providers to enable.  Valid values are "google"
 "email", "microsoft", and/or "facebook". Defaults to \code{c("google", "email")}.}
@@ -16,5 +16,7 @@ providers_ui(ns, sign_in_providers = c("google", "email"))
 the html UI of the "Sign in with *" buttons.
 }
 \description{
-Creates the html UI of the "Sign in with *" buttons.
+Creates the html UI of the "Sign in with *" buttons.  These buttons are only
+necessary if you enable social sign in via the \code{sign_in_providers} argument
+passed to \code{\link{global_sessions_config}}.
 }

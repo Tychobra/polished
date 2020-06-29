@@ -46,7 +46,7 @@ profile_module_ui <- function(id, other_lis = NULL) {
   )
 }
 
-#' profile module server
+#' Profile Module Server
 #'
 #' The server logic to accompany the  \code{\link{profile_module_ui}}.
 #'

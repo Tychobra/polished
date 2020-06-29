@@ -2,7 +2,7 @@
 % Please edit documentation in R/sign_out_from_shiny.R
 \name{sign_out_from_shiny}
 \alias{sign_out_from_shiny}
-\title{sign_out_from_shiny}
+\title{Sign our from your 'shiny' app}
 \usage{
 sign_out_from_shiny(session = shiny::getDefaultReactiveDomain())
 }

@@ -1,4 +1,4 @@
-#' sign_in_ui_default
+#' Default UI styles for the sign-in pages
 #'
 #' Default styling for the sign in and registration pages.  Update the \code{sign_in_ui_default()}
 #' arguments with your brand and colors to quickly style the sign in and registration

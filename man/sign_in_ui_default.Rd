@@ -2,7 +2,7 @@
 % Please edit documentation in R/sign_in_ui_default.R
 \name{sign_in_ui_default}
 \alias{sign_in_ui_default}
-\title{sign_in_ui_default}
+\title{Default UI styles for the sign-in pages}
 \usage{
 sign_in_ui_default(
   sign_in_module = sign_in_module_ui("sign_in"),

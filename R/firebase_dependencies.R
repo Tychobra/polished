@@ -1,6 +1,10 @@
-#' load the Firebase JavaScript dependencies into the ui
+#' Load the Firebase JavaScript dependencies into the UI
 #'
-#' @param services character vector of Firebase services to load into the ui.  Valid strings are
+#' Under the hood, 'polished' uses Firebase JavaScript dependencies to handle user
+#' user authentication.  This function loads the required Firebase JavaScript dependencies
+#' in the the UI of your 'shiny' app.
+#'
+#' @param services character vector of Firebase services to load into the UI.  Valid strings are
 #' "auth", "firestore", "functions", "messaging", and "storage"
 #' @param firebase_version character string of the Firebase version.  Defaults to 7.15.5.
 #'

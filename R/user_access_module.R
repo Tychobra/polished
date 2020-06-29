@@ -8,6 +8,7 @@
 #' @importFrom htmltools br tags
 #' @importFrom DT DTOutput
 #'
+#' @noRd
 #'
 user_access_module_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -67,6 +68,7 @@ user_access_module_ui <- function(id) {
 #' @importFrom purrr map_chr
 #' @importFrom lubridate force_tz
 #'
+#' @noRd
 #'
 user_access_module <- function(input, output, session) {
   ns <- session$ns

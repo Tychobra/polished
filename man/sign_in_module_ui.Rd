@@ -2,7 +2,7 @@
 % Please edit documentation in R/sign_in_module.R
 \name{sign_in_module_ui}
 \alias{sign_in_module_ui}
-\title{sign_in_module_ui}
+\title{UI for the sign in and register pages}
 \usage{
 sign_in_module_ui(id, register_link = "First time user? Register here!")
 }

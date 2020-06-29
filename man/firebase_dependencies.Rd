@@ -2,12 +2,12 @@
 % Please edit documentation in R/firebase_dependencies.R
 \name{firebase_dependencies}
 \alias{firebase_dependencies}
-\title{load the Firebase JavaScript dependencies into the ui}
+\title{Load the Firebase JavaScript dependencies into the UI}
 \usage{
 firebase_dependencies(services = c("auth"), firebase_version = "7.15.5")
 }
 \arguments{
-\item{services}{character vector of Firebase services to load into the ui.  Valid strings are
+\item{services}{character vector of Firebase services to load into the UI.  Valid strings are
 "auth", "firestore", "functions", "messaging", and "storage"}
 
 \item{firebase_version}{character string of the Firebase version.  Defaults to 7.15.5.}
@@ -16,7 +16,9 @@ firebase_dependencies(services = c("auth"), firebase_version = "7.15.5")
 the html <script> tags for the Firebase JavaScript dependencies
 }
 \description{
-load the Firebase JavaScript dependencies into the ui
+Under the hood, 'polished' uses Firebase JavaScript dependencies to handle user
+user authentication.  This function loads the required Firebase JavaScript dependencies
+in the the UI of your 'shiny' app.
 }
 \examples{
 

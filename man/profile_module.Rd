@@ -2,7 +2,7 @@
 % Please edit documentation in R/profile_module.R
 \name{profile_module}
 \alias{profile_module}
-\title{profile module server}
+\title{Profile Module Server}
 \usage{
 profile_module(input, output, session)
 }

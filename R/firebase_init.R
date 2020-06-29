@@ -1,10 +1,13 @@
-#' firebase_init
+#' Initialize Firebase
+#'
+#' Executes a couple lines of JavaScript to initialize Firebase.  This function should be
+#' called in your 'shiny' UI immediately after \code{\link{firebase_dependencies}}.
 #'
 #' @param firebase_config list of firebase configuration
 #'
 #' @export
 #'
-#' @return a character string of JavaScript code defining firebaseConfig
+#' @return a character string of JavaScript code to initialize Firebase
 #'
 #' @importFrom htmltools tagList tags
 #'

@@ -1,15 +1,15 @@
-#' admin_module_ui
+#' The UI for the "Admin Panel" 'shinydashboard'
 #'
 #' The 'shiny' module UI for the Admin Panel.
 #'
 #' @param id the Shiny module id
-#' @param custom_admin_ui Either `NULL`, the default, or a list of 2 elements containing custom
-#' ui to add additional `shinydashboard` tabs to the Polished admin panel.
-#' @param options list of html elements to customize branding of Admin Panel.  Valid
+#' @param custom_admin_ui Either \code{NULL}, the default, or a list of 2 elements containing custom
+#' UI to add additional 'shinydashboard' tabs to the 'polished' "Admin Panel".
+#' @param options list of html elements to customize branding of "Admin Panel".  Valid
 #' list element names are "title", "sidebar_branding", and "browser_tab_icon".  See
 #' \code{\link{default_admin_ui_options}} for an example.
 #' @param include_go_to_shiny_app_button whether or not to include the button to go to
-#' the Shiny app.  This argument is set to `FALSE` when `polished` is in "admin_mode".
+#' the Shiny app.  This argument is set to \code{FALSE} when 'polished' is in "admin_mode".
 #'
 #' @importFrom shiny NS icon
 #' @importFrom shinydashboard dashboardSidebar dashboardBody sidebarMenu menuItem tabItems
@@ -19,6 +19,8 @@
 #' @importFrom shinydashboardPlus dashboardHeaderPlus dashboardPagePlus
 #'
 #' @return the UI for the "Admin Panel"
+#'
+#' @noRd
 #'
 admin_module_ui <- function(id, custom_admin_ui = NULL,
   options = default_admin_ui_options(),
@@ -141,7 +143,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 }
 
 
-#' admin_module
+#' The server logic for the "Admin Panel" 'shinydashboard'
 #'
 #' The 'shiny' module server logic for the Admin Panel.
 #'
@@ -151,6 +153,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 #'
 #' @importFrom shiny callModule observeEvent
 #'
+#' @noRd
 #'
 admin_module <- function(input, output, session) {
   ns <- session$ns

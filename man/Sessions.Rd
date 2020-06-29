@@ -4,8 +4,8 @@
 \alias{Sessions}
 \title{R6 class to track polished sessions}
 \description{
-An instance of this class handles the polished user sessions for each Shiny
-app using polished.  The Shiny developer should not need to interact with
+An instance of this class handles the 'polished' user sessions for each 'shiny'
+app using 'polished'.  The 'shiny' developer should not need to interact with
 this class directly.
 }
 \section{Methods}{

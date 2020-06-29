@@ -2,7 +2,7 @@
 % Please edit documentation in R/global_sessions_config.R
 \name{global_sessions_config}
 \alias{global_sessions_config}
-\title{configuration for global sessions}
+\title{Configuration for global sessions}
 \usage{
 global_sessions_config(
   app_name,
@@ -41,7 +41,10 @@ invite before registering/signing in}
 "email", "microsoft", and/or "facebook". Defaults to \code{c("google", "email")}.}
 }
 \description{
-configuration for global sessions
+This is the primary function for configuring 'polished'.  It configures your app's instance of the
+\code{Sessions} class that manages your user's 'polished' sessions.  Call this function in
+your "global.R" file.  See \url{https://github.com/Tychobra/polished/blob/master/inst/examples/polished_example_01/global.R}
+for a complete example.
 }
 \examples{
 
