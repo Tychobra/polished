@@ -1,4 +1,4 @@
-#' sign_out_from_shiny
+#' Sign our from your 'shiny' app
 #'
 #' Call this function to sign a user out of your 'shiny' app.  This function should
 #' be called inside the server function of your 'shiny' app.  See

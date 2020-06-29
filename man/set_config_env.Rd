@@ -2,7 +2,7 @@
 % Please edit documentation in R/set_config_env.R
 \name{set_config_env}
 \alias{set_config_env}
-\title{set_config_env}
+\title{Automatically set the config environment}
 \usage{
 set_config_env(override = NULL)
 }

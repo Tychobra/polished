@@ -1,5 +1,9 @@
-#' configuration for global sessions
+#' Configuration for global sessions
 #'
+#' This is the primary function for configuring 'polished'.  It configures your app's instance of the
+#' \code{Sessions} class that manages your user's 'polished' sessions.  Call this function in
+#' your "global.R" file.  See \url{https://github.com/Tychobra/polished/blob/master/inst/examples/polished_example_01/global.R}
+#' for a complete example.
 #'
 #' @param app_name the name of the app.
 #' @param api_key the API key. Either from polished.tech or your on premise polished API

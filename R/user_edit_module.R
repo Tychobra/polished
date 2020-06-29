@@ -14,6 +14,8 @@
 #' @importFrom shinyWidgets pickerInput
 #' @importFrom shinyFeedback showToast
 #'
+#' @noRd
+#'
 user_edit_module <- function(input, output, session,
   modal_title,
   user_to_edit,

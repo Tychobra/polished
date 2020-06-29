@@ -2,7 +2,7 @@
 % Please edit documentation in R/sign_in_module.R
 \name{sign_in_module}
 \alias{sign_in_module}
-\title{sign_in}
+\title{Server logic for the sign in and register pages}
 \usage{
 sign_in_module(input, output, session)
 }
@@ -14,5 +14,5 @@ sign_in_module(input, output, session)
 \item{session}{the Shiny session}
 }
 \description{
-sign_in
+This server logic accompanies the \code{\link{sign_in_module_ui}}.
 }

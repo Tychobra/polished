@@ -2,7 +2,7 @@
 % Please edit documentation in R/secure_server.R
 \name{secure_server}
 \alias{secure_server}
-\title{secure_server}
+\title{Secure your 'shiny' app's server}
 \usage{
 secure_server(
   server,

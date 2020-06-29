@@ -1,4 +1,4 @@
-#' set_config_env
+#' Automatically set the config environment
 #'
 #' Determines if the app is deployed to a server or running locally, and adjusts
 #' the config environment to "production" or "default" respectively.  This function

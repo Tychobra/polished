@@ -1,6 +1,6 @@
-#' email_input
+#' A 'shiny' email input
 #'
-#' This is a replica of 'shiny::textInput()' with the html input "type"
+#' This is a replica of \code{shiny::textInput()} with the html input "type"
 #' attribute set to "email" rather than "text".
 #'
 #' @param inputId The input slot that will be used to access the value.

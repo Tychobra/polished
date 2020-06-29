@@ -1,4 +1,4 @@
-#' sign_in_module_ui
+#' UI for the sign in and register pages
 #'
 #' UI for the sign in and register pages when a user invite is required to register and
 #' sign in.  See \code{\link{sign_in_no_invite_module}} if you do not require your
@@ -231,7 +231,9 @@ sign_in_module_ui <- function(
   )
 }
 
-#' sign_in
+#' Server logic for the sign in and register pages
+#'
+#' This server logic accompanies the \code{\link{sign_in_module_ui}}.
 #'
 #' @param input the Shiny input
 #' @param output the Shiny output
@@ -242,6 +244,7 @@ sign_in_module_ui <- function(
 #' @importFrom shinyjs show hide
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom digest digest
+#'
 #'
 sign_in_module <- function(input, output, session) {
   ns <- session$ns

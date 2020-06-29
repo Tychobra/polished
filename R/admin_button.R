@@ -1,8 +1,9 @@
-#' admin_button_ui
+#' An html button to navigate the the "Admin Panel"
 #'
-#' The default UI for the admin button 'shiny' module.  This is the button that,
-#' when clicked, navigates a 'polished' admin from your 'shiny' app to the 'polished'
-#' Admin Panel.
+#' The UI portion of the 'shiny' module for the button to navigate to the "Admin Panel".
+#' This is the button that, when clicked, navigates a 'polished' admin from your 'shiny' app to the 'polished'
+#' Admin Panel.  If your app is set up with the default 'polished' configuration, this button appears
+#' in the bottom right of your 'shiny' app.
 #'
 #' @param id the Shiny module id.
 #'
@@ -10,6 +11,7 @@
 #'
 #' @return admin button UI
 #'
+#' @noRd
 #'
 admin_button_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -23,7 +25,7 @@ admin_button_ui <- function(id) {
   )
 }
 
-#' admin_button
+#' Server logic for button to go to "Admin Panel"
 #'
 #' The server logic for the button to navigate 'polished' admins from your 'shiny'
 #' app to the 'polished' Admin Panel.
@@ -34,6 +36,7 @@ admin_button_ui <- function(id) {
 #'
 #' @importFrom shiny observeEvent updateQueryString
 #'
+#' @noRd
 #'
 admin_button <- function(input, output, session) {
 

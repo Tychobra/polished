@@ -1,4 +1,4 @@
-#' dashboard_module_ui
+#' The UI for the "Dashboard" page of the "Admin Panel"
 #'
 #' The 'shiny' module UI for the "Dashboard" page of the "Admin Panel".
 #'
@@ -13,6 +13,8 @@
 #' @importFrom htmlwidgets JS
 #'
 #' @return the UI for the "Dashboard" page of the "Admin Panel".
+#'
+#' @noRd
 #'
 dashboard_module_ui <- function(id) {
   ns <- NS(id)
@@ -84,7 +86,7 @@ dashboard_module_ui <- function(id) {
   )
 }
 
-#' dashboard_module
+#' The server logic for the "Dashboard Page" of the "Admin Panel"
 #'
 #' The 'shiny' module server logic for the "Dashboard" page of the "Admin Panel".
 #'
@@ -99,6 +101,8 @@ dashboard_module_ui <- function(id) {
 #' @importFrom apexcharter apexchart ax_title ax_chart ax_tooltip ax_xaxis ax_stroke ax_dataLabels ax_fill ax_series ax_yaxis
 #' @importFrom DT renderDT datatable
 #' @importFrom shinyFeedback valueBoxModule
+#'
+#' @noRd
 #'
 dashboard_module <- function(input, output, session) {
   ns <- session$ns

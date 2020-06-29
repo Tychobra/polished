@@ -2,7 +2,7 @@
 % Please edit documentation in R/firebase_init.R
 \name{firebase_init}
 \alias{firebase_init}
-\title{firebase_init}
+\title{Initialize Firebase}
 \usage{
 firebase_init(firebase_config)
 }
@@ -10,10 +10,11 @@ firebase_init(firebase_config)
 \item{firebase_config}{list of firebase configuration}
 }
 \value{
-a character string of JavaScript code defining firebaseConfig
+a character string of JavaScript code to initialize Firebase
 }
 \description{
-firebase_init
+Executes a couple lines of JavaScript to initialize Firebase.  This function should be
+called in your 'shiny' UI immediately after \code{\link{firebase_dependencies}}.
 }
 \examples{
 

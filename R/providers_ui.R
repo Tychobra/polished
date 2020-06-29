@@ -1,10 +1,12 @@
 
 
-#' providers_ui
+#' UI for the Firebase authentication providers buttons
 #'
-#' Creates the html UI of the "Sign in with *" buttons.
+#' Creates the html UI of the "Sign in with *" buttons.  These buttons are only
+#' necessary if you enable social sign in via the \code{sign_in_providers} argument
+#' passed to \code{\link{global_sessions_config}}.
 #'
-#' @param ns the 'shiny' namespce function created with \code{shiny::NS()}.
+#' @param ns the 'shiny' namespace function created with \code{shiny::NS()}.
 #'
 #' @inheritParams global_sessions_config
 #'

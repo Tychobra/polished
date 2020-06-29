@@ -2,7 +2,7 @@
 % Please edit documentation in R/sign_in_no_invite_module.R
 \name{sign_in_no_invite_module_ui}
 \alias{sign_in_no_invite_module_ui}
-\title{sign_in_no_invite_module_ui}
+\title{Generates sign in page that does not require user invites}
 \usage{
 sign_in_no_invite_module_ui(id)
 }
@@ -12,6 +12,7 @@ sign_in_no_invite_module_ui(id)
 \description{
 UI for the sign in and registration pages. \code{sign_in_no_invite_module} does not
 require your users to be invited to your 'shiny' app before registering and signing
-in.  See \code{\link{sign_in_module}} if you wish to limit access to only invited
-users.
+in.  i.e. if you use \code{sign_in_no_invite_module}, anyone will be able to register
+and sign in to access your 'shiny' app.  See \code{\link{sign_in_module}} if you wish
+to limit access to only invited users.
 }

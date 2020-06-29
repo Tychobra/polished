@@ -1,9 +1,10 @@
-#' sign_in_no_invite_module_ui
+#' Generates sign in page that does not require user invites
 #'
 #' UI for the sign in and registration pages. \code{sign_in_no_invite_module} does not
 #' require your users to be invited to your 'shiny' app before registering and signing
-#' in.  See \code{\link{sign_in_module}} if you wish to limit access to only invited
-#' users.
+#' in.  i.e. if you use \code{sign_in_no_invite_module}, anyone will be able to register
+#' and sign in to access your 'shiny' app.  See \code{\link{sign_in_module}} if you wish
+#' to limit access to only invited users.
 #'
 #' @inheritParams sign_in_module_ui
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/secure_static.R
 \name{secure_static}
 \alias{secure_static}
-\title{secure_static}
+\title{Secure a static html page}
 \usage{
 secure_static(html_file_path, global_sessions_config_args)
 }
@@ -15,7 +15,7 @@ secure_static(html_file_path, global_sessions_config_args)
 a Shiny app object
 }
 \description{
-Secure a static html page.  \code{secure_static()} can be used to secure any html
+\code{secure_static()} can be used to secure any html
 page using 'polished'.  It is often used to add 'polished' to ".Rmd" htmloutput
 and flexdashboards.
 }

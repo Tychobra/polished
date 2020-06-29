@@ -1,19 +1,21 @@
-#' secure_ui
+#' Secure your 'shiny' UI
 #'
 #' This function is used to secure your 'shiny' app's UI.  Make sure to pass
 #' your 'shiny' app's UI as the first argument to \code{secure_ui()} at
 #' the bottom of your 'shiny' app's "ui.R" file.
 #'
 #' @param ui UI of the application.
-#' @param sign_in_page_ui Either `NULL`, the default, or the HTML, CSS, and JavaScript
+#' @param sign_in_page_ui Either \code{NULL}, the default, or the HTML, CSS, and JavaScript
 #' to use for the UI of the Sign In page.
-#' @param custom_admin_ui Either `NULL`, the default, or a list of 2 elements containing custom
-#' ui to add addtional `shinydashboard` tabs to the Polished admin panel.
-#' @param custom_admin_button_ui Either `admin_button_ui("polished")`, the default, ot your custom
-#' ui to take admins from the custom Shiny app to the Admin panel.
-#' @param admin_ui_options list of custom UI options.  Passed as argument to `admin_module_ui()`.
+#' @param custom_admin_ui Either \code{NULL}, the default, or a list of 2 elements containing custom
+#' UI to add additional 'shinydashboard' tabs to the Polished admin panel.
+#' @param custom_admin_button_ui Either \code{admin_button_ui("polished")}, the default, or your custom
+#' UI to take admins from the custom Shiny app to the Admin panel.
+#' @param admin_ui_options list of html elements to customize branding of the "Admin Panel".  Valid
+#' list element names are "title", "sidebar_branding", and "browser_tab_icon".  See
+#' \code{\link{default_admin_ui_options}} for an example.
 #'
-#' @return Secured Shiny app ui
+#' @return Secured Shiny app UI
 #'
 #' @export
 #'

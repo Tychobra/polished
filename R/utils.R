@@ -1,11 +1,11 @@
-#' remove_query_string
+#' Remove the URL query
 #'
-#' Remove the entire query string from the url.  This function should be called
+#' Remove the entire query string from the url.  This function should only be called
 #' inside the server function of your 'shiny' app.
 #'
 #' @param session the Shiny session
 #'
-#' @export
+#' @noRd
 #'
 #' @importFrom shiny updateQueryString getDefaultReactiveDomain
 #'
@@ -29,6 +29,8 @@ remove_query_string <- function(session = shiny::getDefaultReactiveDomain()) {
 #' @importFrom tidyr separate
 #' @importFrom tibble tibble
 #'
+#' @noRd
+#'
 #' @examples
 #' cookies <- "cookie_name=cookie-value; cookie_name_2=cookie-value-2; cookie_name_3=cookie-with=sign"
 #'
@@ -47,6 +49,8 @@ get_cookie <- function(cookie_string, name) {
 }
 
 
+#' @noRd
+#'
 #' @importFrom lubridate with_tz
 time_now_utc <- function() {
   lubridate::with_tz(Sys.time(), tzone = "UTC")

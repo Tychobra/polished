@@ -1,10 +1,12 @@
-#' verify email page ui
+#' Verify email page ui
 #'
 #' @param id the Shiny module id
 #'
 #' @importFrom htmltools tags h1
 #' @importFrom shiny fluidPage fluidRow column
 #' @importFrom shinyFeedback useShinyFeedback
+#'
+#' @noRd
 #'
 verify_email_module_ui <- function(id) {
   ns <- NS(id)
@@ -38,7 +40,7 @@ verify_email_module_ui <- function(id) {
 }
 
 
-#' verify email page ui
+#' Verify email page server logic
 #'
 #' @param input the Shiny server input
 #' @param output the Shiny server output
@@ -46,6 +48,7 @@ verify_email_module_ui <- function(id) {
 #'
 #' @importFrom shiny observeEvent
 #'
+#' @noRd
 #'
 verify_email_module <- function(input, output, session) {
 
