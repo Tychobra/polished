@@ -1,5 +1,6 @@
-#' default options for the Admin UI
+#' Default Options for the Admin UI
 #'
+#' This function specifies the default logos that are displayed in the "Admin Panel".
 #'
 #' @return a list of html for branding the Admin UI
 #'

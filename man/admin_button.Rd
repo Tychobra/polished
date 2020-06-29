@@ -14,5 +14,6 @@ admin_button(input, output, session)
 \item{session}{the Shiny server session}
 }
 \description{
-The server logic for the admin button 'shiny' module.
+The server logic for the button to navigate 'polished' admins from your 'shiny'
+app to the 'polished' Admin Panel.
 }

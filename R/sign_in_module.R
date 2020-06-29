@@ -1,7 +1,7 @@
 #' sign_in_module_ui
 #'
 #' UI for the sign in and register pages when a user invite is required to register and
-#' sign in.  See \code{\link{sing_in_no_invite_module}} if you do not require your
+#' sign in.  See \code{\link{sign_in_no_invite_module}} if you do not require your
 #' users to sign in and register to access your 'shiny' app.
 #'
 #' @param id the Shiny module id

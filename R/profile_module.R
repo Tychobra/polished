@@ -1,9 +1,9 @@
 #' Profile Module UI
 #'
-#' Generates the UI for the a user profile dropdown button to be used with the
+#' Generates the UI for a user profile dropdown button to be used with the
 #' 'shinydashboard' package.
 #'
-#' @param id the Shiny module id
+#' @param id the Shiny module id.
 #' @param other_lis additional <li> html tags to place between the email address
 #' and the Sign out button in the user profile dropdown.  This is often used to
 #' add a user "My Account" page/app where the user can set their account settings.

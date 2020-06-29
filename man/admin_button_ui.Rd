@@ -13,5 +13,7 @@ admin_button_ui(id)
 admin button UI
 }
 \description{
-The default UI for the admin button 'shiny' module.
+The default UI for the admin button 'shiny' module.  This is the button that,
+when clicked, navigates a 'polished' admin from your 'shiny' app to the 'polished'
+Admin Panel.
 }

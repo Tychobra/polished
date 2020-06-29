@@ -2,7 +2,7 @@
 % Please edit documentation in R/default_admin_ui_options.R
 \name{default_admin_ui_options}
 \alias{default_admin_ui_options}
-\title{default options for the Admin UI}
+\title{Default Options for the Admin UI}
 \usage{
 default_admin_ui_options()
 }
@@ -10,5 +10,5 @@ default_admin_ui_options()
 a list of html for branding the Admin UI
 }
 \description{
-default options for the Admin UI
+This function specifies the default logos that are displayed in the "Admin Panel".
 }

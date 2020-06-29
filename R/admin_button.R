@@ -1,6 +1,8 @@
 #' admin_button_ui
 #'
-#' The default UI for the admin button 'shiny' module.
+#' The default UI for the admin button 'shiny' module.  This is the button that,
+#' when clicked, navigates a 'polished' admin from your 'shiny' app to the 'polished'
+#' Admin Panel.
 #'
 #' @param id the Shiny module id.
 #'
@@ -23,7 +25,8 @@ admin_button_ui <- function(id) {
 
 #' admin_button
 #'
-#' The server logic for the admin button 'shiny' module.
+#' The server logic for the button to navigate 'polished' admins from your 'shiny'
+#' app to the 'polished' Admin Panel.
 #'
 #' @param input the Shiny server input
 #' @param output the Shiny server output

@@ -9,6 +9,9 @@ dashboard_module_ui(id)
 \arguments{
 \item{id}{the module id}
 }
+\value{
+the UI for the "Dashboard" page of the "Admin Panel".
+}
 \description{
 The 'shiny' module UI for the Dashboard page of the Admin Panel.
 }

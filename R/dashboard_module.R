@@ -12,6 +12,8 @@
 #' @importFrom shinyFeedback valueBoxModuleUI
 #' @importFrom htmlwidgets JS
 #'
+#' @return the UI for the "Dashboard" page of the "Admin Panel".
+#'
 dashboard_module_ui <- function(id) {
   ns <- NS(id)
 
