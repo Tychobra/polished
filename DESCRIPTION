@@ -6,9 +6,9 @@ Authors@R: c(
   person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre")),
   person("Patrick", "Howard", email = "patrick.howard@tychobra.com", role = c("aut")))
 Maintainer: Andy Merlino <andy.merlino@tychobra.com>
-Description: Easily add modern authentication and user administration to your 'shiny' apps.
-Customize user sign in and registration pages to match your brand.  Control who can
-access one or more of your 'shiny' apps.
+Description: Easily add modern authentication and user administration to your 'shiny' apps. 
+  Customize user sign in and registration pages to match your brand.  Control who can
+  access one or more of your 'shiny' apps.
 License: MIT + file LICENSE
 URL: https://github.com/tychobra/polished,
     https://polished.tech
