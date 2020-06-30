@@ -235,8 +235,10 @@ sign_in_no_invite_module <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$go_to_sign_in, {
-    shinyjs::hide("register_panel")
-    shinyjs::show("sign_in_panel")
+    shinyjs::hide("register_panel_top")
+    shinyjs::hide("register_panel_bottom")
+    shinyjs::show("sign_in_panel_top")
+    shinyjs::show("sign_in_panel_bottom")
   })
 
 
