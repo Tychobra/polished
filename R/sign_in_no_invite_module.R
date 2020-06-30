@@ -25,19 +25,32 @@ sign_in_no_invite_module_ui <- function(id) {
   email_ui <- tags$div(
     id = ns("email_ui"),
     tags$div(
-      id = ns("sign_in_panel"),
+      id = ns("sign_in_panel_top"),
       htmltools::h1(
         class = "text-center",
         style = "padding-top: 0;",
         "Sign In"
-      ),
-      br(),
-      email_input(
-        inputId = ns("email"),
-        label = tagList(icon("envelope"), "email"),
-        value = ""
-      ),
-      br(),
+      )
+    ),
+    shinyjs::hidden(tags$div(
+      id = ns("register_panel_top"),
+      tags$h1(
+        class = "text-center",
+        style = "padding-top: 0;",
+        "Register"
+      )
+    )),
+
+    tags$br(),
+    email_input(
+      inputId = ns("email"),
+      label = tagList(icon("envelope"), "email"),
+      value = ""
+    ),
+    tags$br(),
+
+    tags$div(
+      id = ns("sign_in_panel_bottom"),
       div(
         id = ns("sign_in_password"),
         div(
@@ -84,25 +97,10 @@ sign_in_no_invite_module_ui <- function(id) {
 
 
     shinyjs::hidden(div(
-      id = ns("register_panel"),
-      tags$h1(
-        class = "text-center",
-        style = "padding-top: 0;",
-        "Register"
-      ),
-      tags$br(),
-      tags$div(
-        class = "form-group",
-        style = "width: 100%",
-        email_input(
-          inputId = ns("register_email"),
-          label = tagList(shiny::icon("envelope"), "email"),
-          value = ""
-        )
-      ),
+      id = ns("register_panel_bottom"),
+
       tags$div(
         id = ns("register_passwords"),
-        tags$br(),
         tags$div(
           class = "form-group",
           style = "width: 100%",
@@ -215,19 +213,25 @@ sign_in_no_invite_module <- function(input, output, session) {
     shinyjs::hide("providers_ui")
   })
 
+  go_to_registration_page <- function() {
+    # go to the user registration page
+    shinyjs::hide("sign_in_panel_top")
+    shinyjs::hide("sign_in_panel_bottom")
+    shinyjs::show("register_panel_top")
+    shinyjs::show("register_panel_bottom")
+  }
+
   # if query parameter "register" == TRUE, then go directly to registration page
   shiny::observe({
     query_string <- shiny::getQueryString()
 
     if (identical(query_string$register, "TRUE")) {
-      shinyjs::hide("sign_in_panel")
-      shinyjs::show("register_panel")
+      go_to_registration_page()
     }
   })
 
   shiny::observeEvent(input$go_to_register, {
-    shinyjs::hide("sign_in_panel")
-    shinyjs::show("register_panel")
+    go_to_registration_page()
   })
 
   shiny::observeEvent(input$go_to_sign_in, {

@@ -42,7 +42,6 @@ sign_in_module_ui <- function(
     ),
     shinyjs::hidden(div(
       id = ns("register_panel_top"),
-      class = "auth_panel",
       h1(
         class = "text-center",
         style = "padding-top: 0;",
