@@ -41,4 +41,4 @@ Imports:
     tidyr,
     uuid,
     xts
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

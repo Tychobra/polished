@@ -57,6 +57,7 @@ profile_module_ui <- function(id, other_lis = NULL) {
 #' @export
 #'
 #' @importFrom shiny renderText observeEvent req
+#' @importFrom shinyFeedback showToast
 #'
 #'
 profile_module <- function(input, output, session) {
@@ -71,9 +72,17 @@ profile_module <- function(input, output, session) {
   shiny::observeEvent(input$polish__sign_out, {
     shiny::req(session$userData$user()$email)
 
-    sign_out_from_shiny(session)
+    tryCatch({
 
-    session$reload()
+      sign_out_from_shiny(session)
+      session$reload()
+
+    }, error = function(err) {
+
+      print(err)
+      shinyFeedback::showToast("error", "Sign Out Error")
+    })
+
   })
 }
 
