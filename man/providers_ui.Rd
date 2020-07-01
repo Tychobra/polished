@@ -10,7 +10,7 @@ providers_ui(ns, sign_in_providers = c("google", "email"))
 \item{ns}{the 'shiny' namespace function created with \code{shiny::NS()}.}
 
 \item{sign_in_providers}{the sign in providers to enable.  Valid values are "google"
-"email", "microsoft", and/or "facebook". Defaults to \code{c("google", "email")}.}
+"email", "microsoft", and/or "facebook". Defaults to \code{"email"}.}
 }
 \value{
 the html UI of the "Sign in with *" buttons.

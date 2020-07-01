@@ -22,7 +22,7 @@
 #' invite before registering/signing in
 #' @param api_url the API url.  Defaults to "https://api.polished.tech".
 #' @param sign_in_providers the sign in providers to enable.  Valid values are "google"
-#' "email", "microsoft", and/or "facebook". Defaults to \code{c("google", "email")}.
+#' "email", "microsoft", and/or "facebook". Defaults to \code{"email"}.
 #'
 #' @export
 #'
@@ -45,10 +45,7 @@ global_sessions_config <- function(
   admin_mode = FALSE,
   is_invite_required = TRUE,
   api_url = "https://api.polished.tech",
-  sign_in_providers = c(
-    "google",
-    "email"
-  )
+  sign_in_providers = "email"
 ) {
 
   .global_sessions$config(
