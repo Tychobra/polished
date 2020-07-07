@@ -96,7 +96,7 @@ user_edit_module <- function(input, output, session,
   # the firebase function to add the user is triggered in the client side js, not in Shiny
   shiny::observeEvent(input$submit, {
     session_user <- session$userData$user()$user_uid
-    input_email <- input$user_email
+    input_email <- tolower(input$user_email)
     input_is_admin <- input$user_is_admin
 
     is_admin_out <- if (input_is_admin == "Yes") TRUE else FALSE
@@ -145,10 +145,10 @@ user_edit_module <- function(input, output, session,
 
         users_trigger(users_trigger() + 1)
         shinyFeedback::showToast("success", "User successfully added!")
-      }, error = function(e) {
+      }, error = function(err) {
 
-        shinyFeedback::showToast("error", "Error adding user")
-        print(e)
+        shinyFeedback::showToast("error", err$message)
+        print(err)
       })
 
     } else {
