@@ -19,10 +19,10 @@ password_input(
 
 \item{value}{Initial value.}
 
+\item{style}{Character string of in-line css to style the input.}
+
 \item{placeholder}{A character string giving the user a hint as to what can
 be entered into the control. Internet Explorer 8 and 9 do not support this option.}
-
-\item{width}{The width of the input, e.g. '400px', or '100%'.}
 }
 \description{
 This modified version of shiny's passwordInput() does not actual send the password

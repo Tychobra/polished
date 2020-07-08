@@ -9,9 +9,11 @@
 #' @param input_id The input slot that will be used to access the value.
 #' @param label Display label for the control, or NULL for no label.
 #' @param value Initial value.
-#' @param width The width of the input, e.g. '400px', or '100%'.
+#' @param style Character string of in-line css to style the input.
 #' @param placeholder A character string giving the user a hint as to what can
 #' be entered into the control. Internet Explorer 8 and 9 do not support this option.
+#'
+#' @importFrom htmltools tags
 #'
 #' @export
 #'
@@ -22,7 +24,7 @@ password_input <- function(
   style = "",
   placeholder = NULL
 ) {
-  div(
+  tags$div(
     class = "form-group",
     style = style,
     tags$label(
