@@ -114,7 +114,7 @@ ui <- secure_ui(
   ui = fluidPage(
     h1("I am a Shiny app!")
   ),
-  sign_in_page_ui = my_custom_sign_in_module("my_sign_in")
+  sign_in_page_ui = my_custom_sign_in_module_ui("my_sign_in")
 )
 
 server <- secure_server(
