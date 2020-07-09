@@ -94,12 +94,12 @@ dashboard_module_ui <- function(id) {
 #' @param output the Shiny server output
 #' @param session the Shiny server session
 #'
-#' @importFrom shiny reactive callModule reactivePoll
+#' @importFrom shiny reactive callModule reactivePoll reactiveVal observe req
 #' @importFrom lubridate days today month
 #' @importFrom dplyr tbl select collect mutate group_by summarize ungroup left_join %>% bind_rows distinct .data n
 #' @importFrom tibble tibble
 #' @importFrom apexcharter apexchart ax_title ax_chart ax_tooltip ax_xaxis ax_stroke ax_dataLabels ax_fill ax_series ax_yaxis
-#' @importFrom DT renderDT datatable
+#' @importFrom DT renderDT datatable dataTableProxy replaceData
 #' @importFrom shinyFeedback valueBoxModule
 #'
 #' @noRd
@@ -390,10 +390,24 @@ dashboard_module <- function(input, output, session) {
       )
     )
   )
+  
+  active_users_table_prep <- shiny::reactiveVal()
+  
+  shiny::observe({
+    shiny::req(length(poll_global_users()) > 0)
+    out <- poll_global_users()
+    
+    if (is.null(active_users_table_prep())) {
+      active_users_table_prep(out)
+    } else {
+      DT::replaceData(active_users_table_proxy, out, rownames = FALSE)
+    }
+  })
+  
 
   output$active_users_table <- DT::renderDT({
-    req(length(poll_global_users()) > 0)
-    out <- poll_global_users()
+    shiny::req(active_users_table_prep())
+    out <- active_users_table_prep()
 
     DT::datatable(
       out,
@@ -402,12 +416,14 @@ dashboard_module <- function(input, output, session) {
       selection = "none",
       callback = JS("$( table.table().container() ).addClass( 'table-responsive' ); return table;"),
       options = list(
-        dom = "t",
+        dom = "tp",
         language = list(
           emptyTable = "No Active Users"
         )
       )
     )
   })
+  
+  active_users_table_proxy <- DT::dataTableProxy("active_users_table")
 }
 
