@@ -61,13 +61,15 @@ my_custom_sign_in_module_ui <- function(id) {
   ns <- NS(id)
   
   tagList(
-    
+    shinyjs::useShinyjs(),
     # your custom sign in inputs
     
     # both the register and sign in pages use the same email input
     email_input(
       ns("email")
     ),
+    div(
+      id = ns("sign_in_page"),
       password_input(
         ns("password")
       ),
@@ -75,10 +77,16 @@ my_custom_sign_in_module_ui <- function(id) {
         ns("submit_sign_in"),
         "Sign In"
       ),
+      actionLink(
+        ns("go_to_register"),
+        "Not a member? Register!"
+      )
+    ),
     
     # your custom registration inputs.  Your inputs
     shinyjs::hidden(
       div(
+        id = ns("register_page"),
         password_input(
           ns("register_password")
         ),
@@ -88,6 +96,10 @@ my_custom_sign_in_module_ui <- function(id) {
         actionButton(
           ns("submit_register"),
           "Register"
+        ),
+        actionLink(
+          ns("go_to_sign_in"),
+          "Already a member? Sign in!"
         )
       )
     ),
@@ -101,8 +113,21 @@ my_custom_sign_in_module_ui <- function(id) {
 }
 
 my_custom_sign_in_module <- function(input, output, session) {
-  
+  ns <- session$ns
   # your custom sign in and registration server logic
+  # We provide an example showing the sign in & registration pages separately
+  
+  # show the registration inputs & button
+  observeEvent(input$go_to_register, {
+    shinyjs::hideElement("sign_in_page")
+    shinyjs::showElement("register_page")
+  })
+  
+  # show the sign in inputs & button
+  observeEvent(input$go_to_sign_in, {
+    shinyjs::hideElement("register_page")
+    shinyjs::showElement("sign_in_page")
+  })
   
   jwt <- reactive({
     # optional: include additional authorization checks here checks   
