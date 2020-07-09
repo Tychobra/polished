@@ -57,7 +57,12 @@ secure_static <- function(html_file_path, global_sessions_config_args) {
     )
   )
 
-  server <- secure_server(function(input, output, session) {})
+  server <- secure_server(function(input, output, session) {
+    observeEvent(input$sign_out, {
+      sign_out_from_shiny(session)
+      session$reload()
+    })
+  })
 
 
   shiny::shinyApp(ui, server, onStart = function() {
