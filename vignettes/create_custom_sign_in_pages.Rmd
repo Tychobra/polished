@@ -45,7 +45,7 @@ Behind the scenes, the `sign_in_module()` and `sign_in_no_invite_module()` use t
 - "submit_register"
 
 You can create `shiny::textInputs`, `shiny::passwordInput`s, and `shiny::actionButton`s
-with the above IDs, or you can use the `email_input` and `password_input`s available
+with the above IDs, or you can use the `email_input` and `password_input` functions available
 with `polished`;  As long as the ID of the input matched up with the above input IDs,
  then the JavaScript available with `sign_in_js()` and the server logic in `sign_in_check_jwt()`
  will be able to handle the sign in and registration.  See the example below:
