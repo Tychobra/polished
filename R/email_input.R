@@ -15,7 +15,13 @@
 #' @importFrom htmltools tags
 #' @importFrom shiny restoreInput
 #'
-email_input <- function (inputId, label, value = "", width = NULL, placeholder = NULL) {
+email_input <- function (
+  inputId, 
+  label = tagList(icon("envelope"), "Email"), 
+  value = "", 
+  width = NULL, 
+  placeholder = NULL
+) {
   value <- shiny::restoreInput(id = inputId, default = value)
 
   tags$div(
