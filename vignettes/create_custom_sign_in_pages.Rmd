@@ -44,6 +44,8 @@ Behind the scenes, the `sign_in_module()` and `sign_in_no_invite_module()` use t
 - "register_password_verify"
 - "submit_register"
 
+And when passing your custom module UI as the `sign_in_page_ui` argument in the `secure_ui` function, you **must** use `sign_in` as the UI module's ID (as shown in the example below).
+
 You can create `shiny::textInputs`, `shiny::passwordInput`s, and `shiny::actionButton`s
 with the above IDs, or you can use the `email_input` and `password_input` functions available
 with `polished`;  As long as the ID of the input matched up with the above input IDs,
@@ -66,13 +68,13 @@ my_custom_sign_in_module_ui <- function(id) {
     email_input(
       ns("email")
     ),
-    password_input(
-      ns("password")
-    ),
-    actionButton(
-      ns("submit_sign_in"),
-      "Sign In"
-    ),
+      password_input(
+        ns("password")
+      ),
+      actionButton(
+        ns("submit_sign_in"),
+        "Sign In"
+      ),
     
     # your custom registration inputs.  Your inputs
     shinyjs::hidden(
@@ -86,7 +88,7 @@ my_custom_sign_in_module_ui <- function(id) {
         actionButton(
           ns("submit_register"),
           "Register"
-        )    
+        )
       )
     ),
     
@@ -114,17 +116,12 @@ ui <- secure_ui(
   ui = fluidPage(
     h1("I am a Shiny app!")
   ),
-  sign_in_page_ui = my_custom_sign_in_module_ui("my_sign_in")
+  sign_in_page_ui = my_custom_sign_in_module_ui("sign_in")
 )
 
 server <- secure_server(
   server = function(input, output, session) {}, 
-  custom_sign_in_server = function(input, output, session) {
-    callModule(
-      my_custom_sign_in_module,
-      "my_sign_in"
-    )
-  }
+  custom_sign_in_server = my_custom_sign_in_module
 )
 
 
