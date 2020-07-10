@@ -6,7 +6,7 @@
 #'
 #' @param html_file_path the path the to html file.  See the details for more info.
 #' @param global_sessions_config_args arguments to be passed to \code{\link{global_sessions_config}}.
-#' @param sign_out_button action button with id "sign_out". Set to NULL to not include a sign out button.
+#' @param sign_out_button action button or link with inputId "sign_out". Set to NULL to not include a sign out button.
 #'
 #' @md
 #'
@@ -28,11 +28,20 @@
 #' @importFrom htmltools tags tagList
 #'
 secure_static <- function(html_file_path, global_sessions_config_args,
-  sign_out_button = shiny::actionButton(
+  sign_out_button = shiny::actionLink(
     "sign_out",
     "Sign Out",
     icon = shiny::icon("sign-out-alt"),
-    style = "position: fixed; top: 15px; right: 15px; color: #FFFFFF; z-index: 9999; background-color: #0000FF; padding: 15px; border-radius: 20px; border-color: #0000FF"
+    style = "
+      font-family: 'Source Sans Pro',Calibri,Candara,Arial,sans-serif;
+      position: absolute;
+      top: 0;
+      right: 15px;
+      color: #FFFFFF;
+      z-index: 9999;
+      padding: 15px;
+      text-decoration: none;
+    "
   )) {
 
   ui <- htmltools::tagList(
