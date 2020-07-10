@@ -12,14 +12,14 @@
 #'
 #' @export
 #'
-#' @importFrom htmltools tags
-#' @importFrom shiny restoreInput
+#' @importFrom htmltools tags tagList
+#' @importFrom shiny restoreInput icon
 #'
 email_input <- function (
-  inputId, 
-  label = tagList(icon("envelope"), "Email"), 
-  value = "", 
-  width = NULL, 
+  inputId,
+  label = tagList(icon("envelope"), "Email"),
+  value = "",
+  width = NULL,
   placeholder = NULL
 ) {
   value <- shiny::restoreInput(id = inputId, default = value)
