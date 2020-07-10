@@ -8,7 +8,7 @@
 #'
 #' @inheritParams sign_in_module_ui
 #'
-#' @importFrom shiny textInput actionButton NS actionLink
+#' @importFrom shiny NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr
 #' @importFrom shinyjs useShinyjs hidden
 #' @importFrom shinyFeedback loadingButton useShinyFeedback
@@ -19,7 +19,6 @@
 sign_in_no_invite_module_ui <- function(id) {
   ns <- shiny::NS(id)
 
-  firebase_config <- .global_sessions$firebase_config
   providers <- .global_sessions$sign_in_providers
 
   email_ui <- tags$div(
@@ -175,21 +174,13 @@ sign_in_no_invite_module_ui <- function(id) {
   fluidPage(
     fluidRow(
       shinyjs::useShinyjs(),
-      shinyFeedback::useShinyFeedback(feedback = FALSE),
       tags$div(
         class = "auth_panel",
         ui_out
       )
     ),
 
-    firebase_dependencies(),
-    firebase_init(firebase_config),
-    tags$script(src = "polish/js/toast_options.js"),
-    tags$script(src = "polish/js/auth_all_no_invite.js?version=2"),
-    tags$script(paste0("auth_all_no_invite('", ns(''), "')")),
-    tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-    tags$script(src = "polish/js/auth_firebase.js?version=6"),
-    tags$script(paste0("auth_firebase('", ns(''), "')"))
+    sign_in_js(ns)
   )
 }
 
@@ -200,9 +191,7 @@ sign_in_no_invite_module_ui <- function(id) {
 #' @param session the Shiny session
 #'
 #' @importFrom shiny observeEvent getQueryString observe
-#' @importFrom shinyFeedback showToast resetLoadingButton
 #' @importFrom shinyjs show hide
-#' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom digest digest
 #'
 sign_in_no_invite_module <- function(input, output, session) {
@@ -241,43 +230,9 @@ sign_in_no_invite_module <- function(input, output, session) {
     shinyjs::show("sign_in_panel_bottom")
   })
 
+  sign_in_check_jwt(
+    jwt = shiny::reactive({input$check_jwt})
+  )
 
-  observeEvent(input$check_jwt, {
-
-    tryCatch({
-
-      # user is invited, so attempt sign in
-      new_user <- .global_sessions$sign_in(
-        input$check_jwt$jwt,
-        digest::digest(input$check_jwt$cookie)
-      )
-
-      if (is.null(new_user)) {
-        shinyFeedback::resetLoadingButton('submit_sign_in')
-        # show unable to sign in message
-        shinyFeedback::showToast('error', 'sign in error')
-        stop('sign_in_module: sign in error', call. = FALSE)
-
-      } else {
-        # sign in success
-        remove_query_string()
-        session$reload()
-      }
-
-
-
-    }, error = function(e) {
-      shinyFeedback::resetLoadingButton('submit_sign_in')
-      # user is not invited
-      print(e)
-      shinyWidgets::sendSweetAlert(
-        session,
-        title = "Not Authorized",
-        text = "You must have an invite to access this app",
-        type = "error"
-      )
-
-    })
-
-  })
+  invisible()
 }
