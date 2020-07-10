@@ -6,6 +6,7 @@
 #'
 #' @param html_file_path the path the to html file.  See the details for more info.
 #' @param global_sessions_config_args arguments to be passed to \code{\link{global_sessions_config}}.
+#' @param sign_out_button action button or link with inputId "sign_out". Set to NULL to not include a sign out button.
 #'
 #' @md
 #'
@@ -23,18 +24,38 @@
 #'
 #' @return a Shiny app object
 #'
-#' @importFrom shiny shinyApp actionButton
+#' @importFrom shiny shinyApp actionLink
 #' @importFrom htmltools tags tagList
 #'
-secure_static <- function(html_file_path, global_sessions_config_args) {
+secure_static <- function(
+  html_file_path,
+  global_sessions_config_args,
+  sign_out_button = shiny::actionLink(
+    "sign_out",
+    "Sign Out",
+    icon = shiny::icon("sign-out-alt"),
+    class = "polished_sign_out_link"
+  )) {
 
   ui <- htmltools::tagList(
+    sign_out_button,
     tags$head(
       tags$style("
       body {
         margin: 0;
         padding: 0;
         overflow: hidden
+      }
+
+      .polished_sign_out_link {
+        font-family: 'Source Sans Pro',Calibri,Candara,Arial,sans-serif;
+        position: absolute;
+        top: 0;
+        right: 15px;
+        color: #FFFFFF;
+        z-index: 9999;
+        padding: 15px;
+        text-decoration: none;
       }
     "),
     ),
@@ -57,7 +78,19 @@ secure_static <- function(html_file_path, global_sessions_config_args) {
     )
   )
 
-  server <- secure_server(function(input, output, session) {})
+  server <- secure_server(function(input, output, session) {
+
+    observeEvent(input$sign_out, {
+
+      tryCatch({
+        sign_out_from_shiny(session)
+        session$reload()
+      }, error = function(err) {
+        print(err)
+      })
+
+    })
+  })
 
 
   shiny::shinyApp(ui, server, onStart = function() {
