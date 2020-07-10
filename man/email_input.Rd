@@ -4,7 +4,13 @@
 \alias{email_input}
 \title{A 'shiny' email input}
 \usage{
-email_input(inputId, label, value = "", width = NULL, placeholder = NULL)
+email_input(
+  inputId,
+  label = tagList(icon("envelope"), "Email"),
+  value = "",
+  width = NULL,
+  placeholder = NULL
+)
 }
 \arguments{
 \item{inputId}{The input slot that will be used to access the value.}

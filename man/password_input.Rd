@@ -6,7 +6,7 @@
 \usage{
 password_input(
   input_id,
-  label = tagList(icon("unlock-alt"), "password"),
+  label = tagList(icon("unlock-alt"), "Password"),
   value = "",
   style = "",
   placeholder = NULL
