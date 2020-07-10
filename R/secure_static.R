@@ -24,24 +24,17 @@
 #'
 #' @return a Shiny app object
 #'
-#' @importFrom shiny shinyApp actionButton
+#' @importFrom shiny shinyApp actionLink
 #' @importFrom htmltools tags tagList
 #'
-secure_static <- function(html_file_path, global_sessions_config_args,
+secure_static <- function(
+  html_file_path,
+  global_sessions_config_args,
   sign_out_button = shiny::actionLink(
     "sign_out",
     "Sign Out",
     icon = shiny::icon("sign-out-alt"),
-    style = "
-      font-family: 'Source Sans Pro',Calibri,Candara,Arial,sans-serif;
-      position: absolute;
-      top: 0;
-      right: 15px;
-      color: #FFFFFF;
-      z-index: 9999;
-      padding: 15px;
-      text-decoration: none;
-    "
+    class = "polished_sign_out_link"
   )) {
 
   ui <- htmltools::tagList(
@@ -52,6 +45,17 @@ secure_static <- function(html_file_path, global_sessions_config_args,
         margin: 0;
         padding: 0;
         overflow: hidden
+      }
+
+      .polished_sign_out_link {
+        font-family: 'Source Sans Pro',Calibri,Candara,Arial,sans-serif;
+        position: absolute;
+        top: 0;
+        right: 15px;
+        color: #FFFFFF;
+        z-index: 9999;
+        padding: 15px;
+        text-decoration: none;
       }
     "),
     ),
