@@ -4,12 +4,19 @@
 \alias{secure_static}
 \title{Secure a static html page}
 \usage{
-secure_static(html_file_path, global_sessions_config_args)
+secure_static(
+  html_file_path,
+  global_sessions_config_args,
+  sign_out_button = shiny::actionLink("sign_out", "Sign Out", icon =
+    shiny::icon("sign-out-alt"), class = "polished_sign_out_link")
+)
 }
 \arguments{
 \item{html_file_path}{the path the to html file.  See the details for more info.}
 
 \item{global_sessions_config_args}{arguments to be passed to \code{\link{global_sessions_config}}.}
+
+\item{sign_out_button}{action button or link with inputId "sign_out". Set to NULL to not include a sign out button.}
 }
 \value{
 a Shiny app object
