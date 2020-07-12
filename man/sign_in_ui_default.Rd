@@ -14,7 +14,8 @@ sign_in_ui_default(
     "margin-bottom: 15px; margin-top: 10px;")),
   logo_bottom = tags$img(src = "polish/images/placeholder_company_logo.jpg", alt =
     "Placeholder Logo", style = "width: 200px; margin-bottom: 15px; padding-top: 15px;"),
-  icon_href = "polish/images/polished_icon.png"
+  icon_href = "polish/images/polished_icon.png",
+  background_image = NULL
 )
 }
 \arguments{
@@ -29,6 +30,10 @@ sign_in_ui_default(
 \item{logo_bottom}{html for the logo below the sign in panel.}
 
 \item{icon_href}{the url/path to the browser tab icon.}
+
+\item{background_image}{the url/path to a full width background image.  If set to NULL,
+the default, the \code{color} argument will be used for the background instead of this
+image.}
 }
 \value{
 the UI for the sign in page

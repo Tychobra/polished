@@ -10,6 +10,9 @@
 #' @param logo_top html for logo to go above the sign in panel.
 #' @param logo_bottom html for the logo below the sign in panel.
 #' @param icon_href the url/path to the browser tab icon.
+#' @param background_image the url/path to a full width background image.  If set to NULL,
+#' the default, the \code{color} argument will be used for the background instead of this
+#' image.
 #'
 #' @export
 #'
@@ -35,8 +38,21 @@ sign_in_ui_default <- function(
     alt = "Placeholder Logo",
     style = "width: 200px; margin-bottom: 15px; padding-top: 15px;"
   ),
-  icon_href = "polish/images/polished_icon.png"
+  icon_href = "polish/images/polished_icon.png",
+  background_image = NULL
 ) {
+
+  if (is.null(background_image)) {
+    background_image_css <-  stringr::str_interp("")
+  } else {
+    background_image_css <- stringr::str_interp("
+      background-image: url(${background_image});
+      background-repeat: no-repeat;
+      background-position: 0 0;
+      background-size: cover;
+    ")
+  }
+
 
   shiny::fluidPage(
     style = "height: 100vh;",
@@ -80,6 +96,7 @@ sign_in_ui_default <- function(
 
         body {
           background-color: ${color} !important;
+          ${background_image_css}
         }
 
       ")
