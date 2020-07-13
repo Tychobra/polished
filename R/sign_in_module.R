@@ -215,6 +215,8 @@ sign_in_module_ui <- function(
       class = "auth_panel",
       ui_out
     ),
+    tags$script(src = "polished/auth_keypress.js"),
+    tags$script(paste0("auth_keypress('", ns(''), "')")),
     sign_in_js(ns)
   )
 }
@@ -337,7 +339,7 @@ sign_in_module <- function(input, output, session) {
 
       # go to the user registration page
       go_to_registration_page()
-      
+
       updateTextInput(
         session,
         "email_register",

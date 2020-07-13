@@ -15,7 +15,7 @@
 #' @export
 #'
 #'
-sign_in_js <- function(ns, include_default_keystrokes = TRUE) {
+sign_in_js <- function(ns) {
 
   firebase_config <- .global_sessions$firebase_config
 
@@ -25,8 +25,6 @@ sign_in_js <- function(ns, include_default_keystrokes = TRUE) {
     firebase_dependencies(),
     firebase_init(firebase_config),
     tags$script(src = "polish/js/toast_options.js"),
-    tags$script(src = "polish/js/auth_all.js?version=1"),
-    if (isTRUE(include_default_keystrokes)) tags$script(paste0("auth_all('", ns(''), "')")) else list(),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
     tags$script(src = "polish/js/auth_firebase.js?version=6"),
     tags$script(paste0("auth_firebase('", ns(''), "')"))

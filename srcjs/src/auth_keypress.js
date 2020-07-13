@@ -4,7 +4,7 @@
 
 
 
-const auth_all = (ns_prefix) => {
+const auth_keypress = (ns_prefix) => {
 
 
   $(`#${ns_prefix}email`).on("keypress", e => {

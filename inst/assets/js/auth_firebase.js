@@ -26,7 +26,7 @@ var auth_firebase = function auth_firebase(ns_prefix) {
   };
 
   $(document).on("click", "#".concat(ns_prefix, "submit_register"), function () {
-    var email = $("#".concat(ns_prefix, "email_register")).val().toLowerCase();
+    var email = $("#".concat(ns_prefix, "email")).val().toLowerCase();
     var password = $("#".concat(ns_prefix, "register_password")).val();
     var password_2 = $("#".concat(ns_prefix, "register_password_verify")).val();
 

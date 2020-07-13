@@ -22,9 +22,9 @@ sign_in_module_ui_2 <- function(
   register_link = "First time user? Register here!"
 ) {
   ns <- shiny::NS(id)
-  
+
   providers <- .global_sessions$sign_in_providers
-  
+
   sign_in_email_ui <- tags$div(
     id = ns("email_ui"),
     tags$br(),
@@ -35,7 +35,7 @@ sign_in_module_ui_2 <- function(
       width = "100%"
     ),
     tags$br(),
-    
+
     tags$div(
       id = ns("sign_in_panel_bottom"),
       shinyjs::hidden(div(
@@ -85,7 +85,7 @@ sign_in_module_ui_2 <- function(
       )
     )
   )
-  
+
   register_ui <- div(
     h1(
       class = "text-center",
@@ -156,19 +156,19 @@ sign_in_module_ui_2 <- function(
       )
     ))
   )
-  
+
   if (length(providers) == 1 && providers == "email") {
    sign_in_ui <- sign_in_email_ui
-      
+
   } else {
-    
+
     hold_providers_ui <- providers_ui(
       ns,
       providers[providers != "email"],
       title = NULL,
       fancy = FALSE
     )
-    
+
     sign_in_ui <-  div(
       fluidRow(
         htmltools::h1("Sign In")
@@ -189,9 +189,9 @@ sign_in_module_ui_2 <- function(
       )
     )
   }
-  
-  
-  
+
+
+
   htmltools::tagList(
     shinyjs::useShinyjs(),
     tags$div(
@@ -202,7 +202,7 @@ sign_in_module_ui_2 <- function(
         shiny::tabPanel("Register", register_ui)
       )
     ),
-    sign_in_js(ns, include_default_keystrokes = FALSE)
+    sign_in_js(ns)
   )
 }
 
@@ -228,11 +228,11 @@ sign_in_module_2 <- function(input, output, session) {
     shinyjs::show("email_ui")
     shinyjs::hide("providers_ui")
   })
-  
-  
+
+
   observe({
     query_string <- shiny::getQueryString()
-    
+
     if (identical(query_string$register, "TRUE")) {
       shiny::updateTabsetPanel(
         session,
@@ -241,12 +241,12 @@ sign_in_module_2 <- function(input, output, session) {
       )
     }
   })
-  
+
 
   shiny::observeEvent(input$submit_continue_sign_in, {
 
     email <- tolower(input$email)
-    
+
     # check user invite
     invite <- NULL
     tryCatch({
@@ -321,7 +321,7 @@ sign_in_module_2 <- function(input, output, session) {
         "tabs",
         "Register"
       )
-      
+
       updateTextInput(
         session,
         "email_register",
@@ -352,7 +352,7 @@ sign_in_module_2 <- function(input, output, session) {
   shiny::observeEvent(submit_continue_register_rv(), {
 
     email <- tolower(input$email_register)
-    
+
     invite <- NULL
     tryCatch({
       invite <- .global_sessions$get_invite_by_email(email)

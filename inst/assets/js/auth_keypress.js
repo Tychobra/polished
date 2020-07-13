@@ -1,6 +1,6 @@
 "use strict";
 
-var auth_all = function auth_all(ns_prefix) {
+var auth_keypress = function auth_keypress(ns_prefix) {
   $("#".concat(ns_prefix, "email")).on("keypress", function (e) {
     if (e.which == 13) {
       if ($("#".concat(ns_prefix, "sign_in_panel_top")).is(":visible")) {
