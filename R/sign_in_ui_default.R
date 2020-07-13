@@ -86,7 +86,6 @@ sign_in_ui_default <- function(
           padding: 10px 25px;
           background-color: #fff;
           color: #080021;
-          z-index: 20000;
         }
 
         .btn-primary {
