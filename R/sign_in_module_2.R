@@ -29,7 +29,7 @@ sign_in_module_ui_2 <- function(
     id = ns("email_ui"),
     tags$br(),
     email_input(
-      inputId = ns("sign_in_email"),
+      inputId = ns("email"),
       label = tagList(icon("envelope"), "email"),
       value = "",
       width = "100%"
@@ -94,7 +94,7 @@ sign_in_module_ui_2 <- function(
     ),
     br(),
     email_input(
-      inputId = ns("email"),
+      inputId = ns("email_register"),
       label = tagList(icon("envelope"), "email"),
       value = "",
       width = "100%"
@@ -165,7 +165,8 @@ sign_in_module_ui_2 <- function(
     hold_providers_ui <- providers_ui(
       ns,
       providers[providers != "email"],
-      title = NULL
+      title = NULL,
+      fancy = FALSE
     )
     
     sign_in_ui <-  div(
@@ -174,14 +175,14 @@ sign_in_module_ui_2 <- function(
       ),
       fluidRow(
         column(
-          6,
+          7,
           sign_in_email_ui
         ),
         column(
-          6,
+          5,
           br(),
           div(
-            style = "margin-top: 6px;",
+            style = "margin-top: 25px;",
             hold_providers_ui
           )
         )
@@ -244,7 +245,7 @@ sign_in_module_2 <- function(input, output, session) {
 
   shiny::observeEvent(input$submit_continue_sign_in, {
 
-    email <- tolower(input$sign_in_email)
+    email <- tolower(input$email)
     
     # check user invite
     invite <- NULL
@@ -295,7 +296,7 @@ sign_in_module_2 <- function(input, output, session) {
 
 
   observeEvent(input$check_registered_res, {
-    hold_email <- tolower(input$sign_in_email)
+    hold_email <- tolower(input$email)
 
     is_registered <- input$check_registered_res
 
@@ -323,8 +324,8 @@ sign_in_module_2 <- function(input, output, session) {
       
       updateTextInput(
         session,
-        "email",
-        value = email
+        "email_register",
+        value = hold_email
       )
 
       # open the passwords to continue user registration
@@ -350,7 +351,7 @@ sign_in_module_2 <- function(input, output, session) {
 
   shiny::observeEvent(submit_continue_register_rv(), {
 
-    email <- tolower(input$email)
+    email <- tolower(input$email_register)
     
     invite <- NULL
     tryCatch({

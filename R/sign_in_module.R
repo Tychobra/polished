@@ -33,7 +33,14 @@ sign_in_module_ui <- function(
         class = "text-center",
         style = "padding-top: 0;",
         "Sign In"
-      )
+      ),
+      tags$br(),
+      email_input(
+        inputId = ns("email"),
+        label = tagList(icon("envelope"), "email"),
+        value = ""
+      ),
+      tags$br()
     ),
     shinyjs::hidden(div(
       id = ns("register_panel_top"),
@@ -42,18 +49,14 @@ sign_in_module_ui <- function(
         style = "padding-top: 0;",
         "Register"
       ),
-      br()
+      tags$br(),
+      email_input(
+        inputId = ns("email_register"),
+        label = tagList(icon("envelope"), "email"),
+        value = ""
+      ),
+      tags$br()
     )),
-
-
-    tags$br(),
-    email_input(
-      inputId = ns("email"),
-      label = tagList(icon("envelope"), "email"),
-      value = ""
-    ),
-    tags$br(),
-
 
     tags$div(
       id = ns("sign_in_panel_bottom"),
@@ -120,7 +123,6 @@ sign_in_module_ui <- function(
       id = ns("register_panel_bottom"),
       div(
         id = ns("continue_registation"),
-        br(),
         shiny::actionButton(
           inputId = ns("submit_continue_register"),
           label = "Continue",
@@ -335,6 +337,12 @@ sign_in_module <- function(input, output, session) {
 
       # go to the user registration page
       go_to_registration_page()
+      
+      updateTextInput(
+        session,
+        "email_register",
+        value = hold_email
+      )
 
       # open the passwords to continue user registration
       submit_continue_register_rv(submit_continue_register_rv() + 1)
@@ -379,7 +387,7 @@ sign_in_module <- function(input, output, session) {
 
   shiny::observeEvent(submit_continue_register_rv(), {
 
-    email <- tolower(input$email)
+    email <- tolower(input$email_register)
 
     invite <- NULL
     tryCatch({

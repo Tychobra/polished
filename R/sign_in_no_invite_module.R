@@ -29,7 +29,14 @@ sign_in_no_invite_module_ui <- function(id) {
         class = "text-center",
         style = "padding-top: 0;",
         "Sign In"
-      )
+      ),
+      tags$br(),
+      email_input(
+        inputId = ns("email"),
+        label = tagList(icon("envelope"), "email"),
+        value = ""
+      ),
+      tags$br()
     ),
     shinyjs::hidden(tags$div(
       id = ns("register_panel_top"),
@@ -37,16 +44,15 @@ sign_in_no_invite_module_ui <- function(id) {
         class = "text-center",
         style = "padding-top: 0;",
         "Register"
-      )
+      ),
+      tags$br(),
+      email_input(
+        inputId = ns("email_register"),
+        label = tagList(icon("envelope"), "email"),
+        value = ""
+      ),
+      tags$br()
     )),
-
-    tags$br(),
-    email_input(
-      inputId = ns("email"),
-      label = tagList(icon("envelope"), "email"),
-      value = ""
-    ),
-    tags$br(),
 
     tags$div(
       id = ns("sign_in_panel_bottom"),
