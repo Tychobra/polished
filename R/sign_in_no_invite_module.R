@@ -185,7 +185,7 @@ sign_in_no_invite_module_ui <- function(id) {
         ui_out
       )
     ),
-    tags$script(src = "polished/auth_keypress.js"),
+    tags$script(src = "polish/js/auth_keypress.js"),
     tags$script(paste0("auth_keypress('", ns(''), "')")),
     sign_in_js(ns)
   )
