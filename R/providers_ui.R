@@ -9,6 +9,8 @@
 #' @param ns the 'shiny' namespace function created with \code{shiny::NS()}.
 #'
 #' @inheritParams global_sessions_config
+#' 
+#' @param title The title to be used above the provider buttons. Set to NULL to not include
 #'
 #' @export
 #'
@@ -17,7 +19,7 @@
 providers_ui <- function(ns, sign_in_providers = c(
   "google",
   "email"
-)) {
+), title = "Sign In") {
 
   providers_buttons <- list(
     "google" = actionButton(
@@ -57,16 +59,24 @@ providers_ui <- function(ns, sign_in_providers = c(
 
   providers_out <- providers_buttons[sign_in_providers]
 
-
-  tags$div(
-    id = ns("providers_ui"),
-    htmltools::h1(
-      class = "text-center",
-      style = "padding-top: 0;",
-      "Sign In"
-    ),
-    providers_out,
-    br(),
-    br()
-  )
+  if (is.null(title)) {
+    tags$div(
+      id = ns("providers_ui"),
+      providers_out,
+      br(),
+      br()
+    )
+  } else {
+    tags$div(
+      id = ns("providers_ui"),
+      htmltools::h1(
+        class = "text-center",
+        style = "padding-top: 0;",
+        "Sign In"
+      ),
+      providers_out,
+      br(),
+      br()
+    )
+  }
 }
