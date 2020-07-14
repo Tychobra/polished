@@ -234,6 +234,7 @@ sign_in_module_ui <- function(
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom digest digest
 #'
+#' @export
 #'
 sign_in_module <- function(input, output, session) {
   ns <- session$ns

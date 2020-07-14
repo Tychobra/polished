@@ -18,8 +18,43 @@
 sign_in_module_ui_2 <- function(id) {
   ns <- shiny::NS(id)
 
-  providers <- .global_sessions$sign_in_providers
-
+  sign_in_password <- div(
+    id = ns("sign_in_password"),
+    div(
+      class = "form-group",
+      style = "width: 100%;",
+      tags$label(
+        tagList(icon("unlock-alt"), "password"),
+        `for` = "password"
+      ),
+      tags$input(
+        id = ns("password"),
+        type = "password",
+        class = "form-control",
+        value = ""
+      )
+    ),
+    shinyFeedback::loadingButton(
+      ns("submit_sign_in"),
+      label = "Sign In",
+      class = "btn btn-primary btn-lg text-center",
+      style = "width: 100%",
+      loadingLabel = "Authenticating...",
+      loadingClass = "btn btn-primary btn-lg text-center",
+      loadingStyle = "width: 100%"
+    )
+  )
+    
+  continue_sign_in <- div(
+    id = ns("continue_sign_in"),
+    shiny::actionButton(
+      inputId = ns("submit_continue_sign_in"),
+      label = "Continue",
+      width = "100%",
+      class = "btn btn-primary btn-lg"
+    )
+  )
+  
   sign_in_email_ui <- tags$div(
     id = ns("email_ui"),
     tags$br(),
@@ -28,45 +63,14 @@ sign_in_module_ui_2 <- function(id) {
       label = tagList(icon("envelope"), "email"),
       value = "",
       width = "100%"
-    ),
-
+    ), 
     tags$div(
       id = ns("sign_in_panel_bottom"),
-      shinyjs::hidden(div(
-        id = ns("sign_in_password"),
-        div(
-          class = "form-group",
-          style = "width: 100%;",
-          tags$label(
-            tagList(icon("unlock-alt"), "password"),
-            `for` = "password"
-          ),
-          tags$input(
-            id = ns("password"),
-            type = "password",
-            class = "form-control",
-            value = ""
-          )
-        ),
-        shinyFeedback::loadingButton(
-          ns("submit_sign_in"),
-          label = "Sign In",
-          class = "btn btn-primary btn-lg text-center",
-          style = "width: 100%",
-          loadingLabel = "Authenticating...",
-          loadingClass = "btn btn-primary btn-lg text-center",
-          loadingStyle = "width: 100%"
-        )
-      )),
-      div(
-        id = ns("continue_sign_in"),
-        shiny::actionButton(
-          inputId = ns("submit_continue_sign_in"),
-          label = "Continue",
-          width = "100%",
-          class = "btn btn-primary btn-lg"
-        )
-      ),
+      if (isTRUE(.global_sessions$is_invite_required)) {
+        tagList(continue_sign_in, shinyjs::hidden(sign_in_password))
+      } else {
+        sign_in_password
+      },
       div(
         style = "text-align: center;",
         br(),
@@ -75,6 +79,61 @@ sign_in_module_ui_2 <- function(id) {
           id = ns("reset_password"),
           "Forgot your password?"
         )
+      )
+    )
+  )
+  
+  continue_registration <- div(
+    id = ns("continue_registration"),
+    shiny::actionButton(
+      inputId = ns("submit_continue_register"),
+      label = "Continue",
+      width = "100%",
+      class = "btn btn-primary btn-lg"
+    )
+  )
+  
+  
+  register_passwords <- div(
+    id = ns("register_passwords"),
+    div(
+      class = "form-group",
+      style = "width: 100%",
+      tags$label(
+        tagList(icon("unlock-alt"), "password"),
+        `for` = ns("register_password")
+      ),
+      tags$input(
+        id = ns("register_password"),
+        type = "password",
+        class = "form-control",
+        value = ""
+      )
+    ),
+    div(
+      class = "form-group shiny-input-container",
+      style = "width: 100%",
+      tags$label(
+        tagList(shiny::icon("unlock-alt"), "verify password"),
+        `for` = ns("register_password_verify")
+      ),
+      tags$input(
+        id = ns("register_password_verify"),
+        type = "password",
+        class = "form-control",
+        value = ""
+      )
+    ),
+    div(
+      style = "text-align: center;",
+      shinyFeedback::loadingButton(
+        ns("submit_register"),
+        label = "Register",
+        class = "btn btn-primary btn-lg",
+        style = "width: 100%;",
+        loadingLabel = "Registering...",
+        loadingClass = "btn btn-primary btn-lg text-center",
+        loadingStyle = "width: 100%;"
       )
     )
   )
@@ -87,58 +146,11 @@ sign_in_module_ui_2 <- function(id) {
       value = "",
       width = "100%"
     ),
-    div(
-      id = ns("continue_registation"),
-      shiny::actionButton(
-        inputId = ns("submit_continue_register"),
-        label = "Continue",
-        width = "100%",
-        class = "btn btn-primary btn-lg"
-      )
-    ),
-    shinyjs::hidden(div(
-      id = ns("register_passwords"),
-      div(
-        class = "form-group",
-        style = "width: 100%",
-        tags$label(
-          tagList(icon("unlock-alt"), "password"),
-          `for` = ns("register_password")
-        ),
-        tags$input(
-          id = ns("register_password"),
-          type = "password",
-          class = "form-control",
-          value = ""
-        )
-      ),
-      div(
-        class = "form-group shiny-input-container",
-        style = "width: 100%",
-        tags$label(
-          tagList(shiny::icon("unlock-alt"), "verify password"),
-          `for` = ns("register_password_verify")
-        ),
-        tags$input(
-          id = ns("register_password_verify"),
-          type = "password",
-          class = "form-control",
-          value = ""
-        )
-      ),
-      div(
-        style = "text-align: center;",
-        shinyFeedback::loadingButton(
-          ns("submit_register"),
-          label = "Register",
-          class = "btn btn-primary btn-lg",
-          style = "width: 100%;",
-          loadingLabel = "Registering...",
-          loadingClass = "btn btn-primary btn-lg text-center",
-          loadingStyle = "width: 100%;"
-        )
-      )
-    ))
+    if (isTRUE(.global_sessions$is_invite_required)) {
+      tagList(continue_registration, shinyjs::hidden(register_passwords))
+    } else {
+      register_passwords
+    }
   )
   
   sign_in_register_email <- shiny::tabsetPanel(
@@ -146,6 +158,8 @@ sign_in_module_ui_2 <- function(id) {
     shiny::tabPanel("Sign In", sign_in_email_ui),
     shiny::tabPanel("Register", register_ui)
   )
+  
+  providers <- .global_sessions$sign_in_providers
 
   if (length(providers) == 1 && providers == "email") {
     sign_in_ui <- tags$div(
@@ -213,7 +227,6 @@ sign_in_module_ui_2 <- function(id) {
 sign_in_module_2 <- function(input, output, session) {
   ns <- session$ns
 
-
   observeEvent(input$sign_in_with_email, {
     shinyjs::show("email_ui")
     shinyjs::hide("providers_ui")
@@ -243,7 +256,7 @@ sign_in_module_2 <- function(input, output, session) {
       
       invite <- .global_sessions$get_invite_by_email(email)
 
-      if (isTRUE(.global_sessions$is_invite_required) && is.null(invite)) {
+      if (is.null(invite)) {
 
         shinyWidgets::sendSweetAlert(
           session,
@@ -320,7 +333,7 @@ sign_in_module_2 <- function(input, output, session) {
       )
       
       # user is invited
-      shinyjs::hide("continue_registation")
+      shinyjs::hide("continue_registration")
       
       shinyjs::show(
         "register_passwords",
@@ -358,7 +371,7 @@ sign_in_module_2 <- function(input, output, session) {
     tryCatch({
       invite <- .global_sessions$get_invite_by_email(email)
 
-      if (isTRUE(.global_sessions$is_invite_required) && is.null(invite)) {
+      if (is.null(invite)) {
 
         shinyWidgets::sendSweetAlert(
           session,
@@ -370,7 +383,7 @@ sign_in_module_2 <- function(input, output, session) {
       }
 
       # user is invited
-      shinyjs::hide("continue_registation")
+      shinyjs::hide("continue_registration")
 
       shinyjs::show(
         "register_passwords",
