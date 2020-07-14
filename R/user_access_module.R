@@ -16,6 +16,13 @@ user_access_module_ui <- function(id) {
   shinydashboard::tabItem(
     tabName = "user_access",
     shiny::fluidRow(
+      tags$style(
+        paste0(
+          "#", ns('users_table'), " .dataTables_length {
+            padding-top: 10px;
+          }"
+        )
+      ),
       shinydashboard::box(
         width = 12,
         title = "Users",
@@ -233,7 +240,7 @@ user_access_module <- function(input, output, session) {
       selection = "none",
       callback = JS("$( table.table().container() ).addClass( 'table-responsive' ); return table;"),
       options = list(
-        dom = 'ftp',
+        dom = 'ftlp',
         columnDefs = list(
           list(targets = 0, orderable = FALSE),
           list(targets = 0, class = "dt-center"),
