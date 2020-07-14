@@ -24,6 +24,101 @@ sign_in_module_ui <- function(
   ns <- shiny::NS(id)
 
   providers <- .global_sessions$sign_in_providers
+  
+  continue_sign_in <- div(
+    id = ns("continue_sign_in"),
+    shiny::actionButton(
+      inputId = ns("submit_continue_sign_in"),
+      label = "Continue",
+      width = "100%",
+      class = "btn btn-primary btn-lg"
+    )
+  )
+  
+  sign_in_password <- div(
+    id = ns("sign_in_password"),
+    div(
+      class = "form-group",
+      style = "width: 100%;",
+      tags$label(
+        tagList(icon("unlock-alt"), "password"),
+        `for` = "password"
+      ),
+      tags$input(
+        id = ns("password"),
+        type = "password",
+        class = "form-control",
+        value = ""
+      )
+    ),
+    br(),
+    shinyFeedback::loadingButton(
+      ns("submit_sign_in"),
+      label = "Sign In",
+      class = "btn btn-primary btn-lg text-center",
+      style = "width: 100%",
+      loadingLabel = "Authenticating...",
+      loadingClass = "btn btn-primary btn-lg text-center",
+      loadingStyle = "width: 100%"
+    )
+  )
+  
+  continue_registration <- div(
+    id = ns("continue_registration"),
+    shiny::actionButton(
+      inputId = ns("submit_continue_register"),
+      label = "Continue",
+      width = "100%",
+      class = "btn btn-primary btn-lg"
+    )
+  )
+  
+  register_passwords <- div(
+    id = ns("register_passwords"),
+    div(
+      class = "form-group",
+      style = "width: 100%",
+      tags$label(
+        tagList(icon("unlock-alt"), "password"),
+        `for` = ns("register_password")
+      ),
+      tags$input(
+        id = ns("register_password"),
+        type = "password",
+        class = "form-control",
+        value = ""
+      )
+    ),
+    br(),
+    div(
+      class = "form-group shiny-input-container",
+      style = "width: 100%",
+      tags$label(
+        tagList(shiny::icon("unlock-alt"), "verify password"),
+        `for` = ns("register_password_verify")
+      ),
+      tags$input(
+        id = ns("register_password_verify"),
+        type = "password",
+        class = "form-control",
+        value = ""
+      )
+    ),
+    br(),
+    br(),
+    div(
+      style = "text-align: center;",
+      shinyFeedback::loadingButton(
+        ns("submit_register"),
+        label = "Register",
+        class = "btn btn-primary btn-lg",
+        style = "width: 100%;",
+        loadingLabel = "Registering...",
+        loadingClass = "btn btn-primary btn-lg text-center",
+        loadingStyle = "width: 100%;"
+      )
+    )
+  )
 
   email_ui <- tags$div(
     id = ns("email_ui"),
@@ -42,60 +137,13 @@ sign_in_module_ui <- function(
       ),
       tags$br()
     ),
-    shinyjs::hidden(div(
-      id = ns("register_panel_top"),
-      h1(
-        class = "text-center",
-        style = "padding-top: 0;",
-        "Register"
-      ),
-      tags$br(),
-      email_input(
-        inputId = ns("email_register"),
-        label = tagList(icon("envelope"), "email"),
-        value = ""
-      ),
-      tags$br()
-    )),
-
     tags$div(
       id = ns("sign_in_panel_bottom"),
-      shinyjs::hidden(div(
-        id = ns("sign_in_password"),
-        div(
-          class = "form-group",
-          style = "width: 100%;",
-          tags$label(
-            tagList(icon("unlock-alt"), "password"),
-            `for` = "password"
-          ),
-          tags$input(
-            id = ns("password"),
-            type = "password",
-            class = "form-control",
-            value = ""
-          )
-        ),
-        br(),
-        shinyFeedback::loadingButton(
-          ns("submit_sign_in"),
-          label = "Sign In",
-          class = "btn btn-primary btn-lg text-center",
-          style = "width: 100%",
-          loadingLabel = "Authenticating...",
-          loadingClass = "btn btn-primary btn-lg text-center",
-          loadingStyle = "width: 100%"
-        )
-      )),
-      div(
-        id = ns("continue_sign_in"),
-        shiny::actionButton(
-          inputId = ns("submit_continue_sign_in"),
-          label = "Continue",
-          width = "100%",
-          class = "btn btn-primary btn-lg"
-        )
-      ),
+      if (isTRUE(.global_sessions$is_invite_required)) {
+        tagList(continue_sign_in, shinyjs::hidden(sign_in_password))
+      } else {
+        sign_in_password
+      },
       div(
         style = "text-align: center;",
         if (is.null(register_link)) {
@@ -117,65 +165,30 @@ sign_in_module_ui <- function(
         )
       )
     ),
-
-
+    
+    shinyjs::hidden(div(
+      id = ns("register_panel_top"),
+      h1(
+        class = "text-center",
+        style = "padding-top: 0;",
+        "Register"
+      ),
+      tags$br(),
+      email_input(
+        inputId = ns("email_register"),
+        label = tagList(icon("envelope"), "email"),
+        value = ""
+      ),
+      tags$br()
+    )),
+    
     shinyjs::hidden(div(
       id = ns("register_panel_bottom"),
-      div(
-        id = ns("continue_registation"),
-        shiny::actionButton(
-          inputId = ns("submit_continue_register"),
-          label = "Continue",
-          width = "100%",
-          class = "btn btn-primary btn-lg"
-        )
-      ),
-      shinyjs::hidden(div(
-        id = ns("register_passwords"),
-        div(
-          class = "form-group",
-          style = "width: 100%",
-          tags$label(
-            tagList(icon("unlock-alt"), "password"),
-            `for` = ns("register_password")
-          ),
-          tags$input(
-            id = ns("register_password"),
-            type = "password",
-            class = "form-control",
-            value = ""
-          )
-        ),
-        br(),
-        div(
-          class = "form-group shiny-input-container",
-          style = "width: 100%",
-          tags$label(
-            tagList(shiny::icon("unlock-alt"), "verify password"),
-            `for` = ns("register_password_verify")
-          ),
-          tags$input(
-            id = ns("register_password_verify"),
-            type = "password",
-            class = "form-control",
-            value = ""
-          )
-        ),
-        br(),
-        br(),
-        div(
-          style = "text-align: center;",
-          shinyFeedback::loadingButton(
-            ns("submit_register"),
-            label = "Register",
-            class = "btn btn-primary btn-lg",
-            style = "width: 100%;",
-            loadingLabel = "Registering...",
-            loadingClass = "btn btn-primary btn-lg text-center",
-            loadingStyle = "width: 100%;"
-          )
-        )
-      )),
+      if (isTRUE(.global_sessions$is_invite_required)) {
+        tagList(continue_registration, shinyjs::hidden(register_passwords))
+      } else {
+        register_passwords
+      },
       div(
         style = "text-align: center",
         hr(),
@@ -348,7 +361,7 @@ sign_in_module <- function(input, output, session) {
       )
       
       # user is invited
-      shinyjs::hide("continue_registation")
+      shinyjs::hide("continue_registration")
       
       shinyjs::show(
         "register_passwords",
@@ -415,7 +428,7 @@ sign_in_module <- function(input, output, session) {
       }
 
       # user is invited
-      shinyjs::hide("continue_registation")
+      shinyjs::hide("continue_registration")
 
       shinyjs::show(
         "register_passwords",

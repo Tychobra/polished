@@ -211,7 +211,7 @@ sign_in_module_ui_2 <- function(id) {
 
 #' Server logic for the sign in and register pages
 #'
-#' This server logic accompanies the \code{\link{sign_in_module_ui_2}}.
+#' This server logic accompanies \code{\link{sign_in_module_ui_2}}.
 #'
 #' @param input the Shiny input
 #' @param output the Shiny output

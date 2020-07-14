@@ -14,5 +14,5 @@ sign_in_module_2(input, output, session)
 \item{session}{the Shiny session}
 }
 \description{
-This server logic accompanies the \code{\link{sign_in_module_ui_2}}.
+This server logic accompanies \code{\link{sign_in_module_ui_2}}.
 }
