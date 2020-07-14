@@ -24,7 +24,7 @@ sign_in_module_ui <- function(
   ns <- shiny::NS(id)
 
   providers <- .global_sessions$sign_in_providers
-  
+
   continue_sign_in <- div(
     id = ns("continue_sign_in"),
     shiny::actionButton(
@@ -34,7 +34,7 @@ sign_in_module_ui <- function(
       class = "btn btn-primary btn-lg"
     )
   )
-  
+
   sign_in_password <- div(
     id = ns("sign_in_password"),
     div(
@@ -62,7 +62,7 @@ sign_in_module_ui <- function(
       loadingStyle = "width: 100%"
     )
   )
-  
+
   continue_registration <- div(
     id = ns("continue_registration"),
     shiny::actionButton(
@@ -72,7 +72,7 @@ sign_in_module_ui <- function(
       class = "btn btn-primary btn-lg"
     )
   )
-  
+
   register_passwords <- div(
     id = ns("register_passwords"),
     div(
@@ -165,7 +165,7 @@ sign_in_module_ui <- function(
         )
       )
     ),
-    
+
     shinyjs::hidden(div(
       id = ns("register_panel_top"),
       h1(
@@ -181,7 +181,7 @@ sign_in_module_ui <- function(
       ),
       tags$br()
     )),
-    
+
     shinyjs::hidden(div(
       id = ns("register_panel_bottom"),
       if (isTRUE(.global_sessions$is_invite_required)) {
@@ -242,7 +242,7 @@ sign_in_module_ui <- function(
 #' @param output the Shiny output
 #' @param session the Shiny session
 #'
-#' @importFrom shiny observeEvent observe getQueryString
+#' @importFrom shiny observeEvent observe getQueryString updateTextInput
 #' @importFrom shinyjs show hide
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom digest digest
@@ -354,25 +354,25 @@ sign_in_module <- function(input, output, session) {
       # go to the user registration page
       go_to_registration_page()
 
-      updateTextInput(
+      shiny::updateTextInput(
         session,
         "email_register",
         value = hold_email
       )
-      
+
       # user is invited
       shinyjs::hide("continue_registration")
-      
+
       shinyjs::show(
         "register_passwords",
         anim = TRUE
       )
-      
+
       # NEED to sleep this exact amount to allow animation (above) to show w/o bug
       Sys.sleep(.25)
-      
+
       shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
-      
+
 
     } else {
 
