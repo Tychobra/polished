@@ -1,13 +1,11 @@
 #' UI for the sign in and register pages
 #'
-#' UI for the sign in and register pages when a user invite is required to register and
-#' sign in.  See \code{\link{sign_in_no_invite_module}} if you do not require your
-#' users to sign in and register to access your 'shiny' app.
+#' Alternate sign in UI that works regardless of whether or not invites
+#' are required. \code{\link{sign_in_module_2}} must be provided as the 
+#' argument custom_sign_in_server in \code{\link{secure_server}} for proper
+#' functionality.
 #'
 #' @param id the Shiny module id
-#' @param register_link The text that will be displayed in the link to go to the
-#' user registration page.  The default is "First time user? Register here!".
-#' Set to \code{NULL} if you don't want to use the registration page.
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr
@@ -17,10 +15,7 @@
 #' @export
 #'
 #'
-sign_in_module_ui_2 <- function(
-  id,
-  register_link = "First time user? Register here!"
-) {
+sign_in_module_ui_2 <- function(id) {
   ns <- shiny::NS(id)
 
   providers <- .global_sessions$sign_in_providers
@@ -202,7 +197,7 @@ sign_in_module_ui_2 <- function(
 
 #' Server logic for the sign in and register pages
 #'
-#' This server logic accompanies the \code{\link{sign_in_module_ui}}.
+#' This server logic accompanies the \code{\link{sign_in_module_ui_2}}.
 #'
 #' @param input the Shiny input
 #' @param output the Shiny output
@@ -212,7 +207,8 @@ sign_in_module_ui_2 <- function(
 #' @importFrom shinyjs show hide
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom digest digest
-#'
+#' 
+#' @export
 #'
 sign_in_module_2 <- function(input, output, session) {
   ns <- session$ns

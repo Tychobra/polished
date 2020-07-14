@@ -4,13 +4,22 @@
 \alias{providers_ui}
 \title{UI for the Firebase authentication providers buttons}
 \usage{
-providers_ui(ns, sign_in_providers = c("google", "email"))
+providers_ui(
+  ns,
+  sign_in_providers = c("google", "email"),
+  title = "Sign In",
+  fancy = TRUE
+)
 }
 \arguments{
 \item{ns}{the 'shiny' namespace function created with \code{shiny::NS()}.}
 
 \item{sign_in_providers}{the sign in providers to enable.  Valid values are "google"
 "email", "microsoft", and/or "facebook". Defaults to \code{"email"}.}
+
+\item{title}{The title to be used above the provider buttons. Set to NULL to not include}
+
+\item{fancy}{Should the buttons be large and colorful?}
 }
 \value{
 the html UI of the "Sign in with *" buttons.
