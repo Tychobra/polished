@@ -4,6 +4,10 @@
 - only use the "email" sign in provider by default rather than c("google", "email")
 - add customizable sign out button to secure_static #93
 - standarized and documented process for using fully customized sign in and registration pages #92
+- add sign_in_module_2 as an alternative premade sign in page.
+- Deprecate sign_in_no_invite_module.  sign_in_module and sign_in_module_2 can now work with or without an invite requirement, so there is no longer a need for a dedicated
+sign_in_no_invite_module.
+
 
 # v0.1.0
 

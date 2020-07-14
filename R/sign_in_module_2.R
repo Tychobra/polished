@@ -1,13 +1,12 @@
 #' UI for the sign in and register pages
 #'
-#' UI for the sign in and register pages when a user invite is required to register and
-#' sign in.  See \code{\link{sign_in_no_invite_module}} if you do not require your
-#' users to sign in and register to access your 'shiny' app.
+#' Alternate sign in UI that works regardless of whether or not invites
+#' are required. The UI displays email sign in inputs on the left, and social sign in options
+#' on the right.  \code{\link{sign_in_module_2}} must be provided as the
+#' argument "custom_sign_in_server" in \code{\link{secure_server}} for proper
+#' functionality.
 #'
 #' @param id the Shiny module id
-#' @param register_link The text that will be displayed in the link to go to the
-#' user registration page.  The default is "First time user? Register here!".
-#' Set to \code{NULL} if you don't want to use the registration page.
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr
@@ -17,23 +16,8 @@
 #' @export
 #'
 #'
-sign_in_module_ui <- function(
-  id,
-  register_link = "First time user? Register here!"
-) {
+sign_in_module_2_ui <- function(id) {
   ns <- shiny::NS(id)
-
-  providers <- .global_sessions$sign_in_providers
-
-  continue_sign_in <- div(
-    id = ns("continue_sign_in"),
-    shiny::actionButton(
-      inputId = ns("submit_continue_sign_in"),
-      label = "Continue",
-      width = "100%",
-      class = "btn btn-primary btn-lg"
-    )
-  )
 
   sign_in_password <- div(
     id = ns("sign_in_password"),
@@ -51,7 +35,6 @@ sign_in_module_ui <- function(
         value = ""
       )
     ),
-    br(),
     shinyFeedback::loadingButton(
       ns("submit_sign_in"),
       label = "Sign In",
@@ -60,6 +43,44 @@ sign_in_module_ui <- function(
       loadingLabel = "Authenticating...",
       loadingClass = "btn btn-primary btn-lg text-center",
       loadingStyle = "width: 100%"
+    )
+  )
+
+  continue_sign_in <- div(
+    id = ns("continue_sign_in"),
+    shiny::actionButton(
+      inputId = ns("submit_continue_sign_in"),
+      label = "Continue",
+      width = "100%",
+      class = "btn btn-primary btn-lg"
+    )
+  )
+
+  sign_in_email_ui <- tags$div(
+    id = ns("email_ui"),
+    tags$br(),
+    email_input(
+      inputId = ns("email"),
+      label = tagList(icon("envelope"), "email"),
+      value = "",
+      width = "100%"
+    ),
+    tags$div(
+      id = ns("sign_in_panel_bottom"),
+      if (isTRUE(.global_sessions$is_invite_required)) {
+        tagList(continue_sign_in, shinyjs::hidden(sign_in_password))
+      } else {
+        sign_in_password
+      },
+      div(
+        style = "text-align: center;",
+        br(),
+        tags$button(
+          class = 'btn btn-link btn-small',
+          id = ns("reset_password"),
+          "Forgot your password?"
+        )
+      )
     )
   )
 
@@ -72,6 +93,7 @@ sign_in_module_ui <- function(
       class = "btn btn-primary btn-lg"
     )
   )
+
 
   register_passwords <- div(
     id = ns("register_passwords"),
@@ -89,7 +111,6 @@ sign_in_module_ui <- function(
         value = ""
       )
     ),
-    br(),
     div(
       class = "form-group shiny-input-container",
       style = "width: 100%",
@@ -104,8 +125,6 @@ sign_in_module_ui <- function(
         value = ""
       )
     ),
-    br(),
-    br(),
     div(
       style = "text-align: center;",
       shinyFeedback::loadingButton(
@@ -116,119 +135,78 @@ sign_in_module_ui <- function(
         loadingLabel = "Registering...",
         loadingClass = "btn btn-primary btn-lg text-center",
         loadingStyle = "width: 100%;"
-      )
+      ),
+      br(),
+      br()
     )
   )
 
-  email_ui <- tags$div(
-    id = ns("email_ui"),
-    tags$div(
-      id = ns("sign_in_panel_top"),
-      htmltools::h1(
-        class = "text-center",
-        style = "padding-top: 0;",
-        "Sign In"
-      ),
-      tags$br(),
-      email_input(
-        inputId = ns("email"),
-        label = tagList(icon("envelope"), "email"),
-        value = ""
-      ),
-      tags$br()
+  register_ui <- div(
+    br(),
+    email_input(
+      inputId = ns("email_register"),
+      label = tagList(icon("envelope"), "email"),
+      value = "",
+      width = "100%"
     ),
-    tags$div(
-      id = ns("sign_in_panel_bottom"),
-      if (isTRUE(.global_sessions$is_invite_required)) {
-        tagList(continue_sign_in, shinyjs::hidden(sign_in_password))
-      } else {
-        sign_in_password
-      },
-      div(
-        style = "text-align: center;",
-        if (is.null(register_link)) {
-          list()
-        } else {
-          list(
-            hr(),
-            shiny::actionLink(
-              inputId = ns("go_to_register"),
-              label = register_link
-            )
-          )
-        },
-        br(),
-        tags$button(
-          class = 'btn btn-link btn-small',
-          id = ns("reset_password"),
-          "Forgot your password?"
-        )
-      )
-    ),
-
-    shinyjs::hidden(div(
-      id = ns("register_panel_top"),
-      h1(
-        class = "text-center",
-        style = "padding-top: 0;",
-        "Register"
-      ),
-      tags$br(),
-      email_input(
-        inputId = ns("email_register"),
-        label = tagList(icon("envelope"), "email"),
-        value = ""
-      ),
-      tags$br()
-    )),
-
-    shinyjs::hidden(div(
-      id = ns("register_panel_bottom"),
-      if (isTRUE(.global_sessions$is_invite_required)) {
-        tagList(continue_registration, shinyjs::hidden(register_passwords))
-      } else {
-        register_passwords
-      },
-      div(
-        style = "text-align: center",
-        hr(),
-        shiny::actionLink(
-          inputId = ns("go_to_sign_in"),
-          label = "Already a user? Sign in!"
-        ),
-        br(),
-        br()
-      )
-    ))
+    if (isTRUE(.global_sessions$is_invite_required)) {
+      tagList(continue_registration, shinyjs::hidden(register_passwords))
+    } else {
+      register_passwords
+    }
   )
 
+  sign_in_register_email <- shiny::tabsetPanel(
+    id = ns("tabs"),
+    shiny::tabPanel("Sign In", sign_in_email_ui),
+    shiny::tabPanel("Register", register_ui)
+  )
+
+  providers <- .global_sessions$sign_in_providers
+
   if (length(providers) == 1 && providers == "email") {
-    ui_out <- email_ui
+    sign_in_ui <- tags$div(
+      class = "auth_panel",
+      sign_in_register_email
+    )
   } else {
 
     hold_providers_ui <- providers_ui(
       ns,
-      providers
+      providers[providers != "email"],
+      title = NULL,
+      fancy = FALSE
     )
 
-    email_ui <- shinyjs::hidden(email_ui)
-
-    ui_out <-  tagList(
-      hold_providers_ui,
-      email_ui
+    sign_in_ui <- tags$div(
+      class = "auth_panel_2",
+      fluidRow(
+        column(
+          7,
+          style = "border-style: none solid none none; border-width: 1px; border-color: #ddd;",
+          sign_in_register_email
+        ),
+        column(
+          5,
+          br(),
+          br(),
+          br(),
+          br(),
+          div(
+            style = "margin-top: 8px;",
+            hold_providers_ui
+          )
+        )
+      )
     )
-
   }
 
 
 
   htmltools::tagList(
     shinyjs::useShinyjs(),
-    tags$div(
-      class = "auth_panel",
-      ui_out
-    ),
-    tags$script(src = "polish/js/auth_keypress.js"),
+    sign_in_ui,
+    tags$script(src = "polish/js/auth_keypress_2.js"),
     tags$script(paste0("auth_keypress('", ns(''), "')")),
     sign_in_js(ns)
   )
@@ -236,22 +214,21 @@ sign_in_module_ui <- function(
 
 #' Server logic for the sign in and register pages
 #'
-#' This server logic accompanies the \code{\link{sign_in_module_ui}}.
+#' This server logic accompanies \code{\link{sign_in_module_2_ui}}.
 #'
 #' @param input the Shiny input
 #' @param output the Shiny output
 #' @param session the Shiny session
 #'
-#' @importFrom shiny observeEvent observe getQueryString updateTextInput
+#' @importFrom shiny observeEvent observe getQueryString updateTabsetPanel updateTextInput
 #' @importFrom shinyjs show hide
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom digest digest
 #'
 #' @export
 #'
-sign_in_module <- function(input, output, session) {
+sign_in_module_2 <- function(input, output, session) {
   ns <- session$ns
-
 
   observeEvent(input$sign_in_with_email, {
     shinyjs::show("email_ui")
@@ -259,20 +236,15 @@ sign_in_module <- function(input, output, session) {
   })
 
 
-  go_to_registration_page <- function() {
-    # go to the user registration page
-    shinyjs::hide("sign_in_panel_top")
-    shinyjs::hide("sign_in_panel_bottom")
-    shinyjs::show("register_panel_top")
-    shinyjs::show("register_panel_bottom")
-  }
-
-  # if query parameter "register" == TRUE, then go directly to registration page
   observe({
     query_string <- shiny::getQueryString()
 
     if (identical(query_string$register, "TRUE")) {
-      go_to_registration_page()
+      shiny::updateTabsetPanel(
+        session,
+        "tabs",
+        selected = "Register"
+      )
     }
   })
 
@@ -316,6 +288,7 @@ sign_in_module <- function(input, output, session) {
 
     }, error = function(e) {
       # user is not invited
+      print("Error in continuing sign in")
       print(e)
       shinyWidgets::sendSweetAlert(
         session,
@@ -348,11 +321,13 @@ sign_in_module <- function(input, output, session) {
       Sys.sleep(.25)
 
       shinyjs::runjs(paste0("$('#", ns('password'), "').focus()"))
-
     } else if (isFALSE(is_registered)) {
 
-      # go to the user registration page
-      go_to_registration_page()
+      shiny::updateTabsetPanel(
+        session,
+        "tabs",
+        "Register"
+      )
 
       shiny::updateTextInput(
         session,
@@ -372,8 +347,6 @@ sign_in_module <- function(input, output, session) {
       Sys.sleep(.25)
 
       shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
-
-
     } else {
 
       print(is_registered)
@@ -385,21 +358,6 @@ sign_in_module <- function(input, output, session) {
       )
     }
   })
-
-
-  shiny::observeEvent(input$go_to_register, {
-    go_to_registration_page()
-  })
-
-  shiny::observeEvent(input$go_to_sign_in, {
-    shinyjs::hide("register_panel_top")
-    shinyjs::hide("register_panel_bottom")
-    shinyjs::show("sign_in_panel_top")
-    shinyjs::show("sign_in_panel_bottom")
-  })
-
-
-
 
 
   submit_continue_register_rv <- reactiveVal(0)
@@ -442,6 +400,7 @@ sign_in_module <- function(input, output, session) {
 
     }, error = function(e) {
       # user is not invited
+      print("Error in continuing registration")
       print(e)
       shinyWidgets::sendSweetAlert(
         session,

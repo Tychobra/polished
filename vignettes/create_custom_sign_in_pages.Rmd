@@ -39,6 +39,8 @@ Behind the scenes, the `sign_in_module()` and `sign_in_no_invite_module()` use t
 - "email"
 - "password"
 - "submit_sign_in"
+
+- "email_register"
 - "register_password"
 - "register_password_verify"
 - "submit_register"

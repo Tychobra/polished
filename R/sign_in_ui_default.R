@@ -77,7 +77,14 @@ sign_in_ui_default <- function(
           padding: 10px 25px;
           background-color: #fff;
           color: #080021;
-          z-index: 20000;
+        }
+
+        .auth_panel_2 {
+          width: 600px;
+          max-width: 100%;
+          padding: 10px 25px;
+          background-color: #fff;
+          color: #080021;
         }
 
         .btn-primary {
@@ -108,11 +115,17 @@ sign_in_ui_default <- function(
         width = 12,
         align = "center",
         logo_top,
-        sign_in_module,
         tags$div(
-          style = "width: 300px; max-width: 100%; background-color: #FFF",
-          tags$hr(style="padding: 0; margin: 0;"),
-          logo_bottom
+          style = "display: inline-block;",
+          div(
+            style = "display: flex; flex-direction: column;",
+            sign_in_module,
+            tags$div(
+              style = "max-width: 100%; background-color: #FFF",
+              tags$hr(style="padding: 0; margin: 0;"),
+              logo_bottom
+            )
+          )
         )
       )
     ),

@@ -17,6 +17,11 @@
 #'
 #'
 sign_in_no_invite_module_ui <- function(id) {
+  .Deprecated(
+    msg = "`sign_in_no_invite_module_ui` is deprecated. Instead, use a `sign_in_module*`
+sign in page and set `is_invite_required = FALSE` in `global_sessions_config()`.
+The UI will automatically adjust to not require and invite.")
+
   ns <- shiny::NS(id)
 
   providers <- .global_sessions$sign_in_providers
@@ -29,7 +34,14 @@ sign_in_no_invite_module_ui <- function(id) {
         class = "text-center",
         style = "padding-top: 0;",
         "Sign In"
-      )
+      ),
+      tags$br(),
+      email_input(
+        inputId = ns("email"),
+        label = tagList(icon("envelope"), "email"),
+        value = ""
+      ),
+      tags$br()
     ),
     shinyjs::hidden(tags$div(
       id = ns("register_panel_top"),
@@ -37,16 +49,15 @@ sign_in_no_invite_module_ui <- function(id) {
         class = "text-center",
         style = "padding-top: 0;",
         "Register"
-      )
+      ),
+      tags$br(),
+      email_input(
+        inputId = ns("email_register"),
+        label = tagList(icon("envelope"), "email"),
+        value = ""
+      ),
+      tags$br()
     )),
-
-    tags$br(),
-    email_input(
-      inputId = ns("email"),
-      label = tagList(icon("envelope"), "email"),
-      value = ""
-    ),
-    tags$br(),
 
     tags$div(
       id = ns("sign_in_panel_bottom"),
@@ -179,7 +190,8 @@ sign_in_no_invite_module_ui <- function(id) {
         ui_out
       )
     ),
-
+    tags$script(src = "polish/js/auth_keypress.js"),
+    tags$script(paste0("auth_keypress('", ns(''), "')")),
     sign_in_js(ns)
   )
 }
