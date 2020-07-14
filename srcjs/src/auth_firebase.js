@@ -37,7 +37,7 @@ const auth_firebase = (ns_prefix) => {
   }
 
   $(document).on("click", `#${ns_prefix}submit_register`, () => {
-    const email = $(`#${ns_prefix}email`).val().toLowerCase()
+    const email = $(`#${ns_prefix}email_register`).val().toLowerCase()
     const password = $(`#${ns_prefix}register_password`).val()
     const password_2 = $(`#${ns_prefix}register_password_verify`).val()
 
