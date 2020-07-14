@@ -17,10 +17,13 @@
 #'
 #'
 sign_in_no_invite_module_ui <- function(id) {
-  .Deprecated(msg = "sign_in_no_invite_module_ui is deprecated. \nYou can use another default sign in page and set is_invite_required = FALSE in global_sessions_config")
-  
+  .Deprecated(
+    msg = "`sign_in_no_invite_module_ui` is deprecated. Instead, use a `sign_in_module*`
+sign in page and set `is_invite_required = FALSE` in `global_sessions_config()`.
+The UI will automatically adjust to not require and invite.")
+
   ns <- shiny::NS(id)
-  
+
   providers <- .global_sessions$sign_in_providers
 
   email_ui <- tags$div(
