@@ -135,7 +135,9 @@ sign_in_module_2_ui <- function(id) {
         loadingLabel = "Registering...",
         loadingClass = "btn btn-primary btn-lg text-center",
         loadingStyle = "width: 100%;"
-      )
+      ),
+      br(),
+      br()
     )
   )
 
