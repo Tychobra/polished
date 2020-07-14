@@ -87,11 +87,6 @@ sign_in_module_ui_2 <- function(
   )
 
   register_ui <- div(
-    h1(
-      class = "text-center",
-      style = "padding-top: 0;",
-      "Register"
-    ),
     br(),
     email_input(
       inputId = ns("email_register"),
@@ -99,7 +94,6 @@ sign_in_module_ui_2 <- function(
       value = "",
       width = "100%"
     ),
-    br(),
     div(
       id = ns("continue_registation"),
       br(),
@@ -156,10 +150,18 @@ sign_in_module_ui_2 <- function(
       )
     ))
   )
+  
+  sign_in_register_email <- shiny::tabsetPanel(
+    id = ns("tabs"),
+    shiny::tabPanel("Sign In", sign_in_email_ui),
+    shiny::tabPanel("Register", register_ui)
+  )
 
   if (length(providers) == 1 && providers == "email") {
-   sign_in_ui <- sign_in_email_ui
-
+    sign_in_ui <- tags$div(
+      class = "auth_panel",
+      sign_in_register_email
+    )
   } else {
 
     hold_providers_ui <- providers_ui(
@@ -169,20 +171,22 @@ sign_in_module_ui_2 <- function(
       fancy = FALSE
     )
 
-    sign_in_ui <-  div(
-      fluidRow(
-        htmltools::h1("Sign In")
-      ),
+    sign_in_ui <- tags$div(
+      class = "auth_panel_2",
       fluidRow(
         column(
           7,
-          sign_in_email_ui
+          style = "border-style: none solid none none; border-width: 1px; border-color: #ddd;",
+          sign_in_register_email
         ),
         column(
           5,
           br(),
+          br(),
+          br(),
+          br(),
           div(
-            style = "margin-top: 25px;",
+            style = "margin-top: 8px;",
             hold_providers_ui
           )
         )
@@ -194,14 +198,9 @@ sign_in_module_ui_2 <- function(
 
   htmltools::tagList(
     shinyjs::useShinyjs(),
-    tags$div(
-      class = "auth_panel_2",
-      shiny::tabsetPanel(
-        id = ns("tabs"),
-        shiny::tabPanel("Sign In", sign_in_ui),
-        shiny::tabPanel("Register", register_ui)
-      )
-    ),
+    sign_in_ui,
+    tags$script(src = "polish/js/auth_keypress_2.js"),
+    tags$script(paste0("auth_keypress('", ns(''), "')")),
     sign_in_js(ns)
   )
 }
