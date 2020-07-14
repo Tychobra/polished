@@ -249,10 +249,10 @@ sign_in_module_2 <- function(input, output, session) {
     # check user invite
     invite <- NULL
     tryCatch({
-
+      
       invite <- .global_sessions$get_invite_by_email(email)
 
-      if (is.null(invite)) {
+      if (isTRUE(.global_sessions$is_invite_required) && is.null(invite)) {
 
         shinyWidgets::sendSweetAlert(
           session,
@@ -356,7 +356,7 @@ sign_in_module_2 <- function(input, output, session) {
     tryCatch({
       invite <- .global_sessions$get_invite_by_email(email)
 
-      if (is.null(invite)) {
+      if (isTRUE(.global_sessions$is_invite_required) && is.null(invite)) {
 
         shinyWidgets::sendSweetAlert(
           session,
