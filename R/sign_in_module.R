@@ -345,9 +345,21 @@ sign_in_module <- function(input, output, session) {
         "email_register",
         value = hold_email
       )
+      
+      # user is invited
+      shinyjs::hide("continue_registation")
+      
+      shinyjs::show(
+        "register_passwords",
+        anim = TRUE
+      )
+      
+      # NEED to sleep this exact amount to allow animation (above) to show w/o bug
+      Sys.sleep(.25)
+      
+      shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
+      
 
-      # open the passwords to continue user registration
-      submit_continue_register_rv(submit_continue_register_rv() + 1)
     } else {
 
       print(is_registered)
@@ -357,12 +369,7 @@ sign_in_module <- function(input, output, session) {
         text = "Error checking invite",
         type = "error"
       )
-
-
     }
-
-
-
   })
 
 

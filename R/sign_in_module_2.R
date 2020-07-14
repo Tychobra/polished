@@ -34,7 +34,6 @@ sign_in_module_ui_2 <- function(
       value = "",
       width = "100%"
     ),
-    tags$br(),
 
     tags$div(
       id = ns("sign_in_panel_bottom"),
@@ -54,7 +53,6 @@ sign_in_module_ui_2 <- function(
             value = ""
           )
         ),
-        br(),
         shinyFeedback::loadingButton(
           ns("submit_sign_in"),
           label = "Sign In",
@@ -96,7 +94,6 @@ sign_in_module_ui_2 <- function(
     ),
     div(
       id = ns("continue_registation"),
-      br(),
       shiny::actionButton(
         inputId = ns("submit_continue_register"),
         label = "Continue",
@@ -120,7 +117,6 @@ sign_in_module_ui_2 <- function(
           value = ""
         )
       ),
-      br(),
       div(
         class = "form-group shiny-input-container",
         style = "width: 100%",
@@ -135,7 +131,6 @@ sign_in_module_ui_2 <- function(
           value = ""
         )
       ),
-      br(),
       div(
         style = "text-align: center;",
         shinyFeedback::loadingButton(
@@ -281,6 +276,7 @@ sign_in_module_2 <- function(input, output, session) {
 
     }, error = function(e) {
       # user is not invited
+      print("Error in continuing sign in")
       print(e)
       shinyWidgets::sendSweetAlert(
         session,
@@ -296,41 +292,51 @@ sign_in_module_2 <- function(input, output, session) {
 
   observeEvent(input$check_registered_res, {
     hold_email <- tolower(input$email)
-
+    
     is_registered <- input$check_registered_res
-
+    
     if (isTRUE(is_registered)) {
       # user is already registered, so continue sign in
       # user is invited
       shinyjs::hide("submit_continue_sign_in")
-
+      
       shinyjs::show(
         "sign_in_password",
         anim = TRUE
       )
-
+      
       # NEED to sleep this exact amount to allow animation (above) to show w/o bug
       Sys.sleep(.25)
-
+      
       shinyjs::runjs(paste0("$('#", ns('password'), "').focus()"))
-
     } else if (isFALSE(is_registered)) {
+  
       updateTabsetPanel(
         session,
         "tabs",
         "Register"
       )
-
+  
       updateTextInput(
         session,
         "email_register",
         value = hold_email
       )
-
-      # open the passwords to continue user registration
-      submit_continue_register_rv(submit_continue_register_rv() + 1)
+      
+      # user is invited
+      shinyjs::hide("continue_registation")
+      
+      shinyjs::show(
+        "register_passwords",
+        anim = TRUE
+      )
+      
+      # NEED to sleep this exact amount to allow animation (above) to show w/o bug
+      Sys.sleep(.25)
+      
+      shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
     } else {
-
+      
       print(is_registered)
       shinyWidgets::sendSweetAlert(
         session,
@@ -349,7 +355,7 @@ sign_in_module_2 <- function(input, output, session) {
   })
 
   shiny::observeEvent(submit_continue_register_rv(), {
-
+    
     email <- tolower(input$email_register)
 
     invite <- NULL
@@ -382,6 +388,7 @@ sign_in_module_2 <- function(input, output, session) {
 
     }, error = function(e) {
       # user is not invited
+      print("Error in continuing registration")
       print(e)
       shinyWidgets::sendSweetAlert(
         session,
