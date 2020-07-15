@@ -62,7 +62,7 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
       )
 
       if (is.null(new_user)) {
-        shinyFeedback::resetLoadingButton('submit_sign_in')
+        shinyFeedback::resetLoadingButton('sign_in_submit')
         # show unable to sign in message
         shinyFeedback::showToast('error', 'sign in error')
         stop('sign_in_module: sign in error', call. = FALSE)
@@ -74,7 +74,7 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
       }
 
     }, error = function(e) {
-      shinyFeedback::resetLoadingButton('submit_sign_in')
+      shinyFeedback::resetLoadingButton('sign_in_submit')
       print(e)
       shinyWidgets::sendSweetAlert(
         session,
