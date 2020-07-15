@@ -206,7 +206,7 @@ sign_in_module_2_ui <- function(id) {
   htmltools::tagList(
     shinyjs::useShinyjs(),
     sign_in_ui,
-    tags$script(src = "polish/js/auth_keypress_2.js?version=2"),
+    tags$script(src = "polish/js/auth_keypress.js?version=2"),
     tags$script(paste0("auth_keypress('", ns(''), "')")),
     sign_in_js(ns)
   )
