@@ -19,24 +19,24 @@
 sign_in_module_2_ui <- function(id) {
   ns <- shiny::NS(id)
 
-  sign_in_password <- div(
-    id = ns("sign_in_password"),
+  sign_in_password_ui <- div(
+    id = ns("sign_in_password_ui"),
     div(
       class = "form-group",
       style = "width: 100%;",
       tags$label(
         tagList(icon("unlock-alt"), "password"),
-        `for` = "password"
+        `for` = "sign_in_password"
       ),
       tags$input(
-        id = ns("password"),
+        id = ns("sign_in_password"),
         type = "password",
         class = "form-control",
         value = ""
       )
     ),
     shinyFeedback::loadingButton(
-      ns("submit_sign_in"),
+      ns("sign_in_submit"),
       label = "Sign In",
       class = "btn btn-primary btn-lg text-center",
       style = "width: 100%",
@@ -60,7 +60,7 @@ sign_in_module_2_ui <- function(id) {
     id = ns("email_ui"),
     tags$br(),
     email_input(
-      inputId = ns("email"),
+      inputId = ns("sign_in_email"),
       label = tagList(icon("envelope"), "email"),
       value = "",
       width = "100%"
@@ -68,9 +68,9 @@ sign_in_module_2_ui <- function(id) {
     tags$div(
       id = ns("sign_in_panel_bottom"),
       if (isTRUE(.global_sessions$is_invite_required)) {
-        tagList(continue_sign_in, shinyjs::hidden(sign_in_password))
+        tagList(continue_sign_in, shinyjs::hidden(sign_in_password_ui))
       } else {
-        sign_in_password
+        sign_in_password_ui
       },
       div(
         style = "text-align: center;",
@@ -128,7 +128,7 @@ sign_in_module_2_ui <- function(id) {
     div(
       style = "text-align: center;",
       shinyFeedback::loadingButton(
-        ns("submit_register"),
+        ns("register_submit"),
         label = "Register",
         class = "btn btn-primary btn-lg",
         style = "width: 100%;",
@@ -144,7 +144,7 @@ sign_in_module_2_ui <- function(id) {
   register_ui <- div(
     br(),
     email_input(
-      inputId = ns("email_register"),
+      inputId = ns("register_email"),
       label = tagList(icon("envelope"), "email"),
       value = "",
       width = "100%"
@@ -206,7 +206,7 @@ sign_in_module_2_ui <- function(id) {
   htmltools::tagList(
     shinyjs::useShinyjs(),
     sign_in_ui,
-    tags$script(src = "polish/js/auth_keypress_2.js"),
+    tags$script(src = "polish/js/auth_keypress_2.js?version=2"),
     tags$script(paste0("auth_keypress('", ns(''), "')")),
     sign_in_js(ns)
   )
@@ -251,7 +251,7 @@ sign_in_module_2 <- function(input, output, session) {
 
   shiny::observeEvent(input$submit_continue_sign_in, {
 
-    email <- tolower(input$email)
+    email <- tolower(input$sign_in_email)
 
     # check user invite
     invite <- NULL
@@ -303,7 +303,7 @@ sign_in_module_2 <- function(input, output, session) {
 
 
   observeEvent(input$check_registered_res, {
-    hold_email <- tolower(input$email)
+    hold_email <- tolower(input$sign_in_email)
 
     is_registered <- input$check_registered_res
 
@@ -313,14 +313,14 @@ sign_in_module_2 <- function(input, output, session) {
       shinyjs::hide("submit_continue_sign_in")
 
       shinyjs::show(
-        "sign_in_password",
+        "sign_in_password_ui",
         anim = TRUE
       )
 
       # NEED to sleep this exact amount to allow animation (above) to show w/o bug
       Sys.sleep(.25)
 
-      shinyjs::runjs(paste0("$('#", ns('password'), "').focus()"))
+      shinyjs::runjs(paste0("$('#", ns('sign_in_password'), "').focus()"))
     } else if (isFALSE(is_registered)) {
 
       shiny::updateTabsetPanel(
@@ -331,7 +331,7 @@ sign_in_module_2 <- function(input, output, session) {
 
       shiny::updateTextInput(
         session,
-        "email_register",
+        "register_email",
         value = hold_email
       )
 
@@ -368,7 +368,7 @@ sign_in_module_2 <- function(input, output, session) {
 
   shiny::observeEvent(submit_continue_register_rv(), {
 
-    email <- tolower(input$email_register)
+    email <- tolower(input$register_email)
 
     invite <- NULL
     tryCatch({

@@ -36,14 +36,14 @@ const auth_firebase = (ns_prefix) => {
     })
   }
 
-  $(document).on("click", `#${ns_prefix}submit_register`, () => {
-    const email = $(`#${ns_prefix}email_register`).val().toLowerCase()
+  $(document).on("click", `#${ns_prefix}register_submit`, () => {
+    const email = $(`#${ns_prefix}register_email`).val().toLowerCase()
     const password = $(`#${ns_prefix}register_password`).val()
     const password_2 = $(`#${ns_prefix}register_password_verify`).val()
 
     if (password !== password_2) {
       // Event to reset Register loading button from loading state back to ready state
-      loadingButtons.resetLoading(`${ns_prefix}submit_register`);
+      loadingButtons.resetLoading(`${ns_prefix}register_submit`);
 
       toastr.error("The passwords do not match", null, toast_options)
       console.log("the passwords do not match")
@@ -56,7 +56,7 @@ const auth_firebase = (ns_prefix) => {
       // send verification email
       return userCredential.user.sendEmailVerification().catch(error => {
         console.error("Error sending email verification", error)
-        loadingButtons.resetLoading(`${ns_prefix}submit_register`);
+        loadingButtons.resetLoading(`${ns_prefix}register_submit`);
       })
 
 
@@ -65,21 +65,21 @@ const auth_firebase = (ns_prefix) => {
       return sign_in(email, password).catch(error => {
         toastr.error(`Sign in Error: ${error.message}`, null, toast_options)
         console.log("error: ", error)
-        loadingButtons.resetLoading(`${ns_prefix}submit_sign_in`);
+        loadingButtons.resetLoading(`${ns_prefix}sign_in_submit`);
       })
 
     }).catch((error) => {
       toastr.error("" + error, null, toast_options)
       console.log("error registering user")
       console.log(error)
-      loadingButtons.resetLoading(`${ns_prefix}submit_register`);
+      loadingButtons.resetLoading(`${ns_prefix}register_submit`);
     })
 
   })
 
 
   $(document).on("click", `#${ns_prefix}reset_password`, () => {
-    const email = $(`#${ns_prefix}email`).val().toLowerCase()
+    const email = $(`#${ns_prefix}sign_in_email`).val().toLowerCase()
 
     auth.sendPasswordResetEmail(email).then(() => {
       console.log(`Password reset email sent to ${email}`)
@@ -90,15 +90,15 @@ const auth_firebase = (ns_prefix) => {
     })
   })
 
-  $(document).on("click", `#${ns_prefix}submit_sign_in`, () => {
+  $(document).on("click", `#${ns_prefix}sign_in_submit`, () => {
 
-    const email = $(`#${ns_prefix}email`).val().toLowerCase()
-    const password = $(`#${ns_prefix}password`).val()
+    const email = $(`#${ns_prefix}sign_in_email`).val().toLowerCase()
+    const password = $(`#${ns_prefix}sign_in_password`).val()
 
     sign_in(email, password).catch(error => {
 
       // Event to reset Sign In loading button
-      loadingButtons.resetLoading(`${ns_prefix}submit_sign_in`);
+      loadingButtons.resetLoading(`${ns_prefix}sign_in_submit`);
       toastr.error(`Sign in Error: ${error.message}`, null, toast_options)
       console.log("error: ", error)
     })

@@ -25,14 +25,14 @@ var auth_firebase = function auth_firebase(ns_prefix) {
     });
   };
 
-  $(document).on("click", "#".concat(ns_prefix, "submit_register"), function () {
-    var email = $("#".concat(ns_prefix, "email_register")).val().toLowerCase();
+  $(document).on("click", "#".concat(ns_prefix, "register_submit"), function () {
+    var email = $("#".concat(ns_prefix, "register_email")).val().toLowerCase();
     var password = $("#".concat(ns_prefix, "register_password")).val();
     var password_2 = $("#".concat(ns_prefix, "register_password_verify")).val();
 
     if (password !== password_2) {
       // Event to reset Register loading button from loading state back to ready state
-      loadingButtons.resetLoading("".concat(ns_prefix, "submit_register"));
+      loadingButtons.resetLoading("".concat(ns_prefix, "register_submit"));
       toastr.error("The passwords do not match", null, toast_options);
       console.log("the passwords do not match");
       return;
@@ -42,23 +42,23 @@ var auth_firebase = function auth_firebase(ns_prefix) {
       // send verification email
       return userCredential.user.sendEmailVerification()["catch"](function (error) {
         console.error("Error sending email verification", error);
-        loadingButtons.resetLoading("".concat(ns_prefix, "submit_register"));
+        loadingButtons.resetLoading("".concat(ns_prefix, "register_submit"));
       });
     }).then(function () {
       return sign_in(email, password)["catch"](function (error) {
         toastr.error("Sign in Error: ".concat(error.message), null, toast_options);
         console.log("error: ", error);
-        loadingButtons.resetLoading("".concat(ns_prefix, "submit_sign_in"));
+        loadingButtons.resetLoading("".concat(ns_prefix, "sign_in_submit"));
       });
     })["catch"](function (error) {
       toastr.error("" + error, null, toast_options);
       console.log("error registering user");
       console.log(error);
-      loadingButtons.resetLoading("".concat(ns_prefix, "submit_register"));
+      loadingButtons.resetLoading("".concat(ns_prefix, "register_submit"));
     });
   });
   $(document).on("click", "#".concat(ns_prefix, "reset_password"), function () {
-    var email = $("#".concat(ns_prefix, "email")).val().toLowerCase();
+    var email = $("#".concat(ns_prefix, "sign_in_email")).val().toLowerCase();
     auth.sendPasswordResetEmail(email).then(function () {
       console.log("Password reset email sent to ".concat(email));
       toastr.success("Password reset email sent to ".concat(email), null, toast_options);
@@ -67,12 +67,12 @@ var auth_firebase = function auth_firebase(ns_prefix) {
       console.log("error resetting email: ", error);
     });
   });
-  $(document).on("click", "#".concat(ns_prefix, "submit_sign_in"), function () {
-    var email = $("#".concat(ns_prefix, "email")).val().toLowerCase();
-    var password = $("#".concat(ns_prefix, "password")).val();
+  $(document).on("click", "#".concat(ns_prefix, "sign_in_submit"), function () {
+    var email = $("#".concat(ns_prefix, "sign_in_email")).val().toLowerCase();
+    var password = $("#".concat(ns_prefix, "sign_in_password")).val();
     sign_in(email, password)["catch"](function (error) {
       // Event to reset Sign In loading button
-      loadingButtons.resetLoading("".concat(ns_prefix, "submit_sign_in"));
+      loadingButtons.resetLoading("".concat(ns_prefix, "sign_in_submit"));
       toastr.error("Sign in Error: ".concat(error.message), null, toast_options);
       console.log("error: ", error);
     });

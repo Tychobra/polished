@@ -36,14 +36,14 @@ sign_in_check_jwt()
 
 Behind the scenes, the `sign_in_module()` and `sign_in_no_invite_module()` use the 2 above functions to build their UI and server functionality.  To fully customize your sign in pages, you can create your own shiny module that uses these functions. To create your own fully cuatomized sign in module, include inputs with the following name-spaced ids:
 
-- "email"
-- "password"
-- "submit_sign_in"
+- "sign_in_email"
+- "sign_in_password"
+- "sign_in_submit"
 
-- "email_register"
+- "register_email"
 - "register_password"
 - "register_password_verify"
-- "submit_register"
+- "register_submit"
 
 You can create `shiny::textInputs`, `shiny::passwordInput`s, and `shiny::actionButton`s with the above IDs, or you can use the `email_input` and `password_input` functions available with `polished`;  As long as the ID of the inputs match up with the above input IDs, then the JavaScript available with `sign_in_js()` and the server logic in `sign_in_check_jwt()` will be able to handle the sign in and registration.  See the example below:
 
@@ -61,17 +61,16 @@ my_custom_sign_in_module_ui <- function(id) {
     shinyjs::useShinyjs(),
     # your custom sign in inputs
     
-    # both the register and sign in pages use the same email input
-    email_input(
-      ns("email")
-    ),
     div(
       id = ns("sign_in_page"),
+      email_input(
+        ns("sign_in_email")
+      ),
       password_input(
-        ns("password")
+        ns("sign_in_password")
       ),
       actionButton(
-        ns("submit_sign_in"),
+        ns("sign_in_submit"),
         "Sign In"
       ),
       actionLink(
@@ -91,7 +90,7 @@ my_custom_sign_in_module_ui <- function(id) {
           ns("register_password_verify")
         ),
         actionButton(
-          ns("submit_register"),
+          ns("register_submit"),
           "Register"
         ),
         actionLink(
