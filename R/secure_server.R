@@ -158,7 +158,7 @@ secure_server <- function(
 
 
 
-    })
+    }, once = TRUE)
 
     # go to admin panel
     shiny::callModule(
@@ -220,7 +220,7 @@ secure_server <- function(
 
         })
       }
-    })
+    }, once = TRUE)
 
 
 
