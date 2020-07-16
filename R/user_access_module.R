@@ -385,14 +385,6 @@ user_access_module <- function(input, output, session) {
       filter(.data$user_uid == input$sign_in_as_btn_user_uid) %>%
       dplyr::pull("user_uid")
 
-
-    session$sendCustomMessage(
-      "polish__show_loading",
-      message = list(
-        text = "Loading..."
-      )
-    )
-
     # sign in as another user
     .global_sessions$set_signed_in_as(
       hold_user$session_uid,

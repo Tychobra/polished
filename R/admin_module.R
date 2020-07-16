@@ -165,13 +165,6 @@ admin_module <- function(input, output, session) {
 
   shiny::observeEvent(input$go_to_shiny_app, {
 
-    session$sendCustomMessage(
-      "polish__show_loading",
-      message = list(
-        text = "Loading..."
-      )
-    )
-
     # to to the Shiny app
     remove_query_string(session)
 
