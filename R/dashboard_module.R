@@ -415,7 +415,9 @@ dashboard_module <- function(input, output, session) {
       container = container,
       selection = "none",
       callback = JS("$( table.table().container() ).addClass( 'table-responsive' ); return table;"),
+      plugins = 'select',
       options = list(
+        sPaginationType = 'listbox',
         dom = "tp",
         language = list(
           emptyTable = "No Active Users"
