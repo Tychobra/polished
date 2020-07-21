@@ -9,12 +9,6 @@ Authentication and user administration for Shiny apps.  `polished` provides a wa
 
 Register and sign in to a [live Shiny app using polished](https://tychobra.shinyapps.io/polished_example_01).
 
-### Polished API
+### Polished.tech
 
-polished requires the [polishedapi](https://github.com/Tychobra/polishedapi).  There are two ways to use the `polishedapi`.
-
-1. [polished.tech](https://polished.tech): polished.tech is our hosted offering of the `polishedapi`.  It is the easiest way to use `polished`.  It does not require database setup or API hosting.  
-
-2. On Premise: Deploy the `polishedapi` on your own servers.  This naturally requires you to set up and maintain a database and API hosting server.  
-
-If you want to use [polished.tech](https://polished.tech), go to the polished.tech website and follow the [Get Started](https://polished.tech/docs/get-started) instructions.  If you want to deploy the polishedapi on premise, check out the [polishedapi README](https://github.com/Tychobra/polishedapi/blob/master/README.md).
+polished requires a [polished.tech](https://github.com/Tychobra/polishedapi) account. Create an account and following the [Get Started Guide](https://polished.tech/docs/get-started) to get up and running in minutes.
