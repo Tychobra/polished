@@ -7,10 +7,8 @@ Authentication and user administration for Shiny apps.  `polished` provides a wa
 
 ### Live Demo
 
-Register and sign in to a [live Shiny app using polished](https://tychobra.shinyapps.io/polished_example_01).
+[live example apps with videos here](https://polished.tech/examples)
 
 ### Polished.tech
 
 Follow the [Get Started Guide](https://polished.tech/docs/get-started) to get up and running in minutes.
-
-[More live examples with videos here](https://polished.tech/examples)
