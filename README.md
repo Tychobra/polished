@@ -11,4 +11,6 @@ Register and sign in to a [live Shiny app using polished](https://tychobra.shiny
 
 ### Polished.tech
 
-polished requires a [polished.tech](https://github.com/Tychobra/polishedapi) account. Create an account and following the [Get Started Guide](https://polished.tech/docs/get-started) to get up and running in minutes.
+Follow the [Get Started Guide](https://polished.tech/docs/get-started) to get up and running in minutes.
+
+[More live examples with videos here](https://polished.tech/examples)
