@@ -78,7 +78,14 @@ secure_ui <- function(
 
     page_out <- NULL
 
-    if (is.null(user)) {
+    if (identical(page_query, "set_password")) {
+
+      email <- query$email
+      passcode <- query$verify_code
+
+      page_out <- set_password_module_ui("set_pass")
+
+    } else if (is.null(user)) {
 
 
 
@@ -106,7 +113,10 @@ secure_ui <- function(
             sign_in_page_ui
           )
         }
+
       } else {
+
+
 
         # send a random uuid as the polished_session.  This will trigger a session
         # reload and a redirect to the sign in page

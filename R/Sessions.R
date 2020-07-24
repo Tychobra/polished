@@ -97,10 +97,7 @@ Sessions <-  R6::R6Class(
       admin_mode = FALSE,
       is_invite_required = TRUE,
       api_url = "https://api.polished.tech",
-      sign_in_providers = c(
-        "google",
-        "email"
-      )
+      sign_in_providers = "email"
     ) {
 
       if (!(length(app_name) == 1 && is.character(app_name))) {
@@ -318,7 +315,8 @@ Sessions <-  R6::R6Class(
         httr::authenticate(
           user = self$api_key,
           password = ""
-        )
+        ),
+        encode = "json"
       )
 
       httr::stop_for_status(res)
@@ -333,6 +331,28 @@ Sessions <-  R6::R6Class(
 
 
       return(session_out)
+    },
+    sign_in_2 = function(email, password, hashed_cookie) {
+      browser()
+      res <- httr::POST(
+        url = paste0(self$hosted_url, "/sign-in-email-password"),
+        query = list(
+          app_uid = self$app_name,
+          email = email,
+          password = password,
+          hashed_cookie = hashed_cookie
+        ),
+        httr::authenticate(
+          user = self$api_key,
+          password = ""
+        )
+      )
+
+      session_out <- jsonlite::fromJSON(
+        httr::content(res, "text", encoding = "UTF-8")
+      )
+
+      session_out
     },
     refresh_email_verification = function(session_uid, firebase_token) {
 
