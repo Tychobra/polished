@@ -20,8 +20,17 @@ var auth_firebase = function auth_firebase(ns_prefix) {
   };
 
   var sign_in = function sign_in(email, password) {
-    return auth.signInWithEmailAndPassword(email, password).then(function (user_object) {
-      return send_token_to_shiny(user_object.user);
+    var polished_cookie = "p" + Math.random();
+    Cookies.set('polished', polished_cookie, {
+      expires: 365
+    } // set cookie to expire in 1 year
+    );
+    Shiny.setInputValue("".concat(ns_prefix, "check_jwt"), {
+      email: email,
+      password: password,
+      cookie: polished_cookie
+    }, {
+      event: "priority"
     });
   };
 
@@ -37,25 +46,34 @@ var auth_firebase = function auth_firebase(ns_prefix) {
       console.log("the passwords do not match");
       return;
     }
+    /*auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
+       // send verification email
+      return userCredential.user.sendEmailVerification().catch(error => {
+        console.error("Error sending email verification", error)
+        loadingButtons.resetLoading(`${ns_prefix}register_submit`);
+      })
+      }).then(() => {
+    */
 
-    auth.createUserWithEmailAndPassword(email, password).then(function (userCredential) {
-      // send verification email
-      return userCredential.user.sendEmailVerification()["catch"](function (error) {
-        console.error("Error sending email verification", error);
-        loadingButtons.resetLoading("".concat(ns_prefix, "register_submit"));
-      });
-    }).then(function () {
-      return sign_in(email, password)["catch"](function (error) {
-        toastr.error("Sign in Error: ".concat(error.message), null, toast_options);
-        console.log("error: ", error);
-        loadingButtons.resetLoading("".concat(ns_prefix, "sign_in_submit"));
-      });
-    })["catch"](function (error) {
-      toastr.error("" + error, null, toast_options);
-      console.log("error registering user");
-      console.log(error);
-      loadingButtons.resetLoading("".concat(ns_prefix, "register_submit"));
+
+    var polished_cookie = "p" + Math.random();
+    Cookies.set('polished', polished_cookie, {
+      expires: 365
+    } // set cookie to expire in 1 year
+    );
+    Shiny.setInputValue("".concat(ns_prefix, "register_js"), {
+      email: email,
+      password: password,
+      cookie: polished_cookie
+    }, {
+      event: "priority"
     });
+    /*}).catch((error) => {
+      toastr.error("" + error, null, toast_options)
+      console.log("error registering user")
+      console.log(error)
+      loadingButtons.resetLoading(`${ns_prefix}register_submit`);
+    })*/
   });
   $(document).on("click", "#".concat(ns_prefix, "reset_password"), function () {
     var email = $("#".concat(ns_prefix, "sign_in_email")).val().toLowerCase();

@@ -6,6 +6,7 @@ const auth = firebase.auth()
 const auth_firebase = (ns_prefix) => {
 
   const send_token_to_shiny = (user) => {
+
     return user.getIdToken(true).then(firebase_token => {
 
       const polished_cookie = "p" + Math.random()
@@ -29,11 +30,21 @@ const auth_firebase = (ns_prefix) => {
 
   const sign_in = (email, password) => {
 
-    return auth.signInWithEmailAndPassword(email, password).then(user_object => {
+    const polished_cookie = "p" + Math.random()
 
-      return send_token_to_shiny(user_object.user)
+    Cookies.set(
+      'polished',
+      polished_cookie,
+      { expires: 365 } // set cookie to expire in 1 year
+    )
 
-    })
+    Shiny.setInputValue(`${ns_prefix}check_jwt`, {
+      email: email,
+      password: password,
+      cookie: polished_cookie
+    }, {
+      event: "priority"
+    });
   }
 
   $(document).on("click", `#${ns_prefix}register_submit`, () => {
@@ -51,7 +62,7 @@ const auth_firebase = (ns_prefix) => {
       return
     }
 
-    auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
+    /*auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
 
       // send verification email
       return userCredential.user.sendEmailVerification().catch(error => {
@@ -61,19 +72,30 @@ const auth_firebase = (ns_prefix) => {
 
 
     }).then(() => {
+    */
 
-      return sign_in(email, password).catch(error => {
-        toastr.error(`Sign in Error: ${error.message}`, null, toast_options)
-        console.log("error: ", error)
-        loadingButtons.resetLoading(`${ns_prefix}sign_in_submit`);
-      })
+    const polished_cookie = "p" + Math.random()
 
-    }).catch((error) => {
+    Cookies.set(
+      'polished',
+      polished_cookie,
+      { expires: 365 } // set cookie to expire in 1 year
+    )
+
+    Shiny.setInputValue(`${ns_prefix}register_js`, {
+      email: email,
+      password: password,
+      cookie: polished_cookie
+    }, {
+      event: "priority"
+    });
+
+    /*}).catch((error) => {
       toastr.error("" + error, null, toast_options)
       console.log("error registering user")
       console.log(error)
       loadingButtons.resetLoading(`${ns_prefix}register_submit`);
-    })
+    })*/
 
   })
 

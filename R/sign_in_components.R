@@ -52,14 +52,25 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
 
   observeEvent(jwt(), {
     hold_jwt <- jwt()
-
+    browser()
     tryCatch({
 
-      # user is invited, so attempt sign in
-      new_user <- .global_sessions$sign_in(
-        hold_jwt$jwt,
-        digest::digest(hold_jwt$cookie)
-      )
+      if (is.null(hold_jwt$jwt)) {
+
+        # attempt sign in with email
+        new_user <- .global_sessions$sign_in_email(
+          email = hold_jwt$email,
+          password = hold_jwt$password,
+          hashed_cookie = digest::digest(hold_jwt$cookie)
+        )
+
+      } else {
+        # attempt sign in with a social sign in provider
+        new_user <- .global_sessions$sign_in_social(
+          hold_jwt$jwt,
+          digest::digest(hold_jwt$cookie)
+        )
+      }
 
       if (is.null(new_user)) {
         shinyFeedback::resetLoadingButton('sign_in_submit')

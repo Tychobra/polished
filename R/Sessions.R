@@ -210,7 +210,7 @@ Sessions <-  R6::R6Class(
     #' @md
     #'
     #'
-    sign_in = function(firebase_token, hashed_cookie) {
+    sign_in_social = function(firebase_token, hashed_cookie) {
 
       decoded_jwt <- NULL
 
@@ -332,20 +332,46 @@ Sessions <-  R6::R6Class(
 
       return(session_out)
     },
-    sign_in_2 = function(email, password, hashed_cookie) {
-      browser()
+    sign_in_email = function(email, password, hashed_cookie) {
+
       res <- httr::POST(
-        url = paste0(self$hosted_url, "/sign-in-email-password"),
-        query = list(
-          app_uid = self$app_name,
-          email = email,
-          password = password,
-          hashed_cookie = hashed_cookie
-        ),
+        url = paste0(self$hosted_url, "/sign-in-email"),
         httr::authenticate(
           user = self$api_key,
           password = ""
-        )
+        ),
+        body = list(
+          app_uid = self$app_name,
+          email = email,
+          password = password,
+          hashed_cookie = hashed_cookie,
+          is_invite_required = self$is_invite_required
+        ),
+        encode = "json"
+      )
+
+      session_out <- jsonlite::fromJSON(
+        httr::content(res, "text", encoding = "UTF-8")
+      )
+
+      session_out
+    },
+    register_email = function(email, password, hashed_cookie) {
+
+      res <- httr::POST(
+        url = paste0(self$hosted_url, "/register-email"),
+        httr::authenticate(
+          user = self$api_key,
+          password = ""
+        ),
+        body = list(
+          app_uid = self$app_name,
+          email = email,
+          password = password,
+          hashed_cookie = hashed_cookie,
+          is_invite_required = self$is_invite_required
+        ),
+        encode = "json"
       )
 
       session_out <- jsonlite::fromJSON(

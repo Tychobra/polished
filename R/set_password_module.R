@@ -91,7 +91,7 @@ set_password_module <- function(input, output, session) {
         httr::stop_for_status(res)
 
         # verify email reset successful, so sign user in
-        res <- .global_sessions$sign_in_2(
+        res <- .global_sessions$sign_in_email(
           email = hold_email,
           password = hold_pass,
           hashed_cookie = hashed_cookie
