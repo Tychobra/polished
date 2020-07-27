@@ -116,41 +116,8 @@ const auth_firebase = (ns_prefix) => {
 
     const email = $(`#${ns_prefix}sign_in_email`).val().toLowerCase()
     const password = $(`#${ns_prefix}sign_in_password`).val()
-
-    sign_in(email, password).catch(error => {
-
-      // Event to reset Sign In loading button
-      loadingButtons.resetLoading(`${ns_prefix}sign_in_submit`);
-      toastr.error(`Sign in Error: ${error.message}`, null, toast_options)
-      console.log("error: ", error)
-    })
-
-  })
-
-  $(document).on("shiny:sessioninitialized", () => {
-    // check if the email address is already register
-    Shiny.addCustomMessageHandler(
-      `${ns_prefix}check_registered`,
-      (message) => {
-
-        auth.fetchSignInMethodsForEmail(message.email).then(res => {
-
-          let is_registered = false
-          if (res.length > 0) {
-            is_registered = true
-          }
-
-          Shiny.setInputValue(`${ns_prefix}check_registered_res`, is_registered, { priority: "event" })
-
-        }).catch(err => {
-
-          Shiny.setInputValue(`${ns_prefix}check_registered_res`, err, { priority: "event" })
-          console.log("error: ", err)
-
-        })
-
-      }
-    )
+    debugger
+    sign_in(email, password)
 
   })
 

@@ -52,7 +52,7 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
 
   observeEvent(jwt(), {
     hold_jwt <- jwt()
-    browser()
+
     tryCatch({
 
       if (is.null(hold_jwt$jwt)) {

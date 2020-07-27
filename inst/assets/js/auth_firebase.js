@@ -88,33 +88,8 @@ var auth_firebase = function auth_firebase(ns_prefix) {
   $(document).on("click", "#".concat(ns_prefix, "sign_in_submit"), function () {
     var email = $("#".concat(ns_prefix, "sign_in_email")).val().toLowerCase();
     var password = $("#".concat(ns_prefix, "sign_in_password")).val();
-    sign_in(email, password)["catch"](function (error) {
-      // Event to reset Sign In loading button
-      loadingButtons.resetLoading("".concat(ns_prefix, "sign_in_submit"));
-      toastr.error("Sign in Error: ".concat(error.message), null, toast_options);
-      console.log("error: ", error);
-    });
-  });
-  $(document).on("shiny:sessioninitialized", function () {
-    // check if the email address is already register
-    Shiny.addCustomMessageHandler("".concat(ns_prefix, "check_registered"), function (message) {
-      auth.fetchSignInMethodsForEmail(message.email).then(function (res) {
-        var is_registered = false;
-
-        if (res.length > 0) {
-          is_registered = true;
-        }
-
-        Shiny.setInputValue("".concat(ns_prefix, "check_registered_res"), is_registered, {
-          priority: "event"
-        });
-      })["catch"](function (err) {
-        Shiny.setInputValue("".concat(ns_prefix, "check_registered_res"), err, {
-          priority: "event"
-        });
-        console.log("error: ", err);
-      });
-    });
+    debugger;
+    sign_in(email, password);
   }); // Google Sign In
 
   var provider_google = new firebase.auth.GoogleAuthProvider();

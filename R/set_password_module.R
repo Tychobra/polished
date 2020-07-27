@@ -68,8 +68,6 @@ set_password_module <- function(input, output, session) {
 
     hashed_cookie <- digest::digest(hold_cookie)
 
-    browser()
-
     if (nchar(hold_pass) < 6) {
       shinyFeedback::showToast("error", "Your password must be at least 6 characters")
     } else {

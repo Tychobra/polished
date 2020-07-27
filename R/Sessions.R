@@ -14,8 +14,6 @@ api_get_invite_by_email <- function(url, api_key, email, app_uid) {
     )
   )
 
-  httr::stop_for_status(res)
-
   invite <- jsonlite::fromJSON(
     httr::content(res, "text", encoding = "UTF-8")
   )
@@ -247,7 +245,7 @@ Sessions <-  R6::R6Class(
           # if invite is not required, and this is the first time that the user is signing in,
           # then create the app_users
           res <- httr::POST(
-            url = paste0(.global_sessions$hosted_url, "/app-users"),
+            url = paste0(self$hosted_url, "/app-users"),
             body = list(
               email = new_session$email,
               app_uid = self$app_name,
@@ -255,7 +253,7 @@ Sessions <-  R6::R6Class(
               req_user_uid = "00000000-0000-0000-0000-000000000000"
             ),
             httr::authenticate(
-              user = .global_sessions$api_key,
+              user = self$api_key,
               password = ""
             ),
             encode = "json"
@@ -336,10 +334,6 @@ Sessions <-  R6::R6Class(
 
       res <- httr::POST(
         url = paste0(self$hosted_url, "/sign-in-email"),
-        httr::authenticate(
-          user = self$api_key,
-          password = ""
-        ),
         body = list(
           app_uid = self$app_name,
           email = email,
@@ -347,7 +341,11 @@ Sessions <-  R6::R6Class(
           hashed_cookie = hashed_cookie,
           is_invite_required = self$is_invite_required
         ),
-        encode = "json"
+        encode = "json",
+        httr::authenticate(
+          user = self$api_key,
+          password = ""
+        )
       )
 
       session_out <- jsonlite::fromJSON(
@@ -377,6 +375,10 @@ Sessions <-  R6::R6Class(
       session_out <- jsonlite::fromJSON(
         httr::content(res, "text", encoding = "UTF-8")
       )
+
+      if (!identical(httr::status_code(res), 200L)) {
+        stop(session_out$message)
+      }
 
       session_out
     },
