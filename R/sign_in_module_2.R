@@ -75,11 +75,7 @@ sign_in_module_2_ui <- function(id) {
       div(
         style = "text-align: center;",
         br(),
-        actionLink(
-          class = 'btn btn-link btn-small',
-          id = ns("reset_password"),
-          "Forgot your password?"
-        )
+        reset_password_module_ui(ns("reset_password"))
       )
     )
   )
@@ -248,6 +244,11 @@ sign_in_module_2 <- function(input, output, session) {
     }
   })
 
+  callModule(
+    reset_password_module,
+    "reset_password",
+    email = reactive({input$sign_in_email})
+  )
 
   shiny::observeEvent(input$submit_continue_sign_in, {
 
