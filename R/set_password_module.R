@@ -32,7 +32,7 @@ set_password_module_ui <- function(id) {
           label = "Set Password",
           class = "btn btn-primary btn-lg",
           style = "width: 100%;",
-          loadingLabel = "Registering...",
+          loadingLabel = "Setting Password...",
           loadingClass = "btn btn-primary btn-lg text-center",
           loadingStyle = "width: 100%;"
         )
