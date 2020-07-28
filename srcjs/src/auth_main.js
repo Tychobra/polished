@@ -3,7 +3,7 @@ const auth = firebase.auth()
 
 
 
-const auth_firebase = (ns_prefix) => {
+const auth_main = (ns_prefix) => {
 
   const send_token_to_shiny = (user) => {
 
@@ -62,17 +62,7 @@ const auth_firebase = (ns_prefix) => {
       return
     }
 
-    /*auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
 
-      // send verification email
-      return userCredential.user.sendEmailVerification().catch(error => {
-        console.error("Error sending email verification", error)
-        loadingButtons.resetLoading(`${ns_prefix}register_submit`);
-      })
-
-
-    }).then(() => {
-    */
 
     const polished_cookie = "p" + Math.random()
 
@@ -90,27 +80,10 @@ const auth_firebase = (ns_prefix) => {
       event: "priority"
     });
 
-    /*}).catch((error) => {
-      toastr.error("" + error, null, toast_options)
-      console.log("error registering user")
-      console.log(error)
-      loadingButtons.resetLoading(`${ns_prefix}register_submit`);
-    })*/
-
   })
 
 
-  $(document).on("click", `#${ns_prefix}reset_password`, () => {
-    const email = $(`#${ns_prefix}sign_in_email`).val().toLowerCase()
 
-    auth.sendPasswordResetEmail(email).then(() => {
-      console.log(`Password reset email sent to ${email}`)
-      toastr.success(`Password reset email sent to ${email}`, null, toast_options)
-    }).catch((error) => {
-      toastr.error("" + error, null, toast_options)
-      console.log("error resetting email: ", error)
-    })
-  })
 
   $(document).on("click", `#${ns_prefix}sign_in_submit`, () => {
 
