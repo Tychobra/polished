@@ -18,17 +18,18 @@ set_password_module_ui <- function(id) {
 
   fluidPage(
     div(
-      class = "auth_panel",
+      style = "width: 350px; margin: 100px auto;",
+      class = "text-center",
       shiny::passwordInput(
         inputId = ns("password"),
-        label = htmltools::tagList(shiny::icon("unlock-alt"), "verify password"),
+        label = htmltools::tagList(shiny::icon("unlock-alt"), "set password"),
         width = "100%"
       ),
       div(
         style = "text-align: center;",
         shinyFeedback::loadingButton(
           ns("submit"),
-          label = "Register",
+          label = "Set Password",
           class = "btn btn-primary btn-lg",
           style = "width: 100%;",
           loadingLabel = "Registering...",
