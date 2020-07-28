@@ -75,7 +75,7 @@ sign_in_module_2_ui <- function(id) {
       div(
         style = "text-align: center;",
         br(),
-        tags$button(
+        actionLink(
           class = 'btn btn-link btn-small',
           id = ns("reset_password"),
           "Forgot your password?"

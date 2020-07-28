@@ -158,10 +158,7 @@ sign_in_module_ui <- function(
           )
         },
         br(),
-        shiny::actionLink(
-          inputId = ns("reset_password"),
-          "Forgot your password?"
-        )
+        reset_password_module_ui(ns("reset_password"))
       )
     ),
 
@@ -272,41 +269,11 @@ sign_in_module <- function(input, output, session) {
     go_to_registration_page()
   })
 
-  shiny::observeEvent(input$reset_password, {
-    email <- input$sign_in_email
-
-    tryCatch({
-      res <- httr::POST(
-        url = paste0(.global_sessions$hosted_url, "/reset-password"),
-        httr::authenticate(
-          user = .global_sessions$api_key,
-          password = ""
-        ),
-        body = list(
-          email = email,
-          app_uid = .global_sessions$app_name,
-          is_invite_required = .global_sessions$is_invite_required
-        ),
-        encode = "json"
-      )
-
-      res_content <- jsonlite::fromJSON(
-        httr::content(res, "text", encoding = "UTF-8")
-      )
-
-      if (!identical(httr::status_code(res), 200L)) {
-        stop(res_content$message)
-      }
-
-      shinyFeedback::showToast("success", paste0("Password reset email sent to ", email))
-    }, error = function(err) {
-
-      print(err)
-      shinyFeedback::showToast("error", err$message)
-    })
-
-
-  })
+  callModule(
+    reset_password_module,
+    "reset_password",
+    email = reactive({input$sign_in_email})
+  )
 
 
   # if query parameter "register" == TRUE, then go directly to registration page
