@@ -42,7 +42,6 @@ sign_in_js <- function(ns) {
 #' @param session the shiny session.
 #'
 #' @importFrom shinyFeedback resetLoadingButton showToast
-#' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom shiny getDefaultReactiveDomain
 #'
 #' @export
@@ -84,15 +83,11 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
         session$reload()
       }
 
-    }, error = function(e) {
+    }, error = function(err) {
       shinyFeedback::resetLoadingButton('sign_in_submit')
-      print(e)
-      shinyWidgets::sendSweetAlert(
-        session,
-        title = "Not Authorized",
-        text = "You must have an invite to access this app",
-        type = "error"
-      )
+      print(err)
+
+      shinyFeedback::showToast("error", err$message)
 
     })
 

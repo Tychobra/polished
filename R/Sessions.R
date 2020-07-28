@@ -352,6 +352,10 @@ Sessions <-  R6::R6Class(
         httr::content(res, "text", encoding = "UTF-8")
       )
 
+      if (!identical(httr::status_code(res), 200L)) {
+        stop(session_out$message, call. = FALSE)
+      }
+
       session_out
     },
     register_email = function(email, password, hashed_cookie) {
