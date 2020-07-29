@@ -64,6 +64,25 @@ secure_ui <- function(
       hashed_cookie <- digest::digest(polished_cookie)
     }
 
+    if (!is.null(query$token)) {
+      query_cookie <- query$token
+      return(
+        tagList(
+          tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
+          tags$script(paste0("
+            Cookies.set(
+              'polished',
+              '", query_cookie, "',
+              { expires: 365 } // set cookie to expire in 1 year
+            )
+
+            window.location.href = window.location.origin + window.location.pathname;
+
+          "))
+        )
+      )
+    }
+
 
     user <- NULL
     if (!is.null(hashed_cookie) && length(hashed_cookie) > 0) {
