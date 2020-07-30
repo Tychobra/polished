@@ -1,4 +1,4 @@
-#' the UI for a Shiny module to reset password
+#' the UI for a Shiny module to send a password reset email
 #'
 #' @param id the Shiny module id
 #'
@@ -6,7 +6,7 @@
 #' @importFrom shinyFeedback useShinyFeedback
 #'
 #' @export
-reset_password_module_ui <- function(id) {
+send_password_reset_email_module_ui <- function(id) {
   ns <- NS(id)
 
   tagList(
@@ -18,7 +18,7 @@ reset_password_module_ui <- function(id) {
   )
 }
 
-#' server logic for Shiny module to reset password
+#' server logic for Shiny module to send a password reset email
 #'
 #' This function sends s request to the polished.tech API to reset a user's
 #' password.
@@ -36,7 +36,7 @@ reset_password_module_ui <- function(id) {
 #'
 #' @export
 #'
-reset_password_module <- function(input, output, session, email) {
+send_password_reset_email_module <- function(input, output, session, email) {
 
 
   shiny::observeEvent(input$reset_password, {
@@ -44,7 +44,7 @@ reset_password_module <- function(input, output, session, email) {
 
     tryCatch({
       res <- httr::POST(
-        url = paste0(.global_sessions$hosted_url, "/reset-password"),
+        url = paste0(.global_sessions$hosted_url, "/send-password-reset-email"),
         httr::authenticate(
           user = .global_sessions$api_key,
           password = ""
