@@ -75,7 +75,7 @@ sign_in_module_2_ui <- function(id) {
       div(
         style = "text-align: center;",
         br(),
-        reset_password_module_ui(ns("reset_password"))
+        send_password_reset_email_module_ui(ns("reset_password"))
       )
     )
   )
@@ -245,7 +245,7 @@ sign_in_module_2 <- function(input, output, session) {
   })
 
   callModule(
-    reset_password_module,
+    send_password_reset_email_module,
     "reset_password",
     email = reactive({input$sign_in_email})
   )
