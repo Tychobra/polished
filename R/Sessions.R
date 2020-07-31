@@ -167,10 +167,12 @@ Sessions <-  R6::R6Class(
         httr::content(res, "text", encoding = "UTF-8")
       )
 
-      status_out <- httr::status_code(res)
-
-      if (!identical(status_out, 200L)) {
+      if (!identical(httr::status_code(res), 200L)) {
         stop(app, call. = FALSE)
+      }
+
+      if (length(app) == 0) {
+        stop(paste0("App `", app_name, "` does not exist"), call. = FALSE)
       }
 
       self$app_name <- app$uid
