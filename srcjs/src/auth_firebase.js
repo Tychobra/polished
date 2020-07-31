@@ -1,7 +1,7 @@
 const auth = firebase.auth()
 
 
-const auth_main = (ns_prefix) => {
+const auth_firebase = (ns_prefix) => {
 
   const send_token_to_shiny = (user) => {
 
