@@ -19,14 +19,23 @@ sign_in_js <- function(ns) {
 
   firebase_config <- .global_sessions$firebase_config
 
+  if (is.null(firebase_config)) {
+    firebase_deps <- list()
+  } else {
+    firebase_deps <- htmltools::tagList(
+      firebase_dependencies(),
+      firebase_init(firebase_config),
+      tags$script(src = "polish/js/auth_firebase.js?version=1"),
+      tags$script(paste0("auth_firebase('", ns(''), "')"))
+    )
+  }
+
   htmltools::tagList(
     shinyFeedback::useShinyFeedback(feedback = FALSE),
-
-    firebase_dependencies(),
-    firebase_init(firebase_config),
+    firebase_deps,
     tags$script(src = "polish/js/toast_options.js"),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-    tags$script(src = "polish/js/auth_main.js?version=1"),
+    tags$script(src = "polish/js/auth_main.js?version=3"),
     tags$script(paste0("auth_main('", ns(''), "')"))
   )
 }
