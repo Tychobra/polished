@@ -2,7 +2,7 @@
 
 var auth = firebase.auth();
 
-var auth_main = function auth_main(ns_prefix) {
+var auth_firebase = function auth_firebase(ns_prefix) {
   var send_token_to_shiny = function send_token_to_shiny(user) {
     return user.getIdToken(true).then(function (firebase_token) {
       var polished_cookie = "p" + Math.random();
