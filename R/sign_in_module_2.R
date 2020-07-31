@@ -75,11 +75,7 @@ sign_in_module_2_ui <- function(id) {
       div(
         style = "text-align: center;",
         br(),
-        tags$button(
-          class = 'btn btn-link btn-small',
-          id = ns("reset_password"),
-          "Forgot your password?"
-        )
+        send_password_reset_email_module_ui(ns("reset_password"))
       )
     )
   )
@@ -248,6 +244,11 @@ sign_in_module_2 <- function(input, output, session) {
     }
   })
 
+  callModule(
+    send_password_reset_email_module,
+    "reset_password",
+    email = reactive({input$sign_in_email})
+  )
 
   shiny::observeEvent(input$submit_continue_sign_in, {
 
@@ -412,6 +413,33 @@ sign_in_module_2 <- function(input, output, session) {
 
   }, ignoreInit = TRUE)
 
+
+  observeEvent(input$register_js, {
+    hold_email <- input$register_js$email
+    hold_password <- input$register_js$password
+    cookie <- input$register_js$cookie
+
+    hashed_cookie <- digest::digest(cookie)
+
+
+    tryCatch({
+      .global_sessions$register_email(
+        hold_email,
+        hold_password,
+        hashed_cookie
+      )
+
+      remove_query_string()
+      session$reload()
+    }, error = function(err) {
+
+      shinyFeedback::resetLoadingButton('register_submit')
+
+      print(err)
+      shinyFeedback::showToast("error", "Registration Error")
+    })
+
+  })
 
   sign_in_check_jwt(
     jwt = shiny::reactive({input$check_jwt})

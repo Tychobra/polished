@@ -12,9 +12,11 @@ this class directly.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-config}{\code{Sessions$config()}}
-\item \href{#method-sign_in}{\code{Sessions$sign_in()}}
+\item \href{#method-sign_in_social}{\code{Sessions$sign_in_social()}}
 \item \href{#method-get_invite_by_email}{\code{Sessions$get_invite_by_email()}}
 \item \href{#method-find}{\code{Sessions$find()}}
+\item \href{#method-sign_in_email}{\code{Sessions$sign_in_email()}}
+\item \href{#method-register_email}{\code{Sessions$register_email()}}
 \item \href{#method-refresh_email_verification}{\code{Sessions$refresh_email_verification()}}
 \item \href{#method-set_signed_in_as}{\code{Sessions$set_signed_in_as()}}
 \item \href{#method-get_signed_in_as_user}{\code{Sessions$get_signed_in_as_user()}}
@@ -37,7 +39,7 @@ polished Sessions configuration function
   admin_mode = FALSE,
   is_invite_required = TRUE,
   api_url = "https://api.polished.tech",
-  sign_in_providers = c("google", "email")
+  sign_in_providers = "email"
 )}\if{html}{\out{</div>}}
 }
 
@@ -48,12 +50,12 @@ of all Shiny apps using polished.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sign_in"></a>}}
-\if{latex}{\out{\hypertarget{method-sign_in}{}}}
-\subsection{Method \code{sign_in()}}{
+\if{html}{\out{<a id="method-sign_in_social"></a>}}
+\if{latex}{\out{\hypertarget{method-sign_in_social}{}}}
+\subsection{Method \code{sign_in_social()}}{
 verify the users Firebase JWT and store the session
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_in(firebase_token, hashed_cookie)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_in_social(firebase_token, hashed_cookie)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -95,6 +97,24 @@ NULL if sign in fails. If sign in is successful, a list containing the following
 \subsection{Method \code{find()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$find(hashed_cookie, page)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-sign_in_email"></a>}}
+\if{latex}{\out{\hypertarget{method-sign_in_email}{}}}
+\subsection{Method \code{sign_in_email()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_in_email(email, password, hashed_cookie)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-register_email"></a>}}
+\if{latex}{\out{\hypertarget{method-register_email}{}}}
+\subsection{Method \code{register_email()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$register_email(email, password, hashed_cookie)}\if{html}{\out{</div>}}
 }
 
 }

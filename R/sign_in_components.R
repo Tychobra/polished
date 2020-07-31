@@ -26,8 +26,8 @@ sign_in_js <- function(ns) {
     firebase_init(firebase_config),
     tags$script(src = "polish/js/toast_options.js"),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
-    tags$script(src = "polish/js/auth_firebase.js?version=7"),
-    tags$script(paste0("auth_firebase('", ns(''), "')"))
+    tags$script(src = "polish/js/auth_main.js?version=1"),
+    tags$script(paste0("auth_main('", ns(''), "')"))
   )
 }
 
@@ -42,7 +42,6 @@ sign_in_js <- function(ns) {
 #' @param session the shiny session.
 #'
 #' @importFrom shinyFeedback resetLoadingButton showToast
-#' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom shiny getDefaultReactiveDomain
 #'
 #' @export
@@ -55,11 +54,22 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
 
     tryCatch({
 
-      # user is invited, so attempt sign in
-      new_user <- .global_sessions$sign_in(
-        hold_jwt$jwt,
-        digest::digest(hold_jwt$cookie)
-      )
+      if (is.null(hold_jwt$jwt)) {
+
+        # attempt sign in with email
+        new_user <- .global_sessions$sign_in_email(
+          email = hold_jwt$email,
+          password = hold_jwt$password,
+          hashed_cookie = digest::digest(hold_jwt$cookie)
+        )
+
+      } else {
+        # attempt sign in with a social sign in provider
+        new_user <- .global_sessions$sign_in_social(
+          hold_jwt$jwt,
+          digest::digest(hold_jwt$cookie)
+        )
+      }
 
       if (is.null(new_user)) {
         shinyFeedback::resetLoadingButton('sign_in_submit')
@@ -73,15 +83,11 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
         session$reload()
       }
 
-    }, error = function(e) {
+    }, error = function(err) {
       shinyFeedback::resetLoadingButton('sign_in_submit')
-      print(e)
-      shinyWidgets::sendSweetAlert(
-        session,
-        title = "Not Authorized",
-        text = "You must have an invite to access this app",
-        type = "error"
-      )
+      print(err)
+
+      shinyFeedback::showToast("error", err$message)
 
     })
 

@@ -3,9 +3,10 @@ const auth = firebase.auth()
 
 
 
-const auth_firebase = (ns_prefix) => {
+const auth_main = (ns_prefix) => {
 
   const send_token_to_shiny = (user) => {
+
     return user.getIdToken(true).then(firebase_token => {
 
       const polished_cookie = "p" + Math.random()
@@ -29,11 +30,21 @@ const auth_firebase = (ns_prefix) => {
 
   const sign_in = (email, password) => {
 
-    return auth.signInWithEmailAndPassword(email, password).then(user_object => {
+    const polished_cookie = "p" + Math.random()
 
-      return send_token_to_shiny(user_object.user)
+    Cookies.set(
+      'polished',
+      polished_cookie,
+      { expires: 365 } // set cookie to expire in 1 year
+    )
 
-    })
+    Shiny.setInputValue(`${ns_prefix}check_jwt`, {
+      email: email,
+      password: password,
+      cookie: polished_cookie
+    }, {
+      event: "priority"
+    });
   }
 
   $(document).on("click", `#${ns_prefix}register_submit`, () => {
@@ -51,84 +62,35 @@ const auth_firebase = (ns_prefix) => {
       return
     }
 
-    auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
-
-      // send verification email
-      return userCredential.user.sendEmailVerification().catch(error => {
-        console.error("Error sending email verification", error)
-        loadingButtons.resetLoading(`${ns_prefix}register_submit`);
-      })
 
 
-    }).then(() => {
+    const polished_cookie = "p" + Math.random()
 
-      return sign_in(email, password).catch(error => {
-        toastr.error(`Sign in Error: ${error.message}`, null, toast_options)
-        console.log("error: ", error)
-        loadingButtons.resetLoading(`${ns_prefix}sign_in_submit`);
-      })
+    Cookies.set(
+      'polished',
+      polished_cookie,
+      { expires: 365 } // set cookie to expire in 1 year
+    )
 
-    }).catch((error) => {
-      toastr.error("" + error, null, toast_options)
-      console.log("error registering user")
-      console.log(error)
-      loadingButtons.resetLoading(`${ns_prefix}register_submit`);
-    })
+    Shiny.setInputValue(`${ns_prefix}register_js`, {
+      email: email,
+      password: password,
+      cookie: polished_cookie
+    }, {
+      event: "priority"
+    });
 
   })
 
 
-  $(document).on("click", `#${ns_prefix}reset_password`, () => {
-    const email = $(`#${ns_prefix}sign_in_email`).val().toLowerCase()
 
-    auth.sendPasswordResetEmail(email).then(() => {
-      console.log(`Password reset email sent to ${email}`)
-      toastr.success(`Password reset email sent to ${email}`, null, toast_options)
-    }).catch((error) => {
-      toastr.error("" + error, null, toast_options)
-      console.log("error resetting email: ", error)
-    })
-  })
 
   $(document).on("click", `#${ns_prefix}sign_in_submit`, () => {
 
     const email = $(`#${ns_prefix}sign_in_email`).val().toLowerCase()
     const password = $(`#${ns_prefix}sign_in_password`).val()
-
-    sign_in(email, password).catch(error => {
-
-      // Event to reset Sign In loading button
-      loadingButtons.resetLoading(`${ns_prefix}sign_in_submit`);
-      toastr.error(`Sign in Error: ${error.message}`, null, toast_options)
-      console.log("error: ", error)
-    })
-
-  })
-
-  $(document).on("shiny:sessioninitialized", () => {
-    // check if the email address is already register
-    Shiny.addCustomMessageHandler(
-      `${ns_prefix}check_registered`,
-      (message) => {
-
-        auth.fetchSignInMethodsForEmail(message.email).then(res => {
-
-          let is_registered = false
-          if (res.length > 0) {
-            is_registered = true
-          }
-
-          Shiny.setInputValue(`${ns_prefix}check_registered_res`, is_registered, { priority: "event" })
-
-        }).catch(err => {
-
-          Shiny.setInputValue(`${ns_prefix}check_registered_res`, err, { priority: "event" })
-          console.log("error: ", err)
-
-        })
-
-      }
-    )
+    debugger
+    sign_in(email, password)
 
   })
 

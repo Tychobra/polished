@@ -158,11 +158,7 @@ sign_in_module_ui <- function(
           )
         },
         br(),
-        tags$button(
-          class = 'btn btn-link btn-small',
-          id = ns("reset_password"),
-          "Forgot your password?"
-        )
+        send_password_reset_email_module_ui(ns("reset_password"))
       )
     ),
 
@@ -245,7 +241,9 @@ sign_in_module_ui <- function(
 #' @importFrom shiny observeEvent observe getQueryString updateTextInput
 #' @importFrom shinyjs show hide
 #' @importFrom shinyWidgets sendSweetAlert
+#' @importFrom shinyFeedback showToast
 #' @importFrom digest digest
+#' @importFrom httr POST authenticate
 #'
 #' @export
 #'
@@ -266,6 +264,17 @@ sign_in_module <- function(input, output, session) {
     shinyjs::show("register_panel_top")
     shinyjs::show("register_panel_bottom")
   }
+
+  shiny::observeEvent(input$go_to_register, {
+    go_to_registration_page()
+  })
+
+  callModule(
+    send_password_reset_email_module,
+    "reset_password",
+    email = reactive({input$sign_in_email})
+  )
+
 
   # if query parameter "register" == TRUE, then go directly to registration page
   observe({
@@ -295,32 +304,85 @@ sign_in_module <- function(input, output, session) {
           text = "You must have an invite to access this app",
           type = "error"
         )
-        return()
+
       } else {
 
-        # check is user is already registered with Firebase.  If user already registered,
-        # then allow them to continue signing in.  If not registered, take the user
-        # to the registration page and open the passwords to continue registration.
-
-        # this custom message triggers the `input$check_registered_res` input which
-        # will fire off the next observeEvent
-        session$sendCustomMessage(
-          session$ns("check_registered"),
-          message = list(
+        # check if the user's password is already set.  If it is already set, then
+        # continue the sign in process.  If it is not set, redirect the user to the registration page.
+        res <- httr::GET(
+          url = paste0(.global_sessions$hosted_url, "/users"),
+          query = list(
             email = email
-          )
+          ),
+          httr::authenticate(
+            user = .global_sessions$api_key,
+            password = ""
+          ),
+          encode = "json"
         )
+
+
+        status <- httr::status_code(res)
+
+        res_content <- jsonlite::fromJSON(
+          httr::content(res, "text", encoding = "UTF-8")
+        )
+
+        if (!identical(status, 200L)) {
+          stop(res_content$message)
+        }
+
+
+        if (isTRUE(res_content$is_password_set)) {
+          # user is already registered, so continue sign in
+          # user is invited
+          shinyjs::hide("submit_continue_sign_in")
+
+          shinyjs::show(
+            "sign_in_password_ui",
+            anim = TRUE
+          )
+
+          # NEED to sleep this exact amount to allow animation (above) to show w/o bug
+          Sys.sleep(.25)
+
+          shinyjs::runjs(paste0("$('#", ns('sign_in_password'), "').focus()"))
+
+        } else {
+
+          # go to the user registration page
+          go_to_registration_page()
+
+          shiny::updateTextInput(
+            session,
+            "register_email",
+            value = email
+          )
+
+          # user is invited
+          shinyjs::hide("continue_registration")
+
+          shinyjs::show(
+            "register_passwords",
+            anim = TRUE
+          )
+
+          # NEED to sleep this exact amount to allow animation (above) to show w/o bug
+          Sys.sleep(.25)
+
+          shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
+        }
 
       }
 
 
-    }, error = function(e) {
+    }, error = function(err) {
       # user is not invited
-      print(e)
+      print(err)
       shinyWidgets::sendSweetAlert(
         session,
         title = "Error",
-        text = "Error checking invite",
+        text = err$message,
         type = "error"
       )
 
@@ -329,67 +391,8 @@ sign_in_module <- function(input, output, session) {
   })
 
 
-  observeEvent(input$check_registered_res, {
-    hold_email <- tolower(input$sign_in_email)
-
-    is_registered <- input$check_registered_res
-
-    if (isTRUE(is_registered)) {
-      # user is already registered, so continue sign in
-      # user is invited
-      shinyjs::hide("submit_continue_sign_in")
-
-      shinyjs::show(
-        "sign_in_password_ui",
-        anim = TRUE
-      )
-
-      # NEED to sleep this exact amount to allow animation (above) to show w/o bug
-      Sys.sleep(.25)
-
-      shinyjs::runjs(paste0("$('#", ns('sign_in_password'), "').focus()"))
-
-    } else if (isFALSE(is_registered)) {
-
-      # go to the user registration page
-      go_to_registration_page()
-
-      shiny::updateTextInput(
-        session,
-        "register_email",
-        value = hold_email
-      )
-
-      # user is invited
-      shinyjs::hide("continue_registration")
-
-      shinyjs::show(
-        "register_passwords",
-        anim = TRUE
-      )
-
-      # NEED to sleep this exact amount to allow animation (above) to show w/o bug
-      Sys.sleep(.25)
-
-      shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
 
 
-    } else {
-
-      print(is_registered)
-      shinyWidgets::sendSweetAlert(
-        session,
-        title = "Error",
-        text = "Error checking invite",
-        type = "error"
-      )
-    }
-  })
-
-
-  shiny::observeEvent(input$go_to_register, {
-    go_to_registration_page()
-  })
 
   shiny::observeEvent(input$go_to_sign_in, {
     shinyjs::hide("register_panel_top")
@@ -453,6 +456,33 @@ sign_in_module <- function(input, output, session) {
 
   }, ignoreInit = TRUE)
 
+
+  observeEvent(input$register_js, {
+    hold_email <- input$register_js$email
+    hold_password <- input$register_js$password
+    cookie <- input$register_js$cookie
+
+    hashed_cookie <- digest::digest(cookie)
+
+
+    tryCatch({
+      .global_sessions$register_email(
+        hold_email,
+        hold_password,
+        hashed_cookie
+      )
+
+      remove_query_string()
+      session$reload()
+    }, error = function(err) {
+
+      shinyFeedback::resetLoadingButton('register_submit')
+
+      print(err)
+      shinyFeedback::showToast("error", err$message)
+    })
+
+  })
 
   sign_in_check_jwt(
     jwt = shiny::reactive({input$check_jwt})

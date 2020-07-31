@@ -124,16 +124,25 @@ secure_server <- function(
 
     # if the user is an admin and on the admin page, set up the admin server
     shiny::observeEvent(session$userData$user(), {
+      query_list <- shiny::getQueryString()
+      hold_user <- session$userData$user()
 
-      if (isTRUE(session$userData$user()$email_verified)) {
-        query_list <- shiny::getQueryString()
+      if (identical(query_list$page, 'set_password')) {
+
+        # sign the user out of polished
+        .global_sessions$sign_out(hold_user$hashed_cookie, hold_user$session_uid)
+        session$reload()
+
+
+      } else if (isTRUE(hold_user$email_verified)) {
+
 
         is_on_admin_page <- if (
           isTRUE(.global_sessions$get_admin_mode()) ||
           !is.null(query_list$page) && query_list$page == 'admin_panel') TRUE else FALSE
 
 
-        if (isTRUE(session$userData$user()$is_admin) && isTRUE(is_on_admin_page)) {
+        if (isTRUE(hold_user$is_admin) && isTRUE(is_on_admin_page)) {
           callModule(
             admin_module,
             "admin"
@@ -143,6 +152,29 @@ secure_server <- function(
           if (isTRUE(!is.null(custom_admin_server))) {
             custom_admin_server(input, output, session)
           }
+        } else if (is.null(query_list$page)) {
+          # go to the custom app
+
+          server(input, output, session)
+
+          # set the session to inactive when the session ends
+          shiny::onStop(fun = function() {
+
+            tryCatch({
+
+              .global_sessions$set_inactive(
+                session_uid = hold_user$session_uid,
+                user_uid = hold_user$user_uid
+              )
+
+            }, catch = function(err) {
+              print('error setting the session to incative')
+              print(err)
+            })
+
+          })
+
+
         }
 
       } else {
@@ -156,71 +188,46 @@ secure_server <- function(
         )
       }
 
-
-
     }, once = TRUE)
 
-    # go to admin panel
-    shiny::callModule(
-      admin_button,
-      "polished"
-    )
 
-    if (is.null(custom_sign_in_server)) {
-      if (isTRUE(.global_sessions$is_invite_required)) {
-        shiny::callModule(
-          sign_in_module,
-          "sign_in"
-        )
-      } else {
-        shiny::callModule(
-          sign_in_no_invite_module,
-          "sign_in"
-        )
-      }
-    } else {
-
-      shiny::callModule(
-        custom_sign_in_server,
-        "sign_in"
-      )
-
-    }
-
-
-
-
-
-    # custom app server.  Requires signed in user to access
-    shiny::observeEvent(session$userData$user(), {
+    observe({
       query_list <- shiny::getQueryString()
-
-      if (is.null(query_list$page) && session$userData$user()$email_verified &&
-          isFALSE(.global_sessions$get_admin_mode())) {
-        hold_user <- session$userData$user()
-        server(input, output, session)
-
-        # set the session from inactive to active
-        #.global_sessions$set_active(session_uid)
-
-        # set the session to inactive when the session ends
-        shiny::onStop(fun = function() {
-
-          tryCatch({
-
-            .global_sessions$set_inactive(
-              session_uid = hold_user$session_uid,
-              user_uid = hold_user$user_uid
+      page <- query_list$page
+      if (is.null(page)) {
+        # go to admin panel
+        shiny::callModule(
+          admin_button,
+          "polished"
+        )
+      } else if (identical(page, "sign_in")) {
+        if (is.null(custom_sign_in_server)) {
+          if (isTRUE(.global_sessions$is_invite_required)) {
+            shiny::callModule(
+              sign_in_module,
+              "sign_in"
             )
+          } else {
+            shiny::callModule(
+              sign_in_no_invite_module,
+              "sign_in"
+            )
+          }
+        } else {
 
-          }, catch = function(err) {
-            print('error setting the session to incative')
-            print(err)
-          })
+          shiny::callModule(
+            custom_sign_in_server,
+            "sign_in"
+          )
 
-        })
+        }
+      } else if (identical(page, "set_password")) {
+        shiny::callModule(
+          set_password_module,
+          "set_pass"
+        )
       }
-    }, once = TRUE)
+    })
 
 
 
