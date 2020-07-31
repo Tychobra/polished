@@ -146,7 +146,7 @@ Sessions <-  R6::R6Class(
       }
 
       if (length(app) == 0) {
-        stop(paste0("App `", app_name, "` does not exist"), call. = FALSE)
+        stop(paste0("app_name `", app_name, "` does not exist"), call. = FALSE)
       }
 
       self$app_name <- app$uid
