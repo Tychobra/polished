@@ -32,9 +32,9 @@ sign_in_js <- function(ns) {
 
   htmltools::tagList(
     shinyFeedback::useShinyFeedback(feedback = FALSE),
-    firebase_deps,
     tags$script(src = "polish/js/toast_options.js"),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
+    firebase_deps,
     tags$script(src = "polish/js/auth_main.js?version=3"),
     tags$script(paste0("auth_main('", ns(''), "')"))
   )
