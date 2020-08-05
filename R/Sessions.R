@@ -333,8 +333,42 @@ Sessions <-  R6::R6Class(
         httr::content(res, "text", encoding = "UTF-8")
       )
 
+
+
       if (!identical(httr::status_code(res), 200L)) {
-        stop(session_out$message, call. = FALSE)
+
+        if (identical(session_out$message, "Password reset required")) {
+
+          # send a password reset email and stop
+          res2 <- httr::POST(
+            url = paste0(self$hosted_url, "/send-password-reset-email"),
+            body = list(
+              email = email,
+              app_uid = self$app_name,
+              is_invite_required = self$is_invite_required
+            ),
+            httr::authenticate(
+              user = self$api_key,
+              password = ""
+            ),
+            encode = "json"
+          )
+
+          res2_content <- jsonlite::fromJSON(
+            httr::content(res2, "text", encoding = "UTF-8")
+          )
+
+          if (!identical(httr::status_code(res2), 200L)) {
+            stop(res2_content$message, call. = FALSE)
+          }
+
+          return(list(
+            message = "Password reset email sent"
+          ))
+
+        } else {
+          stop(session_out$message, call. = FALSE)
+        }
       }
 
       session_out

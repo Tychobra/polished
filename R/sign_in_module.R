@@ -307,74 +307,21 @@ sign_in_module <- function(input, output, session) {
 
       } else {
 
-        # check if the user's password is already set.  If it is already set, then
-        # continue the sign in process.  If it is not set, redirect the user to the registration page.
-        res <- httr::GET(
-          url = paste0(.global_sessions$hosted_url, "/users"),
-          query = list(
-            email = email
-          ),
-          httr::authenticate(
-            user = .global_sessions$api_key,
-            password = ""
-          ),
-          encode = "json"
+
+        # user is invited, so continue the sign in process
+        shinyjs::hide("submit_continue_sign_in")
+
+        shinyjs::show(
+          "sign_in_password_ui",
+          anim = TRUE
         )
 
+        # NEED to sleep this exact amount to allow animation (above) to show w/o bug
+        Sys.sleep(.25)
 
-        status <- httr::status_code(res)
-
-        res_content <- jsonlite::fromJSON(
-          httr::content(res, "text", encoding = "UTF-8")
-        )
-
-        if (!identical(status, 200L)) {
-          stop(res_content$message)
-        }
-
-
-        if (isTRUE(res_content$is_password_set)) {
-          # user is already registered, so continue sign in
-          # user is invited
-          shinyjs::hide("submit_continue_sign_in")
-
-          shinyjs::show(
-            "sign_in_password_ui",
-            anim = TRUE
-          )
-
-          # NEED to sleep this exact amount to allow animation (above) to show w/o bug
-          Sys.sleep(.25)
-
-          shinyjs::runjs(paste0("$('#", ns('sign_in_password'), "').focus()"))
-
-        } else {
-
-          # go to the user registration page
-          go_to_registration_page()
-
-          shiny::updateTextInput(
-            session,
-            "register_email",
-            value = email
-          )
-
-          # user is invited
-          shinyjs::hide("continue_registration")
-
-          shinyjs::show(
-            "register_passwords",
-            anim = TRUE
-          )
-
-          # NEED to sleep this exact amount to allow animation (above) to show w/o bug
-          Sys.sleep(.25)
-
-          shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
-        }
+        shinyjs::runjs(paste0("$('#", ns('sign_in_password'), "').focus()"))
 
       }
-
 
     }, error = function(err) {
       # user is not invited
