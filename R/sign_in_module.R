@@ -1,8 +1,7 @@
 #' UI for the sign in and register pages
 #'
 #' UI for the sign in and register pages when a user invite is required to register and
-#' sign in.  See \code{\link{sign_in_no_invite_module}} if you do not require your
-#' users to sign in and register to access your 'shiny' app.
+#' sign in.
 #'
 #' @param id the Shiny module id
 #' @param register_link The text that will be displayed in the link to go to the
@@ -104,7 +103,6 @@ sign_in_module_ui <- function(
         value = ""
       )
     ),
-    br(),
     br(),
     div(
       style = "text-align: center;",

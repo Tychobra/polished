@@ -201,18 +201,14 @@ secure_server <- function(
           "polished"
         )
       } else if (identical(page, "sign_in")) {
+
         if (is.null(custom_sign_in_server)) {
-          if (isTRUE(.global_sessions$is_invite_required)) {
-            shiny::callModule(
-              sign_in_module,
-              "sign_in"
-            )
-          } else {
-            shiny::callModule(
-              sign_in_no_invite_module,
-              "sign_in"
-            )
-          }
+
+          shiny::callModule(
+            sign_in_module,
+            "sign_in"
+          )
+
         } else {
 
           shiny::callModule(

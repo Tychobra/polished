@@ -15,6 +15,5 @@ Set to \code{NULL} if you don't want to use the registration page.}
 }
 \description{
 UI for the sign in and register pages when a user invite is required to register and
-sign in.  See \code{\link{sign_in_no_invite_module}} if you do not require your
-users to sign in and register to access your 'shiny' app.
+sign in.
 }
