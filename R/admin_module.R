@@ -50,11 +50,6 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
       shinydashboard::sidebarMenu(
         id = ns("sidebar_menu"),
         menuItem(
-          text = "Dashboard",
-          tabName = "dashboard",
-          icon = shiny::icon("dashboard")
-        ),
-        menuItem(
           text = "User Access",
           tabName = "user_access",
           icon = shiny::icon("users")
@@ -68,11 +63,6 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
     sidebar <- shinydashboard::dashboardSidebar(
       sidebarMenu(
         id = ns("sidebar_menu"),
-        shinydashboard::menuItem(
-          text = "Dashboard",
-          tabName = "dashboard",
-          icon = shiny::icon("dashboard")
-        ),
         shinydashboard::menuItem(
           text = "User Access",
           tabName = "user_access",
@@ -89,12 +79,10 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 
   if (is.null(custom_admin_ui$tab_items)) {
     tab_items <- shinydashboard::tabItems(
-      dashboard_module_ui(ns("dashboard")),
       user_access_module_ui(ns("user_access"))
     )
   } else {
     tab_items <- shinydashboard::tabItems(
-      dashboard_module_ui(ns("dashboard")),
       user_access_module_ui(ns("user_access")),
       custom_admin_ui$tab_items
     )
@@ -172,7 +160,5 @@ admin_module <- function(input, output, session) {
 
   }, ignoreInit = TRUE)
 
-
-  shiny::callModule(dashboard_module, "dashboard")
   shiny::callModule(user_access_module, "user_access")
 }
