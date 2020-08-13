@@ -178,7 +178,7 @@ user_edit_module <- function(input, output, session,
           encode = "json"
         )
 
-        if (res$status_code != 200) {
+        if (!identical(httr::status_code(res), 200L)) {
 
           err <- jsonlite::fromJSON(
             httr::content(res, "text", encoding = "UTF-8")
@@ -187,8 +187,6 @@ user_edit_module <- function(input, output, session,
           stop(err, call. = FALSE)
         }
 
-
-        httr::stop_for_status(res)
 
 
         shiny::removeModal()
@@ -226,7 +224,7 @@ user_edit_module <- function(input, output, session,
           encode = "json"
         )
 
-        if (!identical(res$status_code, 200)) {
+        if (!identical(httr::status_code(res), 200L)) {
 
           err <- jsonlite::fromJSON(
             httr::content(res, "text", encoding = "UTF-8")
@@ -234,9 +232,6 @@ user_edit_module <- function(input, output, session,
 
           stop(err, call. = FALSE)
         }
-
-        httr::stop_for_status(res)
-
 
         users_trigger(users_trigger() + 1)
         shinyFeedback::showToast("success", "User successfully edited!")
