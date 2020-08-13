@@ -16,12 +16,10 @@ BugReports: https://github.com/tychobra/polished/issues
 Encoding: UTF-8
 LazyData: true
 Imports:
-    apexcharter,
     digest,
     dplyr,
     DT,
     htmltools,
-    htmlwidgets,
     httr,
     jose,
     jsonlite,
@@ -39,8 +37,7 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    uuid,
-    xts
+    uuid
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,

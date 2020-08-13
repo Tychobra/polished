@@ -68,12 +68,13 @@ user_access_module_ui <- function(id) {
 #'
 #' @importFrom shiny showModal modalDialog removeModal reactiveVal reactive observeEvent callModule req eventReactive
 #' @importFrom htmltools tags
-#' @importFrom DT renderDT datatable dataTableProxy formatDate replaceData
+#' @importFrom DT renderDT datatable dataTableProxy formatDate replaceData JS
 #' @importFrom dplyr filter select %>% left_join mutate
 #' @importFrom tibble tibble
 #' @importFrom shinyFeedback showToast
 #' @importFrom purrr map_chr
 #' @importFrom lubridate force_tz
+#' @importFrom rlang .data
 #'
 #' @noRd
 #'
@@ -238,7 +239,7 @@ user_access_module <- function(input, output, session) {
       ),
       escape = -1,
       selection = "none",
-      callback = JS("$( table.table().container() ).addClass( 'table-responsive' ); return table;"),
+      callback = DT::JS("$( table.table().container() ).addClass( 'table-responsive' ); return table;"),
       options = list(
         dom = 'ftlp',
         columnDefs = list(

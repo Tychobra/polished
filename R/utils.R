@@ -28,6 +28,7 @@ remove_query_string <- function(session = shiny::getDefaultReactiveDomain()) {
 #' @importFrom dplyr filter pull %>%
 #' @importFrom tidyr separate
 #' @importFrom tibble tibble
+#' @importFrom rlang .data
 #'
 #' @noRd
 #'
