@@ -66,6 +66,7 @@ user_edit_module <- function(input, output, session,
     hold_app_url <- app_url()
 
     if (is.null(hold_user)) {
+      # adding a new user
       is_admin_value  <- "No"
 
       email_input <- shiny::textInput(
@@ -74,7 +75,15 @@ user_edit_module <- function(input, output, session,
         value = if (is.null(hold_user)) "" else hold_user$email
       )
 
+      send_invite_ui <- tagList(
+        br(),
+        send_invite_checkbox(ns, hold_app_url)
+      )
+
+
     } else {
+      # editing and existing user
+
       if (isTRUE(hold_user$is_admin)) {
         is_admin_value <- "Yes"
       } else {
@@ -82,6 +91,8 @@ user_edit_module <- function(input, output, session,
       }
 
       email_input <- NULL
+
+      send_invite_ui <- list()
     }
 
 
@@ -119,8 +130,7 @@ user_edit_module <- function(input, output, session,
             selected = is_admin_value,
             inline = TRUE
           ),
-          br(),
-          send_invite_checkbox(ns, hold_app_url)
+          send_invite_ui
         ),
         tags$script(src = "polish/js/user_edit_module.js?version=2"),
         tags$script(paste0("user_edit_module('", ns(''), "')"))
@@ -158,7 +168,8 @@ user_edit_module <- function(input, output, session,
             email = input_email,
             app_uid = .global_sessions$app_name,
             is_admin = is_admin_out,
-            req_user_uid = session$userData$user()$user_uid
+            req_user_uid = session$userData$user()$user_uid,
+            send_invite_email = input$send_invite_email
           ),
           httr::authenticate(
             user = .global_sessions$api_key,
@@ -206,8 +217,7 @@ user_edit_module <- function(input, output, session,
             user_uid = hold_user$user_uid,
             app_uid = .global_sessions$app_name,
             is_admin = is_admin_out,
-            req_user_uid = session$userData$user()$user_uid,
-            send_invite_email = input$send_invite_email
+            req_user_uid = session$userData$user()$user_uid
           ),
           httr::authenticate(
             user = .global_sessions$api_key,
