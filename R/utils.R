@@ -57,3 +57,42 @@ time_now_utc <- function() {
   lubridate::with_tz(Sys.time(), tzone = "UTC")
 }
 
+#' @noRd
+#'
+#' @importFrom shinyjs disabled
+#' @importFrom shinyWidgets prettyCheckbox
+#' @importFrom htmltools tags
+send_invite_checkbox <- function(ns, app_url) {
+  # check if the app has an app url.  If the app has an app_url, allow the
+  # user to send an invite email.
+  if (!is.null(app_url) && !is.na(app_url) && app_url != "") {
+    email_invite_checkbox <- shinyWidgets::prettyCheckbox(
+      ns("send_invite_email"),
+      "Send Invite Email?",
+      value = FALSE,
+      status = "primary"
+    )
+  } else {
+    email_invite_checkbox <- tags$div(
+      tags$span(
+        shinyjs::disabled(shinyWidgets::prettyCheckbox(
+          ns("send_invite_email"),
+          "Send Invite Email?",
+          value = FALSE,
+          status = "primary",
+          inline = TRUE
+        ))
+      ),
+      tags$span(
+        style = "display: inline-block; margin-left: -15px;",
+        id = ns("checkbox_question"),
+        icon("question-circle"),
+        `data-toggle` = "tooltip",
+        `data-placement`= "top",
+        title = "You must set the App URL to send email invites."
+      )
+    )
+  }
+
+  email_invite_checkbox
+}

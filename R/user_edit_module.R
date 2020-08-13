@@ -13,6 +13,8 @@
 #' @importFrom shiny reactive observeEvent showModal modalDialog modalButton removeModal
 #' @importFrom shinyWidgets pickerInput
 #' @importFrom shinyFeedback showToast
+#' @importFrom httr GET authenticate content status_code
+#' @importFrom jsonlite fromJSON
 #'
 #' @noRd
 #'
@@ -25,9 +27,43 @@ user_edit_module <- function(input, output, session,
 
   ns <- session$ns
 
+  app_url <- reactiveVal(NULL)
+
+  # get the app_url
+  observeEvent(open_modal_trigger(), {
+
+    tryCatch({
+      res <- httr::GET(
+        url = paste0(.global_sessions$hosted_url, "/apps"),
+        query = list(
+          app_uid = .global_sessions$app_name
+        ),
+        httr::authenticate(
+          user = .global_sessions$api_key,
+          password = ""
+        )
+      )
+
+      res_content <- jsonlite::fromJSON(
+        httr::content(res, type = "text", encoding = "UTF-8")
+      )
+
+      if (!identical(httr::status_code(res), 200L)) {
+        app_url(NULL)
+        stop(res_content, call. = FALSE)
+      } else {
+        app_url(res_content$app_url)
+      }
+
+    }, error = function(err) {
+      print(err)
+    })
+
+  }, priority = 1)
 
   shiny::observeEvent(open_modal_trigger(), {
     hold_user <- user_to_edit()
+    hold_app_url <- app_url()
 
     if (is.null(hold_user)) {
       is_admin_value  <- "No"
@@ -47,6 +83,8 @@ user_edit_module <- function(input, output, session,
 
       email_input <- NULL
     }
+
+
 
 
 
@@ -80,7 +118,9 @@ user_edit_module <- function(input, output, session,
             ),
             selected = is_admin_value,
             inline = TRUE
-          )
+          ),
+          br(),
+          send_invite_checkbox(ns, hold_app_url)
         ),
         tags$script(src = "polish/js/user_edit_module.js?version=2"),
         tags$script(paste0("user_edit_module('", ns(''), "')"))
@@ -166,7 +206,8 @@ user_edit_module <- function(input, output, session,
             user_uid = hold_user$user_uid,
             app_uid = .global_sessions$app_name,
             is_admin = is_admin_out,
-            req_user_uid = session$userData$user()$user_uid
+            req_user_uid = session$userData$user()$user_uid,
+            send_invite_email = input$send_invite_email
           ),
           httr::authenticate(
             user = .global_sessions$api_key,
@@ -175,7 +216,7 @@ user_edit_module <- function(input, output, session,
           encode = "json"
         )
 
-        if (res$status_code != 200) {
+        if (!identical(res$status_code, 200)) {
 
           err <- jsonlite::fromJSON(
             httr::content(res, "text", encoding = "UTF-8")
