@@ -12,10 +12,10 @@ sign_in_ui_default(
     "text-center", h1("Your", style = "margin-bottom: 0; margin-top: 30px;"), h1("Brand",
     style = "margin-bottom: 0; margin-top: 10px;"), h1("Here", style =
     "margin-bottom: 15px; margin-top: 10px;")),
-  logo_bottom = tags$img(src = "polish/images/placeholder_company_logo.jpg", alt =
-    "Placeholder Logo", style = "width: 200px; margin-bottom: 15px; padding-top: 15px;"),
+  logo_bottom = NULL,
   icon_href = "polish/images/polished_icon.png",
-  background_image = NULL
+  background_image = NULL,
+  terms_and_privacy_footer = NULL
 )
 }
 \arguments{
@@ -34,6 +34,9 @@ sign_in_ui_default(
 \item{background_image}{the url/path to a full width background image.  If set to NULL,
 the default, the \code{color} argument will be used for the background instead of this
 image.}
+
+\item{terms_and_privacy_footer}{links to place in the footer, directly above the copyright
+notice.}
 }
 \value{
 the UI for the sign in page

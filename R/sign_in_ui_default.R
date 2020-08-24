@@ -13,6 +13,8 @@
 #' @param background_image the url/path to a full width background image.  If set to NULL,
 #' the default, the \code{color} argument will be used for the background instead of this
 #' image.
+#' @param terms_and_privacy_footer links to place in the footer, directly above the copyright
+#' notice.
 #'
 #' @export
 #'
@@ -35,7 +37,8 @@ sign_in_ui_default <- function(
   ),
   logo_bottom = NULL,
   icon_href = "polish/images/polished_icon.png",
-  background_image = NULL
+  background_image = NULL,
+  terms_and_privacy_footer = NULL
 ) {
 
   if (is.null(background_image)) {
@@ -47,6 +50,12 @@ sign_in_ui_default <- function(
       background-position: 0 0;
       background-size: cover;
     ")
+  }
+
+  if (is.null(terms_and_privacy_footer)) {
+    footer_margin <- -40
+  } else {
+    footer_margin <- -68
   }
 
 
@@ -96,7 +105,7 @@ sign_in_ui_default <- function(
           color: #FFF;
           text-align: center;
           z-index: 1;
-          margin-top: -40px;
+          margin-top: ${footer_margin}px;
         }
 
         body {
@@ -123,8 +132,8 @@ sign_in_ui_default <- function(
       shiny::column(
         12,
         class = "footer",
+        terms_and_privacy_footer,
         tags$p(
-          style = "color: #FFF; text-align: center;",
           htmltools::HTML("&copy;"),
           paste0(
             substr(Sys.Date(), 1, 4),
