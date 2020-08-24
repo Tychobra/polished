@@ -33,11 +33,7 @@ sign_in_ui_default <- function(
     h1("Brand", style = "margin-bottom: 0; margin-top: 10px;"),
     h1("Here", style = "margin-bottom: 15px; margin-top: 10px;")
   ),
-  logo_bottom = tags$img(
-    src = "polish/images/placeholder_company_logo.jpg",
-    alt = "Placeholder Logo",
-    style = "width: 200px; margin-bottom: 15px; padding-top: 15px;"
-  ),
+  logo_bottom = NULL,
   icon_href = "polish/images/polished_icon.png",
   background_image = NULL
 ) {
@@ -72,19 +68,21 @@ sign_in_ui_default <- function(
       tags$style(
         stringr::str_interp("
         .auth_panel {
-          width: 300px;
-          max-width: 100%;
+          width: 100%;
+          max-width: 300px;
           padding: 10px 25px;
           background-color: #fff;
           color: #080021;
+          margin: 0 auto;
         }
 
         .auth_panel_2 {
-          width: 600px;
-          max-width: 100%;
+          width: 100%;
+          max-width: 600px;
           padding: 10px 25px;
           background-color: #fff;
           color: #080021;
+          margin: 0 auto;
         }
 
         .btn-primary {
@@ -116,16 +114,8 @@ sign_in_ui_default <- function(
         align = "center",
         logo_top,
         tags$div(
-          style = "display: inline-block;",
-          div(
-            style = "display: flex; flex-direction: column;",
-            sign_in_module,
-            tags$div(
-              style = "max-width: 100%; background-color: #FFF",
-              tags$hr(style="padding: 0; margin: 0;"),
-              logo_bottom
-            )
-          )
+          sign_in_module,
+          logo_bottom
         )
       )
     ),
