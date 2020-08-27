@@ -54,7 +54,7 @@ verify_email_module_ui <- function(id) {
 #' @param output the Shiny server output
 #' @param session the Shiny server session
 #'
-#' @importFrom shiny observeEvent
+#' @importFrom shiny observeEvent reactivePoll
 #' @importFrom shinyFeedback showToast
 #' @importFrom httr GET POST content status_code
 #'
@@ -68,7 +68,7 @@ verify_email_module <- function(input, output, session) {
   # the number of times that the API has been queried
   count_polls <- 0
 
-  user_from_db <- reactivePoll(
+  user_from_db <- shiny::reactivePoll(
     5000,
     session,
     checkFunc = function() {
