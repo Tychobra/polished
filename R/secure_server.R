@@ -47,7 +47,8 @@ secure_server <- function(
           email = "admin@tychobra.com",
           is_admin = TRUE,
           hashed_cookie = character(0),
-          email_verified = TRUE
+          email_verified = TRUE,
+          roles = NA
         ))
 
         # remove admin_panel=false from query
@@ -99,7 +100,7 @@ secure_server <- function(
         if (is.na(global_user$signed_in_as)) {
 
           user_out <- global_user[
-            c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified")
+            c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified", "roles")
           ]
 
           session$userData$user(user_out)

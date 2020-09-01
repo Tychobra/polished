@@ -482,10 +482,36 @@ Sessions <-  R6::R6Class(
 
       email <- invite$email
 
+      res <- httr::GET(
+        url = paste0(self$hosted_url, "/user-roles"),
+        query = list(
+          user_uid = user_uid
+        ),
+        httr::authenticate(
+          user = self$api_key,
+          password = ""
+        ),
+        encode = "json"
+      )
+
+      httr::stop_for_status(res)
+
+      roles_df <- jsonlite::fromJSON(
+        httr::content(res, "text", encoding = "UTF-8")
+      )
+
+      if (length(roles_df) == 0) {
+        roles_out <- NA
+      } else {
+        roles_out <- roles_df$role_name
+      }
+
+
       list(
         user_uid = user_uid,
         email = email,
-        is_admin = invite$is_admin
+        is_admin = invite$is_admin,
+        roles = roles_out
       )
     },
     set_inactive = function(session_uid, user_uid) {
