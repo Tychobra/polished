@@ -79,6 +79,7 @@ Sessions <-  R6::R6Class(
     is_invite_required = TRUE,
     api_key = NULL,
     sign_in_providers = character(0),
+    is_email_verification_required = TRUE,
     #' @description
     #' polished Sessions configuration function
     #'
@@ -95,7 +96,8 @@ Sessions <-  R6::R6Class(
       admin_mode = FALSE,
       is_invite_required = TRUE,
       api_url = "https://api.polished.tech",
-      sign_in_providers = "email"
+      sign_in_providers = "email",
+      is_email_verification_required = FALSE
     ) {
 
       if (!(length(app_name) == 1 && is.character(app_name))) {
@@ -159,10 +161,14 @@ Sessions <-  R6::R6Class(
       if (!(length(is_invite_required) == 1 && is.logical(is_invite_required))) {
         stop("invalid `is_invite_required` argument passed to `global_sessions_config()`", call. = FALSE)
       }
+      if (!(length(is_email_verification_required) == 1 && is.logical(is_email_verification_required))) {
+        stop("invalid `is_email_verification_required` argument passed to `global_sessions_config()`", call. = FALSE)
+      }
 
 
       private$admin_mode <- admin_mode
       self$is_invite_required <- is_invite_required
+      self$is_email_verification_required <- is_email_verification_required
 
       private$refresh_jwt_pub_key()
 
@@ -386,7 +392,8 @@ Sessions <-  R6::R6Class(
           email = email,
           password = password,
           hashed_cookie = hashed_cookie,
-          is_invite_required = self$is_invite_required
+          is_invite_required = self$is_invite_required,
+          is_email_verification_required = self$is_email_verification_required
         ),
         encode = "json"
       )

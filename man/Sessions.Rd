@@ -39,7 +39,8 @@ polished Sessions configuration function
   admin_mode = FALSE,
   is_invite_required = TRUE,
   api_url = "https://api.polished.tech",
-  sign_in_providers = "email"
+  sign_in_providers = "email",
+  is_email_verification_required = FALSE
 )}\if{html}{\out{</div>}}
 }
 

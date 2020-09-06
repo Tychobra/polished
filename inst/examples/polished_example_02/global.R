@@ -10,5 +10,6 @@ global_sessions_config(
   api_key = app_config$api_key,
   firebase_config = app_config$firebase,
   is_invite_required = FALSE,
-  sign_in_providers = c("google")
+  sign_in_providers = c("google"),
+  is_email_verification_required = FALSE
 )

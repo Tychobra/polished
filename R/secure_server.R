@@ -135,7 +135,8 @@ secure_server <- function(
         session$reload()
 
 
-      } else if (isTRUE(hold_user$email_verified)) {
+      } else if (isTRUE(hold_user$email_verified) ||
+                 isFALSE(.global_sessions$is_email_verification_required)) {
 
 
         is_on_admin_page <- if (

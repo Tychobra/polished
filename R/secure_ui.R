@@ -140,7 +140,8 @@ secure_ui <- function(
 
     } else {
 
-      if (isTRUE(user$email_verified)) {
+      if (isTRUE(user$email_verified) ||
+          isFALSE(.global_sessions$is_email_verification_required)) {
 
         if (isTRUE(user$is_admin)) {
 

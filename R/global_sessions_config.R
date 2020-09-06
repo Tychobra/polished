@@ -23,6 +23,8 @@
 #' @param api_url the API url.  Defaults to "https://api.polished.tech".
 #' @param sign_in_providers the sign in providers to enable.  Valid values are "google"
 #' "email", "microsoft", and/or "facebook". Defaults to \code{"email"}.
+#' @param is_email_verification_required TRUE by default.  Whether or not to require the user to
+#' verify their email before accessing your Shiny app.
 #'
 #' @export
 #'
@@ -45,7 +47,8 @@ global_sessions_config <- function(
   admin_mode = FALSE,
   is_invite_required = TRUE,
   api_url = "https://api.polished.tech",
-  sign_in_providers = "email"
+  sign_in_providers = "email",
+  is_email_verification_required = TRUE
 ) {
 
   .global_sessions$config(
@@ -55,7 +58,8 @@ global_sessions_config <- function(
     is_invite_required = is_invite_required,
     api_key = api_key,
     api_url = api_url,
-    sign_in_providers = sign_in_providers
+    sign_in_providers = sign_in_providers,
+    is_email_verification_required = is_email_verification_required
   )
 
 }
