@@ -57,6 +57,7 @@ verify_email_module_ui <- function(id) {
 #' @importFrom shiny observeEvent reactivePoll
 #' @importFrom shinyFeedback showToast
 #' @importFrom httr GET POST content status_code
+#' @importFrom stats runif
 #'
 #' @noRd
 #'
@@ -72,7 +73,7 @@ verify_email_module <- function(input, output, session) {
     5000,
     session,
     checkFunc = function() {
-      runif(1)
+      stats::runif(1)
     },
     valueFunc = function() {
 
