@@ -146,7 +146,7 @@ verify_email_module <- function(input, output, session) {
         encode = "json"
       )
 
-      if (!identicl(httr::status_code(res), 200L)) {
+      if (!identical(httr::status_code(res), 200L)) {
         res_content <- jsonlite::fromJSON(
           httr::content(res, type = "text", encoding = "UTF-8")
         )
