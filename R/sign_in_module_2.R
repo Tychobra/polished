@@ -10,7 +10,7 @@
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr
-#' @importFrom shinyFeedback useShinyFeedback
+#' @importFrom shinyFeedback useShinyFeedback loadingButton
 #' @importFrom shinyjs useShinyjs hidden
 #'
 #' @export
