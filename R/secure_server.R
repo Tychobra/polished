@@ -148,9 +148,18 @@ secure_server <- function(
             custom_admin_server(input, output, session)
           }
         } else if (is.null(query_list$page)) {
-          # go to the custom app
 
+          # go to the custom app
           server(input, output, session)
+
+          if (isTRUE(hold_user$is_admin)) {
+            # go to admin panel button
+            shiny::callModule(
+              admin_button,
+              "polished"
+            )
+          }
+
 
           # set the session to inactive when the session ends
           shiny::onStop(fun = function() {
@@ -186,16 +195,15 @@ secure_server <- function(
     }, once = TRUE)
 
 
-    observe({
+    # load up the sign in module server logic if the user in on "sign_in" page
+
+    observeEvent(session$userData$user(), {
+      req(is.null(session$userData$user()))
+
       query_list <- shiny::getQueryString()
       page <- query_list$page
-      if (is.null(page)) {
-        # go to admin panel
-        shiny::callModule(
-          admin_button,
-          "polished"
-        )
-      } else if (identical(page, "sign_in")) {
+
+      if (identical(page, "sign_in")) {
 
         if (is.null(custom_sign_in_server)) {
 
@@ -205,15 +213,16 @@ secure_server <- function(
           )
 
         } else {
-
           shiny::callModule(
             custom_sign_in_server,
             "sign_in"
           )
-
         }
       }
-    })
+
+    }, ignoreNULL = FALSE, once = TRUE)
+
+
 
 
 
