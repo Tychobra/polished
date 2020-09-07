@@ -64,6 +64,9 @@ secure_ui <- function(
       hashed_cookie <- digest::digest(polished_cookie)
     }
 
+    # if a token exists attempt to sign in the user using the token.  This is used to automatically
+    # sign a user in via an email link without requiring the user to enter their email
+    # and password.
     if (!is.null(query$token)) {
       query_cookie <- query$token
       return(
@@ -97,16 +100,7 @@ secure_ui <- function(
 
     page_out <- NULL
 
-    if (identical(page_query, "set_password")) {
-
-      email <- query$email
-      passcode <- query$verify_code
-
-      page_out <- set_password_module_ui("set_pass")
-
-    } else if (is.null(user)) {
-
-
+    if (is.null(user)) {
 
       if (identical(page_query, "sign_in")) {
         # go to the sign in page

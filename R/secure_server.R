@@ -219,11 +219,6 @@ secure_server <- function(
           )
 
         }
-      } else if (identical(page, "set_password")) {
-        shiny::callModule(
-          set_password_module,
-          "set_pass"
-        )
       }
     })
 
