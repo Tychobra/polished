@@ -128,15 +128,8 @@ secure_server <- function(
       query_list <- shiny::getQueryString()
       hold_user <- session$userData$user()
 
-      if (identical(query_list$page, 'set_password')) {
-
-        # sign the user out of polished
-        .global_sessions$sign_out(hold_user$hashed_cookie, hold_user$session_uid)
-        session$reload()
-
-
-      } else if (isTRUE(hold_user$email_verified) ||
-                 isFALSE(.global_sessions$is_email_verification_required)) {
+      if (isTRUE(hold_user$email_verified) ||
+          isFALSE(.global_sessions$is_email_verification_required)) {
 
 
         is_on_admin_page <- if (
