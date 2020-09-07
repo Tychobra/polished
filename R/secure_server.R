@@ -147,6 +147,14 @@ secure_server <- function(
           if (isTRUE(!is.null(custom_admin_server))) {
             custom_admin_server(input, output, session)
           }
+        } else if (identical(query_list$page, "payments")) {
+
+          # load up the payments module
+          shiny::callModule(
+            polishedpayments::app_module,
+            "payments"
+          )
+
         } else if (is.null(query_list$page)) {
 
           # go to the custom app

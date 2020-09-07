@@ -137,8 +137,15 @@ secure_ui <- function(
       if (isTRUE(user$email_verified) ||
           isFALSE(.global_sessions$is_email_verification_required)) {
 
-        if (isTRUE(user$is_admin)) {
+        if (identical(page_query, "payments")) {
 
+          # server the payments module UI
+          page_out <- tagList(
+            polishedpayments::app_module_ui("payments"),
+            tags$script(src = "polish/js/polished_session.js?version=2"),
+            tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
+          )
+        } else if (isTRUE(user$is_admin)) {
 
           if (identical(page_query, "admin_panel")) {
 
@@ -148,7 +155,7 @@ secure_ui <- function(
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
             )
-          } else {
+          } else if (is.null(page_query)) {
 
             # go to Shiny app with admin button.  User is an admin.
             page_out <- tagList(
