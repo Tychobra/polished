@@ -62,8 +62,8 @@ sign_in_ui_default <- function(
   shiny::fluidPage(
     style = "height: 100vh;",
     tags$head(
-      tags$title("Polished"),
       tags$link(rel = "shortcut icon", href = icon_href),
+      tags$title(company_name),
       tags$meta(
         name = "viewport",
         content = "
