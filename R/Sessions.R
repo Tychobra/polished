@@ -72,12 +72,10 @@ api_get_invite <- function(url, api_key, app_uid, user_uid) {
 Sessions <-  R6::R6Class(
   classname = 'Sessions',
   public = list(
-    hosted_url = character(0),
     app_name = character(0),
     conn = NULL,
     firebase_config = NULL,
     is_invite_required = TRUE,
-    api_key = NULL,
     sign_in_providers = character(0),
     is_email_verification_required = TRUE,
     #' @description
@@ -91,11 +89,9 @@ Sessions <-  R6::R6Class(
     #'
     config = function(
       app_name,
-      api_key,
       firebase_config = NULL,
       admin_mode = FALSE,
       is_invite_required = TRUE,
-      api_url = "https://api.polished.tech",
       sign_in_providers = "email",
       is_email_verification_required = FALSE
     ) {
@@ -104,17 +100,10 @@ Sessions <-  R6::R6Class(
         stop("invalid `app_name` argument passed to `global_sessions_config()`", call. = FALSE)
       }
 
-      if (!(length(api_url) == 1 && is.character(api_url))) {
-        stop("invalid `api_url` argument passed to `global_sessions_config()`", call. = FALSE)
-      }
-
       if (!(length(sign_in_providers) >= 1 && is.character(sign_in_providers))) {
         stop("invalid `sign_in_providers` argument passed to `global_sessions_config()`", call. = FALSE)
       }
 
-
-      self$api_key <- api_key
-      self$hosted_url <- api_url
       self$sign_in_providers <- sign_in_providers
 
       if (!is.null(firebase_config)) {
@@ -129,12 +118,12 @@ Sessions <-  R6::R6Class(
 
       # get the app uid
       res <- httr::GET(
-        url = paste0(self$hosted_url, "/apps"),
+        url = paste0(getOption("polished")$api_url, "/apps"),
         query = list(
           app_name = app_name
         ),
         httr::authenticate(
-          user = self$api_key,
+          user = getOption("polished")$api_key,
           password = ""
         )
       )
@@ -222,8 +211,8 @@ Sessions <-  R6::R6Class(
 
 
         invite <- api_get_invite_by_email(
-          self$hosted_url,
-          self$api_key,
+          getOption("polished")$api_url,
+          getOption("polished")$api_key,
           new_session$email,
           self$app_name
         )
@@ -232,7 +221,7 @@ Sessions <-  R6::R6Class(
           # if invite is not required, and this is the first time that the user is signing in,
           # then create the app_users
           res <- httr::POST(
-            url = paste0(self$hosted_url, "/app-users"),
+            url = paste0(getOption("polished")$api_url, "/app-users"),
             body = list(
               email = new_session$email,
               app_uid = self$app_name,
@@ -240,7 +229,7 @@ Sessions <-  R6::R6Class(
               req_user_uid = "00000000-0000-0000-0000-000000000000"
             ),
             httr::authenticate(
-              user = self$api_key,
+              user = getOption("polished")$api_key,
               password = ""
             ),
             encode = "json"
@@ -249,8 +238,8 @@ Sessions <-  R6::R6Class(
           httr::stop_for_status(res)
 
           invite <- api_get_invite_by_email(
-            self$hosted_url,
-            self$api_key,
+            getOption("polished")$api_url,
+            getOption("polished")$api_key,
             new_session$email,
             self$app_name
           )
@@ -279,8 +268,8 @@ Sessions <-  R6::R6Class(
       invite <- NULL
 
       invite <- api_get_invite_by_email(
-        self$hosted_url,
-        self$api_key,
+        getOption("polished")$api_url,
+        getOption("polished")$api_key,
         email,
         self$app_name
       )
@@ -291,14 +280,14 @@ Sessions <-  R6::R6Class(
       if (nchar(hashed_cookie) == 0) return(NULL)
 
       res <- httr::GET(
-        url = paste0(self$hosted_url, "/session-by-cookie"),
+        url = paste0(getOption("polished")$api_url, "/session-by-cookie"),
         query = list(
           hashed_cookie = hashed_cookie,
           app_uid = self$app_name,
           page = page
         ),
         httr::authenticate(
-          user = self$api_key,
+          user = getOption("polished")$api_key,
           password = ""
         ),
         encode = "json"
@@ -320,7 +309,7 @@ Sessions <-  R6::R6Class(
     sign_in_email = function(email, password, hashed_cookie) {
 
       res <- httr::POST(
-        url = paste0(self$hosted_url, "/sign-in-email"),
+        url = paste0(getOption("polished")$api_url, "/sign-in-email"),
         body = list(
           app_uid = self$app_name,
           email = email,
@@ -330,7 +319,7 @@ Sessions <-  R6::R6Class(
         ),
         encode = "json",
         httr::authenticate(
-          user = self$api_key,
+          user = getOption("polished")$api_key,
           password = ""
         )
       )
@@ -347,14 +336,14 @@ Sessions <-  R6::R6Class(
 
           # send a password reset email and stop
           res2 <- httr::POST(
-            url = paste0(self$hosted_url, "/send-password-reset-email"),
+            url = paste0(getOption("polished")$api_url, "/send-password-reset-email"),
             body = list(
               email = email,
               app_uid = self$app_name,
               is_invite_required = self$is_invite_required
             ),
             httr::authenticate(
-              user = self$api_key,
+              user = getOption("polished")$api_key,
               password = ""
             ),
             encode = "json"
@@ -382,7 +371,7 @@ Sessions <-  R6::R6Class(
     register_email = function(email, password, hashed_cookie) {
 
       res <- httr::POST(
-        url = paste0(self$hosted_url, "/register-email"),
+        url = paste0(getOption("polished")$api_url, "/register-email"),
         httr::authenticate(
           user = self$api_key,
           password = ""
@@ -436,9 +425,9 @@ Sessions <-  R6::R6Class(
       } else {
 
         res <- httr::PUT(
-          url = paste0(self$hosted_url, "/sessions"),
+          url = paste0(getOption("polished")$api_url, "/sessions"),
           httr::authenticate(
-            user = self$api_key,
+            user = getOption("polished")$api_key,
             password = ""
           ),
           body = list(
@@ -459,7 +448,7 @@ Sessions <-  R6::R6Class(
     set_signed_in_as = function(session_uid, signed_in_as, user_uid = NULL) {
 
       res <- httr::PUT(
-        url = paste0(self$hosted_url, "/sessions"),
+        url = paste0(getOption("polished")$api_url, "/sessions"),
         httr::authenticate(
           user = self$api_key,
           password = ""
@@ -481,8 +470,8 @@ Sessions <-  R6::R6Class(
     get_signed_in_as_user = function(user_uid) {
 
       invite <- api_get_invite(
-        self$hosted_url,
-        self$api_key,
+        getOption("polished")$api_url,
+        getOption("polished")$api_key,
         self$app_name,
         user_uid
       )
@@ -490,12 +479,12 @@ Sessions <-  R6::R6Class(
       email <- invite$email
 
       res <- httr::GET(
-        url = paste0(self$hosted_url, "/user-roles"),
+        url = paste0(getOption("polished")$api_url, "/user-roles"),
         query = list(
           user_uid = user_uid
         ),
         httr::authenticate(
-          user = self$api_key,
+          user = getOption("polished")$api_key,
           password = ""
         ),
         encode = "json"
@@ -526,9 +515,9 @@ Sessions <-  R6::R6Class(
 
 
       res <- httr::POST(
-        url = paste0(self$hosted_url, "/actions"),
+        url = paste0(getOption("polished")$api_url, "/actions"),
         httr::authenticate(
-          user = self$api_key,
+          user = getOption("polished")$api_key,
           password = ""
         ),
         body = list(
@@ -544,9 +533,9 @@ Sessions <-  R6::R6Class(
     sign_out = function(hashed_cookie, session_uid) {
 
       res <- httr::POST(
-        url = paste0(self$hosted_url, "/sign-out"),
+        url = paste0(getOption("polished")$api_url, "/sign-out"),
         httr::authenticate(
-          user = self$api_key,
+          user = getOption("polished")$api_key,
           password = ""
         ),
         body = list(
@@ -567,9 +556,9 @@ Sessions <-  R6::R6Class(
 
       # add session to "sessions" table via the API
       res <- httr::POST(
-        url = paste0(self$hosted_url, "/sessions"),
+        url = paste0(getOption("polished")$api_url, "/sessions"),
         httr::authenticate(
-          user = self$api_key,
+          user = getOption("polished")$api_key,
           password = ""
         ),
         body = list(

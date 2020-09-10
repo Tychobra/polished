@@ -87,9 +87,9 @@ verify_email_module <- function(input, output, session) {
         tryCatch({
 
           res <- httr::GET(
-            url = paste0(.global_sessions$hosted_url, "/users"),
+            url = paste0(getOption("polished")$api_url, "/users"),
             httr::authenticate(
-              user = .global_sessions$api_key,
+              user = getOption("polished")$api_key,
               password = ""
             ),
             query = list(
@@ -134,9 +134,9 @@ verify_email_module <- function(input, output, session) {
 
 
       res <- httr::POST(
-        url = paste0(.global_sessions$hosted_url, "/resend-verification-email"),
+        url = paste0(getOption("polished")$api_url, "/resend-verification-email"),
         httr::authenticate(
-          user = .global_sessions$api_key,
+          user = getOption("polished")$api_key,
           password = ""
         ),
         body = list(

@@ -51,13 +51,24 @@ global_sessions_config <- function(
   is_email_verification_required = TRUE
 ) {
 
+  if (!(length(api_key) == 1 && is.character(api_key))) {
+    stop("invalid `api_key` argument passed to `global_sessions_config()`", call. = FALSE)
+  }
+
+  if (!(length(api_url) == 1 && is.character(api_url))) {
+    stop("invalid `api_url` argument passed to `global_sessions_config()`", call. = FALSE)
+  }
+
+  options("polished" = list(
+    api_key = api_key,
+    api_url = api_url
+  ))
+
   .global_sessions$config(
     app_name = app_name,
     firebase_config = firebase_config,
     admin_mode = admin_mode,
     is_invite_required = is_invite_required,
-    api_key = api_key,
-    api_url = api_url,
     sign_in_providers = sign_in_providers,
     is_email_verification_required = is_email_verification_required
   )
