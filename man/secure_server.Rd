@@ -8,7 +8,8 @@ secure_server(
   server,
   custom_sign_in_server = NULL,
   custom_admin_server = NULL,
-  allow_reconnect = FALSE
+  allow_reconnect = FALSE,
+  account_module = NULL
 )
 }
 \arguments{
@@ -23,6 +24,8 @@ server functionality.}
 \item{allow_reconnect}{argument to pass to the 'shiny' \code{session$allowReconnect()} function. Defaults to
 \code{FALSE}.  Set to \code{TRUE} to allow reconnect with shiny-server and Rstudio Connect.  Set to "force"
 for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.html} for more information.}
+
+\item{account_module}{the server code for the user account module.}
 }
 \description{
 This function is used to secure your 'shiny' app's server function.  Make sure to pass

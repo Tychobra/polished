@@ -14,6 +14,7 @@
 #' @param admin_ui_options list of html elements to customize branding of the "Admin Panel".  Valid
 #' list element names are "title", "sidebar_branding", and "browser_tab_icon".  See
 #' \code{\link{default_admin_ui_options}} for an example.
+#' @param account_module_ui the ui for the user's account module.
 #'
 #' @return Secured Shiny app UI
 #'
@@ -30,7 +31,8 @@ secure_ui <- function(
   sign_in_page_ui = NULL,
   custom_admin_ui = NULL,
   custom_admin_button_ui = admin_button_ui("polished"),
-  admin_ui_options = default_admin_ui_options()
+  admin_ui_options = default_admin_ui_options(),
+  account_module_ui = NULL
 ) {
 
   ui <- force(ui)
@@ -137,14 +139,19 @@ secure_ui <- function(
       if (isTRUE(user$email_verified) ||
           isFALSE(.global_sessions$is_email_verification_required)) {
 
-        if (identical(page_query, "payments")) {
+        if (identical(page_query, "account")) {
 
           # server the payments module UI
-          page_out <- tagList(
-            polishedpayments::app_module_ui("payments"),
-            tags$script(src = "polish/js/polished_session.js?version=2"),
-            tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
-          )
+          if (is.null(account_module_ui)) {
+            stop("`account_module_ui`` cannot ne NULL", call. = FALSE)
+          } else {
+            page_out <- tagList(
+              account_module_ui,
+              tags$script(src = "polish/js/polished_session.js?version=2"),
+              tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
+            )
+          }
+
         } else if (isTRUE(user$is_admin)) {
 
           if (identical(page_query, "admin_panel")) {

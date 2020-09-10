@@ -12,6 +12,7 @@
 #' @param allow_reconnect argument to pass to the 'shiny' \code{session$allowReconnect()} function. Defaults to
 #' \code{FALSE}.  Set to \code{TRUE} to allow reconnect with shiny-server and Rstudio Connect.  Set to "force"
 #' for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.html} for more information.
+#' @param account_module the server code for the user account module.
 #'
 #' @export
 #'
@@ -23,7 +24,8 @@ secure_server <- function(
   server,
   custom_sign_in_server = NULL,
   custom_admin_server = NULL,
-  allow_reconnect = FALSE
+  allow_reconnect = FALSE,
+  account_module = NULL
 ) {
 
   server <- force(server)
@@ -147,12 +149,12 @@ secure_server <- function(
           if (isTRUE(!is.null(custom_admin_server))) {
             custom_admin_server(input, output, session)
           }
-        } else if (identical(query_list$page, "payments")) {
+        } else if (identical(query_list$page, "account")) {
 
           # load up the payments module
-          shiny::callModule(
-            polishedpayments::app_module,
-            "payments"
+          callModule(
+            account_module,
+            "account"
           )
 
         } else if (is.null(query_list$page)) {
