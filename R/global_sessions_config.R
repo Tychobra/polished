@@ -86,11 +86,17 @@ global_sessions_config <- function(
     stop(paste0("app_name `", app_name, "` does not exist"), call. = FALSE)
   }
 
+  # create app display name.  Creating this here and setting it in options will
+  # make it easy to reuse in various locations without repeating code.
+  app_name_display <- gsub("[_|-]", " ", app_name)
+  app_name_display <- tools::toTitleCase(app_name_display)
+
   options("polished" = list(
     api_key = api_key,
     api_url = api_url,
     app_uid = app$uid,
-    app_name = app_name
+    app_name = app_name,
+    app_name_display = app_name_display
   ))
 
   .global_sessions$config(
