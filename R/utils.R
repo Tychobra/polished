@@ -90,7 +90,7 @@ send_invite_checkbox <- function(ns, app_url) {
         icon("question-circle"),
         `data-toggle` = "tooltip",
         `data-placement`= "top",
-        title = "You must set the App URL to send email invites."
+        title = "You must set the App URL to send email invites. Go to https://dashboard.polished.tech to set your app URL."
       )
     )
   }

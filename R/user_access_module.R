@@ -86,18 +86,18 @@ user_access_module <- function(input, output, session) {
   users <- reactive({
     users_trigger()
 
-    hold_app_name <- .global_sessions$app_name
+    hold_app_name <- getOption("polished")$app_uid
 
     out <- NULL
     tryCatch({
 
       res <- httr::GET(
-        url = paste0(.global_sessions$hosted_url, "/app-users"),
+        url = paste0(getOption("polished")$api_url, "/app-users"),
         query = list(
-          app_uid = hold_app_name
+          app_uid = getOption("polished")$app_uid
         ),
         httr::authenticate(
-          user = .global_sessions$api_key,
+          user = getOption("polished")$api_key,
           password = ""
         )
       )
@@ -125,12 +125,12 @@ user_access_module <- function(input, output, session) {
 
 
       res <- httr::GET(
-        url = paste0(.global_sessions$hosted_url, "/last-active-session-time"),
+        url = paste0(getOption("polished")$api_url, "/last-active-session-time"),
         query = list(
-          app_uid = hold_app_name
+          app_uid = getOption("polished")$app_uid
         ),
         httr::authenticate(
-          user = .global_sessions$api_key,
+          user = getOption("polished")$api_key,
           password = ""
         )
       )
@@ -348,19 +348,19 @@ user_access_module <- function(input, output, session) {
     shiny::removeModal()
 
     user_uid <- user_to_delete()$user_uid
-    app_uid <- .global_sessions$app_name
+    app_uid <- getOption("polished")$app_uid
 
     tryCatch({
 
       res <- httr::DELETE(
-        url = paste0(.global_sessions$hosted_url, "/app-users"),
+        url = paste0(getOption("polished")$api_url, "/app-users"),
         body = list(
           user_uid = user_uid,
           app_uid = app_uid,
           req_user_uid = session$userData$user()$user_uid
         ),
         httr::authenticate(
-          user = .global_sessions$api_key,
+          user = getOption("polished")$api_key,
           password = ""
         ),
         encode = "json"

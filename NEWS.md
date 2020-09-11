@@ -1,5 +1,7 @@
 # v0.1.0.9000
 
+
+- Added "is_email_verification_required" argument to `global_sessions_config()` that allows you to disable email verification.
 - Admin Panel > User Access - added a checkbox to send an email invite to a newly newly invited user 
 - removed usage dashboard from "Admin Panel".  This dashboard has been superceded by the dashboard at
 https://dashboard.polished.tech (#102)

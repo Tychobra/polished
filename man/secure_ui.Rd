@@ -9,7 +9,8 @@ secure_ui(
   sign_in_page_ui = NULL,
   custom_admin_ui = NULL,
   custom_admin_button_ui = admin_button_ui("polished"),
-  admin_ui_options = default_admin_ui_options()
+  admin_ui_options = default_admin_ui_options(),
+  account_module_ui = NULL
 )
 }
 \arguments{
@@ -27,6 +28,8 @@ UI to take admins from the custom Shiny app to the Admin panel.}
 \item{admin_ui_options}{list of html elements to customize branding of the "Admin Panel".  Valid
 list element names are "title", "sidebar_branding", and "browser_tab_icon".  See
 \code{\link{default_admin_ui_options}} for an example.}
+
+\item{account_module_ui}{the ui for the user's account module.}
 }
 \value{
 Secured Shiny app UI

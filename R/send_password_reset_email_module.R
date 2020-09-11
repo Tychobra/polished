@@ -44,14 +44,14 @@ send_password_reset_email_module <- function(input, output, session, email) {
 
     tryCatch({
       res <- httr::POST(
-        url = paste0(.global_sessions$hosted_url, "/send-password-reset-email"),
+        url = paste0(getOption("polished")$api_url, "/send-password-reset-email"),
         httr::authenticate(
-          user = .global_sessions$api_key,
+          user = getOption("polished")$api_key,
           password = ""
         ),
         body = list(
           email = hold_email,
-          app_uid = .global_sessions$app_name,
+          app_uid = getOption("polished")$app_uid,
           is_invite_required = .global_sessions$is_invite_required
         ),
         encode = "json"

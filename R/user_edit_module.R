@@ -34,12 +34,12 @@ user_edit_module <- function(input, output, session,
 
     tryCatch({
       res <- httr::GET(
-        url = paste0(.global_sessions$hosted_url, "/apps"),
+        url = paste0(getOption("polished")$api_url, "/apps"),
         query = list(
-          app_uid = .global_sessions$app_name
+          app_uid = getOption("polished")$app_uid
         ),
         httr::authenticate(
-          user = .global_sessions$api_key,
+          user = getOption("polished")$api_key,
           password = ""
         )
       )
@@ -163,16 +163,16 @@ user_edit_module <- function(input, output, session,
       tryCatch({
 
         res <- httr::POST(
-          url = paste0(.global_sessions$hosted_url, "/app-users"),
+          url = paste0(getOption("polished")$api_url, "/app-users"),
           body = list(
             email = input_email,
-            app_uid = .global_sessions$app_name,
+            app_uid = getOption("polished")$app_uid,
             is_admin = is_admin_out,
             req_user_uid = session$userData$user()$user_uid,
             send_invite_email = input$send_invite_email
           ),
           httr::authenticate(
-            user = .global_sessions$api_key,
+            user = getOption("polished")$api_key,
             password = ""
           ),
           encode = "json"
@@ -210,15 +210,15 @@ user_edit_module <- function(input, output, session,
 
         # update the app user
         res <- httr::PUT(
-          url = paste0(.global_sessions$hosted_url, "/app-users"),
+          url = paste0(getOption("polished")$api_url, "/app-users"),
           body = list(
             user_uid = hold_user$user_uid,
-            app_uid = .global_sessions$app_name,
+            app_uid = getOption("polished")$app_uid,
             is_admin = is_admin_out,
             req_user_uid = session$userData$user()$user_uid
           ),
           httr::authenticate(
-            user = .global_sessions$api_key,
+            user = getOption("polished")$api_key,
             password = ""
           ),
           encode = "json"
