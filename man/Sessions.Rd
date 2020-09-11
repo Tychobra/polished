@@ -33,12 +33,9 @@ this class directly.
 polished Sessions configuration function
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Sessions$config(
-  app_name,
-  api_key,
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
-  api_url = "https://api.polished.tech",
   sign_in_providers = "email",
   is_email_verification_required = FALSE
 )}\if{html}{\out{</div>}}

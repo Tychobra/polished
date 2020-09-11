@@ -28,6 +28,9 @@
 #'
 #' @export
 #'
+#' @importFrom httr GET authenticate content status_code
+#' @importFrom jsonlite fromJSON
+#'
 #' @examples
 #'
 #' \dontrun{
@@ -59,13 +62,38 @@ global_sessions_config <- function(
     stop("invalid `api_url` argument passed to `global_sessions_config()`", call. = FALSE)
   }
 
+  # get the app uid
+  res <- httr::GET(
+    url = paste0(api_url, "/apps"),
+    query = list(
+      app_name = app_name
+    ),
+    httr::authenticate(
+      user = api_key,
+      password = ""
+    )
+  )
+
+  app <- jsonlite::fromJSON(
+    httr::content(res, "text", encoding = "UTF-8")
+  )
+
+  if (!identical(httr::status_code(res), 200L)) {
+    stop(app, call. = FALSE)
+  }
+
+  if (length(app) == 0) {
+    stop(paste0("app_name `", app_name, "` does not exist"), call. = FALSE)
+  }
+
   options("polished" = list(
     api_key = api_key,
-    api_url = api_url
+    api_url = api_url,
+    app_uid = app$uid,
+    app_name = app_name
   ))
 
   .global_sessions$config(
-    app_name = app_name,
     firebase_config = firebase_config,
     admin_mode = admin_mode,
     is_invite_required = is_invite_required,

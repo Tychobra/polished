@@ -86,7 +86,7 @@ user_access_module <- function(input, output, session) {
   users <- reactive({
     users_trigger()
 
-    hold_app_name <- .global_sessions$app_name
+    hold_app_name <- getOption("polished")$app_uid
 
     out <- NULL
     tryCatch({
@@ -94,7 +94,7 @@ user_access_module <- function(input, output, session) {
       res <- httr::GET(
         url = paste0(getOption("polished")$api_url, "/app-users"),
         query = list(
-          app_uid = hold_app_name
+          app_uid = getOption("polished")$app_uid
         ),
         httr::authenticate(
           user = getOption("polished")$api_key,
@@ -127,7 +127,7 @@ user_access_module <- function(input, output, session) {
       res <- httr::GET(
         url = paste0(getOption("polished")$api_url, "/last-active-session-time"),
         query = list(
-          app_uid = hold_app_name
+          app_uid = getOption("polished")$app_uid
         ),
         httr::authenticate(
           user = getOption("polished")$api_key,
@@ -348,7 +348,7 @@ user_access_module <- function(input, output, session) {
     shiny::removeModal()
 
     user_uid <- user_to_delete()$user_uid
-    app_uid <- .global_sessions$app_name
+    app_uid <- getOption("polished")$app_uid
 
     tryCatch({
 

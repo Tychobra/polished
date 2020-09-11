@@ -142,7 +142,7 @@ verify_email_module <- function(input, output, session) {
         body = list(
           email = hold_email,
           user_uid = session$userData$user()$user_uid,
-          app_uid = .global_sessions$app_name
+          app_uid = getOption("polished")$app_uid
         ),
         encode = "json"
       )
