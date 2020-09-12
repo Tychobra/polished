@@ -13,6 +13,7 @@
 #' \code{FALSE}.  Set to \code{TRUE} to allow reconnect with shiny-server and Rstudio Connect.  Set to "force"
 #' for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.html} for more information.
 #' @param account_module the server code for the user account module.
+#' @param splash_module the server code for the splash page.
 #'
 #' @export
 #'
@@ -25,7 +26,8 @@ secure_server <- function(
   custom_sign_in_server = NULL,
   custom_admin_server = NULL,
   allow_reconnect = FALSE,
-  account_module = NULL
+  account_module = NULL,
+  splash_module = NULL
 ) {
 
   server <- force(server)
@@ -73,7 +75,8 @@ secure_server <- function(
         # user is not signed in
 
         # if the user is not on the sign in page, redirect to sign in and reload
-        if (is.null(page) || !identical(page, "sign_in")) {
+        if (!identical(page, "sign_in") || (is.null(splash_module) && is.null(page))
+        ) {
           shiny::updateQueryString(
             queryString = paste0("?page=sign_in"),
             session = session,
@@ -82,7 +85,7 @@ secure_server <- function(
           session$reload()
         } else {
 
-          session$userData$user(NULL)
+        session$userData$user(NULL)
           return()
         }
 
@@ -136,7 +139,7 @@ secure_server <- function(
 
         is_on_admin_page <- if (
           isTRUE(.global_sessions$get_admin_mode()) ||
-          !is.null(query_list$page) && query_list$page == 'admin_panel') TRUE else FALSE
+          identical(query_list$page, 'admin_panel')) TRUE else FALSE
 
 
         if (isTRUE(hold_user$is_admin) && isTRUE(is_on_admin_page)) {
@@ -228,6 +231,11 @@ secure_server <- function(
             "sign_in"
           )
         }
+      } else if (is.null(page) && !is.null(splash_module)) {
+        callModule(
+          splash_module,
+          "splash"
+        )
       }
 
     }, ignoreNULL = FALSE, once = TRUE)

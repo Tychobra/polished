@@ -15,6 +15,7 @@
 #' list element names are "title", "sidebar_branding", and "browser_tab_icon".  See
 #' \code{\link{default_admin_ui_options}} for an example.
 #' @param account_module_ui the ui for the user's account module.
+#' @param splash_module_ui the ui for the splash page.
 #'
 #' @return Secured Shiny app UI
 #'
@@ -32,7 +33,8 @@ secure_ui <- function(
   custom_admin_ui = NULL,
   custom_admin_button_ui = admin_button_ui("polished"),
   admin_ui_options = default_admin_ui_options(),
-  account_module_ui = NULL
+  account_module_ui = NULL,
+  splash_module_ui = NULL
 ) {
 
   ui <- force(ui)
@@ -104,7 +106,11 @@ secure_ui <- function(
 
     if (is.null(user)) {
 
-      if (identical(page_query, "sign_in")) {
+      if (!is.null(splash_module_ui) && is.null(page_query)) {
+
+        page_out <- splash_module_ui
+
+      } else if (identical(page_query, "sign_in")) {
         # go to the sign in page
         if (is.null(sign_in_page_ui)) {
 

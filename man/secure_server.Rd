@@ -9,7 +9,8 @@ secure_server(
   custom_sign_in_server = NULL,
   custom_admin_server = NULL,
   allow_reconnect = FALSE,
-  account_module = NULL
+  account_module = NULL,
+  splash_module = NULL
 )
 }
 \arguments{
@@ -26,6 +27,8 @@ server functionality.}
 for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.html} for more information.}
 
 \item{account_module}{the server code for the user account module.}
+
+\item{splash_module}{the server code for the splash page.}
 }
 \description{
 This function is used to secure your 'shiny' app's server function.  Make sure to pass
