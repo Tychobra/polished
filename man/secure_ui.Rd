@@ -10,7 +10,8 @@ secure_ui(
   custom_admin_ui = NULL,
   custom_admin_button_ui = admin_button_ui("polished"),
   admin_ui_options = default_admin_ui_options(),
-  account_module_ui = NULL
+  account_module_ui = NULL,
+  splash_module_ui = NULL
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ list element names are "title", "sidebar_branding", and "browser_tab_icon".  See
 \code{\link{default_admin_ui_options}} for an example.}
 
 \item{account_module_ui}{the ui for the user's account module.}
+
+\item{splash_module_ui}{the ui for the splash page.}
 }
 \value{
 Secured Shiny app UI
