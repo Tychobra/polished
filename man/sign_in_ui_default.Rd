@@ -15,7 +15,8 @@ sign_in_ui_default(
   logo_bottom = NULL,
   icon_href = "polish/images/polished_icon.png",
   background_image = NULL,
-  terms_and_privacy_footer = NULL
+  terms_and_privacy_footer = NULL,
+  align = "center"
 )
 }
 \arguments{
