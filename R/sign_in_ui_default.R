@@ -15,6 +15,8 @@
 #' image.
 #' @param terms_and_privacy_footer links to place in the footer, directly above the copyright
 #' notice.
+#' @oaram align The horizontal alignment of the sign in box. Defaults to "center". Valid
+#' values are "left", "center", or "right"
 #'
 #' @export
 #'
@@ -38,7 +40,8 @@ sign_in_ui_default <- function(
   logo_bottom = NULL,
   icon_href = "polish/images/polished_icon.png",
   background_image = NULL,
-  terms_and_privacy_footer = NULL
+  terms_and_privacy_footer = NULL,
+  align = "center"
 ) {
 
   if (is.null(background_image)) {
@@ -52,12 +55,30 @@ sign_in_ui_default <- function(
     ")
   }
 
+  if (length(align) != 1 && !(align %in% c("left", "center", "right"))) {
+    stop('`align` must be either "lect", "center", or "right"', call. = FALSE)
+  }
+
   if (is.null(terms_and_privacy_footer)) {
     footer_margin <- -40
   } else {
     footer_margin <- -68
   }
 
+
+  if (align == "center") {
+    left_col <- list()
+    main_width <- 12
+    right_col <- list()
+  } else if (align == "left") {
+    left_col <- list()
+    main_width <- 6
+    right_col <- column(6)
+  } else {
+    left_col <- column(6)
+    main_width <- 6
+    right_col <- list()
+  }
 
   shiny::fluidPage(
     style = "height: 100vh;",
@@ -120,15 +141,17 @@ sign_in_ui_default <- function(
     ),
     shiny::fluidRow(
       style = "padding-bottom: 50px; min-height: 100%;",
+      left_col,
       shiny::column(
-        width = 12,
+        width = main_width,
         align = "center",
         logo_top,
         tags$div(
           sign_in_module,
           logo_bottom
         )
-      )
+      ),
+      right_col
     ),
     shiny::fluidRow(
       shiny::column(
