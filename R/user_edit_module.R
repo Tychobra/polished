@@ -155,8 +155,29 @@ user_edit_module <- function(input, output, session,
           created_by = session_user
         )
 
-        shiny::removeModal()
+        # add the newly created user to Firebase and send an email so that they
+        # can set their password and sign in
+        res <- httr::POST(
+          "http://localhost:5001/z-connect-e6765/us-central1/api/shiny/send-admin-email",
+          httr::authenticate(
+            user = "andy.merlino@tychobra.com",
+            password = getOption("shiny_pass")
+          ),
+          body = list(
+            email = input_email
+          ),
+          encode = "json"
+        )
 
+        if (!identical(httr::status_code(res), 200L)) {
+          res_error <- jsonlite::fromJSON(
+            httr::content(res, "text", encoding = "UTF-8")
+          )
+          print(res_err)
+          stop("unable to email new user", call. = FALSE)
+        }
+
+        shiny::removeModal()
 
         users_trigger(users_trigger() + 1)
         tychobratools::show_toast("success", "User successfully added!")
