@@ -10,11 +10,11 @@
 #' @export
 #'
 #'
-remove_query_string <- function(session = shiny::getDefaultReactiveDomain()) {
+remove_query_string <- function(session = shiny::getDefaultReactiveDomain(), mode = "replace") {
 
   shiny::updateQueryString(
-    session$clientData$url_pathname,
-    mode = "replace",
+    "?",
+    mode = mode,
     session = session
   )
 }

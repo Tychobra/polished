@@ -394,7 +394,7 @@ user_access_module <- function(input, output, session) {
     )
 
     # to to the Shiny app
-    remove_query_string(session)
+    remove_query_string(mode = "push")
 
     session$reload()
   }, ignoreInit = TRUE)

@@ -154,7 +154,7 @@ admin_module <- function(input, output, session) {
   shiny::observeEvent(input$go_to_shiny_app, {
 
     # to to the Shiny app
-    remove_query_string(session)
+    remove_query_string(mode = "push")
 
     session$reload()
 

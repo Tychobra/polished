@@ -116,14 +116,16 @@ secure_ui <- function(
 
           # go to default sign in page
           page_out <- tagList(
-            sign_in_ui_default()
+            sign_in_ui_default(),
+            tags$script(src = "polish/js/router.js?version=1")
           )
 
         } else {
 
           # go to custom sign in page
           page_out <- tagList(
-            sign_in_page_ui
+            sign_in_page_ui,
+            tags$script(src = "polish/js/router.js?version=1")
           )
         }
 
@@ -134,6 +136,7 @@ secure_ui <- function(
         # send a random uuid as the polished_session.  This will trigger a session
         # reload and a redirect to the sign in page
         page_out <- tagList(
+          tags$script(src = "polish/js/router.js?version=1"),
           tags$script(src = "polish/js/polished_session.js?version=2"),
           tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
         )
@@ -142,7 +145,16 @@ secure_ui <- function(
 
     } else {
 
-      if (isTRUE(user$email_verified) ||
+
+      if (identical(page_query, "sign_in")) {
+        # send signed in session to polished_session.  This will trigger
+        # a redirect to the app
+        page_out <- tagList(
+          tags$script(src = "polish/js/router.js?version=1"),
+          tags$script(src = "polish/js/polished_session.js?version=2"),
+          tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
+        )
+      } else if (isTRUE(user$email_verified) ||
           isFALSE(.global_sessions$is_email_verification_required)) {
 
         if (identical(page_query, "account")) {
@@ -153,6 +165,7 @@ secure_ui <- function(
           } else {
             page_out <- tagList(
               account_module_ui,
+              tags$script(src = "polish/js/router.js?version=1"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
             )
@@ -165,6 +178,7 @@ secure_ui <- function(
             # go to Admin Panel
             page_out <- tagList(
               admin_module_ui("admin", custom_admin_ui, options = admin_ui_options),
+              tags$script(src = "polish/js/router.js?version=1"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
             )
@@ -174,6 +188,7 @@ secure_ui <- function(
             page_out <- tagList(
               ui,
               custom_admin_button_ui,
+              tags$script(src = "polish/js/router.js?version=1"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
             )
@@ -185,6 +200,7 @@ secure_ui <- function(
           # go to Shiny app without admin button.  User is not an admin
           page_out <- tagList(
             ui,
+            tags$script(src = "polish/js/router.js?version=1"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
             tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
           )
@@ -198,6 +214,7 @@ secure_ui <- function(
           verify_email_module_ui(
             "verify"
           ),
+          tags$script(src = "polish/js/router.js?version=1"),
           tags$script(src = "polish/js/polished_session.js?version=2"),
           tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
         )
@@ -205,6 +222,7 @@ secure_ui <- function(
 
 
     }
+
     page_out
   } # end request handler function
 }

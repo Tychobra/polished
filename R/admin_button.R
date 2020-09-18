@@ -49,18 +49,11 @@ admin_button <- function(input, output, session) {
     # the initial app load.
     req(session$userData$user())
 
-    # clear signed in as in .global_sessions
-    .global_sessions$set_signed_in_as(
-      hold_user$session_uid,
-      NA,
-      user_uid = hold_user$user_uid
-    )
-
     # remove admin_panel=false from query
     shiny::updateQueryString(
       queryString = paste0("?page=admin_panel"),
       session = session,
-      mode = "replace"
+      mode = "push"
     )
 
     session$reload()

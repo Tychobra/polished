@@ -55,11 +55,10 @@ secure_server <- function(
           roles = NA
         ))
 
-        # remove admin_panel=false from query
         shiny::updateQueryString(
           queryString = paste0("?page=admin_panel"),
           session = session,
-          mode = "replace"
+          mode = "push"
         )
         return()
       }
@@ -96,13 +95,24 @@ secure_server <- function(
 
         # if the user somehow ends up on the sign_in page, redirect them to the
         # Shiny app and reload
-        if (!is.null(page) && identical(query_list$page, "sign_in")) {
+
+        if (identical(query_list$page, "sign_in")) {
           remove_query_string()
           session$reload()
         }
 
         #if (isTRUE(global_user$email_verified)) {
-        if (is.na(global_user$signed_in_as)) {
+        if (is.na(global_user$signed_in_as) || !is.null(query_list$page)) {
+
+          # user is not on the custom Shiny app, so clear the signed in as user
+          if (!is.na(global_user$signed_in_as)) {
+            # clear signed in as in .global_sessions
+            .global_sessions$set_signed_in_as(
+              global_user$session_uid,
+              NA,
+              user_uid = global_user$user_uid
+            )
+          }
 
           user_out <- global_user[
             c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified", "roles")
@@ -111,6 +121,7 @@ secure_server <- function(
           session$userData$user(user_out)
 
         } else {
+
           signed_in_as_user <- .global_sessions$get_signed_in_as_user(global_user$signed_in_as)
           signed_in_as_user$session_uid <- global_user$session_uid
           signed_in_as_user$hashed_cookie <- global_user$hashed_cookie
@@ -143,6 +154,8 @@ secure_server <- function(
 
 
         if (isTRUE(hold_user$is_admin) && isTRUE(is_on_admin_page)) {
+
+
           callModule(
             admin_module,
             "admin"
