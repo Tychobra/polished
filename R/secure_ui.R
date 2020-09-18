@@ -108,7 +108,10 @@ secure_ui <- function(
 
       if (!is.null(splash_module_ui) && is.null(page_query)) {
 
-        page_out <- splash_module_ui
+        page_out <- tagList(
+          splash_module_ui,
+          tags$script(src = "polish/js/router.js?version=1")
+        )
 
       } else if (identical(page_query, "sign_in")) {
         # go to the sign in page
