@@ -2,9 +2,17 @@ library(shiny)
 library(polished)
 library(config)
 
+Sys.setenv(R_CONFIG_ACTIVE = "axion")
+
 app_config <- config::get()
 
-db_conn <- tychobratools::db_connect(app_config$db)
+db_conn <- DBI::dbConnect(
+  RPostgres::Postgres(),
+  host = app_config$db$host,
+  dbname = app_config$db$dbname,
+  password = app_config$db$password,
+  user = app_config$db$user
+)
 
 
 global_sessions_config(
