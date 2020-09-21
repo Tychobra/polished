@@ -158,13 +158,15 @@ user_edit_module <- function(input, output, session,
         # add the newly created user to Firebase and send an email so that they
         # can set their password and sign in
         res <- httr::POST(
-          "http://localhost:5001/z-connect-e6765/us-central1/api/shiny/send-admin-email",
+          paste0(getOption("functions_url"), "/shiny/send-admin-email"),
           httr::authenticate(
             user = "andy.merlino@tychobra.com",
             password = getOption("shiny_pass")
           ),
           body = list(
-            email = input_email
+            data = list(
+              email = input_email
+            )
           ),
           encode = "json"
         )
