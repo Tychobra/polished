@@ -5,7 +5,7 @@
 #' the bottom of your 'shiny' app's "server.R" file.
 #'
 #' @param server A Shiny server function (e.g \code{function(input, output, session) {}})
-#' @param custom_admin_server Either \code{NULL}, the default, or a Shiny server function containing your custom admin
+#' @param custom_admin_server Either \code{NULL}, the default, or a Shiny module server function containing your custom admin
 #' server functionality.
 #' @param custom_sign_in_server Either \code{NULL}, the default, or a Shiny module server containing your custom
 #' sign in server logic.
@@ -156,22 +156,43 @@ secure_server <- function(
         if (isTRUE(hold_user$is_admin) && isTRUE(is_on_admin_page)) {
 
 
-          callModule(
+          shiny::callModule(
             admin_module,
             "admin"
           )
 
           # custom admin server functionality
           if (isTRUE(!is.null(custom_admin_server))) {
-            custom_admin_server(input, output, session)
+            if (names(formals(account_module))[[1]] == "id") {
+              # new-style Shiny module
+              custom_admin_server("custom_admin")
+            } else {
+              # old-style Shiny module
+              callModule(
+                custom_admin_server,
+                "custom_admin"
+              )
+            }
+
+
           }
         } else if (identical(query_list$page, "account")) {
 
-          # load up the payments module
-          callModule(
-            account_module,
-            "account"
-          )
+
+          # load up the account module
+          if (names(formals(account_module))[[1]] == "id") {
+            # new-style Shiny module
+            account_module("account")
+          } else {
+            # old-style Shiny module
+            shiny::callModule(
+              account_module,
+              "account"
+            )
+          }
+
+
+
 
         } else if (is.null(query_list$page)) {
 
@@ -239,16 +260,29 @@ secure_server <- function(
           )
 
         } else {
-          shiny::callModule(
-            custom_sign_in_server,
-            "sign_in"
-          )
+
+
+          if (names(formals(account_module))[[1]] == "id") {
+            custom_sign_in_server("sign_in")
+          } else {
+            shiny::callModule(
+              custom_sign_in_server,
+              "sign_in"
+            )
+          }
+
         }
       } else if (is.null(page) && !is.null(splash_module)) {
-        callModule(
-          splash_module,
-          "splash"
-        )
+
+        if (names(formals(account_module))[[1]] == "id") {
+          splash_module("splash")
+        } else {
+          callModule(
+            splash_module,
+            "splash"
+          )
+        }
+
       }
 
     }, ignoreNULL = FALSE, once = TRUE)
