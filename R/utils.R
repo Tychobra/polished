@@ -4,6 +4,8 @@
 #' inside the server function of your 'shiny' app.
 #'
 #' @param session the Shiny session
+#' @param mode the mode to pass to \code{shiny::updateQueryString()}.  Valid values are
+#' "replace" or "push".
 #'
 #' @importFrom shiny updateQueryString getDefaultReactiveDomain
 #'

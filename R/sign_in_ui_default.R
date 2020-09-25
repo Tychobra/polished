@@ -15,7 +15,7 @@
 #' image.
 #' @param terms_and_privacy_footer links to place in the footer, directly above the copyright
 #' notice.
-#' @oaram align The horizontal alignment of the sign in box. Defaults to "center". Valid
+#' @param align The horizontal alignment of the sign in box. Defaults to "center". Valid
 #' values are "left", "center", or "right"
 #'
 #' @export

@@ -267,7 +267,7 @@ sign_in_module <- function(input, output, session) {
     go_to_registration_page()
   })
 
-  callModule(
+  shiny::callModule(
     send_password_reset_email_module,
     "reset_password",
     email = reactive({input$sign_in_email})

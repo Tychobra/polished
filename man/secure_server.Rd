@@ -19,7 +19,7 @@ secure_server(
 \item{custom_sign_in_server}{Either \code{NULL}, the default, or a Shiny module server containing your custom
 sign in server logic.}
 
-\item{custom_admin_server}{Either \code{NULL}, the default, or a Shiny server function containing your custom admin
+\item{custom_admin_server}{Either \code{NULL}, the default, or a Shiny module server function containing your custom admin
 server functionality.}
 
 \item{allow_reconnect}{argument to pass to the 'shiny' \code{session$allowReconnect()} function. Defaults to

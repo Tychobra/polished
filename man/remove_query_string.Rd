@@ -4,10 +4,16 @@
 \alias{remove_query_string}
 \title{Remove the URL query}
 \usage{
-remove_query_string(session = shiny::getDefaultReactiveDomain())
+remove_query_string(
+  session = shiny::getDefaultReactiveDomain(),
+  mode = "replace"
+)
 }
 \arguments{
 \item{session}{the Shiny session}
+
+\item{mode}{the mode to pass to \code{shiny::updateQueryString()}.  Valid values are
+"replace" or "push".}
 }
 \description{
 Remove the entire query string from the url.  This function should only be called

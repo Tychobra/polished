@@ -7,8 +7,9 @@
 #' @param ui UI of the application.
 #' @param sign_in_page_ui Either \code{NULL}, the default, or the HTML, CSS, and JavaScript
 #' to use for the UI of the Sign In page.
-#' @param custom_admin_ui Either \code{NULL}, the default, or a list of 2 elements containing custom
-#' UI to add additional 'shinydashboard' tabs to the Polished admin panel.
+#' @param custom_admin_ui Either \code{NULL}, the default, or a list of 2 Shiny module UI functions
+#' to add additional 'shinydashboard' tabs to the Polished admin panel. The list must be in the form
+#' list("menu_items" = <your_custom_admin_menu_ui('custom_admin')>, "tab_items" = <your_custom_admin_tabs_ui('custom_admin')>).
 #' @param custom_admin_button_ui Either \code{admin_button_ui("polished")}, the default, or your custom
 #' UI to take admins from the custom Shiny app to the Admin panel.
 #' @param admin_ui_options list of html elements to customize branding of the "Admin Panel".  Valid

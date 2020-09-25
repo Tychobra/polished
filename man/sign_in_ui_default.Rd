@@ -38,6 +38,9 @@ image.}
 
 \item{terms_and_privacy_footer}{links to place in the footer, directly above the copyright
 notice.}
+
+\item{align}{The horizontal alignment of the sign in box. Defaults to "center". Valid
+values are "left", "center", or "right"}
 }
 \value{
 the UI for the sign in page

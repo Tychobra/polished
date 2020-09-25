@@ -254,7 +254,7 @@ user_access_module <- function(input, output, session) {
 
   users_proxy <- DT::dataTableProxy("users_table")
 
-  add_user_return <- callModule(
+  add_user_return <- shiny::callModule(
     user_edit_module,
     "add_user",
     modal_title = "Add User",
@@ -278,7 +278,7 @@ user_access_module <- function(input, output, session) {
     user_to_edit(out)
   }, priority = 1)
 
-  edit_user_return <- callModule(
+  edit_user_return <- shiny::callModule(
     user_edit_module,
     "edit_user",
     modal_title = "Edit User",

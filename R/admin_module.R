@@ -2,14 +2,14 @@
 #'
 #' The 'shiny' module UI for the Admin Panel.
 #'
-#' @param id the Shiny module id
-#' @param custom_admin_ui Either \code{NULL}, the default, or a list of 2 elements containing custom
-#' UI to add additional 'shinydashboard' tabs to the 'polished' "Admin Panel".
+#' @param id the Shiny module id.
 #' @param options list of html elements to customize branding of "Admin Panel".  Valid
 #' list element names are "title", "sidebar_branding", and "browser_tab_icon".  See
 #' \code{\link{default_admin_ui_options}} for an example.
 #' @param include_go_to_shiny_app_button whether or not to include the button to go to
 #' the Shiny app.  This argument is set to \code{FALSE} when 'polished' is in "admin_mode".
+#'
+#' @inheritParams secure_ui
 #'
 #' @importFrom shiny NS icon
 #' @importFrom shinydashboard dashboardSidebar dashboardBody sidebarMenu menuItem tabItems
