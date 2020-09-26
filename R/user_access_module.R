@@ -160,7 +160,15 @@ user_access_module <- function(input, output, session) {
       print("[polished] error")
       print(err)
 
-      showToast("error", "Error retrieving app users from API")
+      showToast(
+        "error",
+        "Error retrieving app users from API",
+        .options = list(
+          positionClass = "toast-top-center",
+          showDuration = 1000,
+          newestOnTop = TRUE
+        )
+      )
     })
 
     out
@@ -368,10 +376,26 @@ user_access_module <- function(input, output, session) {
 
       httr::stop_for_status(res)
 
-      shinyFeedback::showToast("success", "User successfully deleted")
+      shinyFeedback::showToast(
+        "success",
+        "User successfully deleted",
+        .options = list(
+          positionClass = "toast-top-center",
+          showDuration = 1000,
+          newestOnTop = TRUE
+        )
+      )
       users_trigger(users_trigger() + 1)
     }, error = function(e) {
-      shinyFeedback::showToast("error", "Error deleting user")
+      shinyFeedback::showToast(
+        "error",
+        "Error deleting user",
+        .options = list(
+          positionClass = "toast-top-center",
+          showDuration = 1000,
+          newestOnTop = TRUE
+        )
+      )
       print(e)
     })
 

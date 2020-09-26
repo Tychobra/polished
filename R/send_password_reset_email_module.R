@@ -65,11 +65,27 @@ send_password_reset_email_module <- function(input, output, session, email) {
         stop(res_content$message)
       }
 
-      shinyFeedback::showToast("success", paste0("Password reset email sent to ", hold_email))
+      shinyFeedback::showToast(
+        "success",
+        paste0("Password reset email sent to ", hold_email),
+        .options = list(
+          positionClass = "toast-top-center",
+          showDuration = 1000,
+          newestOnTop = TRUE
+        )
+      )
     }, error = function(err) {
 
       print(err)
-      shinyFeedback::showToast("error", err$message)
+      shinyFeedback::showToast(
+        "error",
+        err$message,
+        .options = list(
+          positionClass = "toast-top-center",
+          showDuration = 1000,
+          newestOnTop = TRUE
+        )
+      )
     })
 
 
