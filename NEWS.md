@@ -3,7 +3,7 @@
 - New "account" and "splash" pages.  We will share more on these new pages in upcoming blog posts. 
 - Added "is_email_verification_required" argument to `global_sessions_config()` that allows you to disable email verification.
 - Admin Panel > User Access - added a checkbox to send an email invite to a newly newly invited user 
-- removed usage dashboard from "Admin Panel".  This dashboard has been superceded by the dashboard at
+- removed usage dashboard from "Admin Panel".  This dashboard has been superseded by the dashboard at
 https://dashboard.polished.tech (#102)
 - added "background_image" argument to `sign_in_ui_default()` to allow for a full screen image for the sign in page background. 
 - only use the "email" sign in provider by default rather than c("google", "email")

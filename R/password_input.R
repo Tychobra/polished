@@ -1,9 +1,9 @@
 #' A modification of 'shiny::passwordInput'
 #'
-#' This modified version of shiny's passwordInput() does not actual send the password
-#' to our shiny server.  It is just a regular password input that always keeps your
+#' This modified version of Shiny's passwordInput() does not actual send the password
+#' to our Shiny server.  It is just a regular password input that always keeps your
 #' user's password on the client.  The password is used to sign the user in and then
-#' converted to a JWT by Firebase, all on the client, before it is sent to your shiny
+#' converted to a JWT by Firebase, all on the client, before it is sent to your Shiny
 #' server.
 #'
 #' @param input_id The input slot that will be used to access the value.

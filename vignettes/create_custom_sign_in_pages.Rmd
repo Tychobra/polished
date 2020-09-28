@@ -21,7 +21,7 @@ sign_in_module()
 sign_in_module_2()
 ```
 
-`sign_in_module()` is primarily designed to be used for just email/password sign in (i.e. it does not look great when you inlude
+`sign_in_module()` is primarily designed to be used for just email/password sign in (i.e. it does not look great when you inlcude
 social sign in providers like Google and Microsoft).  
 
 `sign_in_module_2()` is designed to look a little better with email/password and social sign in providers.  
@@ -35,7 +35,7 @@ sign_in_js()
 sign_in_check_jwt()
 ```
 
-Behind the scenes, the `sign_in_module()` and `sign_in_module_2()` use the `sign_in_js()` and `sign_in_check_jwt()` to build their UI and server functionality.  To fully customize your sign in pages, you can create your own shiny module that uses these functions. To create your own fully cuatomized sign in module, include inputs with the following name-spaced ids:
+Behind the scenes, the `sign_in_module()` and `sign_in_module_2()` use the `sign_in_js()` and `sign_in_check_jwt()` to build their UI and server functionality.  To fully customize your sign in pages, you can create your own shiny module that uses these functions. To create your own fully customized sign in module, include inputs with the following name-spaced ids:
 
 - "sign_in_email"
 - "sign_in_password"

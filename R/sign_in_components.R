@@ -3,7 +3,7 @@
 #' Sign in and register pages JavaScript dependencies
 #'
 #' This function should be called at the bottom of your custom sign in and registration
-#' pages UI.  It loads in all the javascript dependencies to handle polished sign
+#' pages UI.  It loads in all the JavaScript dependencies to handle polished sign
 #' in and registration.  See the vignette for details.
 #'
 #' @param ns the ns function from the Shiny module that this function is called
