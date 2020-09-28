@@ -163,7 +163,7 @@ secure_server <- function(
 
           # custom admin server functionality
           if (isTRUE(!is.null(custom_admin_server))) {
-            if (names(formals(account_module))[[1]] == "id") {
+            if (names(formals(custom_admin_server))[[1]] == "id") {
               # new-style Shiny module
               custom_admin_server("custom_admin")
             } else {
@@ -262,7 +262,7 @@ secure_server <- function(
         } else {
 
 
-          if (names(formals(account_module))[[1]] == "id") {
+          if (names(formals(custom_sign_in_server))[[1]] == "id") {
             custom_sign_in_server("sign_in")
           } else {
             shiny::callModule(
@@ -274,7 +274,7 @@ secure_server <- function(
         }
       } else if (is.null(page) && !is.null(splash_module)) {
 
-        if (names(formals(account_module))[[1]] == "id") {
+        if (names(formals(splash_module))[[1]] == "id") {
           splash_module("splash")
         } else {
           callModule(
