@@ -72,7 +72,6 @@ api_get_invite <- function(url, api_key, app_uid, user_uid) {
 Sessions <-  R6::R6Class(
   classname = 'Sessions',
   public = list(
-    conn = NULL,
     firebase_config = NULL,
     is_invite_required = TRUE,
     sign_in_providers = character(0),
