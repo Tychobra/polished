@@ -18,12 +18,13 @@ knitr::opts_chunk$set(
 
 ```{r, eval = FALSE}
 sign_in_module()
-sign_in_no_invite_module()
+sign_in_module_2()
 ```
 
-`sign_in_module()` requires the user to first be invited to your app before they can register and sign in.  
+`sign_in_module()` is primarily designed to be used for just email/password sign in (i.e. it does not look great when you inlude
+social sign in providers like Google and Microsoft).  
 
-`sign_in_no_invite_module()` does not require the user to first be invited; anyone can register and sign in to your app if you use the `sign_in_no_invite_module()`.  
+`sign_in_module_2()` is designed to look a little better with email/password and social sign in providers.  
 
 Use the `sign_in_ui_default()` function to style these modules with your brand's colors and logos.  Check out the docs for `?sign_in_ui_default` and see a full example <a href="https://github.com/Tychobra/polished_example_apps/tree/master/02_custom_sign_in">here</a> for more information.
 
@@ -34,7 +35,7 @@ sign_in_js()
 sign_in_check_jwt()
 ```
 
-Behind the scenes, the `sign_in_module()` and `sign_in_no_invite_module()` use the 2 above functions to build their UI and server functionality.  To fully customize your sign in pages, you can create your own shiny module that uses these functions. To create your own fully cuatomized sign in module, include inputs with the following name-spaced ids:
+Behind the scenes, the `sign_in_module()` and `sign_in_module_2()` use the `sign_in_js()` and `sign_in_check_jwt()` to build their UI and server functionality.  To fully customize your sign in pages, you can create your own shiny module that uses these functions. To create your own fully cuatomized sign in module, include inputs with the following name-spaced ids:
 
 - "sign_in_email"
 - "sign_in_password"
@@ -47,7 +48,7 @@ Behind the scenes, the `sign_in_module()` and `sign_in_no_invite_module()` use t
 
 You can create `shiny::textInputs`, `shiny::passwordInput`s, and `shiny::actionButton`s with the above IDs, or you can use the `email_input` and `password_input` functions available with `polished`;  As long as the ID of the inputs match up with the above input IDs, then the JavaScript available with `sign_in_js()` and the server logic in `sign_in_check_jwt()` will be able to handle the sign in and registration.  See the example below:
 
-NOTE: when passing your custom module UI as the `sign_in_page_ui` argument in the `secure_ui` function, you **must** use "sign_in" as the UI module's ID (as shown in the example below).
+NOTE: when passing your custom module UI as the `sign_in_page_ui` argument to the `secure_ui()` function, you **must** use "sign_in" as the UI module's ID (as shown in the example below).
 
 ```{r, eval = FALSE}
 library(shiny)
@@ -126,7 +127,7 @@ my_custom_sign_in_module <- function(input, output, session) {
   })
   
   jwt <- reactive({
-    # optional: include additional authorization checks here checks   
+    # optional: include additional authorization checks here   
     input$check_jwt
   })
   
