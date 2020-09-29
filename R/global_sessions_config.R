@@ -25,6 +25,10 @@
 #' "email", "microsoft", and/or "facebook". Defaults to \code{"email"}.
 #' @param is_email_verification_required TRUE by default.  Whether or not to require the user to
 #' verify their email before accessing your Shiny app.
+#' @param is_auth_required TRUE by default.  Whether or not to require users to be signed
+#' in to access the app.  It can be useful to set this argument to FASLE if you want to
+#' allow user to do certain actions (such as viewing charts and tables) without signing in,
+#' and only require users to sign in if they want to save data to your database.
 #'
 #' @export
 #'
@@ -51,7 +55,8 @@ global_sessions_config <- function(
   is_invite_required = TRUE,
   api_url = "https://api.polished.tech",
   sign_in_providers = "email",
-  is_email_verification_required = TRUE
+  is_email_verification_required = TRUE,
+  is_auth_required = TRUE
 ) {
 
   if (!(length(api_key) == 1 && is.character(api_key))) {
@@ -104,7 +109,8 @@ global_sessions_config <- function(
     admin_mode = admin_mode,
     is_invite_required = is_invite_required,
     sign_in_providers = sign_in_providers,
-    is_email_verification_required = is_email_verification_required
+    is_email_verification_required = is_email_verification_required,
+    is_auth_required = is_auth_required
   )
 
 }

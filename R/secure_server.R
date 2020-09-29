@@ -74,8 +74,9 @@ secure_server <- function(
         # user is not signed in
 
         # if the user is not on the sign in page, redirect to sign in and reload
-        if (!identical(page, "sign_in") || (is.null(splash_module) && is.null(page))
-        ) {
+        if ((!identical(page, "sign_in") || (is.null(splash_module) && is.null(page))) &&
+            isTRUE(.global_sessions$is_auth_required)) {
+
           shiny::updateQueryString(
             queryString = paste0("?page=sign_in"),
             session = session,
@@ -197,7 +198,10 @@ secure_server <- function(
         } else if (is.null(query_list$page)) {
 
           # go to the custom app
-          server(input, output, session)
+          if (isTRUE(.global_sessions$is_auth_required)) {
+            server(input, output, session)
+          }
+
 
           if (isTRUE(hold_user$is_admin)) {
             # go to admin panel button
@@ -242,6 +246,10 @@ secure_server <- function(
     }, once = TRUE)
 
 
+    if (isFALSE(.global_sessions$is_auth_required)) {
+      server(input, output, session)
+    }
+
     # load up the sign in module server logic if the user in on "sign_in" page
 
     observeEvent(session$userData$user(), {
@@ -272,17 +280,20 @@ secure_server <- function(
           }
 
         }
-      } else if (is.null(page) && !is.null(splash_module)) {
+      } else if (is.null(page)) {
 
-        if (names(formals(splash_module))[[1]] == "id") {
-          splash_module("splash")
-        } else {
-          callModule(
-            splash_module,
-            "splash"
-          )
+        if (!is.null(splash_module) && isTRUE(isFALSE(.global_sessions$is_auth_required))) {
+
+          if (names(formals(splash_module))[[1]] == "id") {
+            splash_module("splash")
+          } else {
+            callModule(
+              splash_module,
+              "splash"
+            )
+          }
+
         }
-
       }
 
     }, ignoreNULL = FALSE, once = TRUE)

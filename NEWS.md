@@ -1,6 +1,6 @@
 # v0.2.0.9000
 
-
+- new "is_auth_required option" to `global_sessions_config()` which (when set to FALSE) allows users to access your app without being signed in.  By default this argument is set to TRUE.
 
 # v0.2.0
 
