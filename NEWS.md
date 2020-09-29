@@ -1,6 +1,7 @@
 # v0.2.0.9000
 
-- new "is_auth_required option" to `global_sessions_config()` which (when set to FALSE) allows users to access your app without being signed in.  By default this argument is set to TRUE.
+- new "is_auth_required option" to `global_sessions_config()` which (when set to FALSE) allows users to access your app without being signed in.  By default this argument is set to TRUE. (#109)
+- moved toast notification to top (better for mobile) and extended showDuration. (#107)
 
 # v0.2.0
 
