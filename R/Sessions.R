@@ -76,6 +76,7 @@ Sessions <-  R6::R6Class(
     is_invite_required = TRUE,
     sign_in_providers = character(0),
     is_email_verification_required = TRUE,
+    is_auth_required = TRUE,
     #' @description
     #' polished Sessions configuration function
     #'
@@ -90,7 +91,8 @@ Sessions <-  R6::R6Class(
       admin_mode = FALSE,
       is_invite_required = TRUE,
       sign_in_providers = "email",
-      is_email_verification_required = FALSE
+      is_email_verification_required = TRUE,
+      is_auth_required = TRUE
     ) {
 
       if (!(length(sign_in_providers) >= 1 && is.character(sign_in_providers))) {
@@ -118,11 +120,16 @@ Sessions <-  R6::R6Class(
       if (!(length(is_email_verification_required) == 1 && is.logical(is_email_verification_required))) {
         stop("invalid `is_email_verification_required` argument passed to `global_sessions_config()`", call. = FALSE)
       }
+      if (!(length(is_auth_required) == 1 && is.logical(is_auth_required))) {
+        stop("invalid `is_auth_required` argument passed to `global_sessions_config()`", call. = FALSE)
+      }
+
 
 
       private$admin_mode <- admin_mode
       self$is_invite_required <- is_invite_required
       self$is_email_verification_required <- is_email_verification_required
+      self$is_auth_required <- is_auth_required
 
       private$refresh_jwt_pub_key()
 

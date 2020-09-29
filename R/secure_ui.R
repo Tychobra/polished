@@ -135,15 +135,26 @@ secure_ui <- function(
 
       } else {
 
+        if (isFALSE(.global_sessions$is_auth_required)) {
 
+          # auth is not required, so allow the user to go directly to the custom shiny app
+          # go to Shiny app without admin button.  User is not an admin
+          page_out <- tagList(
+            ui,
+            tags$script(src = "polish/js/router.js?version=1"),
+            tags$script(src = "polish/js/polished_session.js?version=2"),
+            tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
+          )
+        } else {
+          # send a random uuid as the polished_session.  This will trigger a session
+          # reload and a redirect to the sign in page
+          page_out <- tagList(
+            tags$script(src = "polish/js/router.js?version=1"),
+            tags$script(src = "polish/js/polished_session.js?version=2"),
+            tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
+          )
+        }
 
-        # send a random uuid as the polished_session.  This will trigger a session
-        # reload and a redirect to the sign in page
-        page_out <- tagList(
-          tags$script(src = "polish/js/router.js?version=1"),
-          tags$script(src = "polish/js/polished_session.js?version=2"),
-          tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
-        )
       }
 
 
@@ -160,6 +171,7 @@ secure_ui <- function(
         )
       } else if (isTRUE(user$email_verified) ||
           isFALSE(.global_sessions$is_email_verification_required)) {
+
 
         if (identical(page_query, "account")) {
 
