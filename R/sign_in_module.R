@@ -427,11 +427,7 @@ sign_in_module <- function(input, output, session) {
       shinyFeedback::showToast(
         "error",
         err$message,
-        .options = list(
-          positionClass = "toast-top-center",
-          showDuration = 1000,
-          newestOnTop = TRUE
-        )
+        .options = polished_toast_options
       )
     })
 

@@ -196,22 +196,14 @@ user_edit_module <- function(input, output, session,
         shinyFeedback::showToast(
           "success",
           "User successfully added!",
-          .options = list(
-            positionClass = "toast-top-center",
-            showDuration = 1000,
-            newestOnTop = TRUE
-          )
+          .options = polished_toast_options
         )
       }, error = function(err) {
 
         shinyFeedback::showToast(
           "error",
           err$message,
-          .options = list(
-            positionClass = "toast-top-center",
-            showDuration = 1000,
-            newestOnTop = TRUE
-          )
+          .options = polished_toast_options
         )
         print(err)
       })
@@ -253,22 +245,14 @@ user_edit_module <- function(input, output, session,
         shinyFeedback::showToast(
           "success",
           "User successfully edited!",
-          .options = list(
-            positionClass = "toast-top-center",
-            showDuration = 1000,
-            newestOnTop = TRUE
-          )
+          .options = polished_toast_options
         )
       }, error = function(e) {
 
         shinyFeedback::showToast(
           "error",
           "Error editing user",
-          .options = list(
-            positionClass = "toast-top-center",
-            showDuration = 1000,
-            newestOnTop = TRUE
-          )
+          .options = polished_toast_options
         )
         print(e)
 

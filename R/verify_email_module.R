@@ -157,11 +157,7 @@ verify_email_module <- function(input, output, session) {
       shinyFeedback::showToast(
         "success",
         paste0("Verification email send to ", hold_email),
-        .options = list(
-          positionClass = "toast-top-center",
-          showDuration = 1000,
-          newestOnTop = TRUE
-        )
+        .options = polished_toast_options
       )
     }, error = function(err) {
 
@@ -172,11 +168,7 @@ verify_email_module <- function(input, output, session) {
       shinyFeedback::showToast(
         "error",
         "Error resending verification email",
-        .options = list(
-          positionClass = "toast-top-center",
-          showDuration = 1000,
-          newestOnTop = TRUE
-        )
+        .options = polished_toast_options
       )
     })
 

@@ -99,3 +99,12 @@ send_invite_checkbox <- function(ns, app_url) {
 
   email_invite_checkbox
 }
+
+#' @noRd
+#'
+#' Default `.options` for `showToast`
+polished_toast_options <- list(
+  positionClass = "toast-top-center",
+  showDuration = 1000,
+  newestOnTop = TRUE
+)

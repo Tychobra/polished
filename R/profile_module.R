@@ -83,11 +83,7 @@ profile_module <- function(input, output, session) {
       shinyFeedback::showToast(
         "error",
         "Sign Out Error",
-        .options = list(
-          positionClass = "toast-top-center",
-          showDuration = 1000,
-          newestOnTop = TRUE
-        )
+        .options = polished_toast_options
       )
     })
 

@@ -163,11 +163,7 @@ user_access_module <- function(input, output, session) {
       showToast(
         "error",
         "Error retrieving app users from API",
-        .options = list(
-          positionClass = "toast-top-center",
-          showDuration = 1000,
-          newestOnTop = TRUE
-        )
+        .options = polished_toast_options
       )
     })
 
@@ -379,22 +375,14 @@ user_access_module <- function(input, output, session) {
       shinyFeedback::showToast(
         "success",
         "User successfully deleted",
-        .options = list(
-          positionClass = "toast-top-center",
-          showDuration = 1000,
-          newestOnTop = TRUE
-        )
+        .options = polished_toast_options
       )
       users_trigger(users_trigger() + 1)
     }, error = function(e) {
       shinyFeedback::showToast(
         "error",
         "Error deleting user",
-        .options = list(
-          positionClass = "toast-top-center",
-          showDuration = 1000,
-          newestOnTop = TRUE
-        )
+        .options = polished_toast_options
       )
       print(e)
     })
