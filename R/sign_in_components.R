@@ -76,7 +76,8 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
           shinyFeedback::resetLoadingButton('sign_in_submit')
           shinyFeedback::showToast(
             "info",
-            "Password reset required.  Check your email to reset your password."
+            "Password reset required.  Check your email to reset your password.",
+            .options = polished_toast_options
           )
           return()
         }
@@ -92,7 +93,11 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
       if (is.null(new_user)) {
         shinyFeedback::resetLoadingButton('sign_in_submit')
         # show unable to sign in message
-        shinyFeedback::showToast('error', 'sign in error')
+        shinyFeedback::showToast(
+          'error',
+          'sign in error',
+          .options = polished_toast_options
+        )
         stop('sign_in_module: sign in error', call. = FALSE)
 
       } else {
@@ -105,7 +110,11 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
       shinyFeedback::resetLoadingButton('sign_in_submit')
       print(err)
 
-      shinyFeedback::showToast("error", err$message)
+      shinyFeedback::showToast(
+        "error",
+        err$message,
+        .options = polished_toast_options
+      )
 
     })
 

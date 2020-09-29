@@ -436,7 +436,11 @@ sign_in_module_2 <- function(input, output, session) {
       shinyFeedback::resetLoadingButton('register_submit')
 
       print(err)
-      shinyFeedback::showToast("error", err$message)
+      shinyFeedback::showToast(
+        "error",
+        err$message,
+        .options = polished_toast_options
+      )
     })
 
   })

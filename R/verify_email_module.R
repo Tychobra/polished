@@ -154,14 +154,22 @@ verify_email_module <- function(input, output, session) {
         stop(res_content, call. = FALSE)
       }
 
-      shinyFeedback::showToast("success", paste0("Verification email send to ", hold_email))
+      shinyFeedback::showToast(
+        "success",
+        paste0("Verification email send to ", hold_email),
+        .options = polished_toast_options
+      )
     }, error = function(err) {
 
 
       print("[polished] error - resending verification email")
       print(err)
 
-      shinyFeedback::showToast("error", "Error resending verification email")
+      shinyFeedback::showToast(
+        "error",
+        "Error resending verification email",
+        .options = polished_toast_options
+      )
     })
 
   })

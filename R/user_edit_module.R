@@ -193,10 +193,18 @@ user_edit_module <- function(input, output, session,
 
 
         users_trigger(users_trigger() + 1)
-        shinyFeedback::showToast("success", "User successfully added!")
+        shinyFeedback::showToast(
+          "success",
+          "User successfully added!",
+          .options = polished_toast_options
+        )
       }, error = function(err) {
 
-        shinyFeedback::showToast("error", err$message)
+        shinyFeedback::showToast(
+          "error",
+          err$message,
+          .options = polished_toast_options
+        )
         print(err)
       })
 
@@ -234,10 +242,18 @@ user_edit_module <- function(input, output, session,
         }
 
         users_trigger(users_trigger() + 1)
-        shinyFeedback::showToast("success", "User successfully edited!")
+        shinyFeedback::showToast(
+          "success",
+          "User successfully edited!",
+          .options = polished_toast_options
+        )
       }, error = function(e) {
 
-        shinyFeedback::showToast("error", "Error editing user")
+        shinyFeedback::showToast(
+          "error",
+          "Error editing user",
+          .options = polished_toast_options
+        )
         print(e)
 
       })
