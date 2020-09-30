@@ -12,7 +12,8 @@ global_sessions_config(
   is_invite_required = TRUE,
   api_url = "https://api.polished.tech",
   sign_in_providers = "email",
-  is_email_verification_required = TRUE
+  is_email_verification_required = TRUE,
+  is_auth_required = TRUE
 )
 }
 \arguments{
@@ -43,6 +44,11 @@ invite before registering/signing in}
 
 \item{is_email_verification_required}{TRUE by default.  Whether or not to require the user to
 verify their email before accessing your Shiny app.}
+
+\item{is_auth_required}{TRUE by default.  Whether or not to require users to be signed
+in to access the app.  It can be useful to set this argument to FASLE if you want to
+allow user to do certain actions (such as viewing charts and tables) without signing in,
+and only require users to sign in if they want to save data to your database.}
 }
 \description{
 This is the primary function for configuring 'polished'.  It configures your app's instance of the

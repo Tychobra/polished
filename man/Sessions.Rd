@@ -37,7 +37,8 @@ polished Sessions configuration function
   admin_mode = FALSE,
   is_invite_required = TRUE,
   sign_in_providers = "email",
-  is_email_verification_required = FALSE
+  is_email_verification_required = TRUE,
+  is_auth_required = TRUE
 )}\if{html}{\out{</div>}}
 }
 

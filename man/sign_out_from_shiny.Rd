@@ -4,10 +4,16 @@
 \alias{sign_out_from_shiny}
 \title{Sign our from your 'shiny' app}
 \usage{
-sign_out_from_shiny(session = shiny::getDefaultReactiveDomain())
+sign_out_from_shiny(
+  session = shiny::getDefaultReactiveDomain(),
+  redirect_page = "?page=sign_in"
+)
 }
 \arguments{
 \item{session}{the Shiny session}
+
+\item{redirect_page}{the query string for the page that the user should be redirected
+to after signing out.}
 }
 \description{
 Call this function to sign a user out of your 'shiny' app.  This function should

@@ -7,6 +7,8 @@
 #' button.
 #'
 #' @param session the Shiny session
+#' @param redirect_page the query string for the page that the user should be redirected
+#' to after signing out.
 #'
 #' @export
 #'
@@ -14,7 +16,10 @@
 #'
 #'
 #'
-sign_out_from_shiny <- function(session = shiny::getDefaultReactiveDomain()) {
+sign_out_from_shiny <- function(
+  session = shiny::getDefaultReactiveDomain(),
+  redirect_page = "?page=sign_in"
+) {
 
   user <- session$userData$user()
 
@@ -25,7 +30,7 @@ sign_out_from_shiny <- function(session = shiny::getDefaultReactiveDomain()) {
 
   # set query string to sign in page
   shiny::updateQueryString(
-    queryString = paste0("?page=sign_in"),
+    queryString = redirect_page,
     session = session,
     mode = "replace"
   )
