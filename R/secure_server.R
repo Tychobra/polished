@@ -203,13 +203,14 @@ secure_server <- function(
           }
 
 
-          if (isTRUE(hold_user$is_admin)) {
-            # go to admin panel button
-            shiny::callModule(
-              admin_button,
-              "polished"
-            )
-          }
+
+          # go to admin panel button.  Must load this whether or not the user is an
+          # admin so that if an admin is signed in as a non admin, they can still
+          # click the button to return to the admin panel.
+          shiny::callModule(
+            admin_button,
+            "polished"
+          )
 
 
           # set the session to inactive when the session ends
