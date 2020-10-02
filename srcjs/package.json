@@ -13,5 +13,7 @@
     "@babel/core": "^7.10.3",
     "@babel/preset-env": "^7.10.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "npm": "^6.14.8"
+  }
 }
