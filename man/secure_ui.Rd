@@ -30,9 +30,9 @@ list(
 }}
 
 \item{custom_admin_button_ui}{Either \code{admin_button_ui("polished")}, the default, or your custom
-UI to take Admins from the custom Shiny app to the \code{polished} Admin panel.}
+UI to take Admins from the custom Shiny app to the \code{polished} Admin Panel.}
 
-\item{admin_ui_options}{list of HTML elements to customize branding of the "Admin Panel".  Valid
+\item{admin_ui_options}{list of HTML elements to customize branding of the \code{polished} Admin Panel.  Valid
 list element names are \code{title}, \code{sidebar_branding}, and \code{browser_tab_icon}.  See
 \code{\link{default_admin_ui_options}}, the default.}
 
