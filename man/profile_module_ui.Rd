@@ -9,11 +9,11 @@ profile_module_ui(id, other_lis = NULL)
 \arguments{
 \item{id}{the Shiny module id.}
 
-\item{other_lis}{additional <li> html tags to place between the email address
+\item{other_lis}{additional \code{<li>} HTML tags to place between the email address
 and the Sign out button in the user profile dropdown.  This is often used to
 add a user "My Account" page/app where the user can set their account settings.}
 }
 \description{
 Generates the UI for a user profile dropdown button to be used with the
-'shinydashboard' package.
+\code{shinydashboard} package.
 }

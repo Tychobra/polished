@@ -2,16 +2,16 @@
 % Please edit documentation in R/sign_in_module.R
 \name{sign_in_module}
 \alias{sign_in_module}
-\title{Server logic for the sign in and register pages}
+\title{Server logic for the Sign In & Register pages}
 \usage{
 sign_in_module(input, output, session)
 }
 \arguments{
-\item{input}{the Shiny input}
+\item{input}{the Shiny \code{input}}
 
-\item{output}{the Shiny output}
+\item{output}{the Shiny \code{output}}
 
-\item{session}{the Shiny session}
+\item{session}{the Shiny \code{session}}
 }
 \description{
 This server logic accompanies the \code{\link{sign_in_module_ui}}.

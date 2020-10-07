@@ -2,18 +2,18 @@
 % Please edit documentation in R/sign_in_components.R
 \name{sign_in_check_jwt}
 \alias{sign_in_check_jwt}
-\title{Check the JWT from the user sign in}
+\title{Check the JWT from the user Sign In}
 \usage{
 sign_in_check_jwt(jwt, session = shiny::getDefaultReactiveDomain())
 }
 \arguments{
 \item{jwt}{a reactive returning a Firebase JSON web token for the signed in user.}
 
-\item{session}{the shiny session.}
+\item{session}{the Shiny \code{session}.}
 }
 \description{
 This function retreives the JWT created by the JavaScript from \code{\link{sign_in_js}}
 and signs the user in as long as the token can be verified.
-This function should be called in the server function of a shiny module.  Make sure
+This function should be called in the server function of a Shiny module.  Make sure
 to call \code{\link{sign_in_js}} in the UI function of this module.
 }

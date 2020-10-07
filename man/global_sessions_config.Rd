@@ -19,41 +19,41 @@ global_sessions_config(
 \arguments{
 \item{app_name}{the name of the app.}
 
-\item{api_key}{the API key. Either from polished.tech or your on premise polished API
+\item{api_key}{the API key. Either from \url{https://polished.tech} or your on premise \code{polished} API
 deployment.}
 
 \item{firebase_config}{a list containing your Firebase project configuration.  This list should have the
 following named elements:
 \itemize{
-  \item{apiKey}
-  \item{authDomain}
-  \item{projectId}
+  \item{\code{apiKey}}
+  \item{\code{authDomain}}
+  \item{\code{projectId}}
 }}
 
-\item{admin_mode}{FALSE by default.  Set to TRUE to enter the polished Admin Panel without needing
+\item{admin_mode}{\code{FALSE} by default.  Set to \code{TRUE} to enter the \code{polished} Admin Panel without needing
 to register and sign in.  This is useful during development for inviting the first users to your app.
-Make sure to set `admin_mode` to FALSE before deploying your app.}
+Make sure to set \code{admin_mode = FALSE} before deploying your app.}
 
-\item{is_invite_required}{TRUE by default.  Whether or not to require the user to have an
+\item{is_invite_required}{\code{TRUE} by default.  Whether or not to require the user to have an
 invite before registering/signing in}
 
-\item{api_url}{the API url.  Defaults to "https://api.polished.tech".}
+\item{api_url}{the API url.  Defaults to \code{"https://api.polished.tech"}.}
 
-\item{sign_in_providers}{the sign in providers to enable.  Valid values are "google"
-"email", "microsoft", and/or "facebook". Defaults to \code{"email"}.}
+\item{sign_in_providers}{the sign in providers to enable.  Valid values are \code{"google"}
+\code{"email"}, \code{"microsoft"}, and/or \code{"facebook"}. Defaults to \code{"email"}.}
 
-\item{is_email_verification_required}{TRUE by default.  Whether or not to require the user to
+\item{is_email_verification_required}{\code{TRUE} by default.  Whether or not to require the user to
 verify their email before accessing your Shiny app.}
 
-\item{is_auth_required}{TRUE by default.  Whether or not to require users to be signed
-in to access the app.  It can be useful to set this argument to FASLE if you want to
+\item{is_auth_required}{\code{TRUE} by default.  Whether or not to require users to be signed
+in to access the app.  It can be useful to set this argument to \code{FALSE} if you want to
 allow user to do certain actions (such as viewing charts and tables) without signing in,
 and only require users to sign in if they want to save data to your database.}
 }
 \description{
-This is the primary function for configuring 'polished'.  It configures your app's instance of the
-\code{Sessions} class that manages your user's 'polished' sessions.  Call this function in
-your "global.R" file.  See \url{https://github.com/Tychobra/polished/blob/master/inst/examples/polished_example_01/global.R}
+This is the primary function for configuring \code{polished}.  It configures your app's instance of the
+\code{Sessions} class that manages your user's \code{polished} sessions.  Call this function in
+your \code{global.R} file.  See \url{https://github.com/Tychobra/polished/blob/master/inst/examples/polished_example_01/global.R}
 for a complete example.
 }
 \examples{

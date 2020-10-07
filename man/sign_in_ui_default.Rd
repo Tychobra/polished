@@ -2,7 +2,7 @@
 % Please edit documentation in R/sign_in_ui_default.R
 \name{sign_in_ui_default}
 \alias{sign_in_ui_default}
-\title{Default UI styles for the sign-in pages}
+\title{Default UI styles for the Sign In & Registration pages}
 \usage{
 sign_in_ui_default(
   sign_in_module = sign_in_module_ui("sign_in"),
@@ -20,33 +20,33 @@ sign_in_ui_default(
 )
 }
 \arguments{
-\item{sign_in_module}{UI module for the sign in and registration pages.}
+\item{sign_in_module}{UI module for the Sign In & Registration pages.}
 
 \item{color}{hex color for the background and button.}
 
 \item{company_name}{your company name.}
 
-\item{logo_top}{html for logo to go above the sign in panel.}
+\item{logo_top}{HTML for logo to go above the sign in panel.}
 
-\item{logo_bottom}{html for the logo below the sign in panel.}
+\item{logo_bottom}{HTML for the logo below the sign in panel.}
 
-\item{icon_href}{the url/path to the browser tab icon.}
+\item{icon_href}{the URL/path to the browser tab icon.}
 
-\item{background_image}{the url/path to a full width background image.  If set to NULL,
+\item{background_image}{the URL/path to a full width background image.  If set to \code{NULL},
 the default, the \code{color} argument will be used for the background instead of this
 image.}
 
 \item{terms_and_privacy_footer}{links to place in the footer, directly above the copyright
 notice.}
 
-\item{align}{The horizontal alignment of the sign in box. Defaults to "center". Valid
-values are "left", "center", or "right"}
+\item{align}{The horizontal alignment of the Sign In box. Defaults to \code{"center"}. Valid
+values are \code{"left"}, \code{"center"}, or \code{"right"}}
 }
 \value{
-the UI for the sign in page
+the UI for the Sign In & Registration pages
 }
 \description{
-Default styling for the sign in and registration pages.  Update the \code{sign_in_ui_default()}
-arguments with your brand and colors to quickly style the sign in and registration
+Default styling for the sign in & registration pages.  Update the \code{sign_in_ui_default()}
+arguments with your brand and colors to quickly style the sign in & registration
 pages to match your brand.
 }

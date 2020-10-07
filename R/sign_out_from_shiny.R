@@ -1,12 +1,12 @@
-#' Sign our from your 'shiny' app
+#' Sign Out from your Shiny app
 #'
-#' Call this function to sign a user out of your 'shiny' app.  This function should
-#' be called inside the server function of your 'shiny' app.  See
+#' Call this function to sign a user out of your Shiny app.  This function should
+#' be called inside the server function of your Shiny app.  See
 #' \url{https://github.com/Tychobra/polished/blob/master/inst/examples/polished_example_01/server.R}
 #' For an example of this function being called after the user clicks a "Sign Out"
 #' button.
 #'
-#' @param session the Shiny session
+#' @param session the Shiny \code{session}
 #' @param redirect_page the query string for the page that the user should be redirected
 #' to after signing out.
 #'

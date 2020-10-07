@@ -2,16 +2,16 @@
 % Please edit documentation in R/sign_in_components.R
 \name{sign_in_js}
 \alias{sign_in_js}
-\title{Sign in and register pages JavaScript dependencies}
+\title{Sign in and Register pages' JavaScript dependencies}
 \usage{
 sign_in_js(ns)
 }
 \arguments{
-\item{ns}{the ns function from the Shiny module that this function is called
+\item{ns}{the \code{ns} function from the Shiny module that this function is called
 within.}
 }
 \description{
-This function should be called at the bottom of your custom sign in and registration
-pages UI.  It loads in all the JavaScript dependencies to handle polished sign
-in and registration.  See the vignette for details.
+This function should be called at the bottom of your Custom Sign In & Registration
+pages UI.  It loads in all the JavaScript dependencies to handle \code{polished} Sign
+In and Registration.  See the vignette for details.
 }
