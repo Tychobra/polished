@@ -1,13 +1,13 @@
 #' Automatically set the config environment
 #'
 #' Determines if the app is deployed to a server or running locally, and adjusts
-#' the config environment to "production" or "default" respectively.  This function
-#' is almost always called in the "global.R" file of a shiny app immediately before
-#' the configuration in the "config.yml" is read in.
+#' the config environment to \code{"production"} or \code{"default"}, respectively.  This function
+#' is almost always called in the \code{global.R} file of a Shiny app immediately before
+#' the configuration in the \code{config.yml} is read in.
 #'
-#' @param override Set the environment to "default" or "production" manually. \strong{CAUTION:}
-#' Be sure you know the difference between "default" & "production" configuration environments.
-#' Using the "production" environment will affect the database of the deployed application.
+#' @param override Set the environment to \code{"default"} or \code{"production"} manually. \strong{CAUTION:}
+#' Be sure you know the difference between \code{"default"} & \code{"production"} configuration environments.
+#' Using the \code{"production"} environment will affect the database of the deployed application.
 #'
 #' @export
 #'

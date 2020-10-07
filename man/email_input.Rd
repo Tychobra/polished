@@ -2,7 +2,7 @@
 % Please edit documentation in R/email_input.R
 \name{email_input}
 \alias{email_input}
-\title{A 'shiny' email input}
+\title{A Shiny email \code{input}}
 \usage{
 email_input(
   inputId,
@@ -13,18 +13,18 @@ email_input(
 )
 }
 \arguments{
-\item{inputId}{The input slot that will be used to access the value.}
+\item{inputId}{The \code{input} slot that will be used to access the value.}
 
-\item{label}{Display label for the control, or NULL for no label.}
+\item{label}{Display label for the control, or \code{NULL} for no label.}
 
 \item{value}{Initial value.}
 
-\item{width}{The width of the input, e.g. '400px'.}
+\item{width}{The width of the input, e.g. \code{'400px'}.}
 
 \item{placeholder}{A character string giving the user a hint as to what can be entered
 into the control. Internet Explorer 8 and 9 do not support this option.}
 }
 \description{
-This is a replica of \code{shiny::textInput()} with the html input "type"
-attribute set to "email" rather than "text".
+This is a replica of \code{shiny::textInput()} with the HTML input \code{type}
+attribute set to \code{"email"} rather than \code{"text"}.
 }

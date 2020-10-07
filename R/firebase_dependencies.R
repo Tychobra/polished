@@ -1,16 +1,16 @@
 #' Load the Firebase JavaScript dependencies into the UI
 #'
-#' Under the hood, 'polished' uses Firebase JavaScript dependencies to handle user
-#' user authentication.  This function loads the required Firebase JavaScript dependencies
-#' in the the UI of your 'shiny' app.
+#' Under the hood, \code{polished} uses Firebase JavaScript dependencies to handle user
+#' authentication.  This function loads the required Firebase JavaScript dependencies
+#' in the the UI of your Shiny app.
 #'
 #' @param services character vector of Firebase services to load into the UI.  Valid strings are
-#' "auth", "firestore", "functions", "messaging", and "storage"
-#' @param firebase_version character string of the Firebase version.  Defaults to 7.15.5.
+#' \code{"auth"} (default), \code{"firestore"}, \code{"functions"}, \code{"messaging"}, and \code{"storage"}
+#' @param firebase_version character string of the Firebase version.  Defaults to \code{"7.15.5"}.
 #'
 #' @export
 #'
-#' @return the html <script> tags for the Firebase JavaScript dependencies
+#' @return the HTML \code{<script>} tags for the Firebase JavaScript dependencies
 #'
 #' @importFrom htmltools tagList tags
 #'

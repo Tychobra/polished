@@ -1,11 +1,11 @@
 #' Remove the URL query
 #'
-#' Remove the entire query string from the url.  This function should only be called
-#' inside the server function of your 'shiny' app.
+#' Remove the entire query string from the URL.  This function should only be called
+#' inside the server function of your Shiny app.
 #'
-#' @param session the Shiny session
+#' @param session the Shiny \code{session}
 #' @param mode the mode to pass to \code{shiny::updateQueryString()}.  Valid values are
-#' "replace" or "push".
+#' \code{"replace"} or \code{"push"}.
 #'
 #' @importFrom shiny updateQueryString getDefaultReactiveDomain
 #'

@@ -1,7 +1,7 @@
 #' Initialize Firebase
 #'
 #' Executes a couple lines of JavaScript to initialize Firebase.  This function should be
-#' called in your 'shiny' UI immediately after \code{\link{firebase_dependencies}}.
+#' called in your Shiny UI immediately after \code{\link{firebase_dependencies}}.
 #'
 #' @param firebase_config list of firebase configuration
 #'

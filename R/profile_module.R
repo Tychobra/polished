@@ -1,10 +1,10 @@
 #' Profile Module UI
 #'
 #' Generates the UI for a user profile dropdown button to be used with the
-#' 'shinydashboard' package.
+#' \code{shinydashboard} package.
 #'
 #' @param id the Shiny module id.
-#' @param other_lis additional <li> html tags to place between the email address
+#' @param other_lis additional \code{<li>} HTML tags to place between the email address
 #' and the Sign out button in the user profile dropdown.  This is often used to
 #' add a user "My Account" page/app where the user can set their account settings.
 #'
@@ -50,9 +50,9 @@ profile_module_ui <- function(id, other_lis = NULL) {
 #'
 #' The server logic to accompany the  \code{\link{profile_module_ui}}.
 #'
-#' @param input the Shiny server input
-#' @param output the Shiny server output
-#' @param session the Shiny server session
+#' @param input the Shiny server \code{input}
+#' @param output the Shiny server \code{output}
+#' @param session the Shiny server \code{session}
 #'
 #' @export
 #'

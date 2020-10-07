@@ -1,15 +1,15 @@
-#' A modification of 'shiny::passwordInput'
+#' A modification of \code{shiny::passwordInput}
 #'
-#' This modified version of Shiny's passwordInput() does not actual send the password
+#' This modified version of Shiny's \code{passwordInput()} does not actually send the password
 #' to our Shiny server.  It is just a regular password input that always keeps your
 #' user's password on the client.  The password is used to sign the user in and then
 #' converted to a JWT by Firebase, all on the client, before it is sent to your Shiny
 #' server.
 #'
-#' @param input_id The input slot that will be used to access the value.
-#' @param label Display label for the control, or NULL for no label.
+#' @param input_id The \code{input} slot that will be used to access the value.
+#' @param label Display label for the control, or \code{NULL} for no label.
 #' @param value Initial value.
-#' @param style Character string of in-line css to style the input.
+#' @param style Character string of in-line CSS to style the input.
 #' @param placeholder A character string giving the user a hint as to what can
 #' be entered into the control. Internet Explorer 8 and 9 do not support this option.
 #'

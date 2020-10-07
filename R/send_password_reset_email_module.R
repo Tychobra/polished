@@ -1,6 +1,6 @@
 #' the UI for a Shiny module to send a password reset email
 #'
-#' @param id the Shiny module id
+#' @param id the Shiny module \code{id}
 #'
 #' @importFrom shiny actionLink
 #' @importFrom shinyFeedback useShinyFeedback
@@ -18,14 +18,14 @@ send_password_reset_email_module_ui <- function(id) {
   )
 }
 
-#' server logic for Shiny module to send a password reset email
+#' the server logic for a Shiny module to send a password reset email
 #'
-#' This function sends s request to the polished.tech API to reset a user's
+#' This function sends a request to the \url{https://polished.tech} API to reset a user's
 #' password.
 #'
-#' @param input the Shiny server input
-#' @param output the Shiny server output
-#' @param session the Shiny server session
+#' @param input the Shiny server \code{input}
+#' @param output the Shiny server \code{output}
+#' @param session the Shiny server \code{session}
 #' @param email A reactive value returning the email address to send the password
 #' reset email to.
 #'

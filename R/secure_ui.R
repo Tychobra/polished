@@ -1,22 +1,27 @@
-#' Secure your 'shiny' UI
+#' Secure your Shiny UI
 #'
-#' This function is used to secure your 'shiny' app's UI.  Make sure to pass
-#' your 'shiny' app's UI as the first argument to \code{secure_ui()} at
-#' the bottom of your 'shiny' app's "ui.R" file.
+#' This function is used to secure your Shiny app's UI.  Make sure to pass
+#' your Shiny app's UI as the first argument to \code{secure_ui()} at
+#' the bottom of your Shiny app's \code{ui.R} file.
 #'
 #' @param ui UI of the application.
-#' @param sign_in_page_ui Either \code{NULL}, the default, or the HTML, CSS, and JavaScript
+#' @param sign_in_page_ui Either \code{NULL}, the default (See \code{\link{sign_in_ui_default}}), or the HTML, CSS, and JavaScript
 #' to use for the UI of the Sign In page.
 #' @param custom_admin_ui Either \code{NULL}, the default, or a list of 2 Shiny module UI functions
-#' to add additional 'shinydashboard' tabs to the Polished admin panel. The list must be in the form
-#' list("menu_items" = <your_custom_admin_menu_ui('custom_admin')>, "tab_items" = <your_custom_admin_tabs_ui('custom_admin')>).
+#' to add additional \code{shinydashboard} tabs to the \code{polished} Admin Panel. The list must be in the form:
+#' \preformatted{
+#' list(
+#'   "menu_items" = <your_custom_admin_menu_ui("custom_admin")>,
+#'   "tab_items" = <your_custom_admin_tabs_ui("custom_admin")>
+#' )
+#' }
 #' @param custom_admin_button_ui Either \code{admin_button_ui("polished")}, the default, or your custom
-#' UI to take admins from the custom Shiny app to the Admin panel.
-#' @param admin_ui_options list of html elements to customize branding of the "Admin Panel".  Valid
-#' list element names are "title", "sidebar_branding", and "browser_tab_icon".  See
-#' \code{\link{default_admin_ui_options}} for an example.
-#' @param account_module_ui the ui for the user's account module.
-#' @param splash_module_ui the ui for the splash page.
+#' UI to take Admins from the custom Shiny app to the \code{polished} Admin Panel.
+#' @param admin_ui_options list of HTML elements to customize branding of the \code{polished} Admin Panel.  Valid
+#' list element names are \code{title}, \code{sidebar_branding}, and \code{browser_tab_icon}.  See
+#' \code{\link{default_admin_ui_options}}, the default.
+#' @param account_module_ui the UI portion for the user's account module.
+#' @param splash_module_ui the UI portion for the splash page module.
 #'
 #' @return Secured Shiny app UI
 #'

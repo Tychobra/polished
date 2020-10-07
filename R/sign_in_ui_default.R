@@ -1,22 +1,22 @@
-#' Default UI styles for the sign-in pages
+#' Default UI styles for the Sign In & Registration pages
 #'
-#' Default styling for the sign in and registration pages.  Update the \code{sign_in_ui_default()}
-#' arguments with your brand and colors to quickly style the sign in and registration
+#' Default styling for the sign in & registration pages.  Update the \code{sign_in_ui_default()}
+#' arguments with your brand and colors to quickly style the sign in & registration
 #' pages to match your brand.
 #'
-#' @param sign_in_module UI module for the sign in and registration pages.
+#' @param sign_in_module UI module for the Sign In & Registration pages.
 #' @param color hex color for the background and button.
 #' @param company_name your company name.
-#' @param logo_top html for logo to go above the sign in panel.
-#' @param logo_bottom html for the logo below the sign in panel.
-#' @param icon_href the url/path to the browser tab icon.
-#' @param background_image the url/path to a full width background image.  If set to NULL,
+#' @param logo_top HTML for logo to go above the sign in panel.
+#' @param logo_bottom HTML for the logo below the sign in panel.
+#' @param icon_href the URL/path to the browser tab icon.
+#' @param background_image the URL/path to a full width background image.  If set to \code{NULL},
 #' the default, the \code{color} argument will be used for the background instead of this
 #' image.
 #' @param terms_and_privacy_footer links to place in the footer, directly above the copyright
 #' notice.
-#' @param align The horizontal alignment of the sign in box. Defaults to "center". Valid
-#' values are "left", "center", or "right"
+#' @param align The horizontal alignment of the Sign In box. Defaults to \code{"center"}. Valid
+#' values are \code{"left"}, \code{"center"}, or \code{"right"}
 #'
 #' @export
 #'
@@ -24,7 +24,7 @@
 #' @importFrom htmltools tags HTML
 #' @importFrom stringr str_interp
 #'
-#' @return the UI for the sign in page
+#' @return the UI for the Sign In & Registration pages
 #'
 sign_in_ui_default <- function(
   sign_in_module = sign_in_module_ui("sign_in"),

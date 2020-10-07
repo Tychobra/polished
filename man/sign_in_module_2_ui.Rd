@@ -2,17 +2,17 @@
 % Please edit documentation in R/sign_in_module_2.R
 \name{sign_in_module_2_ui}
 \alias{sign_in_module_2_ui}
-\title{UI for the sign in and register pages}
+\title{UI for the Sign In & Register pages}
 \usage{
 sign_in_module_2_ui(id)
 }
 \arguments{
-\item{id}{the Shiny module id}
+\item{id}{the Shiny module \code{id}}
 }
 \description{
 Alternate sign in UI that works regardless of whether or not invites
 are required. The UI displays email sign in inputs on the left, and social sign in options
 on the right.  \code{\link{sign_in_module_2}} must be provided as the
-argument "custom_sign_in_server" in \code{\link{secure_server}} for proper
+argument \code{custom_sign_in_server} in \code{\link{secure_server}} for proper
 functionality.
 }

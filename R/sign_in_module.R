@@ -1,11 +1,10 @@
-#' UI for the sign in and register pages
+#' UI for the Sign In & Register pages
 #'
-#' UI for the sign in and register pages when a user invite is required to register and
-#' sign in.
+#' UI for the Sign In & Register pages when a user invite is required to Register & Sign In.
 #'
-#' @param id the Shiny module id
+#' @param id the Shiny module \code{id}
 #' @param register_link The text that will be displayed in the link to go to the
-#' user registration page.  The default is "First time user? Register here!".
+#' user registration page.  The default is \code{"First time user? Register here!"}.
 #' Set to \code{NULL} if you don't want to use the registration page.
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
@@ -228,13 +227,13 @@ sign_in_module_ui <- function(
   )
 }
 
-#' Server logic for the sign in and register pages
+#' Server logic for the Sign In & Register pages
 #'
 #' This server logic accompanies the \code{\link{sign_in_module_ui}}.
 #'
-#' @param input the Shiny input
-#' @param output the Shiny output
-#' @param session the Shiny session
+#' @param input the Shiny \code{input}
+#' @param output the Shiny \code{output}
+#' @param session the Shiny \code{session}
 #'
 #' @importFrom shiny observeEvent observe getQueryString updateTextInput
 #' @importFrom shinyjs show hide
