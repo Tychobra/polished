@@ -265,11 +265,16 @@ Sessions <-  R6::R6Class(
         encode = "json"
       )
 
-      httr::stop_for_status(res)
 
       session_out <- jsonlite::fromJSON(
         httr::content(res, "text", encoding = "UTF-8")
       )
+
+      status <- httr::status_code(res)
+      if (!identical(httr::status_code(res), 200L)) {
+        print(".global_sessions$find() status: ", status)
+        stop(session_out, call. = FALSE)
+      }
 
       if (length(session_out) == 0) {
         session_out <- NULL
