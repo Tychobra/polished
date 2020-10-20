@@ -12,20 +12,20 @@ providers_ui(
 )
 }
 \arguments{
-\item{ns}{the 'shiny' namespace function created with \code{shiny::NS()}.}
+\item{ns}{the Shiny namespace function created with \code{shiny::NS()}.}
 
-\item{sign_in_providers}{the sign in providers to enable.  Valid values are "google"
-"email", "microsoft", and/or "facebook". Defaults to \code{"email"}.}
+\item{sign_in_providers}{the sign in providers to enable.  Valid values are \code{"google"}
+\code{"email"}, \code{"microsoft"}, and/or \code{"facebook"}. Defaults to \code{"email"}.}
 
-\item{title}{The title to be used above the provider buttons. Set to NULL to not include}
+\item{title}{The title to be used above the provider buttons. Set to \code{NULL} to not include}
 
 \item{fancy}{Should the buttons be large and colorful?}
 }
 \value{
-the html UI of the "Sign in with *" buttons.
+the HTML UI of the "Sign in with *" buttons.
 }
 \description{
-Creates the html UI of the "Sign in with *" buttons.  These buttons are only
+Creates the HTML UI of the "Sign in with *" buttons.  These buttons are only
 necessary if you enable social sign in via the \code{sign_in_providers} argument
 passed to \code{\link{global_sessions_config}}.
 }

@@ -7,11 +7,11 @@
 profile_module(input, output, session)
 }
 \arguments{
-\item{input}{the Shiny server input}
+\item{input}{the Shiny server \code{input}}
 
-\item{output}{the Shiny server output}
+\item{output}{the Shiny server \code{output}}
 
-\item{session}{the Shiny server session}
+\item{session}{the Shiny server \code{session}}
 }
 \description{
 The server logic to accompany the  \code{\link{profile_module_ui}}.

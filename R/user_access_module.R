@@ -52,6 +52,11 @@ user_access_module_ui <- function(id) {
               )
           )
         )
+      ),
+      shiny::column(
+        12,
+        br(),
+        br()
       )
     ),
     # users table

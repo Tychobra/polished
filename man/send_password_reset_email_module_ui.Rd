@@ -7,7 +7,7 @@
 send_password_reset_email_module_ui(id)
 }
 \arguments{
-\item{id}{the Shiny module id}
+\item{id}{the Shiny module \code{id}}
 }
 \description{
 the UI for a Shiny module to send a password reset email

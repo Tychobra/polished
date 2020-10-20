@@ -2,21 +2,21 @@
 % Please edit documentation in R/send_password_reset_email_module.R
 \name{send_password_reset_email_module}
 \alias{send_password_reset_email_module}
-\title{server logic for Shiny module to send a password reset email}
+\title{the server logic for a Shiny module to send a password reset email}
 \usage{
 send_password_reset_email_module(input, output, session, email)
 }
 \arguments{
-\item{input}{the Shiny server input}
+\item{input}{the Shiny server \code{input}}
 
-\item{output}{the Shiny server output}
+\item{output}{the Shiny server \code{output}}
 
-\item{session}{the Shiny server session}
+\item{session}{the Shiny server \code{session}}
 
 \item{email}{A reactive value returning the email address to send the password
 reset email to.}
 }
 \description{
-This function sends s request to the polished.tech API to reset a user's
+This function sends a request to the \url{https://polished.tech} API to reset a user's
 password.
 }

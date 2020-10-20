@@ -2,7 +2,7 @@
 % Please edit documentation in R/secure_ui.R
 \name{secure_ui}
 \alias{secure_ui}
-\title{Secure your 'shiny' UI}
+\title{Secure your Shiny UI}
 \usage{
 secure_ui(
   ui,
@@ -17,29 +17,34 @@ secure_ui(
 \arguments{
 \item{ui}{UI of the application.}
 
-\item{sign_in_page_ui}{Either \code{NULL}, the default, or the HTML, CSS, and JavaScript
+\item{sign_in_page_ui}{Either \code{NULL}, the default (See \code{\link{sign_in_ui_default}}), or the HTML, CSS, and JavaScript
 to use for the UI of the Sign In page.}
 
 \item{custom_admin_ui}{Either \code{NULL}, the default, or a list of 2 Shiny module UI functions
-to add additional 'shinydashboard' tabs to the Polished admin panel. The list must be in the form
-list("menu_items" = <your_custom_admin_menu_ui('custom_admin')>, "tab_items" = <your_custom_admin_tabs_ui('custom_admin')>).}
+to add additional \code{shinydashboard} tabs to the \code{polished} Admin Panel. The list must be in the form:
+\preformatted{
+list(
+  "menu_items" = <your_custom_admin_menu_ui("custom_admin")>,
+  "tab_items" = <your_custom_admin_tabs_ui("custom_admin")>
+)
+}}
 
 \item{custom_admin_button_ui}{Either \code{admin_button_ui("polished")}, the default, or your custom
-UI to take admins from the custom Shiny app to the Admin panel.}
+UI to take Admins from the custom Shiny app to the \code{polished} Admin Panel.}
 
-\item{admin_ui_options}{list of html elements to customize branding of the "Admin Panel".  Valid
-list element names are "title", "sidebar_branding", and "browser_tab_icon".  See
-\code{\link{default_admin_ui_options}} for an example.}
+\item{admin_ui_options}{list of HTML elements to customize branding of the \code{polished} Admin Panel.  Valid
+list element names are \code{title}, \code{sidebar_branding}, and \code{browser_tab_icon}.  See
+\code{\link{default_admin_ui_options}}, the default.}
 
-\item{account_module_ui}{the ui for the user's account module.}
+\item{account_module_ui}{the UI portion for the user's account module.}
 
-\item{splash_module_ui}{the ui for the splash page.}
+\item{splash_module_ui}{the UI portion for the splash page module.}
 }
 \value{
 Secured Shiny app UI
 }
 \description{
-This function is used to secure your 'shiny' app's UI.  Make sure to pass
-your 'shiny' app's UI as the first argument to \code{secure_ui()} at
-the bottom of your 'shiny' app's "ui.R" file.
+This function is used to secure your Shiny app's UI.  Make sure to pass
+your Shiny app's UI as the first argument to \code{secure_ui()} at
+the bottom of your Shiny app's \code{ui.R} file.
 }

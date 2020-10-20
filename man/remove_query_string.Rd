@@ -10,12 +10,12 @@ remove_query_string(
 )
 }
 \arguments{
-\item{session}{the Shiny session}
+\item{session}{the Shiny \code{session}}
 
 \item{mode}{the mode to pass to \code{shiny::updateQueryString()}.  Valid values are
-"replace" or "push".}
+\code{"replace"} or \code{"push"}.}
 }
 \description{
-Remove the entire query string from the url.  This function should only be called
-inside the server function of your 'shiny' app.
+Remove the entire query string from the URL.  This function should only be called
+inside the server function of your Shiny app.
 }

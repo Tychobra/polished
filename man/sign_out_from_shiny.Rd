@@ -2,7 +2,7 @@
 % Please edit documentation in R/sign_out_from_shiny.R
 \name{sign_out_from_shiny}
 \alias{sign_out_from_shiny}
-\title{Sign our from your 'shiny' app}
+\title{Sign Out from your Shiny app}
 \usage{
 sign_out_from_shiny(
   session = shiny::getDefaultReactiveDomain(),
@@ -10,14 +10,14 @@ sign_out_from_shiny(
 )
 }
 \arguments{
-\item{session}{the Shiny session}
+\item{session}{the Shiny \code{session}}
 
 \item{redirect_page}{the query string for the page that the user should be redirected
 to after signing out.}
 }
 \description{
-Call this function to sign a user out of your 'shiny' app.  This function should
-be called inside the server function of your 'shiny' app.  See
+Call this function to sign a user out of your Shiny app.  This function should
+be called inside the server function of your Shiny app.  See
 \url{https://github.com/Tychobra/polished/blob/master/inst/examples/polished_example_01/server.R}
 For an example of this function being called after the user clicks a "Sign Out"
 button.

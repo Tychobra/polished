@@ -1,12 +1,12 @@
-#' UI for the sign in and register pages
+#' UI for the Sign In & Register pages
 #'
 #' Alternate sign in UI that works regardless of whether or not invites
 #' are required. The UI displays email sign in inputs on the left, and social sign in options
 #' on the right.  \code{\link{sign_in_module_2}} must be provided as the
-#' argument "custom_sign_in_server" in \code{\link{secure_server}} for proper
+#' argument \code{custom_sign_in_server} in \code{\link{secure_server}} for proper
 #' functionality.
 #'
-#' @param id the Shiny module id
+#' @param id the Shiny module \code{id}
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr
@@ -208,13 +208,13 @@ sign_in_module_2_ui <- function(id) {
   )
 }
 
-#' Server logic for the sign in and register pages
+#' Server logic for the Sign In & Register pages
 #'
 #' This server logic accompanies \code{\link{sign_in_module_2_ui}}.
 #'
-#' @param input the Shiny input
-#' @param output the Shiny output
-#' @param session the Shiny session
+#' @param input the Shiny \code{input}
+#' @param output the Shiny \code{output}
+#' @param session the Shiny \code{session}
 #'
 #' @importFrom shiny observeEvent observe getQueryString updateTabsetPanel updateTextInput
 #' @importFrom shinyjs show hide
