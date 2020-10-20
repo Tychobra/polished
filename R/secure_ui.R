@@ -38,7 +38,12 @@ secure_ui <- function(
   splash_module_ui = NULL
 ) {
 
-  ui <- force(ui)
+  if (is.function(ui)) {
+    ui <- ui(request)
+  } else {
+    ui <- force(ui)
+  }
+
   custom_admin_button_ui <- force(custom_admin_button_ui)
 
   function(request) {
