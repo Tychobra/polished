@@ -255,7 +255,14 @@ user_access_module <- function(input, output, session) {
           list(targets = 0, orderable = FALSE),
           list(targets = 0, class = "dt-center"),
           list(targets = 0, width = "105px")
-        )
+        ),
+        order = list(
+          list(4, 'desc')
+        ),
+        # removes any lingering tooltips
+        drawCallback = JS("function(settings) {
+          $('.tooltip').remove();
+        }")
       )
     ) %>%
       DT::formatDate(5, method = "toLocaleString")
