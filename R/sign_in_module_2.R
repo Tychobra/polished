@@ -300,30 +300,30 @@ sign_in_module_2 <- function(input, output, session) {
         return()
       } else {
 
-        # check is user is already registered with Firebase.  If user already registered,
-        # then allow them to continue signing in.  If not registered, take the user
-        # to the registration page and open the passwords to continue registration.
+        # user is invited, so continue the sign in process
+        shinyjs::hide("submit_continue_sign_in")
 
-        # this custom message triggers the `input$check_registered_res` input which
-        # will fire off the next observeEvent
-        session$sendCustomMessage(
-          session$ns("check_registered"),
-          message = list(
-            email = email
-          )
+        shinyjs::show(
+          "sign_in_password_ui",
+          anim = TRUE
         )
+
+        # NEED to sleep this exact amount to allow animation (above) to show w/o bug
+        Sys.sleep(.25)
+
+        shinyjs::runjs(paste0("$('#", ns('sign_in_password'), "').focus()"))
 
       }
 
 
-    }, error = function(e) {
+    }, error = function(err) {
       # user is not invited
       print("Error in continuing sign in")
-      print(e)
+      print(err)
       shinyWidgets::sendSweetAlert(
         session,
         title = "Error",
-        text = "Error checking invite",
+        text = err$message,
         type = "error"
       )
 
