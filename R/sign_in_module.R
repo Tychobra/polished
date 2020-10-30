@@ -117,7 +117,7 @@ sign_in_module_ui <- function(
     )
   )
 
-  email_ui <- tags$form(
+  email_ui <- tags$div(
     id = ns("email_ui"),
     tags$div(
       id = ns("sign_in_panel_top"),
