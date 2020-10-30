@@ -56,7 +56,7 @@ sign_in_module_2_ui <- function(id) {
     ) %>% shinyjs::disabled()
   )
 
-  sign_in_email_ui <- tags$div(
+  sign_in_email_ui <- tags$form(
     id = ns("email_ui"),
     tags$br(),
     email_input(
@@ -204,6 +204,9 @@ sign_in_module_2_ui <- function(id) {
     sign_in_ui,
     tags$script(src = "polish/js/auth_keypress.js?version=2"),
     tags$script(paste0("auth_keypress('", ns(''), "')")),
+    tags$script(
+      "$('input').attr('autocomplete', 'off');"
+    ),
     sign_in_js(ns)
   )
 }
@@ -229,7 +232,10 @@ sign_in_module_2 <- function(input, output, session) {
 
   # Email Sign-In validation
   observeEvent(input$sign_in_email, {
-    if (is_valid_email(input$sign_in_email)) {
+    if (input$sign_in_email == "") {
+      shinyjs::disable("submit_continue_sign_in")
+      shinyFeedback::hideFeedback("sign_in_email")
+    } else if (is_valid_email(input$sign_in_email)) {
       shinyFeedback::hideFeedback("sign_in_email")
       shinyjs::enable("submit_continue_sign_in")
     } else {
@@ -243,7 +249,10 @@ sign_in_module_2 <- function(input, output, session) {
 
   # Email Registration validation
   observeEvent(input$register_email, {
-    if (is_valid_email(input$register_email)) {
+    if (input$register_email == "") {
+      shinyjs::disable("submit_continue_register")
+      shinyFeedback::hideFeedback("register_email")
+    } else if (is_valid_email(input$register_email)) {
       shinyFeedback::hideFeedback("register_email")
       shinyjs::enable("submit_continue_register")
     } else {
