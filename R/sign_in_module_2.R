@@ -245,11 +245,7 @@ sign_in_module_2 <- function(input, output, session) {
     shinyjs::hide("providers_ui")
   })
 
-  observe({
-    print(list(
-      "sign_in_submit" = input$sign_in_submit
-    ))
-  })
+
 
   observe({
     query_string <- shiny::getQueryString()
@@ -271,15 +267,15 @@ sign_in_module_2 <- function(input, output, session) {
 
   shiny::observeEvent(input$submit_continue_sign_in, {
 
-    # if (!is_valid_email(input$sign_in_email)) {
-    #   shinyFeedback::showFeedbackDanger(
-    #     "sign_in_email",
-    #     text = "Invalid email"
-    #   )
-    #   return()
-    # }
-
     email <- tolower(input$sign_in_email)
+
+    if (!is_valid_email(email)) {
+      shinyFeedback::showFeedbackDanger(
+        "sign_in_email",
+        text = "Invalid email"
+      )
+      return()
+    }
 
     # check user invite
     invite <- NULL
@@ -365,23 +361,17 @@ sign_in_module_2 <- function(input, output, session) {
 
 
 
-  submit_continue_register_rv <- reactiveVal(0)
+  shiny::observeEvent(input$submit_continue_register, {
 
-  observeEvent(input$submit_continue_register, {
-    submit_continue_register_rv(submit_continue_register_rv() + 1)
-  })
+    email <- tolower(input$register_email)
 
-  shiny::observeEvent(submit_continue_register_rv(), {
-
-    if (!is_valid_email(input$register_email)) {
+    if (!is_valid_email(email)) {
       shinyFeedback::showFeedbackDanger(
-        "sign_in_email",
+        "register_email",
         text = "Invalid email"
       )
       return()
     }
-
-    email <- tolower(input$register_email)
 
     invite <- NULL
     tryCatch({
@@ -432,7 +422,7 @@ sign_in_module_2 <- function(input, output, session) {
     cookie <- input$register_js$cookie
 
 
-    if (!is_valid_email(isolate({input$register_email}))) {
+    if (!is_valid_email(hold_email)) {
 
       shinyFeedback::showFeedbackDanger(
         "register_email",
