@@ -108,3 +108,13 @@ polished_toast_options <- list(
   showDuration = 1000,
   newestOnTop = TRUE
 )
+
+#' is_valid_email
+#'
+#' function for email validation (Sign in & Registration)
+#'
+#' @noRd
+#'
+is_valid_email <- function(x) {
+  grepl("^\\s*[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\s*$", as.character(x), ignore.case=TRUE)
+}

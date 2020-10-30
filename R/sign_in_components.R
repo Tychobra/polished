@@ -31,7 +31,7 @@ sign_in_js <- function(ns) {
   }
 
   htmltools::tagList(
-    shinyFeedback::useShinyFeedback(feedback = FALSE),
+    shinyFeedback::useShinyFeedback(),
     tags$script(src = "polish/js/toast_options.js"),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
     firebase_deps,

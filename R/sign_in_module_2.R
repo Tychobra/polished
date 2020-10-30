@@ -11,7 +11,7 @@
 #' @importFrom shiny textInput actionButton NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr
 #' @importFrom shinyFeedback useShinyFeedback loadingButton
-#' @importFrom shinyjs useShinyjs hidden
+#' @importFrom shinyjs useShinyjs hidden disabled
 #'
 #' @export
 #'
@@ -53,7 +53,7 @@ sign_in_module_2_ui <- function(id) {
       label = "Continue",
       width = "100%",
       class = "btn btn-primary btn-lg"
-    )
+    ) %>% shinyjs::disabled()
   )
 
   sign_in_email_ui <- tags$div(
@@ -217,14 +217,43 @@ sign_in_module_2_ui <- function(id) {
 #' @param session the Shiny \code{session}
 #'
 #' @importFrom shiny observeEvent observe getQueryString updateTabsetPanel updateTextInput
-#' @importFrom shinyjs show hide
+#' @importFrom shinyjs show hide enable disable
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom digest digest
+#' @importFrom shinyFeedback hideFeedback showFeedbackDanger resetLoadingButton
 #'
 #' @export
 #'
 sign_in_module_2 <- function(input, output, session) {
   ns <- session$ns
+
+  # Email Sign-In validation
+  observeEvent(input$sign_in_email, {
+    if (is_valid_email(input$sign_in_email)) {
+      shinyFeedback::hideFeedback("sign_in_email")
+      shinyjs::enable("submit_continue_sign_in")
+    } else {
+      shinyjs::disable("submit_continue_sign_in")
+      shinyFeedback::showFeedbackDanger(
+        "sign_in_email",
+        "Invalid Email"
+      )
+    }
+  })
+
+  # Email Registration validation
+  observeEvent(input$register_email, {
+    if (is_valid_email(input$register_email)) {
+      shinyFeedback::hideFeedback("register_email")
+      shinyjs::enable("submit_continue_register")
+    } else {
+      shinyjs::disable("submit_continue_register")
+      shinyFeedback::showFeedbackDanger(
+        "register_email",
+        "Invalid Email"
+      )
+    }
+  })
 
   observeEvent(input$sign_in_with_email, {
     shinyjs::show("email_ui")
