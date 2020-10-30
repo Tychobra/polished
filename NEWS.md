@@ -1,6 +1,6 @@
 # v0.2.0.9000
 
-- added email validation to the 2 provided sign in and registration modules. 
+- added email validation to email inputs in the sign in and registration modules. 
 - allow for a function UI be passed to the "ui" argument of `secure_ui()`.
 - added "redirect_page" argument to `sign_out_from_shiny()`
 - new "is_auth_required option" to `global_sessions_config()` which (when set to FALSE) allows users to access your app without being signed in.  By default this argument is set to TRUE. (#109)
