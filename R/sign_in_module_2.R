@@ -53,10 +53,10 @@ sign_in_module_2_ui <- function(id) {
       label = "Continue",
       width = "100%",
       class = "btn btn-primary btn-lg"
-    ) %>% shinyjs::disabled()
+    )
   )
 
-  sign_in_email_ui <- tags$form(
+  sign_in_email_ui <- tags$div(
     id = ns("email_ui"),
     tags$br(),
     email_input(
@@ -220,7 +220,7 @@ sign_in_module_2_ui <- function(id) {
 #' @param session the Shiny \code{session}
 #'
 #' @importFrom shiny observeEvent observe getQueryString updateTabsetPanel updateTextInput
-#' @importFrom shinyjs show hide enable disable
+#' @importFrom shinyjs show hide disable
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom digest digest
 #' @importFrom shinyFeedback hideFeedback showFeedbackDanger resetLoadingButton
@@ -232,36 +232,12 @@ sign_in_module_2 <- function(input, output, session) {
 
   # Email Sign-In validation
   observeEvent(input$sign_in_email, {
-    if (input$sign_in_email == "") {
-      shinyjs::disable("submit_continue_sign_in")
-      shinyFeedback::hideFeedback("sign_in_email")
-    } else if (is_valid_email(input$sign_in_email)) {
-      shinyFeedback::hideFeedback("sign_in_email")
-      shinyjs::enable("submit_continue_sign_in")
-    } else {
-      shinyjs::disable("submit_continue_sign_in")
-      shinyFeedback::showFeedbackDanger(
-        "sign_in_email",
-        "Invalid Email"
-      )
-    }
+    shinyFeedback::hideFeedback("sign_in_email")
   })
 
   # Email Registration validation
   observeEvent(input$register_email, {
-    if (input$register_email == "") {
-      shinyjs::disable("submit_continue_register")
-      shinyFeedback::hideFeedback("register_email")
-    } else if (is_valid_email(input$register_email)) {
-      shinyFeedback::hideFeedback("register_email")
-      shinyjs::enable("submit_continue_register")
-    } else {
-      shinyjs::disable("submit_continue_register")
-      shinyFeedback::showFeedbackDanger(
-        "register_email",
-        "Invalid Email"
-      )
-    }
+    shinyFeedback::hideFeedback("register_email")
   })
 
   observeEvent(input$sign_in_with_email, {
@@ -269,6 +245,11 @@ sign_in_module_2 <- function(input, output, session) {
     shinyjs::hide("providers_ui")
   })
 
+  observe({
+    print(list(
+      "sign_in_submit" = input$sign_in_submit
+    ))
+  })
 
   observe({
     query_string <- shiny::getQueryString()
@@ -290,6 +271,14 @@ sign_in_module_2 <- function(input, output, session) {
 
   shiny::observeEvent(input$submit_continue_sign_in, {
 
+    # if (!is_valid_email(input$sign_in_email)) {
+    #   shinyFeedback::showFeedbackDanger(
+    #     "sign_in_email",
+    #     text = "Invalid email"
+    #   )
+    #   return()
+    # }
+
     email <- tolower(input$sign_in_email)
 
     # check user invite
@@ -309,18 +298,51 @@ sign_in_module_2 <- function(input, output, session) {
         return()
       } else {
 
-        # user is invited, so continue the sign in process
-        shinyjs::hide("submit_continue_sign_in")
+        if (is_email_registered(email)) {
 
-        shinyjs::show(
-          "sign_in_password_ui",
-          anim = TRUE
-        )
+          # user is invited, so continue the sign in process
+          shinyjs::hide("submit_continue_sign_in")
 
-        # NEED to sleep this exact amount to allow animation (above) to show w/o bug
-        Sys.sleep(.25)
+          shinyjs::show(
+            "sign_in_password_ui",
+            anim = TRUE
+          )
 
-        shinyjs::runjs(paste0("$('#", ns('sign_in_password'), "').focus()"))
+          # NEED to sleep this exact amount to allow animation (above) to show w/o bug
+          Sys.sleep(.25)
+
+          shinyjs::runjs(paste0("$('#", ns('sign_in_password'), "').focus()"))
+
+
+        } else {
+
+          # user is not registered (they are accidentally attempting to sign in before
+          # they have registed), so send them to the registration page and auto populate
+          # the registration email input
+          shiny::updateTabsetPanel(
+            session,
+            "tabs",
+            "Register"
+          )
+
+          shiny::updateTextInput(
+            session,
+            "register_email",
+            value = email
+          )
+
+          shinyjs::hide("continue_registration")
+
+          shinyjs::show(
+            "register_passwords",
+            anim = TRUE
+          )
+
+          # NEED to sleep this exact amount to allow animation (above) to show w/o bug
+          Sys.sleep(0.3)
+
+          shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
+        }
 
       }
 
@@ -341,62 +363,6 @@ sign_in_module_2 <- function(input, output, session) {
   })
 
 
-  observeEvent(input$check_registered_res, {
-    hold_email <- tolower(input$sign_in_email)
-
-    is_registered <- input$check_registered_res
-
-    if (isTRUE(is_registered)) {
-      # user is already registered, so continue sign in
-      # user is invited
-      shinyjs::hide("submit_continue_sign_in")
-
-      shinyjs::show(
-        "sign_in_password_ui",
-        anim = TRUE
-      )
-
-      # NEED to sleep this exact amount to allow animation (above) to show w/o bug
-      Sys.sleep(.25)
-
-      shinyjs::runjs(paste0("$('#", ns('sign_in_password'), "').focus()"))
-    } else if (isFALSE(is_registered)) {
-
-      shiny::updateTabsetPanel(
-        session,
-        "tabs",
-        "Register"
-      )
-
-      shiny::updateTextInput(
-        session,
-        "register_email",
-        value = hold_email
-      )
-
-      # user is invited
-      shinyjs::hide("continue_registration")
-
-      shinyjs::show(
-        "register_passwords",
-        anim = TRUE
-      )
-
-      # NEED to sleep this exact amount to allow animation (above) to show w/o bug
-      Sys.sleep(.25)
-
-      shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
-    } else {
-
-      print(is_registered)
-      shinyWidgets::sendSweetAlert(
-        session,
-        title = "Error",
-        text = "Error checking invite",
-        type = "error"
-      )
-    }
-  })
 
 
   submit_continue_register_rv <- reactiveVal(0)
@@ -406,6 +372,14 @@ sign_in_module_2 <- function(input, output, session) {
   })
 
   shiny::observeEvent(submit_continue_register_rv(), {
+
+    if (!is_valid_email(input$register_email)) {
+      shinyFeedback::showFeedbackDanger(
+        "sign_in_email",
+        text = "Invalid email"
+      )
+      return()
+    }
 
     email <- tolower(input$register_email)
 
@@ -457,6 +431,18 @@ sign_in_module_2 <- function(input, output, session) {
     hold_password <- input$register_js$password
     cookie <- input$register_js$cookie
 
+
+    if (!is_valid_email(isolate({input$register_email}))) {
+
+      shinyFeedback::showFeedbackDanger(
+        "register_email",
+        text = "Invalid email"
+      )
+      shinyFeedback::resetLoadingButton("register_submit")
+      return(NULL)
+
+    }
+
     hashed_cookie <- digest::digest(cookie)
 
 
@@ -483,8 +469,26 @@ sign_in_module_2 <- function(input, output, session) {
 
   })
 
+  check_jwt_email_valid <- reactive({
+    req(input$check_jwt)
+
+    if (!is_valid_email(isolate({input$sign_in_email}))) {
+
+      shinyFeedback::showFeedbackDanger(
+        "sign_in_email",
+        text = "Invalid email"
+      )
+      shinyFeedback::resetLoadingButton("sign_in_submit")
+      return(NULL)
+    }
+
+    input$check_jwt
+  })
+
   sign_in_check_jwt(
-    jwt = shiny::reactive({input$check_jwt})
+    jwt = shiny::reactive({
+      check_jwt_email_valid()
+    })
   )
 
   invisible()

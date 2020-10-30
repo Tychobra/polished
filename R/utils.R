@@ -118,3 +118,48 @@ polished_toast_options <- list(
 is_valid_email <- function(x) {
   grepl("^\\s*[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\s*$", as.character(x), ignore.case=TRUE)
 }
+
+
+#' is_email_registered
+#'
+#' Check if an email address is already registered.  This function is used in our
+#' sign in modules to redirect the user from the sign in inputs to the registration
+#' inputs if the user is attempting to sign in before they have registered.
+#'
+#' @param email the email address to check
+#'
+#' @return boolean - whether of not the email is already registered with the polished
+#' account
+#'
+#'
+is_email_registered <- function(email) {
+
+  user_res <- httr::GET(
+    paste0(getOption("polished")$api_url, "/users"),
+    query = list(
+      email = email
+    ),
+    httr::authenticate(
+      user = getOption("polished")$api_key,
+      password = ""
+    )
+  )
+
+  user_res_content <- jsonlite::fromJSON(
+    httr::content(user_res, "text", encoding = "UTF-8")
+  )
+
+  if (!identical(httr::status_code(user_res), 200L)) {
+    print(user_res_content)
+    stop("error checking user registration", .call = FALSE)
+  }
+
+  if (isFALSE(user_res_content$email_verified) && isFALSE(user_res_content$email_verified)) {
+    out <- FALSE
+  } else {
+    out <- TRUE
+  }
+
+
+  out
+}
