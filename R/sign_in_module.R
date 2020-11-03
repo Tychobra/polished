@@ -117,7 +117,8 @@ sign_in_module_ui <- function(
     )
   )
 
-  email_ui <- tags$form(
+  # email_ui <- tags$form(
+  email_ui <- tags$div(
     id = ns("email_ui"),
     tags$div(
       id = ns("sign_in_panel_top"),
@@ -223,9 +224,9 @@ sign_in_module_ui <- function(
     ),
     tags$script(src = "polish/js/auth_keypress.js?version=4"),
     tags$script(paste0("auth_keypress('", ns(''), "')")),
-    tags$script(
-      "$('input').attr('autocomplete', 'off');"
-    ),
+    # tags$script(
+    #   "$('input').attr('autocomplete', 'off');"
+    # ),
     sign_in_js(ns)
   )
 }

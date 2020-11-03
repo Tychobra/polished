@@ -39,14 +39,14 @@ email_input <- function (
       type = "email",
       class = "form-control",
       value = value,
-      placeholder = placeholder,
-      name="email",
-      required = TRUE,
-      autocorrect = "off",
-      spellcheck = "false",
-      autocomplete = "off",
-      readonly = TRUE,
-      onfocus = "this.removeAttribute('readonly');"
+      placeholder = placeholder#,
+      # name="email",
+      # required = TRUE,
+      # autocorrect = "off",
+      # spellcheck = "false",
+      # autocomplete = "off",
+      # readonly = TRUE,
+      # onfocus = "this.removeAttribute('readonly');"
     )
   )
 }

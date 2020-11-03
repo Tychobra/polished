@@ -56,7 +56,7 @@ sign_in_module_2_ui <- function(id) {
     ) %>% shinyjs::disabled()
   )
 
-  sign_in_email_ui <- tags$form(
+  sign_in_email_ui <- tags$div(
     id = ns("email_ui"),
     tags$br(),
     email_input(
@@ -204,9 +204,9 @@ sign_in_module_2_ui <- function(id) {
     sign_in_ui,
     tags$script(src = "polish/js/auth_keypress.js?version=2"),
     tags$script(paste0("auth_keypress('", ns(''), "')")),
-    tags$script(
-      "$('input').attr('autocomplete', 'off');"
-    ),
+    # tags$script(
+    #   "$('input').attr('autocomplete', 'off');"
+    # ),
     sign_in_js(ns)
   )
 }
