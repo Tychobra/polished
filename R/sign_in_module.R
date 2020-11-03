@@ -238,7 +238,7 @@ sign_in_module_ui <- function(
 #' @param output the Shiny \code{output}
 #' @param session the Shiny \code{session}
 #'
-#' @importFrom shiny observeEvent observe getQueryString updateTextInput
+#' @importFrom shiny observeEvent observe getQueryString updateTextInput isolate
 #' @importFrom shinyjs show hide enable disable
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom shinyFeedback showToast hideFeedback showFeedbackDanger resetLoadingButton

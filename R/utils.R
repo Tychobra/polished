@@ -131,6 +131,7 @@ is_valid_email <- function(x) {
 #' @return boolean - whether of not the email is already registered with the polished
 #' account
 #'
+#' @noRd
 #'
 is_email_registered <- function(email) {
 

@@ -219,7 +219,7 @@ sign_in_module_2_ui <- function(id) {
 #' @param output the Shiny \code{output}
 #' @param session the Shiny \code{session}
 #'
-#' @importFrom shiny observeEvent observe getQueryString updateTabsetPanel updateTextInput
+#' @importFrom shiny observeEvent observe getQueryString updateTabsetPanel updateTextInput isolate
 #' @importFrom shinyjs show hide disable
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom digest digest
