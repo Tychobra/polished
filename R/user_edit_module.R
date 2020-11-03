@@ -10,7 +10,7 @@
 #' does not add a user that already exists.
 #'
 #'
-#' @importFrom shiny reactive observeEvent showModal modalDialog modalButton removeModal
+#' @importFrom shiny reactive observeEvent showModal modalDialog modalButton removeModal HTML
 #' @importFrom shinyWidgets pickerInput
 #' @importFrom shinyFeedback showToast
 #' @importFrom httr GET authenticate content status_code
@@ -200,11 +200,40 @@ user_edit_module <- function(input, output, session,
         )
       }, error = function(err) {
 
-        shinyFeedback::showToast(
-          "error",
-          err$message,
-          .options = polished_toast_options
-        )
+        if (err$message == "unique user limit exceeded") {
+          shinyFeedback::showToast(
+            "error",
+            shiny::HTML(
+              paste0(
+                tags$div(
+                  class = "text-center",
+                  "Unique User Limit Exceeded!",
+                  tags$br(),
+                  "For unlimited users, enable billing in the ",
+                  tags$a(
+                    href = "https://dashboard.polished.tech",
+                    target = "_blank",
+                    tags$b("Polished Dashboard"),
+                    shiny::icon("external-link-alt")
+                  )
+                )
+              )
+            ),
+            .options = list(
+              positionClass = "toast-top-center",
+              newestOnTop = TRUE,
+              timeOut = 0,
+              extendedTimeOut = 0
+            )
+          )
+        } else {
+          shinyFeedback::showToast(
+            "error",
+            err$message,
+            .options = polished_toast_options
+          )
+        }
+
         print(err)
       })
 
