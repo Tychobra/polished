@@ -324,7 +324,8 @@ sign_in_module <- function(input, output, session) {
 
       } else {
 
-        # TODO: check if user is not registered.  If user is not registered, send them to
+
+        # check if user is not registered.  If user is not registered, send them to
         # the registration page and auto populate the registration email input
         if (is_email_registered(email)) {
           # user is invited, so continue the sign in process
@@ -345,11 +346,7 @@ sign_in_module <- function(input, output, session) {
           # user is not registered (they are accidentally attempting to sign in before
           # they have registed), so send them to the registration page and auto populate
           # the registration email input
-          shiny::updateTabsetPanel(
-            session,
-            "tabs",
-            "Register"
-          )
+          go_to_registration_page()
 
           shiny::updateTextInput(
             session,
