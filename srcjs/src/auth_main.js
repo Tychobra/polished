@@ -33,6 +33,14 @@ const auth_main = (ns_prefix) => {
       console.log("the passwords do not match")
 
       return
+    } else if (password == "" && password_2 == "") {
+      // Event to reset Register loading button from loading state back to ready state
+      loadingButtons.resetLoading(`${ns_prefix}register_submit`);
+
+      toastr.error("Invalid password", null, toast_options)
+      console.log("invalid password")
+
+      return
     }
 
 
