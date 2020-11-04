@@ -43,15 +43,16 @@ secure_ui <- function(
   splash_module_ui = NULL
 ) {
 
-  if (is.function(ui)) {
-    ui <- ui(request)
-  } else {
-    ui <- force(ui)
-  }
 
   custom_admin_button_ui <- force(custom_admin_button_ui)
 
   function(request) {
+
+    if (is.function(ui)) {
+      ui <- ui(request)
+    } else {
+      ui <- force(ui)
+    }
 
     if (isTRUE(.global_sessions$get_admin_mode())) {
 
