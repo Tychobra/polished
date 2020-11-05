@@ -78,7 +78,7 @@ user_access_module_ui <- function(id) {
 #' @importFrom tibble tibble
 #' @importFrom shinyFeedback showToast
 #' @importFrom purrr map_chr
-#' @importFrom lubridate force_tz
+#' @importFrom lubridate force_tz as_datetime
 #' @importFrom rlang .data
 #'
 #' @noRd
@@ -155,7 +155,7 @@ user_access_module <- function(input, output, session) {
       }
 
       last_active_times <- last_active_times %>%
-        mutate(last_sign_in_at = lubridate::force_tz(as.POSIXct(.data$last_sign_in_at), tzone = "UTC"))
+        mutate(last_sign_in_at = lubridate::force_tz(lubridate::as_datetime((.data$last_sign_in_at)), tzone = "UTC"))
 
       out <- app_users %>%
         left_join(last_active_times, by = 'user_uid')
