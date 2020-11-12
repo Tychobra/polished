@@ -29,6 +29,9 @@
 #' in to access the app.  It can be useful to set this argument to \code{FALSE} if you want to
 #' allow user to do certain actions (such as viewing charts and tables) without signing in,
 #' and only require users to sign in if they want to save data to your database.
+#' @param sentry_dsn either \code{NULL}, the default, or a list of 2 in the following format:
+#'  - "r" : the Sentry DSN for your R server code
+#'  - "js" : the Sentry DSN for your JS cleint code
 #'
 #' @export
 #'
@@ -56,7 +59,8 @@ global_sessions_config <- function(
   api_url = "https://api.polished.tech",
   sign_in_providers = "email",
   is_email_verification_required = TRUE,
-  is_auth_required = TRUE
+  is_auth_required = TRUE,
+  sentry_dsn = NULL
 ) {
 
   if (!(length(api_key) == 1 && is.character(api_key))) {
@@ -65,6 +69,10 @@ global_sessions_config <- function(
 
   if (!(length(api_url) == 1 && is.character(api_url))) {
     stop("invalid `api_url` argument passed to `global_sessions_config()`", call. = FALSE)
+  }
+
+  if (!(is.null(sentry_dsn) || (is.list(sentry_dsn) && all( names(sentry_dsn) %in% c("r", "js")) ) ) ) {
+    stop("invalid `sentry_dsn` argument passed to `global_sessions_config()`", call. = FALSE)
   }
 
   # get the app uid
@@ -101,7 +109,8 @@ global_sessions_config <- function(
     api_url = api_url,
     app_uid = app$uid,
     app_name = app_name,
-    app_name_display = app_name_display
+    app_name_display = app_name_display,
+    sentry_dsn = sentry_dsn
   ))
 
   .global_sessions$config(

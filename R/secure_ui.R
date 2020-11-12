@@ -46,6 +46,8 @@ secure_ui <- function(
 
   custom_admin_button_ui <- force(custom_admin_button_ui)
 
+
+
   function(request) {
 
     if (is.function(ui)) {
@@ -118,11 +120,25 @@ secure_ui <- function(
 
     if (is.null(user)) {
 
+      sentry_ui_out <- NULL
+      sentry_option <- getOption("polished")$sentry
+      if (!is.null(sentry_option)) {
+
+        sentry_ui_out <- sentry_ui(
+          sentry_dsn = sentry_option$js,
+          app_uid = paste0(getOption("polished")$app_name, "@", getOption("polished")$app_uid),
+          user = NULL,
+          r_env = if (Sys.getenv("R_CONFIG_ACTIVE") == "") "default" else Sys.getenv("R_CONFIG_ACTIVE")
+        )
+
+      }
+
       if (!is.null(splash_module_ui) && is.null(page_query)) {
 
         page_out <- tagList(
           splash_module_ui,
-          tags$script(src = "polish/js/router.js?version=1")
+          tags$script(src = "polish/js/router.js?version=1"),
+          sentry_ui_out
         )
 
       } else if (identical(page_query, "sign_in")) {
@@ -132,7 +148,8 @@ secure_ui <- function(
           # go to default sign in page
           page_out <- tagList(
             sign_in_ui_default(),
-            tags$script(src = "polish/js/router.js?version=1")
+            tags$script(src = "polish/js/router.js?version=1"),
+            sentry_ui_out
           )
 
         } else {
@@ -140,11 +157,13 @@ secure_ui <- function(
           # go to custom sign in page
           page_out <- tagList(
             sign_in_page_ui,
-            tags$script(src = "polish/js/router.js?version=1")
+            tags$script(src = "polish/js/router.js?version=1"),
+            sentry_ui_out
           )
         }
 
       } else {
+
 
         if (isFALSE(.global_sessions$is_auth_required)) {
 
@@ -154,7 +173,8 @@ secure_ui <- function(
             ui,
             tags$script(src = "polish/js/router.js?version=1"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
-            tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
+            tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
+            sentry_ui_out
           )
         } else {
           # send a random uuid as the polished_session.  This will trigger a session
@@ -162,7 +182,8 @@ secure_ui <- function(
           page_out <- tagList(
             tags$script(src = "polish/js/router.js?version=1"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
-            tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
+            tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')")),
+            sentry_ui_out
           )
         }
 
@@ -170,7 +191,19 @@ secure_ui <- function(
 
 
     } else {
+      # user is not NULL
+      sentry_ui_out <- NULL
+      sentry_option <- getOption("polished")$sentry
+      if (!is.null(sentry_option)) {
 
+        sentry_ui_out <- sentry_ui(
+          sentry_dsn = sentry_option$js,
+          app_uid = paste0(getOption("polished")$app_name, "@", getOption("polished")$app_uid),
+          user = user,
+          r_env = if (Sys.getenv("R_CONFIG_ACTIVE") == "") "default" else Sys.getenv("R_CONFIG_ACTIVE")
+        )
+
+      }
 
       if (identical(page_query, "sign_in")) {
         # send signed in session to polished_session.  This will trigger
@@ -178,7 +211,8 @@ secure_ui <- function(
         page_out <- tagList(
           tags$script(src = "polish/js/router.js?version=1"),
           tags$script(src = "polish/js/polished_session.js?version=2"),
-          tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
+          tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
+          sentry_ui_out
         )
       } else if (isTRUE(user$email_verified) ||
           isFALSE(.global_sessions$is_email_verification_required)) {
@@ -194,7 +228,8 @@ secure_ui <- function(
               account_module_ui,
               tags$script(src = "polish/js/router.js?version=1"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
-              tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
+              tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
+              sentry_ui_out
             )
           }
 
@@ -207,7 +242,8 @@ secure_ui <- function(
               admin_module_ui("admin", custom_admin_ui, options = admin_ui_options),
               tags$script(src = "polish/js/router.js?version=1"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
-              tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
+              tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
+              sentry_ui_out
             )
           } else if (is.null(page_query)) {
 
@@ -217,7 +253,8 @@ secure_ui <- function(
               custom_admin_button_ui,
               tags$script(src = "polish/js/router.js?version=1"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
-              tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
+              tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
+              sentry_ui_out
             )
           }
 
@@ -229,7 +266,8 @@ secure_ui <- function(
             ui,
             tags$script(src = "polish/js/router.js?version=1"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
-            tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
+            tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
+            sentry_ui_out
           )
 
         } # end is_admin check
@@ -243,7 +281,8 @@ secure_ui <- function(
           ),
           tags$script(src = "polish/js/router.js?version=1"),
           tags$script(src = "polish/js/polished_session.js?version=2"),
-          tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
+          tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
+          sentry_ui_out
         )
       }
 
