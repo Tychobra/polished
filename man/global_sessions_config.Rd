@@ -51,9 +51,7 @@ in to access the app.  It can be useful to set this argument to \code{FALSE} if 
 allow user to do certain actions (such as viewing charts and tables) without signing in,
 and only require users to sign in if they want to save data to your database.}
 
-\item{sentry_dsn}{either \code{NULL}, the default, or a list of 2 in the following format:
-- "r" : the Sentry DSN for your R server code
-- "js" : the Sentry DSN for your JS cleint code}
+\item{sentry_dsn}{either \code{NULL}, the default, or your Sentry project DSN.}
 }
 \description{
 This is the primary function for configuring \code{polished}.  It configures your app's instance of the

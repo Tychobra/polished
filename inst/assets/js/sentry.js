@@ -4,7 +4,9 @@
 *
 * @param sentry_dsn the Sentry.io DSN for your JavaScript project
 * @param app_uid the polished app uid.
+* @param user the polished user
 * @param r_env the R environment returned from Sys.getenv("R_CONFIG_ACTIVE")
+* @param the page of the app that the user is on
 *
 */
 var sentry_init = function sentry_init(sentry_dsn, app_uid) {
