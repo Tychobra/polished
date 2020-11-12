@@ -115,30 +115,30 @@ secure_ui <- function(
       })
     }
 
+    # UI to optionally add Sentry.io error monitoring
+    sentry_ui_out <- NULL
+    sentry_dsn <- getOption("polished")$sentry
+    if (!is.null(sentry_dsn)) {
+
+      sentry_ui_out <- sentry_ui(
+        sentry_dsn = sentry_dsn,
+        app_uid = paste0(getOption("polished")$app_name, "@", getOption("polished")$app_uid),
+        user = user,
+        r_env = if (Sys.getenv("R_CONFIG_ACTIVE") == "") "default" else Sys.getenv("R_CONFIG_ACTIVE")
+      )
+
+    }
 
     page_out <- NULL
 
     if (is.null(user)) {
-
-      sentry_ui_out <- NULL
-      sentry_option <- getOption("polished")$sentry
-      if (!is.null(sentry_option)) {
-
-        sentry_ui_out <- sentry_ui(
-          sentry_dsn = sentry_option$js,
-          app_uid = paste0(getOption("polished")$app_name, "@", getOption("polished")$app_uid),
-          user = NULL,
-          r_env = if (Sys.getenv("R_CONFIG_ACTIVE") == "") "default" else Sys.getenv("R_CONFIG_ACTIVE")
-        )
-
-      }
 
       if (!is.null(splash_module_ui) && is.null(page_query)) {
 
         page_out <- tagList(
           splash_module_ui,
           tags$script(src = "polish/js/router.js?version=1"),
-          sentry_ui_out
+          sentry_ui_out("splash")
         )
 
       } else if (identical(page_query, "sign_in")) {
@@ -149,7 +149,7 @@ secure_ui <- function(
           page_out <- tagList(
             sign_in_ui_default(),
             tags$script(src = "polish/js/router.js?version=1"),
-            sentry_ui_out
+            sentry_ui_out("sign_in_default")
           )
 
         } else {
@@ -158,7 +158,7 @@ secure_ui <- function(
           page_out <- tagList(
             sign_in_page_ui,
             tags$script(src = "polish/js/router.js?version=1"),
-            sentry_ui_out
+            sentry_ui_out("sign_in_custom")
           )
         }
 
@@ -174,7 +174,7 @@ secure_ui <- function(
             tags$script(src = "polish/js/router.js?version=1"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
             tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-            sentry_ui_out
+            sentry_ui_out("shiny_app")
           )
         } else {
           # send a random uuid as the polished_session.  This will trigger a session
@@ -182,8 +182,7 @@ secure_ui <- function(
           page_out <- tagList(
             tags$script(src = "polish/js/router.js?version=1"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
-            tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')")),
-            sentry_ui_out
+            tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
           )
         }
 
@@ -192,18 +191,6 @@ secure_ui <- function(
 
     } else {
       # user is not NULL
-      sentry_ui_out <- NULL
-      sentry_option <- getOption("polished")$sentry
-      if (!is.null(sentry_option)) {
-
-        sentry_ui_out <- sentry_ui(
-          sentry_dsn = sentry_option$js,
-          app_uid = paste0(getOption("polished")$app_name, "@", getOption("polished")$app_uid),
-          user = user,
-          r_env = if (Sys.getenv("R_CONFIG_ACTIVE") == "") "default" else Sys.getenv("R_CONFIG_ACTIVE")
-        )
-
-      }
 
       if (identical(page_query, "sign_in")) {
         # send signed in session to polished_session.  This will trigger
@@ -211,8 +198,7 @@ secure_ui <- function(
         page_out <- tagList(
           tags$script(src = "polish/js/router.js?version=1"),
           tags$script(src = "polish/js/polished_session.js?version=2"),
-          tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-          sentry_ui_out
+          tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
         )
       } else if (isTRUE(user$email_verified) ||
           isFALSE(.global_sessions$is_email_verification_required)) {
@@ -229,7 +215,7 @@ secure_ui <- function(
               tags$script(src = "polish/js/router.js?version=1"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-              sentry_ui_out
+              sentry_ui_out("account")
             )
           }
 
@@ -243,7 +229,7 @@ secure_ui <- function(
               tags$script(src = "polish/js/router.js?version=1"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-              sentry_ui_out
+              sentry_ui_out("admin_panel")
             )
           } else if (is.null(page_query)) {
 
@@ -254,7 +240,7 @@ secure_ui <- function(
               tags$script(src = "polish/js/router.js?version=1"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-              sentry_ui_out
+              sentry_ui_out("shiny_app")
             )
           }
 
@@ -267,7 +253,7 @@ secure_ui <- function(
             tags$script(src = "polish/js/router.js?version=1"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
             tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-            sentry_ui_out
+            sentry_ui_out("shiny_app")
           )
 
         } # end is_admin check
@@ -282,7 +268,7 @@ secure_ui <- function(
           tags$script(src = "polish/js/router.js?version=1"),
           tags$script(src = "polish/js/polished_session.js?version=2"),
           tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-          sentry_ui_out
+          sentry_ui_out("email_verification")
         )
       }
 

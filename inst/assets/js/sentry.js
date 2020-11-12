@@ -10,7 +10,7 @@
 var sentry_init = function sentry_init(sentry_dsn, app_uid) {
   var user = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
   var r_env = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "default";
-  debugger;
+  var page = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
   Sentry.init({
     dsn: sentry_dsn,
     release: app_uid,
@@ -23,6 +23,10 @@ var sentry_init = function sentry_init(sentry_dsn, app_uid) {
 
   if (user !== null) {
     Sentry.setUser(user);
+  }
+
+  if (page !== null) {
+    Sentry.setTag("page", page);
   }
 
   $(document).on("shiny:error", function (event) {

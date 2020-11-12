@@ -5,7 +5,7 @@
 * @param r_env the R environment returned from Sys.getenv("R_CONFIG_ACTIVE")
 *
 */
-const sentry_init = (sentry_dsn, app_uid, user = null, r_env = "default") => {
+const sentry_init = (sentry_dsn, app_uid, user = null, r_env = "default", page = null) => {
 
   Sentry.init({
     dsn: sentry_dsn,
@@ -23,6 +23,9 @@ const sentry_init = (sentry_dsn, app_uid, user = null, r_env = "default") => {
     Sentry.setUser(user)
   }
 
+  if (page !== null) {
+    Sentry.setTag("page", page)
+  }
 
   $(document).on("shiny:error", function(event) {
 
