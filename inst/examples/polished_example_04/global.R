@@ -9,8 +9,5 @@ app_config <- config::get()
 global_sessions_config(
   app_name = "polished_example_04",
   api_key = app_config$api_key,
-  sentry_dsn = list(
-    "r" = app_config$sentry_dsn$r,
-    "js" = app_config$sentry_dsn$js
-  )
+  sentry_dsn = app_config$sentry_dsn
 )
