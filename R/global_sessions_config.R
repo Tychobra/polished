@@ -99,7 +99,7 @@ global_sessions_config <- function(
   app_name_display <- gsub("[_|-]", " ", app_name)
   app_name_display <- tools::toTitleCase(app_name_display)
 
-  if (!(is.null(sentry_dsn) || (length(api_url) == 1 && is.character(api_url)) ) ) {
+  if (!(is.null(sentry_dsn) || (length(sentry_dsn) == 1 && is.character(sentry_dsn)) ) ) {
     stop("invalid `sentry_dsn` argument passed to `global_sessions_config()`", call. = FALSE)
   }
 
