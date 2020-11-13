@@ -116,7 +116,7 @@ secure_ui <- function(
     }
 
     # UI to optionally add Sentry.io error monitoring
-    sentry_ui_out <- NULL
+    sentry_ui_out <- function(x) NULL
     sentry_dsn <- getOption("polished")$sentry
     if (!is.null(sentry_dsn)) {
 
