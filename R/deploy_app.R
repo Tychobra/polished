@@ -3,6 +3,7 @@
 #' @param app_name You Shiny app's name.
 #' @param app_dir The path to the directory containing your Shiny app.
 #' @param api_key Your polished.tech API key.  Defaults to \code{getOption("polished")$api_key}.
+#' @param api_url The Polished API url.  Defaults to "https://api.polished.tech".
 #'
 #' @export
 #'
@@ -17,29 +18,30 @@
 #' }
 #'
 #'
-deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$api_key) {
+deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$api_key, api_url = "https://api.polished.tech") {
 
   app_zip_path <- bundle_app(
-    app_name = app_name,
     app_dir = app_dir
   )
 
   zip_to_send <- httr::upload_file(
-    path = app_zip_path
+    path = app_zip_path,
+    type = "application/x-gzip"
   )
 
   res <- httr::POST(
-    url = "http://localhost:8080/deploy-app",
+    url = paste0(api_url, "/hosting/deploy-app"),
     httr::authenticate(
       user = api_key,
       password = ""
     ),
     body = list(
-      app_zip = zip_to_send,
+      app_zip = zip_to_send
+    ),
+    query = list(
       app_name = app_name
     ),
-    encode = "multipart",
-    httr::content_type("application/x-gzip")
+    encode = "multipart"
   )
 
   if (!identical(httr::status_code, 200L)) {
@@ -58,7 +60,6 @@ deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$
 #' deploying them to Polished Hosting.  You probably won't need to call this function
 #' directly.
 #'
-#' @param app_name The name of your Shiny app.
 #' @param app_dir The path to the directory containing your Shiny app.  Defaults to the
 #' working directory.
 #'
@@ -67,16 +68,14 @@ deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$
 #' @examples
 #'
 #' bundle_app(
-#'   system.file("examples/polished_example_01", package = "polished"),
-#'   app_name = "polished_example_01"
+#'   system.file("examples/polished_example_01", package = "polished")
 #' )
 #'
 bundle_app <- function (
-  app_name,
   app_dir = "."
 ) {
 
-  tar_name <- paste0(app_name, ".tar.gz")
+  tar_name <- "shiny_app.tar.gz"
 
   bundles_dir <- tempdir()
 
@@ -98,3 +97,4 @@ bundle_app <- function (
 
   file
 }
+

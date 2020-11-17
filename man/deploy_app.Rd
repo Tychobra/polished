@@ -4,7 +4,12 @@
 \alias{deploy_app}
 \title{Deploy a Shiny app to Polished Hosting}
 \usage{
-deploy_app(app_name, app_dir = ".", api_key = getOption("polished")$api_key)
+deploy_app(
+  app_name,
+  app_dir = ".",
+  api_key = getOption("polished")$api_key,
+  api_url = "https://api.polished.tech"
+)
 }
 \arguments{
 \item{app_name}{You Shiny app's name.}
@@ -12,6 +17,8 @@ deploy_app(app_name, app_dir = ".", api_key = getOption("polished")$api_key)
 \item{app_dir}{The path to the directory containing your Shiny app.}
 
 \item{api_key}{Your polished.tech API key.  Defaults to \code{getOption("polished")$api_key}.}
+
+\item{api_url}{The Polished API url.  Defaults to "https://api.polished.tech".}
 }
 \description{
 Deploy a Shiny app to Polished Hosting

@@ -4,11 +4,9 @@
 \alias{bundle_app}
 \title{Create a tar archive}
 \usage{
-bundle_app(app_name, app_dir = ".")
+bundle_app(app_dir = ".")
 }
 \arguments{
-\item{app_name}{The name of your Shiny app.}
-
 \item{app_dir}{The path to the directory containing your Shiny app.  Defaults to the
 working directory.}
 }
@@ -20,8 +18,7 @@ directly.
 \examples{
 
 bundle_app(
-  system.file("examples/polished_example_01", package = "polished"),
-  app_name = "polished_example_01"
+  system.file("examples/polished_example_01", package = "polished")
 )
 
 }
