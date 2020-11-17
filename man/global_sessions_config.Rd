@@ -13,7 +13,8 @@ global_sessions_config(
   api_url = "https://api.polished.tech",
   sign_in_providers = "email",
   is_email_verification_required = TRUE,
-  is_auth_required = TRUE
+  is_auth_required = TRUE,
+  sentry_dsn = NULL
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ verify their email before accessing your Shiny app.}
 in to access the app.  It can be useful to set this argument to \code{FALSE} if you want to
 allow user to do certain actions (such as viewing charts and tables) without signing in,
 and only require users to sign in if they want to save data to your database.}
+
+\item{sentry_dsn}{either \code{NULL}, the default, or your Sentry project DSN.}
 }
 \description{
 This is the primary function for configuring \code{polished}.  It configures your app's instance of the
