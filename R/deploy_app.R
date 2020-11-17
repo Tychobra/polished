@@ -30,7 +30,7 @@ deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$
   )
 
   res <- httr::POST(
-    url = paste0(api_url, "/hosting/deploy-app"),
+    url = paste0(api_url, "/deploy-app"),
     httr::authenticate(
       user = api_key,
       password = ""
