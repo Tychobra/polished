@@ -11,9 +11,9 @@
 #'
 #' \dontrun{
 #' deploy_app(
-#'   app_name = "polished_example_01",
+#'   app_name = "polished_example_02",
 #'   app_dir = system.file("examples/polished_example_01", package = "polished"),
-#'   api_key = "ybb5sptUuidLW51arHrCmH3bDVoL1XXcGa"
+#'   api_key = "<your polished.tech API key>"
 #' )
 #' }
 #'
