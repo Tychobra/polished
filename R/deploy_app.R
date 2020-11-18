@@ -65,6 +65,8 @@ deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$
 #'
 #' @export
 #'
+#' @importFrom automagic make_deps_file
+#'
 #' @examples
 #'
 #' bundle_app(
@@ -74,6 +76,9 @@ deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$
 bundle_app <- function (
   app_dir = "."
 ) {
+
+  # create yaml file with all the dependencies
+  automagic::make_deps_file(directory = app_dir)
 
   tar_name <- "shiny_app.tar.gz"
 
