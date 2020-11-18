@@ -299,7 +299,8 @@ sign_in_module <- function(input, output, session) {
 
     email <- tolower(input$sign_in_email)
 
-    if (!is_valid_email(email)) {
+    is_email_sign_in <- is.null(input$check_jwt$jwt)
+    if (isTRUE(is_email_sign_in) && !is_valid_email(email)) {
       shinyFeedback::showFeedbackDanger(
         "sign_in_email",
         text = "Invalid email"
