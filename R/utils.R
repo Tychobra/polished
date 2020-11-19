@@ -143,7 +143,8 @@ is_email_registered <- function(email) {
     httr::authenticate(
       user = getOption("polished")$api_key,
       password = ""
-    )
+    ),
+    config = list(http_version = 0)
   )
 
   user_res_content <- jsonlite::fromJSON(

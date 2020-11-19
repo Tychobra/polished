@@ -11,7 +11,8 @@ api_get_invite_by_email <- function(url, api_key, email, app_uid) {
     httr::authenticate(
       user = api_key,
       password = ""
-    )
+    ),
+    config = list(http_version = 0)
   )
 
   invite <- jsonlite::fromJSON(
@@ -204,7 +205,8 @@ Sessions <-  R6::R6Class(
               user = getOption("polished")$api_key,
               password = ""
             ),
-            encode = "json"
+            encode = "json",
+            config = list(http_version = 0)
           )
 
           httr::stop_for_status(res)
@@ -262,7 +264,8 @@ Sessions <-  R6::R6Class(
           user = getOption("polished")$api_key,
           password = ""
         ),
-        encode = "json"
+        encode = "json",
+        config = list(http_version = 0)
       )
 
 
@@ -298,7 +301,8 @@ Sessions <-  R6::R6Class(
         httr::authenticate(
           user = getOption("polished")$api_key,
           password = ""
-        )
+        ),
+        config = list(http_version = 0)
       )
 
       session_out <- jsonlite::fromJSON(
@@ -323,7 +327,8 @@ Sessions <-  R6::R6Class(
               user = getOption("polished")$api_key,
               password = ""
             ),
-            encode = "json"
+            encode = "json",
+            config = list(http_version = 0)
           )
 
           res2_content <- jsonlite::fromJSON(
@@ -361,7 +366,8 @@ Sessions <-  R6::R6Class(
           is_invite_required = self$is_invite_required,
           is_email_verification_required = self$is_email_verification_required
         ),
-        encode = "json"
+        encode = "json",
+        config = list(http_version = 0)
       )
 
       session_out <- jsonlite::fromJSON(
@@ -413,7 +419,8 @@ Sessions <-  R6::R6Class(
               email_verified = email_verified
             )
           ),
-          encode = "json"
+          encode = "json",
+          httr::config(http_version = 0)
         )
 
         httr::stop_for_status(res)
@@ -437,7 +444,8 @@ Sessions <-  R6::R6Class(
           ),
           user_uid = user_uid
         ),
-        encode = "json"
+        encode = "json",
+        config = list(http_version = 0)
       )
 
       httr::stop_for_status(res)
@@ -464,7 +472,8 @@ Sessions <-  R6::R6Class(
           user = getOption("polished")$api_key,
           password = ""
         ),
-        encode = "json"
+        encode = "json",
+        config = list(http_version = 0)
       )
 
       httr::stop_for_status(res)
@@ -502,7 +511,8 @@ Sessions <-  R6::R6Class(
           session_uid = session_uid,
           user_uid = user_uid
         ),
-        encode = "json"
+        encode = "json",
+        config = list(http_version = 0)
       )
 
       httr::stop_for_status(res)
@@ -519,7 +529,8 @@ Sessions <-  R6::R6Class(
           hashed_cookie = hashed_cookie,
           session_uid = session_uid
         ),
-        encode = "json"
+        encode = "json",
+        config = list(http_version = 0)
       )
 
       httr::stop_for_status(res)
@@ -542,7 +553,8 @@ Sessions <-  R6::R6Class(
           data = session_data,
           app_uid = getOption("polished")$app_uid
         ),
-        encode = "json"
+        encode = "json",
+        config = list(http_version = 0)
       )
 
       session_content <- jsonlite::fromJSON(
@@ -554,7 +566,10 @@ Sessions <-  R6::R6Class(
       invisible(self)
     },
     refresh_jwt_pub_key = function() {
-      google_keys_resp <- httr::GET("https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com")
+      google_keys_resp <- httr::GET(
+        "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com",
+        config = list(http_version = 0)
+      )
 
       # Error if we didn't get the keys successfully
       httr::stop_for_status(google_keys_resp)

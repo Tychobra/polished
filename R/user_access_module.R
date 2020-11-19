@@ -104,7 +104,8 @@ user_access_module <- function(input, output, session) {
         httr::authenticate(
           user = getOption("polished")$api_key,
           password = ""
-        )
+        ),
+        config = list(http_version = 0)
       )
 
       httr::stop_for_status(res)
@@ -137,7 +138,8 @@ user_access_module <- function(input, output, session) {
         httr::authenticate(
           user = getOption("polished")$api_key,
           password = ""
-        )
+        ),
+        config = list(http_version = 0)
       )
 
       httr::stop_for_status(res)
@@ -379,7 +381,8 @@ user_access_module <- function(input, output, session) {
           user = getOption("polished")$api_key,
           password = ""
         ),
-        encode = "json"
+        encode = "json",
+        config = list(http_version = 0)
       )
 
       httr::stop_for_status(res)

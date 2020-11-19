@@ -79,7 +79,8 @@ global_sessions_config <- function(
     httr::authenticate(
       user = api_key,
       password = ""
-    )
+    ),
+    config = list(http_version = 0)
   )
 
   app <- jsonlite::fromJSON(

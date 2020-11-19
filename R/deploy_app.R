@@ -41,7 +41,8 @@ deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$
     query = list(
       app_name = app_name
     ),
-    encode = "multipart"
+    encode = "multipart",
+    config = list(http_version = 0)
   )
 
   if (!identical(httr::status_code, 200L)) {
