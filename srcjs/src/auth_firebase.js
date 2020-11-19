@@ -6,8 +6,8 @@ const auth_firebase = (ns_prefix) => {
   let cookie_options = {expires: 365} // set cookie to expire in 1 year
   if (location.protocol === 'https:') {
     // add cookie options that browsers are starting to require to allow you to
-    // use cookies within iframes.
-    cookie_options.simeSite = 'none'
+    // use cookies within iframes.  Only works when app is running on https.
+    cookie_options.sameSite = 'none'
     cookie_options.secure = true
   }
 

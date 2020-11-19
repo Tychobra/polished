@@ -7,8 +7,8 @@ var auth_main = function auth_main(ns_prefix) {
 
   if (location.protocol === 'https:') {
     // add cookie options that browsers are starting to require to allow you to
-    // use cookies within iframes.
-    cookie_options.simeSite = 'none';
+    // use cookies within iframes. Only works when app is running on https.
+    cookie_options.sameSite = 'none';
     cookie_options.secure = true;
   }
 
