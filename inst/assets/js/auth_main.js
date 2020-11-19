@@ -4,9 +4,11 @@ var auth_main = function auth_main(ns_prefix) {
   var sign_in = function sign_in(email, password) {
     var polished_cookie = "p" + Math.random();
     Cookies.set('polished', polished_cookie, {
-      expires: 365
-    } // set cookie to expire in 1 year
-    );
+      expires: 365,
+      // set cookie to expire in 1 year
+      sameSite: 'none',
+      secure: true
+    });
     Shiny.setInputValue("".concat(ns_prefix, "check_jwt"), {
       email: email,
       password: password,

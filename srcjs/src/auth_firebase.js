@@ -13,7 +13,10 @@ const auth_firebase = (ns_prefix) => {
       Cookies.set(
         'polished',
         polished_cookie,
-        { expires: 365 } // set cookie to expire in 1 year
+        { expires: 365, // set cookie to expire in 1 year
+          sameSite: 'none',
+          secure: true
+        }
       )
 
       Shiny.setInputValue(`${ns_prefix}check_jwt`, {

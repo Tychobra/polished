@@ -7,9 +7,11 @@ var auth_firebase = function auth_firebase(ns_prefix) {
     return user.getIdToken(true).then(function (firebase_token) {
       var polished_cookie = "p" + Math.random();
       Cookies.set('polished', polished_cookie, {
-        expires: 365
-      } // set cookie to expire in 1 year
-      );
+        expires: 365,
+        // set cookie to expire in 1 year
+        sameSite: 'none',
+        secure: true
+      });
       Shiny.setInputValue("".concat(ns_prefix, "check_jwt"), {
         jwt: firebase_token,
         cookie: polished_cookie
