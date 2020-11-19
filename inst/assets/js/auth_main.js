@@ -1,14 +1,20 @@
 "use strict";
 
 var auth_main = function auth_main(ns_prefix) {
+  var cookie_options = {
+    expires: 365
+  }; // set cookie to expire in 1 year
+
+  if (location.protocol === 'https:') {
+    // add cookie options that browsers are starting to require to allow you to
+    // use cookies within iframes.
+    cookie_options.simeSite = 'none';
+    cookie_options.secure = true;
+  }
+
   var sign_in = function sign_in(email, password) {
     var polished_cookie = "p" + Math.random();
-    Cookies.set('polished', polished_cookie, {
-      expires: 365,
-      // set cookie to expire in 1 year
-      sameSite: 'none',
-      secure: true
-    });
+    Cookies.set('polished', polished_cookie, cookie_options);
     Shiny.setInputValue("".concat(ns_prefix, "check_jwt"), {
       email: email,
       password: password,
