@@ -1,6 +1,14 @@
 
 const auth_main = (ns_prefix) => {
 
+  let cookie_options = {expires: 365} // set cookie to expire in 1 year
+  if (location.protocol === 'https:') {
+    // add cookie options that browsers are starting to require to allow you to
+    // use cookies within iframes. Only works when app is running on https.
+    cookie_options.sameSite = 'none'
+    cookie_options.secure = true
+  }
+
   const sign_in = (email, password) => {
 
     const polished_cookie = "p" + Math.random()
@@ -8,7 +16,7 @@ const auth_main = (ns_prefix) => {
     Cookies.set(
       'polished',
       polished_cookie,
-      { expires: 365 } // set cookie to expire in 1 year
+      cookie_options
     )
 
     Shiny.setInputValue(`${ns_prefix}check_jwt`, {

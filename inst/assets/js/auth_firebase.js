@@ -3,13 +3,21 @@
 var auth = firebase.auth();
 
 var auth_firebase = function auth_firebase(ns_prefix) {
+  var cookie_options = {
+    expires: 365
+  }; // set cookie to expire in 1 year
+
+  if (location.protocol === 'https:') {
+    // add cookie options that browsers are starting to require to allow you to
+    // use cookies within iframes.  Only works when app is running on https.
+    cookie_options.sameSite = 'none';
+    cookie_options.secure = true;
+  }
+
   var send_token_to_shiny = function send_token_to_shiny(user) {
     return user.getIdToken(true).then(function (firebase_token) {
       var polished_cookie = "p" + Math.random();
-      Cookies.set('polished', polished_cookie, {
-        expires: 365
-      } // set cookie to expire in 1 year
-      );
+      Cookies.set('polished', polished_cookie, cookie_options);
       Shiny.setInputValue("".concat(ns_prefix, "check_jwt"), {
         jwt: firebase_token,
         cookie: polished_cookie
