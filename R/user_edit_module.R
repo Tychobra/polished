@@ -260,8 +260,8 @@ user_edit_module <- function(input, output, session,
             user = getOption("polished")$api_key,
             password = ""
           ),
-          encode = "json",
-          config = list(http_version = 0)
+          encode = "json"#,
+          #config = list(http_version = 0)
         )
 
         if (!identical(httr::status_code(res), 200L)) {

@@ -419,8 +419,8 @@ Sessions <-  R6::R6Class(
               email_verified = email_verified
             )
           ),
-          encode = "json",
-          httr::config(http_version = 0)
+          encode = "json"#,
+          #httr::config(http_version = 0)
         )
 
         httr::stop_for_status(res)
@@ -444,8 +444,7 @@ Sessions <-  R6::R6Class(
           ),
           user_uid = user_uid
         ),
-        encode = "json",
-        config = list(http_version = 0)
+        encode = "json"
       )
 
       httr::stop_for_status(res)
