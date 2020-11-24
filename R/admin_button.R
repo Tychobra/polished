@@ -5,7 +5,6 @@
 #' Admin Panel.  If your app is set up with the default 'polished' configuration, this button appears
 #' in the bottom right of your 'shiny' app.
 #'
-#' @param id the Shiny module id.
 #' @param align The horizontal alignment of the button. Valid options are "right" (the default)
 #' or "left".
 #' @param vertical_align the vertical alignment of the button.  Valid options are "bottom" (the default)
@@ -15,10 +14,10 @@
 #'
 #' @return admin button UI
 #'
-#' @noRd
+#' @export
 #'
-admin_button_ui <- function(id, align = "right", vertical_align = "bottom") {
-  ns <- shiny::NS(id)
+admin_button_ui <- function(align = "right", vertical_align = "bottom") {
+  ns <- shiny::NS("polished")
 
   shiny::actionButton(
     ns("go_to_admin_panel"),

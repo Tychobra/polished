@@ -8,7 +8,7 @@ secure_ui(
   ui,
   sign_in_page_ui = NULL,
   custom_admin_ui = NULL,
-  custom_admin_button_ui = admin_button_ui("polished"),
+  custom_admin_button_ui = admin_button_ui(),
   admin_ui_options = default_admin_ui_options(),
   account_module_ui = NULL,
   splash_module_ui = NULL
@@ -29,7 +29,7 @@ list(
 )
 }}
 
-\item{custom_admin_button_ui}{Either \code{admin_button_ui("polished")}, the default, or your custom
+\item{custom_admin_button_ui}{Either \code{admin_button_ui()}, the default, or your custom
 UI to take Admins from the custom Shiny app to the \code{polished} Admin Panel.}
 
 \item{admin_ui_options}{list of HTML elements to customize branding of the \code{polished} Admin Panel.  Valid
