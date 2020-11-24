@@ -17,8 +17,11 @@ directly.
 }
 \examples{
 
+\dontrun{
 bundle_app(
   system.file("examples/polished_example_01", package = "polished")
 )
+}
+
 
 }

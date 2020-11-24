@@ -13,7 +13,8 @@
 #' deploy_app(
 #'   app_name = "polished_example_02",
 #'   app_dir = system.file("examples/polished_example_01", package = "polished"),
-#'   api_key = "<your polished.tech API key>"
+#'   api_key = "ybb5sptUuidLW51arHrCmH3bDVoL1XXcGa",
+#'   api_url = "http:localhost:8080"
 #' )
 #' }
 #'
@@ -70,9 +71,12 @@ deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$
 #'
 #' @examples
 #'
+#' \dontrun{
 #' bundle_app(
 #'   system.file("examples/polished_example_01", package = "polished")
 #' )
+#' }
+#'
 #'
 bundle_app <- function (
   app_dir = "."
