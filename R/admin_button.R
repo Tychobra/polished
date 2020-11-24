@@ -6,6 +6,10 @@
 #' in the bottom right of your 'shiny' app.
 #'
 #' @param id the Shiny module id.
+#' @param align The horizontal alignment of the button. Valid options are "right" (the default)
+#' or "left".
+#' @param vertical_align the vertical alignment of the button.  Valid options are "bottom" (the default)
+#' or "top"
 #'
 #' @importFrom shiny actionButton NS icon
 #'
@@ -13,7 +17,7 @@
 #'
 #' @noRd
 #'
-admin_button_ui <- function(id) {
+admin_button_ui <- function(id, align = "right", vertical_align = "bottom") {
   ns <- shiny::NS(id)
 
   shiny::actionButton(
@@ -21,7 +25,7 @@ admin_button_ui <- function(id) {
     "Admin Panel",
     icon = shiny::icon("cog"),
     class = "btn-primary btn-lg",
-    style = "position: fixed; bottom: 15px; right: 15px; color: #FFFFFF; z-index: 9999;"
+    style = paste0("position: fixed; ", vertical_align, ": 15px; ", align, ": 15px; color: #FFFFFF; z-index: 9999;")
   )
 }
 
