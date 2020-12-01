@@ -16,7 +16,7 @@ sentry_ui <- function(sentry_dsn, app_uid, user = NULL, r_env = "default") {
 
   function(page) {
     htmltools::tagList(
-      tags$script(src = "polish/js/sentry.browser.5.27.4.tracing.min.js"),
+      tags$script(src = "polish/js/sentry.browser.5.27.6.tracing.min.js"),
       tags$script(src="polish/js/sentry.js"),
       tags$script(
         sprintf(
