@@ -34,7 +34,7 @@ var sentry_init = function sentry_init(sentry_dsn, app_uid) {
   $(document).on("shiny:error", function (event) {
     // shiny raises a lot of silent errors that we do not need to track.  Check if error
     // is not a silent error, and send that to sentry
-    if (event.error.type[0] !== "shiny.silent.error") {
+    if (event.error.type === null || event.error.type[0] !== "shiny.silent.error") {
       Sentry.captureException(event.error);
     }
   });
