@@ -49,17 +49,25 @@ deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$
     config = list(http_version = 0)
   )
 
-  if (!identical(httr::status_code(res), 200L)) {
-    stop("Failed to upload the Shiny app to Polished Hosting.")
-  }
-
-  message("Shiny app successfully uploaded.")
-
   res_content <- jsonlite::fromJSON(
     httr::content(res, "text", encoding = "UTF-8")
   )
 
+  hold_status <- httr::status_code(res)
+  if (!identical(hold_status, 200L)) {
+
+    if (!identical(hold_status, 400L)) {
+      stop(res_content$message, call. = FALSE)
+    } else {
+      stop("Failed to upload the Shiny app to Polished Hosting.", call. = FALSE)
+    }
+  }
+
+  message("Shiny app successfully uploaded.")
+
+
   if (isTRUE(launch_browser)) {
+    # launch user's browser with newly deployed Shiny app
     utils::browseURL(res_content$url)
   }
 
