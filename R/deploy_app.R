@@ -3,7 +3,9 @@
 #' @param app_name You Shiny app's name.
 #' @param app_dir The path to the directory containing your Shiny app.
 #' @param api_key Your polished.tech API key.  Defaults to \code{getOption("polished")$api_key}.
-#' @param api_url The Polished API url.  Defaults to "https://api.polished.tech".
+#' @param api_url The Polished API url.  Defaults to "https://host.polished.tech".  This is used
+#' for testing during polished API development.  You probably should not change this url from
+#' the default.
 #' @param launch_browser Whether or not to open your default brower to your newly deployed app
 #' after it is successfully deployed.  \code{TRUE} by default.
 #'
@@ -22,7 +24,7 @@
 #' }
 #'
 #'
-deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$api_key, api_url = "https://api.polished.tech", launch_browser = TRUE) {
+deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$api_key, api_url = "https://host.polished.tech", launch_browser = TRUE) {
 
   app_zip_path <- bundle_app(
     app_dir = app_dir
