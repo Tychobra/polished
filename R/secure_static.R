@@ -68,7 +68,7 @@ secure_static <- function(
     )
   )
 
-  ui <- secure_ui(
+  ui_out <- secure_ui(
     ui,
     custom_admin_button_ui = shiny::actionButton(
       "polished-go_to_admin_panel",
@@ -93,7 +93,7 @@ secure_static <- function(
   })
 
 
-  shiny::shinyApp(ui, server, onStart = function() {
+  shiny::shinyApp(ui_out, server, onStart = function() {
     library(polished)
 
     # configure the global sessions when the app initially starts up.
