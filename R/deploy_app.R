@@ -26,10 +26,13 @@
 #'
 deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$api_key, api_url = "https://host.polished.tech", launch_browser = TRUE) {
 
+  cat("Creating app bundle...")
   app_zip_path <- bundle_app(
     app_dir = app_dir
   )
+  cat(" Done\n")
 
+  cat("Deploying App.  This may take a while...")
   zip_to_send <- httr::upload_file(
     path = app_zip_path,
     type = "application/x-gzip"
@@ -64,8 +67,7 @@ deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$
       stop("Failed to upload the Shiny app to Polished Hosting.", call. = FALSE)
     }
   }
-
-  message("Shiny app successfully uploaded.")
+  cat(" Done\n")
 
 
   if (isTRUE(launch_browser)) {
@@ -124,7 +126,6 @@ bundle_app <- function (
   if (result != 0) {
     stop("Failed to bundle the Shiny app.")
   }
-  message("The Shiny app has been bundled at:\n- \"", file, "\"")
 
   file
 }
