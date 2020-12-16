@@ -16,7 +16,15 @@ sentry_ui <- function(sentry_dsn, app_uid, user = NULL, r_env = "default") {
 
   function(page) {
     htmltools::tagList(
-      tags$script(src = "polish/js/sentry.browser.5.27.6.tracing.min.js"),
+      shiny::includeScript(
+        # defer = TRUE,
+        path="https://browser.sentry-cdn.com/5.29.0/bundle.tracing.min.js",
+        integrity="sha384-XAhY32zqfuE8aJxn2jjoj70IiDlyteUPCkF97irXm5oFRdTYUHt+y6n2VLZwBPok",
+        type = "text/javascript",
+        # referrerpolicy = "origin-when-cross-origin",
+        crossorigin="anonymous",
+        "data-lazy"="no"
+      ),
       tags$script(src="polish/js/sentry.js"),
       tags$script(
         sprintf(

@@ -12,13 +12,25 @@ const sentry_init = (sentry_dsn, app_uid, user = null, r_env = "default", page =
   Sentry.init({
     dsn: sentry_dsn,
     release: app_uid,
+    // NEW config options for testing
+    attachStacktrace: true,
+    sendDefaultPii: true,
+    autoSessionTracking: true,
+    // transport: Sentry.Transports.XHRTransport,
     integrations: [new Sentry.Integrations.BrowserTracing()],
+    // integrations: [
+    //   new Sentry.Integrations.BrowserTracing({
+    //     tracingOrigins: ["localhost", "127.0.0.1", "api.polished.tech", "polished.tech", "bundle.tracing.min.js.map", /^\//]
+    //   }),
+    // ],
 
     // We recommend adjusting this value in production, or using tracesSampler
     // for finer control
     tracesSampleRate: 1.0,
     environment: r_env
-  })
+    // For DEV
+    // debug: true,
+  });
 
 
   if (user !== null) {
