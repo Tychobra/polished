@@ -20,6 +20,7 @@ var sentry_init = function sentry_init(sentry_dsn, app_uid) {
     attachStacktrace: true,
     sendDefaultPii: true,
     autoSessionTracking: true,
+    normalizeDepth: 0,
     // transport: Sentry.Transports.XHRTransport,
     integrations: [new Sentry.Integrations.BrowserTracing()],
     // integrations: [

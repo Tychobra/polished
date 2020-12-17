@@ -16,6 +16,7 @@ const sentry_init = (sentry_dsn, app_uid, user = null, r_env = "default", page =
     attachStacktrace: true,
     sendDefaultPii: true,
     autoSessionTracking: true,
+    normalizeDepth: 0,
     // transport: Sentry.Transports.XHRTransport,
     integrations: [new Sentry.Integrations.BrowserTracing()],
     // integrations: [
@@ -43,10 +44,11 @@ const sentry_init = (sentry_dsn, app_uid, user = null, r_env = "default", page =
 
   $(document).on("shiny:error", function(event) {
 
-    // shiny raises a lot of silent errors that we do not need to track.  Check if error
-    // is not a silent error, and send that to sentry
-    if (event.error.type === null || event.error.type[0] !== "shiny.silent.error") {
-      Sentry.captureException(event.error)
-    }
+      // shiny raises a lot of silent errors that we do not need to track.  Check if error
+      // is not a silent error, and send that to sentry
+      if (event.error.type === null || event.error.type[0] !== "shiny.silent.error") {
+        Sentry.captureException(event.error);
+      }
+
   })
 }
