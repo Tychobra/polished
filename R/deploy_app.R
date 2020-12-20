@@ -55,11 +55,11 @@ deploy_app <- function(
       password = ""
     ),
     body = list(
-      app_zip = zip_to_send,
-      region = region
+      app_zip = zip_to_send
     ),
     query = list(
-      app_name = app_name
+      app_name = app_name,
+      region = region
     ),
     encode = "multipart",
     config = list(http_version = 0)
