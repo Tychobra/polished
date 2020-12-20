@@ -137,6 +137,29 @@ user_edit_module <- function(input, output, session,
         tags$script(paste0("user_edit_module('", ns(''), "')"))
       )
     )
+
+    if (!is.null(email_input)) {
+
+      observeEvent(input$user_email, {
+
+        hold_email <- tolower(input$user_email)
+
+        if (is_valid_email(hold_email)) {
+          shinyFeedback::hideFeedback("user_email")
+          shinyjs::enable("submit")
+        } else {
+          shinyjs::disable("submit")
+          if (hold_email != "") {
+            shinyFeedback::showFeedbackDanger(
+              "user_email",
+              text = "Invalid email"
+            )
+          } else {
+            shinyFeedback::hideFeedback("user_email")
+          }
+        }
+      })
+    }
   })
 
 
