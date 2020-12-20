@@ -74,6 +74,7 @@ deploy_app <- function(
     if (!identical(hold_status, 400L)) {
       stop(res_content$message, call. = FALSE)
     } else {
+      print(res_content)
       stop("Failed to upload the Shiny app to Polished Hosting.", call. = FALSE)
     }
   }
