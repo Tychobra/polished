@@ -8,6 +8,9 @@
 #' the default.
 #' @param launch_browser Whether or not to open your default brower to your newly deployed app
 #' after it is successfully deployed.  \code{TRUE} by default.
+#' @param region the region to deploy the app to on Google Cloud Platform.  See
+#' \url{https://cloud.google.com/compute/docs/regions-zones} for all available regions
+#' on Google Cloud Platform.
 #'
 #' @importFrom utils browseURL
 #'
@@ -24,7 +27,14 @@
 #' }
 #'
 #'
-deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$api_key, api_url = "https://host.polished.tech", launch_browser = TRUE) {
+deploy_app <- function(
+  app_name,
+  app_dir = ".",
+  api_key = getOption("polished")$api_key,
+  api_url = "https://host.polished.tech",
+  launch_browser = TRUE,
+  region = "us-east1"
+) {
 
   cat("Creating app bundle...")
   app_zip_path <- bundle_app(
@@ -45,7 +55,8 @@ deploy_app <- function(app_name, app_dir = ".", api_key = getOption("polished")$
       password = ""
     ),
     body = list(
-      app_zip = zip_to_send
+      app_zip = zip_to_send,
+      region = region
     ),
     query = list(
       app_name = app_name
