@@ -10,7 +10,8 @@
 #' after it is successfully deployed.  \code{TRUE} by default.
 #' @param region the region to deploy the app to on Google Cloud Platform.  See
 #' \url{https://cloud.google.com/compute/docs/regions-zones} for all available regions
-#' on Google Cloud Platform.
+#' on Google Cloud Platform.  Currenlty on "us-east1" is supported, but soon, all reagions
+#' will be supported.
 #'
 #' @importFrom utils browseURL
 #'
@@ -35,6 +36,11 @@ deploy_app <- function(
   launch_browser = TRUE,
   region = "us-east1"
 ) {
+
+  if (!identical(region, "us-east1")) {
+    stop('only region "us-east1" is supported at this time', call. = FALSE)
+  }
+
 
   cat("Creating app bundle...")
   app_zip_path <- bundle_app(
