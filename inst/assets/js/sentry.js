@@ -16,6 +16,10 @@ var sentry_init = function sentry_init(sentry_dsn, app_uid) {
   Sentry.init({
     dsn: sentry_dsn,
     release: app_uid,
+    attachStacktrace: true,
+    sendDefaultPii: true,
+    autoSessionTracking: true,
+    normalizeDepth: 0,
     integrations: [new Sentry.Integrations.BrowserTracing()],
     // We recommend adjusting this value in production, or using tracesSampler
     // for finer control
