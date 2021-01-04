@@ -26,9 +26,9 @@ deployment.}
 \item{firebase_config}{a list containing your Firebase project configuration.  This list should have the
 following named elements:
 \itemize{
-  \item{\code{apiKey}}
-  \item{\code{authDomain}}
-  \item{\code{projectId}}
+\item{\code{apiKey}}
+\item{\code{authDomain}}
+\item{\code{projectId}}
 }}
 
 \item{admin_mode}{\code{FALSE} by default.  Set to \code{TRUE} to enter the \code{polished} Admin Panel without needing
