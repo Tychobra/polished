@@ -9,7 +9,7 @@ apppath <- fs::path_package("polished", "examples/polished_example_01")
 fs::dir_copy(apppath, fs::path(tpdir, "test_app"), overwrite = TRUE)
 app <- file.path(tpdir, "test_app")
 
-test_that("test creation of deps.yaml and deps.R", {
+test_that("test creation of deps.yaml", {
 
   withr::with_dir(app, {
 
