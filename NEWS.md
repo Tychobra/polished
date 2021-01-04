@@ -1,4 +1,10 @@
-# v0.2.0.9000
+# Polished
+
+## v0.3.0.9000
+
+- added support for package dependency detection
+
+## v0.2.0.9000
 
 - added cookie options { sameSite: "none", secure: true } when the app is being served over https.  This polished authentication to work in an iframe on most browsers.
 - added email validation to email inputs in the sign in and registration modules. 
@@ -7,7 +13,7 @@
 - new "is_auth_required option" to `global_sessions_config()` which (when set to FALSE) allows users to access your app without being signed in.  By default this argument is set to TRUE. (#109)
 - moved toast notification to top (better for mobile) and extended showDuration. (#107)
 
-# v0.2.0
+## v0.2.0
 
 - New "account" and "splash" pages.  We will share more on these new pages in upcoming blog posts. 
 - Added "is_email_verification_required" argument to `global_sessions_config()` that allows you to disable email verification.
@@ -23,6 +29,6 @@ providers (like Google and Microsoft) in addition to email/password.
 - Removed sign_in_no_invite_module.  sign_in_module and sign_in_module_2 now have an "is_invite_requirement" argument, so there is no longer a need for a dedicated sign_in_no_invite_module.
 
 
-# v0.1.0
+## v0.1.0
 
 - Initial CRAN release of polished
