@@ -31,7 +31,6 @@
 #' @importFrom dplyr bind_rows mutate select
 #' @importFrom fs dir_exists path_abs
 #' @importFrom purrr safely map_depth pluck compact map
-#' @importFrom remotes install_version install_github
 #' @importFrom yaml write_yaml
 get_package_deps <- function(path,
                              write_yaml = TRUE,
@@ -84,28 +83,28 @@ get_package_deps <- function(path,
 
   df <- dplyr::bind_rows(out) %>%
     dplyr::mutate(
-      Repository = ifelse(is.na(Repository), "Github", Repository),
+      Repository = ifelse(is.na(.data$Repository), "Github", .data$Repository),
       install_cmd = ifelse(
-        Repository == "CRAN",
+        .data$Repository == "CRAN",
         paste0(
           "remotes::install_version(",
-          shQuote(Package),
+          shQuote(.data$Package),
           ", version = ",
-          shQuote(Version),
+          shQuote(.data$Version),
           ")"
         ),
         paste0(
           "remotes::install_github(",
-          shQuote(paste0(GithubUsername, "/", Package)),
+          shQuote(paste0(.data$GithubUsername, "/", .data$Package)),
           ", ref = ",
-          shQuote(GithubSHA1),
+          shQuote(.data$GithubSHA1),
           ")"
         )
       )
-    ) %>% dplyr::select(package = Package,
-                        src = Repository,
-                        version = Version,
-                        install_cmd)
+    ) %>% dplyr::select(package = .data$Package,
+                        src = .data$Repository,
+                        version = .data$Version,
+                        .data$install_cmd)
 
   return(invisible(df))
 
