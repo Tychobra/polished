@@ -41,7 +41,7 @@ get_package_deps <- function(path,
   if (!fs::dir_exists(path)) stop(paste0("Invalid path argument. '", fs::path_abs(path), "' does not exist."))
 
   # get initial detections from automagic:::get_dependent_packages()
-  init_pkg_names <- automagic:::get_dependent_packages(path)
+  init_pkg_names <- automagic::get_dependent_packages(path)
 
   # return if no detections
   if (length(init_pkg_names) == 0) {
@@ -51,7 +51,7 @@ get_package_deps <- function(path,
 
   # validate packages
   hold <- lapply(init_pkg_names,
-                 purrr::safely(automagic:::get_package_details, quiet = verbose))
+                 purrr::safely(automagic::get_package_details, quiet = verbose))
   names(hold) <- init_pkg_names
 
   errors <- purrr::map_depth(hold, 1, purrr::pluck, "error") %>%
