@@ -26,8 +26,8 @@
 #' dir <- fs::path_package("polished", "examples", "polished_example_01")
 #' pkg_deps <- polished:::get_package_deps(dir)
 #'
-#' @importFrom automagic get_dependent_packages parse_packages
-#' @importFrom cli cli_alert_warning cli_ul cat_bullet
+#' @importFrom automagic get_dependent_packages get_package_details
+#' @importFrom cli cli_alert_warning cli_alert_danger cat_bullet
 #' @importFrom dplyr bind_rows mutate select
 #' @importFrom fs dir_exists path_abs
 #' @importFrom purrr safely map_depth pluck compact map
@@ -50,8 +50,14 @@ get_package_deps <- function(path,
   }
 
   # validate packages
-  hold <- lapply(init_pkg_names,
-                 purrr::safely(automagic::get_package_details, quiet = verbose))
+  hold <- suppressWarnings(
+    lapply(
+      init_pkg_names,
+      purrr::safely(
+        automagic::get_package_details, quiet = TRUE
+      )
+    )
+  )
   names(hold) <- init_pkg_names
 
   errors <- purrr::map_depth(hold, 1, purrr::pluck, "error") %>%
@@ -61,8 +67,7 @@ get_package_deps <- function(path,
   hold <- hold[!(names(hold) %in% errors)]
 
   if (length(errors) > 0 && verbose) {
-    cli::cli_alert_warning("Silently removing detected invalid packages:")
-    cli::cli_ul(errors)
+    cli::cli_alert_danger("Silently removing detected invalid packages: {errors}")
   }
 
   out <- purrr::map_depth(hold, 1, purrr::pluck, "result") %>%
