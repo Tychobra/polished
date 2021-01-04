@@ -3,7 +3,7 @@
 tpdir <- normalizePath(tempdir())
 
 # remove any existing deps files
-apppath <- fs::path_package("polished", "examples/polished_example_01")
+apppath <- fs::path_package("polished", "examples/test_app")
 
 # copy to temp dir
 fs::dir_copy(apppath, fs::path(tpdir, "test_app"), overwrite = TRUE)
