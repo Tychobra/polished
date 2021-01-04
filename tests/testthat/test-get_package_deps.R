@@ -18,7 +18,7 @@ test_that("test creation of deps.yaml", {
     yaml_test <- file.exists(file.path(app, "deps.yaml"))
     testthat::expect_true(yaml_test)
     yaml_content <- yaml::read_yaml(file.path(app, "deps.yaml"))
-    testthat::expect_equal(yaml_content, yaml::read_yaml(fs::path_package("polished", "testfiles/deps.yaml")))
+    testthat::expect_equal(yaml_content, yaml::read_yaml(fs::path_package("polished", "testfiles/deps_no_polished.yaml")))
 
   })
 
