@@ -4,7 +4,8 @@ Title: Authentication and Administration for 'shiny' Apps
 Version: 0.2.0.9000
 Authors@R: c(
   person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre")),
-  person("Patrick", "Howard", email = "patrick.howard@tychobra.com", role = c("aut")))
+  person("Patrick", "Howard", email = "patrick.howard@tychobra.com", role = c("aut")),
+  person("Jimmy", "Briggs", email = "jimmy.briggs@tychobra.com", role = c("aut")))
 Maintainer: Andy Merlino <andy.merlino@tychobra.com>
 Description: Easily add modern authentication and user administration to your 'shiny' apps. 
   Customize user sign in and registration pages to match your brand.  Control who can
@@ -17,9 +18,11 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     automagic,
+    cli,
     digest,
     dplyr,
     DT,
+    fs,
     htmltools,
     httr,
     jose,
@@ -35,12 +38,22 @@ Imports:
     shinyFeedback,
     shinyjs,
     shinyWidgets,
+    stats,
     stringr,
     tibble,
     tidyr,
-    uuid
-RoxygenNote: 7.1.1
+    tools,
+    utils,
+    uuid,
+    yaml
 Suggests: 
+    config,
     knitr,
-    rmarkdown
-VignetteBuilder: knitr
+    rmarkdown,
+    testthat (>= 3.0.0),
+    withr
+VignetteBuilder: 
+    knitr
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1

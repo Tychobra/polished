@@ -1,0 +1,14 @@
+shiny:
+  Package: shiny
+  Repository: CRAN
+  Version: 1.5.0
+polished:
+  Package: polished
+  GithubUsername: tychobra
+  GithubRepo: polished
+  GithubRef: HEAD
+  GithubSHA1: b13b29eeb5b0e97a6ecee7a621f9472a5c347056
+config:
+  Package: config
+  Repository: CRAN
+  Version: 0.3.1

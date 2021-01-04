@@ -107,7 +107,8 @@ deploy_app <- function(
 #'
 #' @export
 #'
-#' @importFrom automagic make_deps_file
+#' @importFrom yaml write_yaml
+#' @importFrom cli cat_bullet
 #'
 #' @examples
 #'
@@ -122,8 +123,18 @@ bundle_app <- function (
   app_dir = "."
 ) {
 
+
+  deps_list <- get_package_deps(app_dir)
+
   # create yaml file with all the dependencies
-  automagic::make_deps_file(directory = app_dir)
+  yml_path <- file.path(app_dir, "deps.yaml")
+  yaml::write_yaml(deps_list, yml_path)
+  cli::cat_bullet(
+    "Created file `deps.yaml`.",
+    bullet = "tick",
+    bullet_col = "green"
+  )
+
 
   tar_name <- "shiny_app.tar.gz"
 

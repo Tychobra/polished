@@ -7,3 +7,4 @@ rsconnect/
 .firebaserc
 cran-comments.md
 ^CRAN-RELEASE$
+^\.github$

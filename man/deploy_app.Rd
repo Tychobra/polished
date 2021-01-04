@@ -9,7 +9,8 @@ deploy_app(
   app_dir = ".",
   api_key = getOption("polished")$api_key,
   api_url = "https://host.polished.tech",
-  launch_browser = TRUE
+  launch_browser = TRUE,
+  region = "us-east1"
 )
 }
 \arguments{
@@ -25,6 +26,11 @@ the default.}
 
 \item{launch_browser}{Whether or not to open your default brower to your newly deployed app
 after it is successfully deployed.  \code{TRUE} by default.}
+
+\item{region}{the region to deploy the app to on Google Cloud Platform.  See
+\url{https://cloud.google.com/compute/docs/regions-zones} for all available regions
+on Google Cloud Platform.  Currenlty on "us-east1" is supported, but soon, all reagions
+will be supported.}
 }
 \description{
 Deploy a Shiny app to Polished Hosting
