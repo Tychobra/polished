@@ -26,7 +26,7 @@
 #' pkg_deps <- polished:::get_package_deps(dir)
 #'
 #' @importFrom automagic get_dependent_packages get_package_details
-#' @importFrom cli cli_alert_warning cli_ul cat_bullet
+#' @importFrom cli cli_alert_warning cli_alert_danger cat_bullet
 #' @importFrom fs dir_exists path_abs
 #' @importFrom dplyr %>%
 #' @importFrom purrr safely map_depth pluck compact map
@@ -49,11 +49,16 @@ get_package_deps <- function(
     return(invisible(NULL))
   }
 
+
   # validate packages.  `automagic::get_package_details` will throw an error if the
   # package is not on CRAN or in a public GitHub repo.
-  hold <- lapply(
-    init_pkg_names,
-    purrr::safely(automagic::get_package_details, quiet = TRUE)
+  hold <- suppressWarnings(
+    lapply(
+      init_pkg_names,
+      purrr::safely(
+        automagic::get_package_details, quiet = TRUE
+      )
+    )
   )
   names(hold) <- init_pkg_names
 
@@ -65,8 +70,7 @@ get_package_deps <- function(
   hold <- hold[!(names(hold) %in% errors)]
 
   if (length(errors) > 0 && verbose) {
-    cli::cli_alert_warning("Silently removing detected invalid packages:")
-    cli::cli_ul(errors)
+    cli::cli_alert_danger("Silently removing detected invalid packages: {errors}")
   }
 
   purrr::map_depth(hold, 1, purrr::pluck, "result") %>%
