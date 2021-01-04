@@ -13,12 +13,9 @@ test_that("test creation of deps.yaml", {
 
   withr::with_dir(app, {
 
-    polished:::get_package_deps(path = app)
+    deps_list <- polished:::get_package_deps(app_dir = app)
 
-    yaml_test <- file.exists(file.path(app, "deps.yaml"))
-    testthat::expect_true(yaml_test)
-    yaml_content <- yaml::read_yaml(file.path(app, "deps.yaml"))
-    testthat::expect_equal(yaml_content, yaml::read_yaml(fs::path_package("polished", "testfiles/deps_no_polished.yaml")))
+    testthat::expect_equal(deps_list, yaml::read_yaml(fs::path_package("polished", "testfiles/deps_no_polished.yaml")))
 
   })
 

@@ -2,23 +2,21 @@
 % Please edit documentation in R/package_deps.R
 \name{get_package_deps}
 \alias{get_package_deps}
-\title{Get/Detect R Package Dependencies}
+\title{Create a list of R Package Dependencies}
 \usage{
-get_package_deps(path, write_yaml = TRUE, verbose = TRUE)
+get_package_deps(app_dir = ".", verbose = TRUE)
 }
 \arguments{
-\item{path}{path to a directory containing R scripts or RMarkdown files. Defaults to current working directory if left blank.}
-
-\item{write_yaml}{logical - should a \code{deps.yaml} file be created at specified path?}
+\item{app_dir}{path to a directory containing R scripts or RMarkdown files. Defaults to current working directory if left blank.}
 
 \item{verbose}{logical - defaults to TRUE. Will provide feedback to detected or invalid R packages.}
 }
 \value{
-silently returns a \code{data.frame} with detected R package details
+a list of package dependencies
 }
 \description{
-Given a \code{path} to a directory/shinyAppDir this function will scan all \code{.R} and
-\code{.Rmd} files for any used R Packages along with their versions/Github references.
+Given a \code{path} to a directory this function will scan all \code{.R} and
+\code{.Rmd} files for any used R Packages along with their CRAN versions or Github references.
 }
 \details{
 Currently, detections are made via \code{\link[automagic:parse_packages]{automagic::parse_packages()}} which supports

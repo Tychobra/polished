@@ -1,7 +1,7 @@
-#' Get/Detect R Package Dependencies
+#' Create a list of R Package Dependencies
 #'
-#' Given a `path` to a directory/shinyAppDir this function will scan all `.R` and
-#' `.Rmd` files for any used R Packages along with their versions/Github references.
+#' Given a `path` to a directory this function will scan all `.R` and
+#' `.Rmd` files for any used R Packages along with their CRAN versions or Github references.
 #'
 #' @details Currently, detections are made via [automagic::parse_packages()] which supports
 #'   the following calls within the code: `library()`, `require()`, and
@@ -11,11 +11,10 @@
 #'   validating that each detection is indeed a valid `CRAN` or public `Github` package
 #'   and can be installed.
 #'
-#' @param path path to a directory containing R scripts or RMarkdown files. Defaults to current working directory if left blank.
-#' @param write_yaml logical - should a `deps.yaml` file be created at specified path?
+#' @param app_dir path to a directory containing R scripts or RMarkdown files. Defaults to current working directory if left blank.
 #' @param verbose logical - defaults to TRUE. Will provide feedback to detected or invalid R packages.
 #'
-#' @return silently returns a `data.frame` with detected R package details
+#' @return a list of package dependencies
 #'
 #' @keywords internal
 #'
@@ -26,22 +25,23 @@
 #' dir <- fs::path_package("polished", "examples", "polished_example_01")
 #' pkg_deps <- polished:::get_package_deps(dir)
 #'
-#' @importFrom automagic get_dependent_packages parse_packages
+#' @importFrom automagic get_dependent_packages get_package_details
 #' @importFrom cli cli_alert_warning cli_ul cat_bullet
-#' @importFrom dplyr bind_rows mutate select
 #' @importFrom fs dir_exists path_abs
+#' @importFrom dplyr %>%
 #' @importFrom purrr safely map_depth pluck compact map
-#' @importFrom yaml write_yaml
-get_package_deps <- function(path,
-                             write_yaml = TRUE,
-                             verbose = TRUE) {
+get_package_deps <- function(
+  app_dir = ".",
+  verbose = TRUE
+) {
 
   # validate args
-  if (missing("path")) path <- getwd()
-  if (!fs::dir_exists(path)) stop(paste0("Invalid path argument. '", fs::path_abs(path), "' does not exist."))
+  if (!fs::dir_exists(app_dir)) {
+    stop(paste0("Invalid path argument. '", fs::path_abs(app_dir), "' does not exist."))
+  }
 
   # get initial detections from automagic:::get_dependent_packages()
-  init_pkg_names <- automagic::get_dependent_packages(path)
+  init_pkg_names <- automagic::get_dependent_packages(app_dir)
 
   # return if no detections
   if (length(init_pkg_names) == 0) {
@@ -49,11 +49,15 @@ get_package_deps <- function(path,
     return(invisible(NULL))
   }
 
-  # validate packages
-  hold <- lapply(init_pkg_names,
-                 purrr::safely(automagic::get_package_details, quiet = verbose))
+  # validate packages.  `automagic::get_package_details` will throw an error if the
+  # package is not on CRAN or in a public GitHub repo.
+  hold <- lapply(
+    init_pkg_names,
+    purrr::safely(automagic::get_package_details, quiet = TRUE)
+  )
   names(hold) <- init_pkg_names
 
+  # check for errors
   errors <- purrr::map_depth(hold, 1, purrr::pluck, "error") %>%
     purrr::compact() %>%
     names()
@@ -65,48 +69,9 @@ get_package_deps <- function(path,
     cli::cli_ul(errors)
   }
 
-  out <- purrr::map_depth(hold, 1, purrr::pluck, "result") %>%
+  purrr::map_depth(hold, 1, purrr::pluck, "result") %>%
     purrr::map(function(x) {
       if (length(x) == 0) return(NULL) else return(x)
     }) %>%
     purrr::compact()
-
-  if (write_yaml) {
-    yml_path <- file.path(path, "deps.yaml")
-    yaml::write_yaml(out, yml_path)
-    cli::cat_bullet(
-      "Created file `deps.yaml`.",
-      bullet = "tick",
-      bullet_col = "green"
-    )
-  }
-
-  df <- dplyr::bind_rows(out) %>%
-    dplyr::mutate(
-      Repository = ifelse(is.na(.data$Repository), "Github", .data$Repository),
-      install_cmd = ifelse(
-        .data$Repository == "CRAN",
-        paste0(
-          "remotes::install_version(",
-          shQuote(.data$Package),
-          ", version = ",
-          shQuote(.data$Version),
-          ")"
-        ),
-        paste0(
-          "remotes::install_github(",
-          shQuote(paste0(.data$GithubUsername, "/", .data$Package)),
-          ", ref = ",
-          shQuote(.data$GithubSHA1),
-          ")"
-        )
-      )
-    ) %>% dplyr::select(package = .data$Package,
-                        src = .data$Repository,
-                        version = .data$Version,
-                        .data$install_cmd)
-
-  return(invisible(df))
-
 }
-
