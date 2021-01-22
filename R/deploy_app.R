@@ -70,7 +70,7 @@ deploy_app <- function(
       region = region
     ),
     encode = "multipart",
-    httr::config(http_version = 0)
+    http_version = 0
   )
 
   res_content <- jsonlite::fromJSON(
