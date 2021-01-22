@@ -108,7 +108,6 @@ deploy_app <- function(
 #' @export
 #'
 #' @importFrom yaml write_yaml
-#' @importFrom cli cat_bullet
 #'
 #' @examples
 #'
@@ -129,11 +128,6 @@ bundle_app <- function (
   # create yaml file with all the dependencies
   yml_path <- file.path(app_dir, "deps.yaml")
   yaml::write_yaml(deps_list, yml_path)
-  cli::cat_bullet(
-    "Created file `deps.yaml`.",
-    bullet = "tick",
-    bullet_col = "green"
-  )
 
 
   tar_name <- "shiny_app.tar.gz"
