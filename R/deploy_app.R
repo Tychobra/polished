@@ -14,6 +14,8 @@
 #' will be supported.
 #'
 #' @importFrom utils browseURL
+#' @importFrom httr POST authenticate config status_code content upload_file
+#' @importFrom jsonlite fromJSON
 #'
 #' @export
 #'
@@ -67,7 +69,8 @@ deploy_app <- function(
       app_name = app_name,
       region = region
     ),
-    encode = "multipart"
+    encode = "multipart",
+    httr::config(http_version = 0)
   )
 
   res_content <- jsonlite::fromJSON(
@@ -108,6 +111,7 @@ deploy_app <- function(
 #' @export
 #'
 #' @importFrom yaml write_yaml
+#' @importFrom utils tar
 #'
 #' @examples
 #'
