@@ -1,3 +1,31 @@
+
+valid_gcp_regions <- c(
+  "asia-east1",
+  "asia-east2",
+  "asia-northeast1",
+  "asia-northeast2",
+  "asia-northeast3",
+  "asia-south1",
+  "asia-southeast1",
+  "asia-southeast2",
+  "australia-southeast1",
+  "europe-north1",
+  "europe-west1",
+  "europe-west2",
+  "europe-west3",
+  "europe-west4",
+  "europe-west6",
+  "northamerica-northeast1",
+  "southamerica-east1",
+  "us-central1",
+  "us-east1",
+  "us-east4",
+  "us-west1",
+  "us-west2",
+  "us-west3",
+  "us-west4"
+)
+
 #' Deploy a Shiny app to Polished Hosting
 #'
 #' @param app_name You Shiny app's name.
@@ -12,6 +40,8 @@
 #' \url{https://cloud.google.com/compute/docs/regions-zones} for all available regions
 #' on Google Cloud Platform.  Currenlty on "us-east1" is supported, but soon, all reagions
 #' will be supported.
+#' @param ram_gb the amount of memory to allocate to your Shiny app server. Valid values are
+#' 2, 4, or 8.
 #'
 #' @importFrom utils browseURL
 #' @importFrom httr POST authenticate config status_code content upload_file
@@ -36,11 +66,21 @@ deploy_app <- function(
   api_key = getOption("polished")$api_key,
   api_url = "https://host.polished.tech",
   launch_browser = TRUE,
-  region = "us-east1"
+  region = "us-east1",
+  ram_gb = 2
 ) {
 
-  if (!identical(region, "us-east1")) {
-    stop('only region "us-east1" is supported at this time', call. = FALSE)
+
+  if (!(region %in% valid_gcp_regions)) {
+    stop(paste0(
+      region,
+      "is not a supported region.  See all supported regions
+      here https://cloud.google.com/compute/docs/regions-zones"
+    ))
+  }
+
+  if (!(ram_gb %in% c(2, 4, 8))) {
+    stop("`ram_db` must be 2, 4, or 8", call. = FALSE)
   }
 
 
@@ -67,10 +107,10 @@ deploy_app <- function(
     ),
     query = list(
       app_name = app_name,
-      region = region
+      region = region,
+      ram_gb = ram_gb
     ),
-    encode = "multipart",
-    http_version = 0
+    encode = "multipart"
   )
 
   res_content <- jsonlite::fromJSON(
