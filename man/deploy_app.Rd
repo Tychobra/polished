@@ -10,7 +10,8 @@ deploy_app(
   api_key = getOption("polished")$api_key,
   api_url = "https://host.polished.tech",
   launch_browser = TRUE,
-  region = "us-east1"
+  region = "us-east1",
+  ram_gb = 2
 )
 }
 \arguments{
@@ -31,6 +32,9 @@ after it is successfully deployed.  \code{TRUE} by default.}
 \url{https://cloud.google.com/compute/docs/regions-zones} for all available regions
 on Google Cloud Platform.  Currenlty on "us-east1" is supported, but soon, all reagions
 will be supported.}
+
+\item{ram_gb}{the amount of memory to allocate to your Shiny app server. Valid values are
+2, 4, or 8.}
 }
 \description{
 Deploy a Shiny app to Polished Hosting
