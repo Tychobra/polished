@@ -1,7 +1,7 @@
 shiny:
   Package: shiny
   Repository: CRAN
-  Version: 1.5.0
+  Version: 1.6.0
 config:
   Package: config
   Repository: CRAN
