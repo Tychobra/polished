@@ -21,7 +21,8 @@ sign_out_from_shiny <- function(
   redirect_page = "?page=sign_in"
 ) {
 
-  user <- session$userData$user()
+  # using isolate() allows this function to be called in onStop()
+  user <- isolate(session$userData$user())
 
   if (is.null(user)) stop("session$userData$user() does not exist", call. = FALSE)
 
@@ -36,3 +37,6 @@ sign_out_from_shiny <- function(
   )
 
 }
+
+
+
