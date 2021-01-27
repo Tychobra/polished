@@ -1,6 +1,5 @@
 # polished v0.2.0.9000
 
-* added unit testing via `testthat`
 * added support for package dependency detection (#129)
 * added cookie options { sameSite: "none", secure: true } when the app is being served over https.  This polished authentication to work in an iframe on most browsers.
 * added email validation to email inputs in the sign in and registration modules. 
