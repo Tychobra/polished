@@ -50,7 +50,7 @@ sign_in_ui_default <- function(
     background_image_css <- stringr::str_interp("
       background-image: url(${background_image});
       background-repeat: no-repeat;
-      background-position: 0 0;
+      background-position: center center;
       background-size: cover;
     ")
   }
