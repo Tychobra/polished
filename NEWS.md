@@ -1,5 +1,7 @@
 # polished v0.2.0.9000
 
+* `sign_out_from_shiny()` can now be used in the `session$onSessionEnded()` or `onStop()` to sign the user
+out when the user's session ends.
 * added support for package dependency detection (#129)
 * added cookie options { sameSite: "none", secure: true } when the app is being served over https.  This polished authentication to work in an iframe on most browsers.
 * added email validation to email inputs in the sign in and registration modules. 
