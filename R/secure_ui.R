@@ -137,7 +137,7 @@ secure_ui <- function(
 
         page_out <- tagList(
           splash_module_ui,
-          tags$script(src = "polish/js/router.js?version=1"),
+          tags$script(src = "polish/js/router.js?version=2"),
           sentry_ui_out("splash")
         )
 
@@ -148,7 +148,7 @@ secure_ui <- function(
           # go to default sign in page
           page_out <- tagList(
             sign_in_ui_default(),
-            tags$script(src = "polish/js/router.js?version=1"),
+            tags$script(src = "polish/js/router.js?version=2"),
             sentry_ui_out("sign_in_default")
           )
 
@@ -157,7 +157,7 @@ secure_ui <- function(
           # go to custom sign in page
           page_out <- tagList(
             sign_in_page_ui,
-            tags$script(src = "polish/js/router.js?version=1"),
+            tags$script(src = "polish/js/router.js?version=2"),
             sentry_ui_out("sign_in_custom")
           )
         }
@@ -171,7 +171,7 @@ secure_ui <- function(
           # go to Shiny app without admin button.  User is not an admin
           page_out <- tagList(
             ui,
-            tags$script(src = "polish/js/router.js?version=1"),
+            tags$script(src = "polish/js/router.js?version=2"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
             tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
             sentry_ui_out("shiny_app")
@@ -180,7 +180,7 @@ secure_ui <- function(
           # send a random uuid as the polished_session.  This will trigger a session
           # reload and a redirect to the sign in page
           page_out <- tagList(
-            tags$script(src = "polish/js/router.js?version=1"),
+            tags$script(src = "polish/js/router.js?version=2"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
             tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
           )
@@ -196,7 +196,7 @@ secure_ui <- function(
         # send signed in session to polished_session.  This will trigger
         # a redirect to the app
         page_out <- tagList(
-          tags$script(src = "polish/js/router.js?version=1"),
+          tags$script(src = "polish/js/router.js?version=2"),
           tags$script(src = "polish/js/polished_session.js?version=2"),
           tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
         )
@@ -212,7 +212,7 @@ secure_ui <- function(
           } else {
             page_out <- tagList(
               account_module_ui,
-              tags$script(src = "polish/js/router.js?version=1"),
+              tags$script(src = "polish/js/router.js?version=2"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
               sentry_ui_out("account")
@@ -226,7 +226,7 @@ secure_ui <- function(
             # go to Admin Panel
             page_out <- tagList(
               admin_module_ui("admin", custom_admin_ui, options = admin_ui_options),
-              tags$script(src = "polish/js/router.js?version=1"),
+              tags$script(src = "polish/js/router.js?version=2"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
               sentry_ui_out("admin_panel")
@@ -237,7 +237,7 @@ secure_ui <- function(
             page_out <- tagList(
               ui,
               custom_admin_button_ui,
-              tags$script(src = "polish/js/router.js?version=1"),
+              tags$script(src = "polish/js/router.js?version=2"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
               sentry_ui_out("shiny_app")
@@ -250,7 +250,7 @@ secure_ui <- function(
           # go to Shiny app without admin button.  User is not an admin
           page_out <- tagList(
             ui,
-            tags$script(src = "polish/js/router.js?version=1"),
+            tags$script(src = "polish/js/router.js?version=2"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
             tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
             sentry_ui_out("shiny_app")
@@ -265,7 +265,7 @@ secure_ui <- function(
           verify_email_module_ui(
             "verify"
           ),
-          tags$script(src = "polish/js/router.js?version=1"),
+          tags$script(src = "polish/js/router.js?version=2"),
           tags$script(src = "polish/js/polished_session.js?version=2"),
           tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
           sentry_ui_out("email_verification")
