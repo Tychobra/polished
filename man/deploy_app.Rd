@@ -8,7 +8,7 @@ deploy_app(
   app_name,
   app_dir = ".",
   api_key = getOption("polished")$api_key,
-  api_url = "https://host.polished.tech",
+  api_url = "https://host-api.polished.tech",
   launch_browser = TRUE,
   region = "us-east1",
   ram_gb = 2
@@ -21,9 +21,8 @@ deploy_app(
 
 \item{api_key}{Your polished.tech API key.  Defaults to \code{getOption("polished")$api_key}.}
 
-\item{api_url}{The Polished API url.  Defaults to "https://host.polished.tech".  This is used
-for testing during polished API development.  You probably should not change this url from
-the default.}
+\item{api_url}{The Polished API url.  Defaults to "https://host-api.polished.tech".  You should
+not change from the default unless you are testing a development version of the API.}
 
 \item{launch_browser}{Whether or not to open your default brower to your newly deployed app
 after it is successfully deployed.  \code{TRUE} by default.}

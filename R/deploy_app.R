@@ -31,9 +31,8 @@ valid_gcp_regions <- c(
 #' @param app_name You Shiny app's name.
 #' @param app_dir The path to the directory containing your Shiny app.
 #' @param api_key Your polished.tech API key.  Defaults to \code{getOption("polished")$api_key}.
-#' @param api_url The Polished API url.  Defaults to "https://host.polished.tech".  This is used
-#' for testing during polished API development.  You probably should not change this url from
-#' the default.
+#' @param api_url The Polished API url.  Defaults to "https://host-api.polished.tech".  You should
+#' not change from the default unless you are testing a development version of the API.
 #' @param launch_browser Whether or not to open your default brower to your newly deployed app
 #' after it is successfully deployed.  \code{TRUE} by default.
 #' @param region the region to deploy the app to on Google Cloud Platform.  See
@@ -64,7 +63,7 @@ deploy_app <- function(
   app_name,
   app_dir = ".",
   api_key = getOption("polished")$api_key,
-  api_url = "https://host.polished.tech",
+  api_url = "https://host-api.polished.tech",
   launch_browser = TRUE,
   region = "us-east1",
   ram_gb = 2
@@ -90,7 +89,9 @@ deploy_app <- function(
   )
   cat(" Done\n")
 
-  cat("Deploying App.  This may take a while...")
+  cat("Deploying App.  Hang tight.  This may take a while...\n")
+  cat("Your Shiny app will open in your default web browser once deployment is complete.\n")
+  cat("Build and deployment logs can be found at https://dashboard.polished.tech")
   zip_to_send <- httr::upload_file(
     path = app_zip_path,
     type = "application/x-gzip"
