@@ -7,7 +7,7 @@
 Duration: 32s
 
 > checking package dependencies ... NOTE
-  Imports includes 22 non-default packages.
+  Imports includes 25 non-default packages.
   Importing from so many packages makes the package vulnerable to any of
   them becoming unavailable.  Move as many as possible to Suggests and
   use conditionally.
