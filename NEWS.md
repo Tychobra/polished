@@ -1,8 +1,5 @@
-# polished (development version)
 
-# polished v0.2.1.9999 (Unreleased)
-
-# polished v0.2.1
+# polished v0.2.0.9000
 
 * removed dependencies on [shinydashboardPlus](https://github/com/rinterface/shinydashboradplus) due to breaking change with `dashboardHeaderPlus()` and `dashboardPagePlus()` deprecations.
 * `sign_out_from_shiny()` can now be used in the `session$onSessionEnded()` or `onStop()` to sign the user
