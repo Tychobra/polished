@@ -3,15 +3,21 @@ window.onpopstate = (event) => {
   window.location.reload(true)
 }
 
-// ping server every 3 minutes to keep Shiny session from graying out as long as
+// update Shiny input 3 minutes to keep Shiny session from graying out as long as
 // browser tab is open for the app.
-$(function() {
+(function() {
 
-  function keepAlive() {
-    var httpRequest = new XMLHttpRequest();
-    httpRequest.open('GET', "/polish/js/router.js");
-    httpRequest.send(null);
-  }
+  var socket_timeout_interval;
+  var n = 0;
 
-  setInterval(keepAlive, 3 * 60 * 1000);
-})
+  $(document).on('shiny:connected', function(event) {
+    socket_timeout_interval = setInterval(function() {
+      Shiny.setInputValue('polished__alive_count', n++, {event: 'priority'})
+    }, 3 * 60 * 1000);
+  });
+
+  $(document).on('shiny:disconnected', function(event) {
+    clearInterval(socket_timeout_interval)
+  });
+
+})()
