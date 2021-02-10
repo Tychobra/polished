@@ -16,7 +16,6 @@
 #' @importFrom htmltools HTML tags
 #' @importFrom shinyjs useShinyjs
 #' @importFrom shinyFeedback useShinyFeedback
-#' @importFrom shinydashboardPlus dashboardHeaderPlus dashboardPagePlus
 #'
 #' @return the UI for the "Admin Panel"
 #'
@@ -33,11 +32,11 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 
   # don't show profile dropdown if in Admin mode.  User cannot log out of admin mode.
   if (isTRUE(.global_sessions$get_admin_mode())) {
-    head <- shinydashboardPlus::dashboardHeaderPlus(
+    head <- shinydashboard::dashboardHeader(
       title = options$title
     )
   } else {
-    head <- shinydashboardPlus::dashboardHeaderPlus(
+    head <- shinydashboard::dashboardHeader(
       title = options$title,
       profile_module_ui(ns("polish__profile"))
     )
@@ -121,7 +120,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 
 
 
-  shinydashboardPlus::dashboardPagePlus(
+  shinydashboard::dashboardPage(
     head,
     sidebar,
     body,
