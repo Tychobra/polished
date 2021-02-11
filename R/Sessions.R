@@ -275,7 +275,7 @@ Sessions <-  R6::R6Class(
 
       status <- httr::status_code(res)
       if (!identical(httr::status_code(res), 200L)) {
-        print(".global_sessions$find() status: ", status)
+        print(paste0(".global_sessions$find() status: ", status))
         stop(session_out, call. = FALSE)
       }
 
