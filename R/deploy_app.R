@@ -111,7 +111,8 @@ deploy_app <- function(
       region = region,
       ram_gb = ram_gb
     ),
-    encode = "multipart"
+    encode = "multipart",
+    http_version = 0
   )
 
   res_content <- jsonlite::fromJSON(
