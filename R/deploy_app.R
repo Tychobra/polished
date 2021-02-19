@@ -124,24 +124,20 @@ deploy_app <- function(
   )
 
   hold_status <- httr::status_code(res)
-  if (!identical(hold_status, 200L)) {
-
-    print(res_content)
-    if (!identical(hold_status, 400L)) {
-      stop(res_content$message, call. = FALSE)
-    } else {
-      stop("Failed to upload the Shiny app to Polished Hosting.", call. = FALSE)
-    }
+  if (identical(hold_status, 200L)) {
+    cat(" Done\n")
   }
-  cat(" Done\n")
-
 
   if (isTRUE(launch_browser)) {
     # launch user's browser with newly deployed Shiny app
     utils::browseURL(res_content$url)
   }
 
-  res_content
+
+  list(
+    status = hold_status,
+    content = res_content
+  )
 }
 
 
