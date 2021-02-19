@@ -126,13 +126,12 @@ deploy_app <- function(
   hold_status <- httr::status_code(res)
   if (identical(hold_status, 200L)) {
     cat(" Done\n")
-  }
 
-  if (isTRUE(launch_browser)) {
-    # launch user's browser with newly deployed Shiny app
-    utils::browseURL(res_content$url)
+    if (isTRUE(launch_browser)) {
+      # launch user's browser with newly deployed Shiny app
+      utils::browseURL(res_content$url)
+    }
   }
-
 
   list(
     status = hold_status,
