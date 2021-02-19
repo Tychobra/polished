@@ -69,7 +69,6 @@ deploy_app <- function(
   ram_gb = 2
 ) {
 
-
   if (!(region %in% valid_gcp_regions)) {
     stop(paste0(
       region,
@@ -82,6 +81,11 @@ deploy_app <- function(
     stop("`ram_db` must be 2, 4, or 8", call. = FALSE)
   }
 
+  # check that app_dir contains either an "app.R" file or a "ui.R" and a "server.R" file
+  file_names <- tolower(list.files(path = app_dir))
+  if ("app.r" %in% file_names || ("ui.r" %in% file_names && "server.r" %in% file_names)) {
+    stop('"app_dir" must contain a file named "app.R" or files named "ui.R" and "server.R"', call. = FALSE)
+  }
 
   cat("Creating app bundle...")
   app_zip_path <- bundle_app(
