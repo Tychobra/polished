@@ -72,8 +72,8 @@ deploy_app <- function(
   if (!(region %in% valid_gcp_regions)) {
     stop(paste0(
       region,
-      "is not a supported region.  See all supported regions
-      here https://cloud.google.com/compute/docs/regions-zones"
+      " is not a supported region.  See all supported regions here
+      https://cloud.google.com/compute/docs/regions-zones"
     ))
   }
 
