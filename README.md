@@ -14,4 +14,4 @@ Authentication and user administration for Shiny apps.  `polished` provides a wa
 
 ### Polished.tech
 
-Follow the [Get Started Guide](https://polished.tech/docs/get-started) to get up and running in minutes.
+Follow the [Get Started Guide](https://polished.tech/docs/01-get-started) to get up and running in minutes.
