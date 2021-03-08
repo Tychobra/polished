@@ -27,7 +27,6 @@
 #'
 #' @importFrom automagic get_dependent_packages get_package_details
 #' @importFrom cli cli_alert_warning cli_alert_danger cat_bullet
-#' @importFrom fs dir_exists path_abs
 #' @importFrom dplyr %>%
 #' @importFrom purrr safely map_depth pluck compact map
 get_package_deps <- function(
@@ -36,8 +35,8 @@ get_package_deps <- function(
 ) {
 
   # validate args
-  if (!fs::dir_exists(app_dir)) {
-    stop(paste0("Invalid path argument. '", fs::path_abs(app_dir), "' does not exist."))
+  if (!dir.exists(app_dir)) {
+    stop(paste0("Invalid path argument. '", app_dir, "' does not exist."))
   }
 
   # get initial detections from automagic:::get_dependent_packages()

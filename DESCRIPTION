@@ -22,7 +22,6 @@ Imports:
     digest,
     dplyr,
     DT,
-    fs,
     htmltools,
     httr,
     jose,
@@ -45,12 +44,11 @@ Imports:
     utils,
     uuid,
     yaml
-Suggests: 
-    config,
+Suggests:
+    fs,
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0),
-    withr
+    testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
