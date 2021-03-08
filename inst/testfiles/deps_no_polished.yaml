@@ -1,8 +1,0 @@
-shiny:
-  Package: shiny
-  Repository: CRAN
-  Version: 1.6.0
-config:
-  Package: config
-  Repository: CRAN
-  Version: 0.3.1
