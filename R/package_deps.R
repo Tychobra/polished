@@ -22,7 +22,7 @@
 #'
 #' @examples
 #' library(polished)
-#' dir <- fs::path_package("polished", "examples", "polished_example_01")
+#' dir <- system.file("examples", "polished_example_01", package = "polished")
 #' pkg_deps <- polished:::get_package_deps(dir)
 #'
 #' @importFrom automagic get_dependent_packages get_package_details
