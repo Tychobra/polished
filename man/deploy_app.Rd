@@ -11,7 +11,8 @@ deploy_app(
   api_url = "https://host-api.polished.tech",
   launch_browser = TRUE,
   region = "us-east1",
-  ram_gb = 2
+  ram_gb = 2,
+  r_ver = NULL
 )
 }
 \arguments{
@@ -34,6 +35,12 @@ will be supported.}
 
 \item{ram_gb}{the amount of memory to allocate to your Shiny app server. Valid values are
 2, 4, or 8.}
+
+\item{r_ver}{Character string of R version.  If kept as \code{NULL}, the default, then
+\code{deploy_app()} will detect the R version you are currently running.  The R version must be a version
+supported by an r-ver Docker image.  You can see all the r-ver Docker image versions
+of R here \url{https://github.com/rocker-org/rocker-versioned2/tree/master/dockerfiles} and here
+\code{https://github.com/rocker-org/rocker-versioned/tree/master/r-ver}.}
 }
 \description{
 Deploy a Shiny app to Polished Hosting

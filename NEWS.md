@@ -1,6 +1,8 @@
 
 # polished v0.2.0.9000
 
+* added `r_ver` argument to `deploy_app()` that allows the user to specify the version of R to run
+on Polished Hosting.
 * removed dependencies on [shinydashboardPlus](https://github/com/rinterface/shinydashboradplus) due to breaking change with `dashboardHeaderPlus()` and `dashboardPagePlus()` deprecations.
 * `sign_out_from_shiny()` can now be used in the `session$onSessionEnded()` or `onStop()` to sign the user
 out when the user's session ends.

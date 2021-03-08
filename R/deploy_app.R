@@ -41,6 +41,11 @@ valid_gcp_regions <- c(
 #' will be supported.
 #' @param ram_gb the amount of memory to allocate to your Shiny app server. Valid values are
 #' 2, 4, or 8.
+#' @param r_ver Character string of R version.  If kept as \code{NULL}, the default, then
+#' \code{deploy_app()} will detect the R version you are currently running.  The R version must be a version
+#' supported by an r-ver Docker image.  You can see all the r-ver Docker image versions
+#' of R here \url{https://github.com/rocker-org/rocker-versioned2/tree/master/dockerfiles} and here
+#' \code{https://github.com/rocker-org/rocker-versioned/tree/master/r-ver}.
 #'
 #' @importFrom utils browseURL
 #' @importFrom httr POST authenticate config status_code content upload_file
@@ -66,7 +71,8 @@ deploy_app <- function(
   api_url = "https://host-api.polished.tech",
   launch_browser = TRUE,
   region = "us-east1",
-  ram_gb = 2
+  ram_gb = 2,
+  r_ver = NULL
 ) {
 
   if (!(region %in% valid_gcp_regions)) {
@@ -85,6 +91,10 @@ deploy_app <- function(
   file_names <- tolower(list.files(path = app_dir))
   if (!("app.r" %in% file_names || ("ui.r" %in% file_names && "server.r" %in% file_names))) {
     stop('"app_dir" must contain a file named "app.R" or files named "ui.R" and "server.R"', call. = FALSE)
+  }
+
+  if (is.null(r_ver)) {
+    r_ver <- paste0(R.Version()$major, ".", R.Version()$minor)
   }
 
   cat("Creating app bundle...")
@@ -113,7 +123,8 @@ deploy_app <- function(
     query = list(
       app_name = app_name,
       region = region,
-      ram_gb = ram_gb
+      ram_gb = ram_gb,
+      r_ver = r_ver
     ),
     encode = "multipart",
     http_version = 0
