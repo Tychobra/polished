@@ -1,5 +1,5 @@
 
-# polished v0.2.0.9000
+# polished v0.3.0
 
 * added `r_ver` argument to `deploy_app()` that allows the user to specify the version of R to run
 on Polished Hosting.
