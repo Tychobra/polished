@@ -11,13 +11,12 @@ app <- file.path(tpdir, "test_app")
 
 test_that("test creation of deps.yaml", {
 
-  withr::with_dir(app, {
 
-    deps_list <- polished:::get_package_deps(app_dir = app)
 
-    testthat::expect_equal(deps_list, yaml::read_yaml(fs::path_package("polished", "testfiles/deps_no_polished.yaml")))
+  deps_list <- polished:::get_package_deps(app_dir = app)
 
-  })
+  testthat::expect_equal(deps_list[[1]]$Package, "shiny")
+  testthat::expect_equal(deps_list[[2]]$Package, "config")
 
 })
 
