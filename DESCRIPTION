@@ -1,6 +1,6 @@
 Package: polished
 Type: Package
-Title: Authentication and Administration for 'shiny' Apps
+Title: Authentication, User Administration, and Hosting for 'shiny' Apps
 Version: 0.3.0
 Authors@R: c(
   person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre")),
