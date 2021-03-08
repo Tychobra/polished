@@ -42,7 +42,7 @@ sign_in_js <- function(ns) {
 
 #' Check the JWT from the user sign in
 #'
-#' This function retreives the JWT created by the JavaScript from \code{\link{sign_in_js}}
+#' This function retrieves the JWT created by the JavaScript from \code{\link{sign_in_js}}
 #' and signs the user in as long as the token can be verified.
 #' This function should be called in the server function of a shiny module.  Make sure
 #' to call \code{\link{sign_in_js}} in the UI function of this module.

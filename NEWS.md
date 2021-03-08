@@ -3,7 +3,7 @@
 
 * added `r_ver` argument to `deploy_app()` that allows the user to specify the version of R to run
 on Polished Hosting.
-* removed dependencies on [shinydashboardPlus](https://github/com/rinterface/shinydashboradplus) due to breaking change with `dashboardHeaderPlus()` and `dashboardPagePlus()` deprecations.
+* removed dependencies on [shinydashboardPlus](https://github/com/rinterface/shinydashboradplus) due to breaking change with `dashboardHeaderPlus()` and `dashboardPagePlus()`.
 * `sign_out_from_shiny()` can now be used in the `session$onSessionEnded()` or `onStop()` to sign the user
 out when the user's session ends.
 * added support for package dependency detection (#129)
@@ -24,7 +24,7 @@ https://dashboard.polished.tech (#102)
 * added "background_image" argument to `sign_in_ui_default()` to allow for a full screen image for the sign in page background. 
 * only use the "email" sign in provider by default rather than c("google", "email")
 * added customizable sign out button to `secure_static()` (#93)
-* standarized and documented process for using fully customized sign in and registration pages (#92).  New functions `sign_in_js()` and `sign_in_check_jwt()`, and new vignette on how to use these functions to create fully customized sign in and registration pages.
+* standardized and documented process for using fully customized sign in and registration pages (#92).  New functions `sign_in_js()` and `sign_in_check_jwt()`, and new vignette on how to use these functions to create fully customized sign in and registration pages.
 * add sign_in_module_2 as an alternative premade sign in page.  sign_in_module_2 is designed to look nice when using social sign in
 providers (like Google and Microsoft) in addition to email/password.
 * Removed sign_in_no_invite_module.  sign_in_module and sign_in_module_2 now have an "is_invite_requirement" argument, so there is no longer a need for a dedicated sign_in_no_invite_module.

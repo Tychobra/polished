@@ -21,7 +21,7 @@ sign_in_module()
 sign_in_module_2()
 ```
 
-`sign_in_module()` is primarily designed to be used for just email/password sign in (i.e. it does not look great when you inlcude
+`sign_in_module()` is primarily designed to be used for just email/password sign in (i.e. it does not look great when you include
 social sign in providers like Google and Microsoft).  
 
 `sign_in_module_2()` is designed to look a little better with email/password and social sign in providers.  

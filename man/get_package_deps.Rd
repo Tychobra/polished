@@ -16,7 +16,7 @@ a list of package dependencies
 }
 \description{
 Given a \code{path} to a directory this function will scan all \code{.R} and
-\code{.Rmd} files for any used R Packages along with their CRAN versions or Github references.
+\code{.Rmd} files for any used R Packages along with their CRAN versions or GitHub references.
 }
 \details{
 Currently, detections are made via \code{\link[automagic:parse_packages]{automagic::parse_packages()}} which supports
@@ -24,7 +24,7 @@ the following calls within the code: \code{library()}, \code{require()}, and
 prefixed \code{::} calls to functions.
 
 Once an initial vector of package detections is built, it is further processed by
-validating that each detection is indeed a valid \code{CRAN} or public \code{Github} package
+validating that each detection is indeed a valid \code{CRAN} or public \code{GitHub} package
 and can be installed.
 }
 \examples{

@@ -1,14 +1,14 @@
 #' Create a list of R Package Dependencies
 #'
 #' Given a `path` to a directory this function will scan all `.R` and
-#' `.Rmd` files for any used R Packages along with their CRAN versions or Github references.
+#' `.Rmd` files for any used R Packages along with their CRAN versions or GitHub references.
 #'
 #' @details Currently, detections are made via [automagic::parse_packages()] which supports
 #'   the following calls within the code: `library()`, `require()`, and
 #'   prefixed `::` calls to functions.
 #'
 #'   Once an initial vector of package detections is built, it is further processed by
-#'   validating that each detection is indeed a valid `CRAN` or public `Github` package
+#'   validating that each detection is indeed a valid `CRAN` or public `GitHub` package
 #'   and can be installed.
 #'
 #' @param app_dir path to a directory containing R scripts or RMarkdown files. Defaults to current working directory if left blank.
@@ -39,7 +39,7 @@ get_package_deps <- function(
     stop(paste0("Invalid path argument. '", app_dir, "' does not exist."))
   }
 
-  # get initial detections from automagic:::get_dependent_packages()
+  # detect R package dependencies
   init_pkg_names <- automagic::get_dependent_packages(app_dir)
 
   # return if no detections

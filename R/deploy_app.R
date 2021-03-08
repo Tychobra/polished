@@ -33,11 +33,11 @@ valid_gcp_regions <- c(
 #' @param api_key Your polished.tech API key.  Defaults to \code{getOption("polished")$api_key}.
 #' @param api_url The Polished API url.  Defaults to "https://host-api.polished.tech".  You should
 #' not change from the default unless you are testing a development version of the API.
-#' @param launch_browser Whether or not to open your default brower to your newly deployed app
+#' @param launch_browser Whether or not to open your default browser to your newly deployed app
 #' after it is successfully deployed.  \code{TRUE} by default.
 #' @param region the region to deploy the app to on Google Cloud Platform.  See
 #' \url{https://cloud.google.com/compute/docs/regions-zones} for all available regions
-#' on Google Cloud Platform.  Currenlty on "us-east1" is supported, but soon, all reagions
+#' on Google Cloud Platform.  Currently on "us-east1" is supported, but soon, all regions
 #' will be supported.
 #' @param ram_gb the amount of memory to allocate to your Shiny app server. Valid values are
 #' 2, 4, or 8.
