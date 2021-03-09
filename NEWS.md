@@ -2,7 +2,7 @@
 # polished v0.3.0
 
 * created new `deploy_app()` function for deploying apps to Polished Hosting.
-* removed dependencies on [shinydashboardPlus](https://github/com/rinterface/shinydashboradplus) due to breaking change with `dashboardHeaderPlus()` and `dashboardPagePlus()`.
+* removed dependencies on `shinydashboardPlus` due to breaking change with `dashboardHeaderPlus()` and `dashboardPagePlus()`.
 * `sign_out_from_shiny()` can now be used in the `session$onSessionEnded()` or `onStop()` to sign the user
 out when the user's session ends.
 * added support for package dependency detection (#129)
