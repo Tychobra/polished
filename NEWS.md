@@ -1,4 +1,9 @@
 
+# polished v0.3.0.9000
+
+* added `tlmgr` argument to `deplo_app()` which allows support for generating pdf documents from 
+Rmarkdown.
+
 # polished v0.3.0
 
 * created new `deploy_app()` function for deploying apps to Polished Hosting.
