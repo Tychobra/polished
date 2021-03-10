@@ -46,6 +46,10 @@ valid_gcp_regions <- c(
 #' supported by an r-ver Docker image.  You can see all the r-ver Docker image versions
 #' of R here \url{https://github.com/rocker-org/rocker-versioned2/tree/master/dockerfiles} and here
 #' \code{https://github.com/rocker-org/rocker-versioned/tree/master/r-ver}.
+#' @param tlmgr a character vector of TeX Live packages to install  This is only used if your Shiny
+#' app generates pdf documents.  Defaults to \code{character(0)} for no TeX Live installation.  Set to
+#' \code{TRUE} for a minimal TeX Live installation, and pass a character vector of your TeX Live package
+#' dependencies to have all your TeX Live packages installed at build time.
 #'
 #' @importFrom utils browseURL
 #' @importFrom httr POST authenticate config status_code content upload_file
@@ -72,7 +76,8 @@ deploy_app <- function(
   launch_browser = TRUE,
   region = "us-east1",
   ram_gb = 2,
-  r_ver = NULL
+  r_ver = NULL,
+  tlmgr = character(0)
 ) {
 
   if (!(region %in% valid_gcp_regions)) {
@@ -124,7 +129,8 @@ deploy_app <- function(
       app_name = app_name,
       region = region,
       ram_gb = ram_gb,
-      r_ver = r_ver
+      r_ver = r_ver,
+      tlmgr = paste(tlmgr, collapse = ",")
     ),
     encode = "multipart",
     http_version = 0
