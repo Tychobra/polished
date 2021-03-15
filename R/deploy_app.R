@@ -80,6 +80,10 @@ deploy_app <- function(
   tlmgr = character(0)
 ) {
 
+  if (identical(Sys.getenv("SHINY_HOSTING"), "polished")) {
+    stop("You cannot run `polished::deploy_app()` from Polished Hosting.", call. = FALSE)
+  }
+
   if (!(region %in% valid_gcp_regions)) {
     stop(paste0(
       region,
