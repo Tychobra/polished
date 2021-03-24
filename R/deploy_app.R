@@ -46,7 +46,7 @@ valid_gcp_regions <- c(
 #' supported by an r-ver Docker image.  You can see all the r-ver Docker image versions
 #' of R here \url{https://github.com/rocker-org/rocker-versioned2/tree/master/dockerfiles} and here
 #' \code{https://github.com/rocker-org/rocker-versioned/tree/master/r-ver}.
-#' @param tlmgr a character vector of TeX Live packages to install  This is only used if your Shiny
+#' @param tlmgr a character vector of TeX Live packages to install.  This is only used if your Shiny
 #' app generates pdf documents.  Defaults to \code{character(0)} for no TeX Live installation.  Set to
 #' \code{TRUE} for a minimal TeX Live installation, and pass a character vector of your TeX Live package
 #' dependencies to have all your TeX Live packages installed at build time.
