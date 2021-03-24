@@ -25,7 +25,7 @@
 #' dir <- system.file("examples", "polished_example_01", package = "polished")
 #' pkg_deps <- polished:::get_package_deps(dir)
 #'
-#' @importFrom automagic get_dependent_packages get_package_details
+#' @importFrom automagic get_package_details
 #' @importFrom cli cli_alert_warning cli_alert_danger cat_bullet
 #' @importFrom dplyr %>%
 #' @importFrom purrr safely map_depth pluck compact map
@@ -40,7 +40,7 @@ get_package_deps <- function(
   }
 
   # detect R package dependencies
-  init_pkg_names <- automagic::get_dependent_packages(app_dir)
+  init_pkg_names <- get_dependent_packages(app_dir)
 
   # return if no detections
   if (length(init_pkg_names) == 0) {
@@ -77,4 +77,40 @@ get_package_deps <- function(
       if (length(x) == 0) return(NULL) else return(x)
     }) %>%
     purrr::compact()
+}
+
+#' get packages required to run R code
+#'
+#' Note: this function is copied from the \code{automagic} R package.  We are including it in
+#' \code{polished} while we await the merging of this PR \url{https://github.com/cole-brokamp/automagic/pull/17}
+#' and a new CRAN release of \code{automagic}.
+#'
+#' @details parses all R and Rmd files in a directory and uses \code{automagic::parse_packages}
+#'     to find all R packages required for the code to run
+#'
+#' @param directory folder to search for R and Rmd files
+#'
+#' @return a vector of package names
+#'
+#' @importFrom automagic parse_packages
+#'
+get_dependent_packages <- function(directory = getwd()) {
+
+  fls <- list.files(
+    path = directory,
+    pattern = '^.*\\.R$|^.*\\.Rmd$',
+    full.names = TRUE,
+    recursive = TRUE,
+    ignore.case = TRUE
+  )
+
+  pkg_names <- unlist(sapply(fls, automagic::parse_packages))
+  pkg_names <- unique(pkg_names)
+
+  if (length(pkg_names)==0) {
+    message('warning: no packages found in specified directory')
+    return(invisible(NULL))
+  }
+
+  return(unname(pkg_names))
 }
