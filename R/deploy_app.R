@@ -120,8 +120,14 @@ deploy_app <- function(
     type = "application/x-gzip"
   )
 
+  url_ <- paste0(api_url, "/deploy-app")
+  # reset the handle.  This allows us to redeploy the app after a failed deploy.  Without
+  # resetting the handle, the request sometimes does not go through.  It just sits there
+  # doing nothing...
+  httr::handle_reset(url = url_)
+
   res <- httr::POST(
-    url = paste0(api_url, "/deploy-app"),
+    url = url_,
     httr::authenticate(
       user = api_key,
       password = ""
