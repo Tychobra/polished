@@ -143,7 +143,9 @@ deploy_app <- function(
       tlmgr = paste(tlmgr, collapse = ",")
     ),
     encode = "multipart",
-    http_version = 0
+    http_version = 0,
+    # timeout after 30 minutes
+    timeout = 1800
   )
 
   res_content <- jsonlite::fromJSON(
