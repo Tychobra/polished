@@ -206,23 +206,109 @@ bundle_app <- function (
 
   tar_name <- "shiny_app.tar.gz"
 
-  bundles_dir <- tempdir()
+  temp_dir <- tempdir()
+  bundles_dir <- file.path(temp_dir, uuid::UUIDgenerate())
+  dir.create(bundles_dir)
 
   file <- file.path(bundles_dir, tar_name)
 
+
+  # these folders/files will be removed before deploying app
+  patterns_to_remove <- c(
+    "^(?!\\.Rproj\\.user)",
+    "^(?!\\.Rhistory)",
+    "^(?!\\.git)"
+  )
+
+  dir_copy(
+    from = app_dir,
+    to = bundles_dir,
+    pattern = patterns_to_remove
+  )
+
+
   current_wd <- getwd()
-  setwd(app_dir)
+  setwd(bundles_dir)
   on.exit({setwd(current_wd)}, add = TRUE)
+
   result <- utils::tar(
     tarfile = file,
+    files = ".",
     compression = "gzip",
     tar = "internal"
   )
 
   if (result != 0) {
-    stop("Failed to bundle the Shiny app.")
+    stop("Failed to bundle the Shiny app.", call. = FALSE)
   }
 
   file
 }
 
+# the following functions are copied from the packrat R package with only minor changes.
+# Original code is here: https://github.com/rstudio/packrat/blob/ae5e5abedc84ea5fc58335d9c4a17b295c6f48f7/R/utils.R#L85
+
+is_dir <- function(file) {
+  isTRUE(file.info(file)$isdir) ## isTRUE guards against NA (ie, missing file)
+}
+
+# Copy a directory at file location 'from' to location 'to' -- this is kludgey,
+# but file.copy does not handle copying of directories cleanly
+dir_copy <- function(from, to, overwrite = TRUE, all.files = TRUE,
+                     pattern = NULL, ignore.case = TRUE) {
+
+  #owd <- getwd()
+  #on.exit(setwd(owd), add = TRUE)
+
+  # Make sure we're doing sane things
+  if (!is_dir(from)) stop("'", from, "' is not a directory.")
+
+  if (file.exists(to)) {
+    if (overwrite) {
+      unlink(to, recursive = TRUE)
+    } else {
+      stop(paste( sep = "",
+                  if (is_dir(to)) "Directory" else "File",
+                  " already exists at path '", to, "'."
+      ))
+    }
+  }
+
+  success <- dir.create(to, recursive = TRUE)
+  if (!success) stop("Couldn't create directory '", to, "'.")
+
+  # Get relative file paths
+  files.relative <- list.files(from, all.files = all.files, full.names = FALSE,
+                               recursive = TRUE, no.. = TRUE)
+
+  # Apply the pattern to the files
+  if (!is.null(pattern)) {
+    files.relative <- Reduce(intersect, lapply(pattern, function(p) {
+      grep(
+        pattern = p,
+        x = files.relative,
+        ignore.case = ignore.case,
+        perl = TRUE,
+        value = TRUE
+      )
+    }))
+  }
+
+  # Get paths from and to
+  files.from <- file.path(from, files.relative)
+  files.to <- file.path(to, files.relative)
+
+  # Create the directory structure
+  dirnames <- unique(dirname(files.to))
+  sapply(dirnames, function(x) dir.create(x, recursive = TRUE, showWarnings = FALSE))
+
+  # Copy the files
+  res <- file.copy(files.from, files.to)
+  if (!all(res)) {
+    # The copy failed; we should clean up after ourselves and return an error
+    unlink(to, recursive = TRUE)
+    stop("Could not copy all files from directory '", from, "' to directory '", to, "'.")
+  }
+  setNames(res, files.relative)
+
+}
