@@ -182,6 +182,7 @@ deploy_app <- function(
 #'
 #' @importFrom yaml write_yaml
 #' @importFrom utils tar
+#' @importFrom uuid UUIDgenerate
 #'
 #' @examples
 #'
