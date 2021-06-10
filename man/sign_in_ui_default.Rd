@@ -16,7 +16,8 @@ sign_in_ui_default(
   icon_href = "polish/images/polished_icon.png",
   background_image = NULL,
   terms_and_privacy_footer = NULL,
-  align = "center"
+  align = "center",
+  button_color = NULL
 )
 }
 \arguments{
@@ -41,6 +42,10 @@ notice.}
 
 \item{align}{The horizontal alignment of the Sign In box. Defaults to \code{"center"}. Valid
 values are \code{"left"}, \code{"center"}, or \code{"right"}}
+
+\item{button_color}{the color of the "Continue", "Sign In", and "Register" buttons.  If kept
+as \code{NULL}, the default, then the button color will be the same color as the color passed to
+the \code{color} argument.}
 }
 \value{
 the UI for the Sign In & Registration pages

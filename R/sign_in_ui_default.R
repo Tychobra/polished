@@ -17,6 +17,9 @@
 #' notice.
 #' @param align The horizontal alignment of the Sign In box. Defaults to \code{"center"}. Valid
 #' values are \code{"left"}, \code{"center"}, or \code{"right"}
+#' @param button_color the color of the "Continue", "Sign In", and "Register" buttons.  If kept
+#' as \code{NULL}, the default, then the button color will be the same color as the color passed to
+#' the \code{color} argument.
 #'
 #' @export
 #'
@@ -41,7 +44,8 @@ sign_in_ui_default <- function(
   icon_href = "polish/images/polished_icon.png",
   background_image = NULL,
   terms_and_privacy_footer = NULL,
-  align = "center"
+  align = "center",
+  button_color = NULL
 ) {
 
   if (is.null(background_image)) {
@@ -79,6 +83,11 @@ sign_in_ui_default <- function(
     main_width <- 6
     right_col <- list()
   }
+
+  if (is.null(button_color)) {
+    button_color <- color
+  }
+
 
   shiny::fluidPage(
     style = "height: 100vh;",
@@ -118,7 +127,7 @@ sign_in_ui_default <- function(
         }
 
         .btn-primary {
-          background-color: ${color} !important;
+          background-color: ${button_color} !important;
           border: none;
           width: 100%;
           color: #FFF;
