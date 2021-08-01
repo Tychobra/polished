@@ -1,9 +1,8 @@
 
 api_get_invite_by_email <- function(url, api_key, email, app_uid) {
 
-
   res <- httr::GET(
-    url = paste0(url, "/invite-by-email"),
+    url = paste0(url, "/app-users"),
     query = list(
       email = email,
       app_uid = app_uid
@@ -19,8 +18,13 @@ api_get_invite_by_email <- function(url, api_key, email, app_uid) {
     httr::content(res, "text", encoding = "UTF-8")
   )
 
-  # API returns a length 0 list when there is no invite
-  if (length(invite) == 0) {
+  if (!identical(httr::status_code(res), 200L)) {
+    stop(invite$error, call. = FALSE)
+  }
+
+  invite <- tibble::as_tibble(invite)
+
+  if (nrow(invite) == 0) {
     invite <- NULL
   }
 
@@ -29,7 +33,7 @@ api_get_invite_by_email <- function(url, api_key, email, app_uid) {
 
 api_get_invite <- function(url, api_key, app_uid, user_uid) {
   res <- httr::GET(
-    url = paste0(url, "/invites"),
+    url = paste0(url, "/app-users"),
     query = list(
       app_uid = app_uid,
       user_uid = user_uid
@@ -46,8 +50,10 @@ api_get_invite <- function(url, api_key, app_uid, user_uid) {
     httr::content(res, "text", encoding = "UTF-8")
   )
 
+  invite <- tibble::as_tibble(invite)
+
   # API returns a length 0 list when there is no invite
-  if (length(invite) == 0) {
+  if (nrow(invite) == 0) {
     invite <- NULL
   }
 
@@ -254,7 +260,7 @@ Sessions <-  R6::R6Class(
       if (nchar(hashed_cookie) == 0) return(NULL)
 
       res <- httr::GET(
-        url = paste0(getOption("polished")$api_url, "/session-by-cookie"),
+        url = paste0(getOption("polished")$api_url, "/sessions"),
         query = list(
           hashed_cookie = hashed_cookie,
           app_uid = getOption("polished")$app_uid,
