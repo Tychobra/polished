@@ -63,7 +63,7 @@ send_password_reset_email_module <- function(input, output, session, email) {
       )
 
       if (!identical(httr::status_code(res), 200L)) {
-        stop(res_content$message)
+        stop(res_content$error)
       }
 
       shinyFeedback::showToast(

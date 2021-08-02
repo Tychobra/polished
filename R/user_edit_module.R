@@ -209,7 +209,7 @@ user_edit_module <- function(input, output, session,
             httr::content(res, "text", encoding = "UTF-8")
           )
 
-          stop(err, call. = FALSE)
+          stop(err$error, call. = FALSE)
         }
 
 

@@ -319,7 +319,7 @@ Sessions <-  R6::R6Class(
 
       if (!identical(httr::status_code(res), 200L)) {
 
-        if (identical(session_out$message, "Password reset required")) {
+        if (identical(session_out$error, "Password reset required")) {
 
           # send a password reset email and stop
           res2 <- httr::POST(
@@ -342,7 +342,7 @@ Sessions <-  R6::R6Class(
           )
 
           if (!identical(httr::status_code(res2), 200L)) {
-            stop(res2_content$message, call. = FALSE)
+            stop(res2_content$error, call. = FALSE)
           }
 
           return(list(
@@ -350,7 +350,7 @@ Sessions <-  R6::R6Class(
           ))
 
         } else {
-          stop(session_out$message, call. = FALSE)
+          stop(session_out$error, call. = FALSE)
         }
       }
 
