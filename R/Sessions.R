@@ -504,17 +504,17 @@ Sessions <-  R6::R6Class(
     set_inactive = function(session_uid, user_uid) {
 
 
-
-      res <- httr::POST(
-        url = paste0(getOption("polished")$api_url, "/actions"),
+      res <- httr::PUT(
+        url = paste0(getOption("polished")$api_url, "/sessions"),
         httr::authenticate(
           user = getOption("polished")$api_key,
           password = ""
         ),
         body = list(
-          type = "set_inactive",
-          session_uid = session_uid,
-          user_uid = user_uid
+          "session_uid" = session_uid,
+          "dat" = list(
+            "is_active" = FALSE
+          )
         ),
         encode = "json",
         config = list(http_version = 0)
