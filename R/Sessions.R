@@ -522,7 +522,7 @@ Sessions <-  R6::R6Class(
 
       httr::stop_for_status(res)
     },
-    sign_out = function(hashed_cookie, session_uid) {
+    sign_out = function(hashed_cookie) {
 
       res <- httr::POST(
         url = paste0(getOption("polished")$api_url, "/sign-out"),
@@ -531,8 +531,7 @@ Sessions <-  R6::R6Class(
           password = ""
         ),
         body = list(
-          hashed_cookie = hashed_cookie,
-          session_uid = session_uid
+          hashed_cookie = hashed_cookie
         ),
         encode = "json",
         config = list(http_version = 0)
