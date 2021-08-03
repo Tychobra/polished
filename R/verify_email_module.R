@@ -94,8 +94,7 @@ verify_email_module <- function(input, output, session) {
             ),
             query = list(
               user_uid = session$userData$user()$user_uid
-            ),
-            config = list(http_version = 0)
+            )
           )
 
           res_content <- jsonlite::fromJSON(
@@ -145,8 +144,7 @@ verify_email_module <- function(input, output, session) {
           user_uid = session$userData$user()$user_uid,
           app_uid = getOption("polished")$app_uid
         ),
-        encode = "json",
-        config = list(http_version = 0)
+        encode = "json"
       )
 
       if (!identical(httr::status_code(res), 200L)) {

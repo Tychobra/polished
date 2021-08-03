@@ -54,8 +54,7 @@ send_password_reset_email_module <- function(input, output, session, email) {
           app_uid = getOption("polished")$app_uid,
           is_invite_required = .global_sessions$is_invite_required
         ),
-        encode = "json",
-        config = list(http_version = 0)
+        encode = "json"
       )
 
       res_content <- jsonlite::fromJSON(

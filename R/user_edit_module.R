@@ -41,8 +41,7 @@ user_edit_module <- function(input, output, session,
         httr::authenticate(
           user = getOption("polished")$api_key,
           password = ""
-        ),
-        config = list(http_version = 0)
+        )
       )
 
       res_content <- jsonlite::fromJSON(
@@ -199,8 +198,7 @@ user_edit_module <- function(input, output, session,
             user = getOption("polished")$api_key,
             password = ""
           ),
-          encode = "json",
-          config = list(http_version = 0)
+          encode = "json"
         )
 
         if (!identical(httr::status_code(res), 200L)) {
@@ -283,8 +281,7 @@ user_edit_module <- function(input, output, session,
             user = getOption("polished")$api_key,
             password = ""
           ),
-          encode = "json"#,
-          #config = list(http_version = 0)
+          encode = "json"
         )
 
         if (!identical(httr::status_code(res), 200L)) {
