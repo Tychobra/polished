@@ -10,7 +10,7 @@ global_sessions_config(
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
-  api_url = "https://api.polished.tech",
+  api_url = "https://auth-api.polished.tech/v1",
   sign_in_providers = "email",
   is_email_verification_required = TRUE,
   is_auth_required = TRUE,

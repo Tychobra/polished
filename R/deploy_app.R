@@ -52,7 +52,7 @@ valid_gcp_regions <- c(
 #' dependencies to have all your TeX Live packages installed at build time.
 #'
 #' @importFrom utils browseURL
-#' @importFrom httr POST authenticate config status_code content upload_file
+#' @importFrom httr POST authenticate status_code content upload_file
 #' @importFrom jsonlite fromJSON
 #'
 #' @export

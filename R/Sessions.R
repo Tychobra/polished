@@ -68,7 +68,7 @@ api_get_invite <- function(url, api_key, app_uid, user_uid) {
 #'
 #'
 #' @importFrom R6 R6Class
-#' @importFrom httr GET content warn_for_status POST
+#' @importFrom httr GET content POST
 #' @importFrom jsonlite fromJSON
 #' @importFrom digest digest
 #' @importFrom jose jwt_decode_sig
@@ -419,8 +419,7 @@ Sessions <-  R6::R6Class(
               email_verified = email_verified
             )
           ),
-          encode = "json"#,
-          #httr::config(http_version = 0)
+          encode = "json"
         )
 
         httr::stop_for_status(res)

@@ -158,7 +158,7 @@ NULL if sign in fails. If sign in is successful, a list containing the following
 \if{latex}{\out{\hypertarget{method-sign_out}{}}}
 \subsection{Method \code{sign_out()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_out(hashed_cookie, session_uid)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Sessions$sign_out(hashed_cookie)}\if{html}{\out{</div>}}
 }
 
 }
