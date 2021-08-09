@@ -1,6 +1,7 @@
 
 # polished v0.3.0.9000
 
+* Bug Fix: fixed check for user already registered during sign in process.
 * added `button_color` argument to `sign_in_ui_default()`.
 * added `tlmgr` argument to `deplo_app()` which allows support for generating pdf documents from 
 Rmarkdown.
