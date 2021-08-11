@@ -72,7 +72,7 @@ deploy_app <- function(
   app_name,
   app_dir = ".",
   api_key = getOption("polished")$api_key,
-  api_url = "https://host-api.polished.tech",
+  api_url = "https://host-api.polished.tech/v1",
   launch_browser = TRUE,
   region = "us-east1",
   ram_gb = 2,
@@ -122,7 +122,7 @@ deploy_app <- function(
     type = "application/x-gzip"
   )
 
-  url_ <- paste0(api_url, "/deploy-app")
+  url_ <- paste0(api_url, "/hosted-apps")
   # reset the handle.  This allows us to redeploy the app after a failed deploy.  Without
   # resetting the handle, the request sometimes does not go through.  It just sits there
   # doing nothing...
