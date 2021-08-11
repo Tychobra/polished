@@ -113,7 +113,9 @@ deploy_app <- function(
   cat(" Done\n")
 
   cat("Deploying App.  Hang tight.  This may take a while...\n")
-  cat("Your Shiny app will open in your default web browser once deployment is complete.\n")
+  if (isTRUE(launch_browser)) {
+    cat("Your Shiny app will open in your default web browser once deployment is complete.\n")
+  }
   cat("Deployment status can be found at https://dashboard.polished.tech")
   zip_to_send <- httr::upload_file(
     path = app_zip_path,
