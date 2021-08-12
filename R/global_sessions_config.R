@@ -90,7 +90,9 @@ global_sessions_config <- function(
     stop(app, call. = FALSE)
   }
 
-  if (length(app) == 0) {
+  app <- tibble::as_tibble(app)
+
+  if (identical(nrow(app), 0L)) {
     stop(paste0("app_name `", app_name, "` does not exist"), call. = FALSE)
   }
 
