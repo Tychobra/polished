@@ -26,7 +26,6 @@
 #' pkg_deps <- polished:::get_package_deps(dir)
 #'
 #' @importFrom automagic get_package_details
-#' @importFrom cli cli_alert_warning cli_alert_danger cat_bullet
 #' @importFrom dplyr %>%
 #' @importFrom purrr safely map_depth pluck compact map
 get_package_deps <- function(
@@ -44,8 +43,8 @@ get_package_deps <- function(
 
   # return if no detections
   if (length(init_pkg_names) == 0) {
-    cli::cli_alert_warning("warning: no packages found in specified directory")
-    return(invisible(NULL))
+    warning("no packages found in specified directory", call. = FALSE)
+    invisible(NULL)
   }
 
 
@@ -69,7 +68,8 @@ get_package_deps <- function(
   hold <- hold[!(names(hold) %in% errors)]
 
   if (length(errors) > 0 && verbose) {
-    cli::cli_alert_danger("Silently removing detected invalid packages: {errors}")
+    removed_packages <- paste(errors, collapse(", "))
+    warning(paste0("Silently removing detected invalid packages: ", removed_packages), call. = FALSE)
   }
 
   purrr::map_depth(hold, 1, purrr::pluck, "result") %>%
