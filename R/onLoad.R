@@ -8,6 +8,7 @@
 .onLoad <- function(...) {
   shiny::addResourcePath("polish", system.file("assets", package = "polished"))
   httr::set_config(httr::config(http_version = 0))
+  set_api_url()
 
   invisible()
 }
