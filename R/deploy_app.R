@@ -150,11 +150,10 @@ deploy_app <- function(
     timeout = 1800
   )
 
-  res_content <- jsonlite::fromJSON(
-    httr::content(res, "text", encoding = "UTF-8")
-  )
 
-  hold_status <- httr::status_code(res)
+  out <- polished_api_res(res)
+
+  hold_status <- httr::status_code(out$response)
   if (identical(hold_status, 200L)) {
     cat(" Done\n")
 
@@ -164,10 +163,7 @@ deploy_app <- function(
     }
   }
 
-  list(
-    status = hold_status,
-    content = res_content
-  )
+  out
 }
 
 
