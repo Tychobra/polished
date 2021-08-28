@@ -108,10 +108,24 @@ set_api_url <- function(
 }
 
 
-
+#' Convert a list returned from the Polished API into a data frame
+#'
+#' In order to avoid issues with converting R data frames into JSON objects and back
+#' to R data frames, we instead convert R data frames to R lists before converting
+#' them to JSON to be sent via the Polished API.  This function then converts those
+#' lists back into R data frames (or more precisely tibbles).
+#'
+#' @param api_list a list.  All elements in the list are vectors of the same length.
+#'
+#' @importFrom tibble as_tibble
+#'
+#' @return a tibble
+#'
 api_list_to_df <- function(api_list) {
 
   if (identical(length(api_list[[1]]), 0L)) {
+    # if the data frame is 0 rows, then each of the list elements will be a list rather than
+    # an atomic vector.  Here we convert these lists to character.
     api_list <- lapply(api_list, function(x) character(0))
   }
 
