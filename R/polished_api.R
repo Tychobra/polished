@@ -141,9 +141,20 @@ api_list_to_df <- function(api_list) {
 #' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
 #' so that you do not need to supply this argument with each function call.
 #'
-#' @details One of either the \code{app_uid} or \code{app_name} must not be \code{NULL}.  If both the
-#' \code{app_uid} and \code{app_name} are provided, then the \code{app_uid} will be used, and the
-#' \code{app_name} will be ignored.
+#' @details If both the \code{app_uid} and \code{app_name} are \code{NULL}, then all the
+#' apps in your account will be returned.  If either \code{app_uid} or \code{app_name} are not
+#' \code{NULL}, then a single app will be returned (assuming the app exists).  If both the
+#' \code{app_uid} and \code{app_name} are provided, then the \code{app_uid} will be used,
+#' and the \code{app_name} will be ignored.  If the app does not exists, a zero row tibble
+#' will be returned.
+#'
+#' @return an object of class \code{polished_api_res}.  The "content" of the object is a
+#' tibble of app(s) with the following columns:
+#' - uid
+#' - app_name
+#' - app_url
+#' - created_at
+#' - modified_at
 #'
 #' @export
 #'
