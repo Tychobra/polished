@@ -9,12 +9,6 @@ get_apps(
   app_name = NULL,
   api_key = getOption("polished")$api_key
 )
-
-get_apps(
-  app_uid = NULL,
-  app_name = NULL,
-  api_key = getOption("polished")$api_key
-)
 }
 \arguments{
 \item{app_uid}{an optional app uid.}
@@ -23,10 +17,6 @@ get_apps(
 
 \item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
 so that you do not need to supply this argument with each function call.}
-
-\item{user_uid}{an optional user uid.}
-
-\item{email}{an optional user email.}
 }
 \value{
 an object of class \code{polished_api_res}.  The "content" of the object is a
@@ -41,23 +31,15 @@ tibble of app(s) with the following columns:
 }
 \description{
 Polished API - Get App(s)
-
-Polished API - Get User(s)
 }
 \details{
 If both the \code{app_uid} and \code{app_name} are \code{NULL}, then all the
 apps in your account will be returned.  If either \code{app_uid} or \code{app_name} are not
 \code{NULL}, then a single app will be returned (assuming the app exists).  If both the
 \code{app_uid} and \code{app_name} are provided, then the \code{app_uid} will be used,
-and the \code{app_name} will be ignored.  If the app does not exists, a single row tibble
+and the \code{app_name} will be ignored.  If the app does not exists, a zero row tibble
 will be returned.
-
-One of either the \code{user_uid} or \code{email} must not be \code{NULL}.  If both the
-\code{user_uid} and \code{app_name} are provided, then the \code{app_uid} will be used, and the
-\code{app_name} will be ignored.
 }
 \seealso{
-add_apps update_app delete_app
-
-add_apps update_app delete_app
+add_app update_app delete_app
 }
