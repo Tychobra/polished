@@ -68,7 +68,7 @@ get_package_deps <- function(
   hold <- hold[!(names(hold) %in% errors)]
 
   if (length(errors) > 0 && verbose) {
-    removed_packages <- paste(errors, collapse(", "))
+    removed_packages <- paste(errors, collapse = ", ")
     warning(paste0("Silently removing detected invalid packages: ", removed_packages), call. = FALSE)
   }
 
