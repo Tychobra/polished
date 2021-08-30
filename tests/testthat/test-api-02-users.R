@@ -4,6 +4,16 @@
 test_email <- "test1@tychobra.com"
 test_that("can add a user to an account", {
 
+  # delete the user if they already exist so that we can be sure to start fresh
+  try({
+    hold <- get_users(email = test_email)
+
+    if (identical(nrow(hold$content), 1L)) {
+      delete_user(user_uid = hold$content$uid)
+    }
+  })
+
+
   api_res <- add_user(email = test_email)
 
   expect_equal(length(api_res), 2L)
