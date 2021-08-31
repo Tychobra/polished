@@ -15,7 +15,7 @@ get_users(
 
 \item{email}{an optional user email.}
 
-\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 }
 \value{
@@ -44,5 +44,5 @@ and the \code{email} will be ignored.  If the user does not exists, a zero row t
 will be returned.
 }
 \seealso{
-add_user delete_user
+\code{\link[=add_user]{add_user()}} \code{\link[=delete_user]{delete_user()}}
 }

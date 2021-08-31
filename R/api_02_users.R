@@ -2,8 +2,8 @@
 #'
 #' @param user_uid an optional user uid.
 #' @param email an optional user email.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
+#'
+#' @inheritParams get_apps
 #'
 #' @details If both the \code{user_uid} and \code{email} are \code{NULL}, then all the
 #' users in your account will be returned.  If either \code{user_uid} or \code{email} are not
@@ -25,7 +25,7 @@
 #'
 #' @export
 #'
-#' @seealso add_user delete_user
+#' @seealso [add_user()] [delete_user()]
 #'
 #' @importFrom httr GET authenticate
 #'
@@ -35,10 +35,9 @@ get_users <- function(
   api_key = getOption("polished")$api_key
 ) {
 
-  query_out <- list(
-    user_uid = user_uid,
-    email = email
-  )
+  query_out <- list()
+  query_out$user_uid <- user_uid
+  query_out$email <- email
 
   resp <- httr::GET(
     url = paste0(getOption("polished")$api_url, "/users"),
@@ -61,15 +60,14 @@ get_users <- function(
 #' Polished API - Add a User
 #'
 #' @param email an email address.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
 #'
+#' @inheritParams get_apps
 #'
 #' @export
 #'
-#' @seealso get_apps update_app delete_app
+#' @seealso [get_users()] [delete_user()]
 #'
-#' @importFrom httr GET authenticate
+#' @importFrom httr POST authenticate
 #'
 add_user <- function(email, api_key = getOption("polished")$api_key) {
 
@@ -97,16 +95,14 @@ add_user <- function(email, api_key = getOption("polished")$api_key) {
 #' Polished API - Delete a User
 #'
 #' @param app_uid the user uid of the user to be deleted.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
 #'
+#' @inheritParams get_apps
 #'
 #' @export
 #'
-#' @seealso get_apps add_app update_app
+#' @seealso [get_users()] [add_user()]
 #'
-#' @importFrom httr GET authenticate
-#' @importFrom tibble as_tibble
+#' @importFrom httr DELETE authenticate
 #'
 delete_user <- function(user_uid, api_key = getOption("polished")$api_key) {
 

@@ -9,12 +9,12 @@ add_user(email, api_key = getOption("polished")$api_key)
 \arguments{
 \item{email}{an email address.}
 
-\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 }
 \description{
 Polished API - Add a User
 }
 \seealso{
-get_apps update_app delete_app
+\code{\link[=get_users]{get_users()}} \code{\link[=delete_user]{delete_user()}}
 }

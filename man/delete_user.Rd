@@ -7,7 +7,7 @@
 delete_user(user_uid, api_key = getOption("polished")$api_key)
 }
 \arguments{
-\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 
 \item{app_uid}{the user uid of the user to be deleted.}
@@ -16,5 +16,5 @@ so that you do not need to supply this argument with each function call.}
 Polished API - Delete a User
 }
 \seealso{
-get_apps add_app update_app
+\code{\link[=get_users]{get_users()}} \code{\link[=add_user]{add_user()}}
 }
