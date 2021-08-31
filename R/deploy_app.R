@@ -31,8 +31,6 @@ valid_gcp_regions <- c(
 #' @param app_name You Shiny app's name.
 #' @param app_dir The path to the directory containing your Shiny app.
 #' @param api_key Your polished.tech API key.  Defaults to \code{getOption("polished")$api_key}.
-#' @param api_url The Polished API url.  Defaults to "https://host-api.polished.tech".  You should
-#' not change from the default unless you are testing a development version of the API.
 #' @param launch_browser Whether or not to open your default browser to your newly deployed app
 #' after it is successfully deployed.  \code{TRUE} by default.
 #' @param region the region to deploy the app to on Google Cloud Platform.  See
@@ -72,7 +70,6 @@ deploy_app <- function(
   app_name,
   app_dir = ".",
   api_key = getOption("polished")$api_key,
-  api_url = "https://host-api.polished.tech/v1",
   launch_browser = TRUE,
   region = "us-east1",
   ram_gb = 2,
@@ -122,7 +119,7 @@ deploy_app <- function(
     type = "application/x-gzip"
   )
 
-  url_ <- paste0(api_url, "/hosted-apps")
+  url_ <- paste0(getOption("polished")$host_api_url, "/hosted-apps")
   # reset the handle.  This allows us to redeploy the app after a failed deploy.  Without
   # resetting the handle, the request sometimes does not go through.  It just sits there
   # doing nothing...
