@@ -305,6 +305,6 @@ dir_copy <- function(from, to, overwrite = TRUE, all.files = TRUE,
     unlink(to, recursive = TRUE)
     stop("Could not copy all files from directory '", from, "' to directory '", to, "'.")
   }
-  setNames(res, files.relative)
+  stats::setNames(res, files.relative)
 
 }
