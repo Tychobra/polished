@@ -1,9 +1,8 @@
 #' Polished API - Get Role(s)
 #'
 #' @param role_uid an optional role uid.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
 #'
+#' @inheritParams get_apps
 #'
 #' @return an object of class \code{polished_api_res}.  The "content" of the object is a
 #' tibble of users(s) with the following columns:
@@ -13,7 +12,7 @@
 #'
 #' @export
 #'
-#' @seealso add_role delete_role
+#' @seealso [add_role()] [delete_role()]
 #'
 #' @importFrom httr GET authenticate
 #'
@@ -45,14 +44,13 @@ get_roles <- function(
 
 #' Polished API - Add a Role
 #'
-#' @param role_name a role name..
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
+#' @param role_name a role name.
 #'
+#' @inheritParams get_apps
 #'
 #' @export
 #'
-#' @seealso get_roles delete_role
+#' @seealso [get_roles()] [delete_role()]
 #'
 #' @importFrom httr GET authenticate
 #'
@@ -82,15 +80,14 @@ add_role <- function(role_name, api_key = getOption("polished")$api_key) {
 #' Polished API - Delete a Role
 #'
 #' @param role_uid the role uid of the role to be deleted.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
 #'
+#' @inheritParams get_apps
 #'
 #' @export
 #'
-#' @seealso get_apps add_app update_app
+#' @seealso [get_roles()] [add_role()]
 #'
-#' @importFrom httr GET authenticate
+#' @importFrom httr DELETE authenticate
 #'
 delete_role <- function(role_uid, api_key = getOption("polished")$api_key) {
 

@@ -7,14 +7,14 @@
 add_role(role_name, api_key = getOption("polished")$api_key)
 }
 \arguments{
-\item{role_name}{a role name..}
+\item{role_name}{a role name.}
 
-\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 }
 \description{
 Polished API - Add a Role
 }
 \seealso{
-get_roles delete_role
+\code{\link[=get_roles]{get_roles()}} \code{\link[=delete_role]{delete_role()}}
 }

@@ -9,12 +9,12 @@ delete_role(role_uid, api_key = getOption("polished")$api_key)
 \arguments{
 \item{role_uid}{the role uid of the role to be deleted.}
 
-\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 }
 \description{
 Polished API - Delete a Role
 }
 \seealso{
-get_apps add_app update_app
+\code{\link[=get_roles]{get_roles()}} \code{\link[=add_role]{add_role()}}
 }
