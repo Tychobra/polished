@@ -12,13 +12,13 @@ get_app_users(
 )
 }
 \arguments{
-\item{app_uid}{an app uid.}
+\item{app_uid}{an optional app uid.}
 
-\item{user_uid}{an optional user uid for the user to be invited to the app.}
+\item{user_uid}{an optional user uid.}
 
-\item{email}{an optional email address for the user to be invited to the app.}
+\item{email}{an optional user email address.}
 
-\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 }
 \value{
@@ -26,15 +26,16 @@ an object of class \code{polished_api_res}.  The "content" of the object is a
 tibble of app(s) with the following columns:
 \itemize{
 \item uid
-\item app_name
-\item app_url
+\item app_uid
+\item user_uid
+\item is_admin
 \item created_at
-\item modified_at
+\item email
 }
 }
 \description{
 Polished API - Get App(s) User(s)
 }
 \seealso{
-add_app update_app delete_app
+\code{\link[=add_app_user]{add_app_user()}} \code{\link[=update_app_user]{update_app_user()}} \code{\link[=delete_app_user]{delete_app_user()}}
 }

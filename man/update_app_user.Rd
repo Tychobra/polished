@@ -2,7 +2,7 @@
 % Please edit documentation in R/api_03_app_users.R
 \name{update_app_user}
 \alias{update_app_user}
-\title{Polished API - Update an App}
+\title{Polished API - Update an App User}
 \usage{
 update_app_user(
   app_uid,
@@ -14,16 +14,16 @@ update_app_user(
 \arguments{
 \item{app_uid}{the app uid to update.}
 
-\item{user_uid}{an optional app name.}
+\item{user_uid}{the user uid to update.}
 
 \item{is_admin}{boolean - whether or not the user is an admin.}
 
-\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 }
 \description{
-Polished API - Update an App
+Polished API - Update an App User
 }
 \seealso{
-get_app_users add_app_user delete_app_user
+\code{\link[=get_app_users]{get_app_users()}} \code{\link[=add_app_user]{add_app_user()}} \code{\link[=delete_app_user]{delete_app_user()}}
 }

@@ -1,23 +1,23 @@
 #' Polished API - Get App(s) User(s)
 #'
-#' @param app_uid an app uid.
-#' @param email an optional email address for the user to be invited to the app.
-#' @param user_uid an optional user uid for the user to be invited to the app.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
+#' @param app_uid an optional app uid.
+#' @param user_uid an optional user uid.
+#' @param email an optional user email address.
 #'
+#' @inheritParams get_apps
 #'
 #' @return an object of class \code{polished_api_res}.  The "content" of the object is a
 #' tibble of app(s) with the following columns:
 #' - uid
-#' - app_name
-#' - app_url
+#' - app_uid
+#' - user_uid
+#' - is_admin
 #' - created_at
-#' - modified_at
+#' - email
 #'
 #' @export
 #'
-#' @seealso add_app update_app delete_app
+#' @seealso [add_app_user()] [update_app_user()] [delete_app_user()]
 #'
 #' @importFrom httr GET authenticate
 #'
@@ -55,18 +55,24 @@ get_app_users <- function(
 
 #' Polished API - Add a User to an App
 #'
-#' @param app_uid an optional app uid.
-#' @param app_name an optional app name.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
+#' @param app_uid the app uid.
+#' @param user_uid an optional user uid for the user to be invited to the app.
+#' @param email an optional user email address.
+#' @param is_admin booles - whether or not the user is a Polished admin.
+#' @param send_email_invite boolean - whether or not to send the user an invite email
+#' notifying them they have been invited to access the app.
+#' @param email an optional email address for the user to be invited to the app.
 #'
-#' @details supply either the app uid or app name to get data about a specific app.
+#' @inheritParams get_apps
+#'
+#' @details supply either the \code{user_uid} or \code{email}. If both a provided, then
+#' the \code{user_uid} will be used, and the \code{email} will be ignored.
 #'
 #' @export
 #'
-#' @seealso get_apps update_app delete_app
+#' @seealso [get_app_users()] [update_app_user()] [delete_app_user()]
 #'
-#' @importFrom httr GET authenticate
+#' @importFrom httr POST authenticate
 #'
 add_app_user <- function(
   app_uid,
@@ -81,9 +87,18 @@ add_app_user <- function(
     stop("`user_uid` and `email` cannot both be `NULL`", call. = FALSE)
   }
 
-  body_out <- list()
+  if (!is.logical(is_admin)) {
+    stop("`is_admin` must be `TRUE` or `FALSE`", call. = FALSE)
+  }
 
-  body_out$app_uid <- app_uid
+  if (!is.logical(send_invite_email)) {
+    stop("`send_invite_email` must be `TRUE` or `FALSE`", call. = FALSE)
+  }
+
+  body_out <- list(
+    app_uid = app_uid
+  )
+
   body_out$user_uid <- user_uid
   body_out$email <- email
   body_out$is_admin <- is_admin
@@ -107,20 +122,20 @@ add_app_user <- function(
 
 
 
-#' Polished API - Update an App
+#' Polished API - Update an App User
 #'
 #' @param app_uid the app uid to update.
-#' @param user_uid an optional app name.
+#' @param user_uid the user uid to update.
 #' @param is_admin boolean - whether or not the user is an admin.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
+#'
+#' @inheritParams get_apps
 #'
 #'
 #' @export
 #'
-#' @seealso get_app_users add_app_user delete_app_user
+#' @seealso [get_app_users()] [add_app_user()] [delete_app_user()]
 #'
-#' @importFrom httr GET authenticate
+#' @importFrom httr PUT authenticate
 #'
 update_app_user <- function(
   app_uid,
@@ -150,20 +165,18 @@ update_app_user <- function(
 }
 
 
-#' Polished API - Delete an App
+#' Polished API - Delete an App User
 #'
 #' @param app_uid an app uid.
 #' @param user_uid a user uid.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
 #'
-#' @details supply either the app uid or app name to get data about a specific app.
+#' @inheritParams get_apps
 #'
 #' @export
 #'
-#' @seealso get_apps add_app update_app
+#' @seealso [get_apps()] [add_app()] [update_app()]
 #'
-#' @importFrom httr GET authenticate
+#' @importFrom httr DELETE authenticate
 #'
 delete_app_user <- function(app_uid, user_uid, api_key = getOption("polished")$api_key) {
 

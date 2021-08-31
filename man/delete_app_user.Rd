@@ -2,7 +2,7 @@
 % Please edit documentation in R/api_03_app_users.R
 \name{delete_app_user}
 \alias{delete_app_user}
-\title{Polished API - Delete an App}
+\title{Polished API - Delete an App User}
 \usage{
 delete_app_user(app_uid, user_uid, api_key = getOption("polished")$api_key)
 }
@@ -11,15 +11,12 @@ delete_app_user(app_uid, user_uid, api_key = getOption("polished")$api_key)
 
 \item{user_uid}{a user uid.}
 
-\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 }
 \description{
-Polished API - Delete an App
-}
-\details{
-supply either the app uid or app name to get data about a specific app.
+Polished API - Delete an App User
 }
 \seealso{
-get_apps add_app update_app
+\code{\link[=get_apps]{get_apps()}} \code{\link[=add_app]{add_app()}} \code{\link[=update_app]{update_app()}}
 }

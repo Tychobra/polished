@@ -14,19 +14,27 @@ add_app_user(
 )
 }
 \arguments{
-\item{app_uid}{an optional app uid.}
+\item{app_uid}{the app uid.}
 
-\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+\item{user_uid}{an optional user uid for the user to be invited to the app.}
+
+\item{email}{an optional email address for the user to be invited to the app.}
+
+\item{is_admin}{booles - whether or not the user is a Polished admin.}
+
+\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 
-\item{app_name}{an optional app name.}
+\item{send_email_invite}{boolean - whether or not to send the user an invite email
+notifying them they have been invited to access the app.}
 }
 \description{
 Polished API - Add a User to an App
 }
 \details{
-supply either the app uid or app name to get data about a specific app.
+supply either the \code{user_uid} or \code{email}. If both a provided, then
+the \code{user_uid} will be used, and the \code{email} will be ignored.
 }
 \seealso{
-get_apps update_app delete_app
+\code{\link[=get_app_users]{get_app_users()}} \code{\link[=update_app_user]{update_app_user()}} \code{\link[=delete_app_user]{delete_app_user()}}
 }
