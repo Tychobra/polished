@@ -4,19 +4,16 @@
 \alias{delete_app}
 \title{Polished API - Delete an App}
 \usage{
-delete_app(app_uid = NULL, api_key = getOption("polished")$api_key)
+delete_app(app_uid, api_key = getOption("polished")$api_key)
 }
 \arguments{
-\item{app_uid}{an optional app uid.}
+\item{app_uid}{the app uid.}
 
-\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 }
 \description{
 Polished API - Delete an App
-}
-\details{
-supply either the app uid or app name to get data about a specific app.
 }
 \seealso{
 get_apps add_app update_app

@@ -5,27 +5,24 @@
 \title{Polished API - Update an App}
 \usage{
 update_app(
-  app_uid = NULL,
+  app_uid,
   app_name = NULL,
   app_url = NULL,
   api_key = getOption("polished")$api_key
 )
 }
 \arguments{
-\item{app_uid}{the app uid to update.}
+\item{app_uid}{the app uid of the app to update.}
 
-\item{app_name}{an optional app name.}
+\item{app_name}{an optional app name to replace the existing app name.}
 
-\item{app_url}{an optional app url.}
+\item{app_url}{an optional app url to replace the existing app url.}
 
-\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 }
 \description{
 Polished API - Update an App
-}
-\details{
-supply either the app uid or app name to get data about a specific app.
 }
 \seealso{
 get_apps add_app delete_app

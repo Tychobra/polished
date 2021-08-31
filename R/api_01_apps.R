@@ -2,7 +2,7 @@
 #'
 #' @param app_uid an optional app uid.
 #' @param app_name an optional app name.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 #' so that you do not need to supply this argument with each function call.
 #'
 #' @details If both the \code{app_uid} and \code{app_name} are \code{NULL}, then all the
@@ -22,7 +22,7 @@
 #'
 #' @export
 #'
-#' @seealso add_app update_app delete_app
+#' @seealso [add_app()] [update_app()] [delete_app()]
 #'
 #' @importFrom httr GET authenticate
 #'
@@ -32,10 +32,9 @@ get_apps <- function(
   api_key = getOption("polished")$api_key
 ) {
 
-  query_out <- list(
-    app_uid = app_uid,
-    app_name = app_name
-  )
+  query_out <- list()
+  query_out$app_uid <- app_uid
+  query_out$app_name <- app_name
 
   resp <- httr::GET(
     url = paste0(getOption("polished")$api_url, "/apps"),
@@ -57,25 +56,25 @@ get_apps <- function(
 
 #' Polished API - Add an App
 #'
-#' @param app_uid an optional app uid.
-#' @param app_name an optional app name.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
+#' @param app_name the app name.
+#' @param app_url an optional app url.  This url will be included in links sent out in invite
+#' and email verification emails to redirect your users to your app.
 #'
-#' @details supply either the app uid or app name to get data about a specific app.
+#' @inheritParams get_apps
 #'
 #' @export
 #'
 #' @seealso get_apps update_app delete_app
 #'
-#' @importFrom httr GET authenticate
+#' @importFrom httr POST authenticate
 #'
-add_app <- function(app_name = NULL, app_url = NULL, api_key = getOption("polished")$api_key) {
+add_app <- function(app_name, app_url = NULL, api_key = getOption("polished")$api_key) {
 
   body_out <- list(
-    app_name = app_name,
-    app_url = app_url
+    app_name = app_name
   )
+
+  body_out$app_url <- app_url
 
   resp <- httr::POST(
     url = paste0(getOption("polished")$api_url, "/apps"),
@@ -96,21 +95,19 @@ add_app <- function(app_name = NULL, app_url = NULL, api_key = getOption("polish
 
 #' Polished API - Update an App
 #'
-#' @param app_uid the app uid to update.
-#' @param app_name an optional app name.
-#' @param app_url an optional app url.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
+#' @param app_uid the app uid of the app to update.
+#' @param app_name an optional app name to replace the existing app name.
+#' @param app_url an optional app url to replace the existing app url.
 #'
-#' @details supply either the app uid or app name to get data about a specific app.
+#' @inheritParams get_apps
 #'
 #' @export
 #'
 #' @seealso get_apps add_app delete_app
 #'
-#' @importFrom httr GET authenticate
+#' @importFrom httr PUT authenticate
 #'
-update_app <- function(app_uid = NULL, app_name = NULL, app_url = NULL, api_key = getOption("polished")$api_key) {
+update_app <- function(app_uid, app_name = NULL, app_url = NULL, api_key = getOption("polished")$api_key) {
 
   body_out <- list(
     app_uid = app_uid
@@ -140,19 +137,17 @@ update_app <- function(app_uid = NULL, app_name = NULL, app_url = NULL, api_key 
 
 #' Polished API - Delete an App
 #'
-#' @param app_uid an optional app uid.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
+#' @param app_uid the app uid.
 #'
-#' @details supply either the app uid or app name to get data about a specific app.
+#' @inheritParams get_apps
 #'
 #' @export
 #'
 #' @seealso get_apps add_app update_app
 #'
-#' @importFrom httr GET authenticate
+#' @importFrom httr DELETE authenticate
 #'
-delete_app <- function(app_uid = NULL, api_key = getOption("polished")$api_key) {
+delete_app <- function(app_uid, api_key = getOption("polished")$api_key) {
 
   body_out <- list(
     app_uid = app_uid

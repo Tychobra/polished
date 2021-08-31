@@ -15,7 +15,7 @@ get_apps(
 
 \item{app_name}{an optional app name.}
 
-\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 }
 \value{
@@ -41,5 +41,5 @@ and the \code{app_name} will be ignored.  If the app does not exists, a zero row
 will be returned.
 }
 \seealso{
-add_app update_app delete_app
+\code{\link[=add_app]{add_app()}} update_app delete_app
 }

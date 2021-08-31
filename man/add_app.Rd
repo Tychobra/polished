@@ -4,25 +4,19 @@
 \alias{add_app}
 \title{Polished API - Add an App}
 \usage{
-add_app(
-  app_name = NULL,
-  app_url = NULL,
-  api_key = getOption("polished")$api_key
-)
+add_app(app_name, app_url = NULL, api_key = getOption("polished")$api_key)
 }
 \arguments{
-\item{app_name}{an optional app name.}
+\item{app_name}{the app name.}
 
-\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
+\item{app_url}{an optional app url.  This url will be included in links sent out in invite
+and email verification emails to redirect your users to your app.}
+
+\item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
-
-\item{app_uid}{an optional app uid.}
 }
 \description{
 Polished API - Add an App
-}
-\details{
-supply either the app uid or app name to get data about a specific app.
 }
 \seealso{
 get_apps update_app delete_app
