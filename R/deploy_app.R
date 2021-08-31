@@ -156,7 +156,7 @@ deploy_app <- function(
 
     if (isTRUE(launch_browser)) {
       # launch user's browser with newly deployed Shiny app
-      utils::browseURL(res_content$url)
+      utils::browseURL(out$content$url)
     }
   }
 
