@@ -94,7 +94,7 @@ add_user <- function(email, api_key = getOption("polished")$api_key) {
 
 #' Polished API - Delete a User
 #'
-#' @param app_uid the user uid of the user to be deleted.
+#' @param user_uid the user uid of the user to be deleted.
 #'
 #' @inheritParams get_apps
 #'

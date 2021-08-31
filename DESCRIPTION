@@ -46,7 +46,8 @@ Imports:
 Suggests:
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    config
 VignetteBuilder: 
     knitr
 Roxygen: list(markdown = TRUE)

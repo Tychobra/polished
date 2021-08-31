@@ -22,11 +22,11 @@ add_app_user(
 
 \item{is_admin}{booles - whether or not the user is a Polished admin.}
 
+\item{send_invite_email}{boolean - whether or not to send the user an invite email
+notifying them they have been invited to access the app.}
+
 \item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
-
-\item{send_email_invite}{boolean - whether or not to send the user an invite email
-notifying them they have been invited to access the app.}
 }
 \description{
 Polished API - Add a User to an App
