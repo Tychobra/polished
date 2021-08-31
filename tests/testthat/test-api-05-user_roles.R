@@ -73,4 +73,16 @@ test_that("can get all user roles for a user", {
 })
 
 
+### DELETE ----
+test_that("delete a role from a user", {
+
+  api_res <- delete_user_role(
+    user_uid = test_user$uid,
+    role_uid = test_role$uid
+  )
+
+  expect_equal(status_code(api_res$response), 200L)
+  expect_equal(length(api_res), 2L)
+  expect_equal(length(api_res$content), 1L)
+})
 

@@ -2,9 +2,8 @@
 #'
 #' @param user_uid an optional user uid.
 #' @param role_uid an optional role uid.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
 #'
+#' @inheritParams get_apps
 #'
 #' @return an object of class \code{polished_api_res}.  The "content" of the object is a
 #' tibble of users(s) with the following columns:
@@ -16,7 +15,7 @@
 #'
 #' @export
 #'
-#' @seealso add_role delete_role
+#' @seealso [add_user_role()] [delete_user_role()]
 #'
 #' @importFrom httr GET authenticate
 #'
@@ -52,15 +51,14 @@ get_user_roles <- function(
 #'
 #' @param user_uid a user uid.
 #' @param role_uid a role name.
-#' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' so that you do not need to supply this argument with each function call.
 #'
+#' @inheritParams get_apps
 #'
 #' @export
 #'
-#' @seealso get_roles delete_role
+#' @seealso [get_user_roles()] [delete_user_role()]
 #'
-#' @importFrom httr GET authenticate
+#' @importFrom httr POST authenticate
 #'
 add_user_role <- function(user_uid, role_uid, api_key = getOption("polished")$api_key) {
 
@@ -86,35 +84,36 @@ add_user_role <- function(user_uid, role_uid, api_key = getOption("polished")$ap
 
 
 
-#' #' Polished API - Delete a User Role
-#' #'
-#' #' @param role_uid the role uid of the role to be deleted.
-#' #' @param api_key your Polished API key.  Set your polished api key using \code{\link{set_api_key()}}
-#' #' so that you do not need to supply this argument with each function call.
-#' #'
-#' #'
-#' #' @export
-#' #'
-#' #' @seealso get_apps add_app update_app
-#' #'
-#' #' @importFrom httr GET authenticate
-#' #'
-#' delete_user_role <- function(role_uid, api_key = getOption("polished")$api_key) {
+#' Polished API - Delete a User Role
 #'
-#'   body_out <- list(
-#'     role_uid = role_uid
-#'   )
+#' @param role_uid the role uid of the role to be deleted.
+#' @param user_uid the user uid that the role should be removed from.
 #'
-#'   resp <- httr::DELETE(
-#'     url = paste0(getOption("polished")$api_url, "/user-roles"),
-#'     ua,
-#'     httr::authenticate(
-#'       user = api_key,
-#'       password = ""
-#'     ),
-#'     body = body_out,
-#'     encode = "json"
-#'   )
+#' @inheritParams get_apps
 #'
-#'   polished_api_res(resp)
-#' }
+#' @export
+#'
+#' @seealso [get_user_roles()] [add_user_role()]
+#'
+#' @importFrom httr DELETE authenticate
+#'
+delete_user_role <- function(role_uid, user_uid, api_key = getOption("polished")$api_key) {
+
+  body_out <- list(
+    role_uid = role_uid,
+    user_uid = user_uid
+  )
+
+  resp <- httr::DELETE(
+    url = paste0(getOption("polished")$api_url, "/user-roles"),
+    ua,
+    httr::authenticate(
+      user = api_key,
+      password = ""
+    ),
+    body = body_out,
+    encode = "json"
+  )
+
+  polished_api_res(resp)
+}
