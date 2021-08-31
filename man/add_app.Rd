@@ -19,5 +19,5 @@ so that you do not need to supply this argument with each function call.}
 Polished API - Add an App
 }
 \seealso{
-get_apps update_app delete_app
+\code{\link[=get_apps]{get_apps()}} \code{\link[=update_app]{update_app()}} \code{\link[=delete_app]{delete_app()}}
 }

@@ -41,5 +41,5 @@ and the \code{app_name} will be ignored.  If the app does not exists, a zero row
 will be returned.
 }
 \seealso{
-\code{\link[=add_app]{add_app()}} update_app delete_app
+\code{\link[=add_app]{add_app()}} \code{\link[=update_app]{update_app()}} \code{\link[=delete_app]{delete_app()}}
 }

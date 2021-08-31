@@ -64,7 +64,7 @@ get_apps <- function(
 #'
 #' @export
 #'
-#' @seealso get_apps update_app delete_app
+#' @seealso [get_apps()] [update_app()] [delete_app()]
 #'
 #' @importFrom httr POST authenticate
 #'
@@ -103,7 +103,7 @@ add_app <- function(app_name, app_url = NULL, api_key = getOption("polished")$ap
 #'
 #' @export
 #'
-#' @seealso get_apps add_app delete_app
+#' @seealso [get_apps()] [add_app()] [delete_app()]
 #'
 #' @importFrom httr PUT authenticate
 #'
@@ -143,7 +143,7 @@ update_app <- function(app_uid, app_name = NULL, app_url = NULL, api_key = getOp
 #'
 #' @export
 #'
-#' @seealso get_apps add_app update_app
+#' @seealso [get_apps()] [add_app()] [update_app()]
 #'
 #' @importFrom httr DELETE authenticate
 #'
