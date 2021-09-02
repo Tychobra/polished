@@ -106,7 +106,7 @@ add_user <- function(email, api_key = getOption("polished")$api_key) {
 #'
 delete_user <- function(user_uid, api_key = getOption("polished")$api_key) {
 
-  body_out <- list(
+  query_out <- list(
     user_uid = user_uid
   )
 
@@ -117,8 +117,7 @@ delete_user <- function(user_uid, api_key = getOption("polished")$api_key) {
       user = api_key,
       password = ""
     ),
-    body = body_out,
-    encode = "json"
+    query = query_out
   )
 
   polished_api_res(resp)

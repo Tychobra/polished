@@ -99,7 +99,7 @@ add_user_role <- function(user_uid, role_uid, api_key = getOption("polished")$ap
 #'
 delete_user_role <- function(role_uid, user_uid, api_key = getOption("polished")$api_key) {
 
-  body_out <- list(
+  query_out <- list(
     role_uid = role_uid,
     user_uid = user_uid
   )
@@ -111,8 +111,7 @@ delete_user_role <- function(role_uid, user_uid, api_key = getOption("polished")
       user = api_key,
       password = ""
     ),
-    body = body_out,
-    encode = "json"
+    query = query_out
   )
 
   polished_api_res(resp)

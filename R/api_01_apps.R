@@ -149,7 +149,7 @@ update_app <- function(app_uid, app_name = NULL, app_url = NULL, api_key = getOp
 #'
 delete_app <- function(app_uid, api_key = getOption("polished")$api_key) {
 
-  body_out <- list(
+  query_out <- list(
     app_uid = app_uid
   )
 
@@ -160,8 +160,7 @@ delete_app <- function(app_uid, api_key = getOption("polished")$api_key) {
       user = api_key,
       password = ""
     ),
-    body = body_out,
-    encode = "json"
+    query = query_out
   )
 
   polished_api_res(resp)
