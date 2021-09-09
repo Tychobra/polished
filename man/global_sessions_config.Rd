@@ -10,7 +10,6 @@ global_sessions_config(
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,
-  api_url = "https://auth-api.polished.tech/v1",
   sign_in_providers = "email",
   is_email_verification_required = TRUE,
   is_auth_required = TRUE,
@@ -37,8 +36,6 @@ Make sure to set \code{admin_mode = FALSE} before deploying your app.}
 
 \item{is_invite_required}{\code{TRUE} by default.  Whether or not to require the user to have an
 invite before registering/signing in}
-
-\item{api_url}{the API url.  Defaults to \code{"https://api.polished.tech"}.}
 
 \item{sign_in_providers}{the sign in providers to enable.  Valid values are \code{"google"}
 \code{"email"}, \code{"microsoft"}, and/or \code{"facebook"}. Defaults to \code{"email"}.}
