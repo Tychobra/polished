@@ -15,7 +15,8 @@ knitr::opts_chunk$set(
 ```
 
 `polished` now comes with functions that make it easy to interact with the Polished API from
-R.  See the individual wrapper function help files for details. The available functions include:
+R.  See the individual wrapper function help files for details (e.g. `?polished::get_apps()`). 
+The available API wrapper functions include:
 
 Apps - functions to manage your account's Shiny apps.  
 
