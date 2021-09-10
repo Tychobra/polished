@@ -2,7 +2,7 @@
 # polished v0.3.0.9000
 
 * created API wrapper functions for programmatically managing users, apps, user invites,
-roles, etc.  See the new API Wrappers vignette for details.
+roles, etc.  See the new API Wrappers vignette for details (`vignette("api_wrappers", package = "polished")`).
 * added 93 new tests for the above mentioned new API wrapper functions.
 * removed `api_url` argument from `global_sessions_config()`.  This argument is only used
 internally during development, so there is no reason to expose it to package users.
