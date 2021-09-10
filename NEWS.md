@@ -8,7 +8,7 @@ roles, etc.  See the new API Wrappers vignette for details.
 internally during development, so there is no reason to expose it to package users.
 * Bug Fix: fixed check for user already registered during sign in process.
 * added `button_color` argument to `sign_in_ui_default()`.
-* added `tlmgr` argument to `deplo_app()` which allows support for generating pdf documents from 
+* added `tlmgr` argument to `deploy_app()` which allows support for generating pdf documents from 
 Rmarkdown.
 
 # polished v0.3.0
