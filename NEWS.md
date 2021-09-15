@@ -1,5 +1,5 @@
 
-# polished v0.3.0.9000
+# polished v0.4.0
 
 * created API wrapper functions for programmatically managing users, apps, user invites,
 roles, etc.  See the new API Wrappers vignette for details.
