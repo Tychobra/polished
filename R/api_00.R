@@ -8,6 +8,8 @@ ua <- httr::user_agent("http://github.com/tychobra/polished")
 #'
 #' @importFrom httr http_type
 #'
+#' @export
+#'
 polished_api_res <- function(resp) {
 
 
