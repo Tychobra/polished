@@ -15,7 +15,6 @@ URL: https://github.com/tychobra/polished,
     https://polished.tech
 BugReports: https://github.com/tychobra/polished/issues
 Encoding: UTF-8
-LazyData: true
 Imports:
     automagic,
     digest,
