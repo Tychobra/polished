@@ -58,7 +58,7 @@ get_app_users <- function(
 #' @param app_uid the app uid.
 #' @param user_uid an optional user uid for the user to be invited to the app.
 #' @param email an optional user email address.
-#' @param is_admin booles - whether or not the user is a Polished admin.
+#' @param is_admin boolean - whether or not the user is a Polished admin.
 #' @param send_invite_email boolean - whether or not to send the user an invite email
 #' notifying them they have been invited to access the app.
 #' @param email an optional email address for the user to be invited to the app.
