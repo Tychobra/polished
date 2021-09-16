@@ -1,13 +1,14 @@
 ## Test environments
-* local OS X install, R 4.0.4
-* ubuntu 20.04, R 4.0.4
-* win-builder (devel and release)
+* local OS X install, R 4.1.1
+* Windows Server 2008 R2 SP1, R-devel, 32/64 bit
+* Fedora Linux, R-devel, clang, gfortran
+* Ubuntu Linux 20.04.1 LTS, R-release, GCC
+* win-builder, R Under development (unstable) (2021-09-11 r80888)
 
 ## R CMD check results
-Duration: 34.1s
 
 > checking package dependencies ... NOTE
-  Imports includes 24 non-default packages.
+  Imports includes 23 non-default packages.
   Importing from so many packages makes the package vulnerable to any of
   them becoming unavailable.  Move as many as possible to Suggests and
   use conditionally.
