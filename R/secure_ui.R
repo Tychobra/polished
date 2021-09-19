@@ -50,12 +50,6 @@ secure_ui <- function(
 
   function(request) {
 
-    if (is.function(ui)) {
-      ui <- ui(request)
-    } else {
-      ui <- force(ui)
-    }
-
     if (isTRUE(.global_sessions$get_admin_mode())) {
 
       # go to Admin Panel
@@ -114,6 +108,16 @@ secure_ui <- function(
         print(error)
       })
     }
+
+    request$polished_user <- user
+
+    if (is.function(ui)) {
+      ui <- ui(request)
+    } else {
+      ui <- (function(request) ui)()
+    }
+    ui <- force(ui)
+
 
     # UI to optionally add Sentry.io error monitoring
     sentry_ui_out <- function(x) NULL
