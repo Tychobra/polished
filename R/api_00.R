@@ -123,6 +123,8 @@ set_api_url <- function(
 #'
 #' @return a tibble
 #'
+#' @export
+#'
 api_list_to_df <- function(api_list) {
 
   if (identical(length(api_list[[1]]), 0L)) {
