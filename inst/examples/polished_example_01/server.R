@@ -11,6 +11,13 @@ server <- function(input, output, session) {
     session$reload()
 
   })
+
+  output$test_render <- renderUI({
+
+    session$userData$user()
+
+  })
+
 }
 
 secure_server(server)
