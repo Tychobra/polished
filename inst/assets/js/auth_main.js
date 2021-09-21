@@ -1,9 +1,9 @@
 "use strict";
 
-var auth_main = function auth_main(ns_prefix) {
+var auth_main = function auth_main(ns_prefix, cookie_expiration) {
   var cookie_options = {
-    expires: 365
-  }; // set cookie to expire in 1 year
+    expires: cookie_expiration
+  };
 
   if (location.protocol === 'https:') {
     // add cookie options that browsers are starting to require to allow you to
@@ -45,9 +45,8 @@ var auth_main = function auth_main(ns_prefix) {
 
     var polished_cookie = "p" + Math.random();
     Cookies.set('polished', polished_cookie, {
-      expires: 365
-    } // set cookie to expire in 1 year
-    );
+      expires: cookie_expiration
+    });
     Shiny.setInputValue("".concat(ns_prefix, "register_js"), {
       email: email,
       password: password,

@@ -1,7 +1,7 @@
 
-const auth_main = (ns_prefix) => {
+const auth_main = (ns_prefix, cookie_expiration) => {
 
-  let cookie_options = {expires: 365} // set cookie to expire in 1 year
+  let cookie_options = {expires: cookie_expiration}
   if (location.protocol === 'https:') {
     // add cookie options that browsers are starting to require to allow you to
     // use cookies within iframes. Only works when app is running on https.
@@ -58,7 +58,7 @@ const auth_main = (ns_prefix) => {
     Cookies.set(
       'polished',
       polished_cookie,
-      { expires: 365 } // set cookie to expire in 1 year
+      { expires: cookie_expiration }
     )
 
     Shiny.setInputValue(`${ns_prefix}register_js`, {
