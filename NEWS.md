@@ -1,4 +1,9 @@
 
+# polished 0.4.0.9000 (development version)
+
+* export the `api_list_to_df` function
+* added new `cookie_expires` argument to `global_sessions_config()`, allowing you to set the cookie expiration for app user's
+
 # polished v0.4.0
 
 * created API wrapper functions for programmatically managing users, apps, user invites,
