@@ -39,7 +39,7 @@ profile_module_ui <- function(id, other_lis = NULL) {
         shiny::actionLink(
           ns("polish__sign_out"),
           label = "Sign Out",
-          icon = icon("sign-out")
+          icon = icon("sign-out-alt")
         )
       )
     )

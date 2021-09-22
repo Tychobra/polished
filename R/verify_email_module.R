@@ -26,7 +26,7 @@ verify_email_module_ui <- function(id) {
         shiny::actionButton(
           ns("sign_out"),
           label = "Sign Out",
-          icon("sign-out"),
+          icon("sign-out-alt"),
           class = "pull-right"
         )
       )
