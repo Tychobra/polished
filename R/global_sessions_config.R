@@ -68,7 +68,7 @@ global_sessions_config <- function(
     stop("invalid `api_key` argument passed to `global_sessions_config()`", call. = FALSE)
   }
 
-  if (!(is.numeric(cookie_expires) || is.null(cookie_expires))) {
+  if ((is.numeric(cookie_expires) && cookie_expires <= 0) || !is.null(cookie_expires)) {
     stop("invalid `cookie_expires` argument passed to `global_sessions_config()`", call. = FALSE)
   }
 
