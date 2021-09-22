@@ -1,5 +1,5 @@
 
-# polished 0.4.0.9000 (development version)
+# polished v0.4.0.9000 (development version)
 
 * removed options to pass an "account module" and/or a "splash page module" to the `secure_ui()` and
 `secure_server()` functions.  These were experimental arguments for extending polished. We now have a better generalized solution for extending polished -- more to come soon.
