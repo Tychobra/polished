@@ -29,8 +29,10 @@
 #' allow user to do certain actions (such as viewing charts and tables) without signing in,
 #' and only require users to sign in if they want to save data to your database.
 #' @param sentry_dsn either \code{NULL}, the default, or your Sentry project DSN.
-#' @param cookie_expiration the number of days before a User's cookie expires.
-#' Set to `NULL` to force Sign Out at session end. Default is `365` (i.e. 1 year)
+#' @param cookie_expiration the number of days before a user's cookie expires.
+#' Set to \code{NULL} to force Sign Out at session end. This argument is passed to
+#' the `expires` option in js-cookie: \url{https://github.com/js-cookie/js-cookie#expires}.
+#' Default value is `365` (i.e. 1 year)
 #'
 #' @export
 #'
