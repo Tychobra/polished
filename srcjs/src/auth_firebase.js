@@ -1,9 +1,9 @@
 const auth = firebase.auth()
 
 
-const auth_firebase = (ns_prefix, cookie_expiration) => {
+const auth_firebase = (ns_prefix, cookie_expires) => {
 
-  let cookie_options = {expires: cookie_expiration}
+  let cookie_options = {expires: cookie_expires}
   if (location.protocol === 'https:') {
     // add cookie options that browsers are starting to require to allow you to
     // use cookies within iframes.  Only works when app is running on https.

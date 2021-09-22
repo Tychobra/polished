@@ -2,9 +2,9 @@
 
 var auth = firebase.auth();
 
-var auth_firebase = function auth_firebase(ns_prefix, cookie_expiration) {
+var auth_firebase = function auth_firebase(ns_prefix, cookie_expires) {
   var cookie_options = {
-    expires: cookie_expiration
+    expires: cookie_expires
   };
 
   if (location.protocol === 'https:') {

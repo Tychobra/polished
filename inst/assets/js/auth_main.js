@@ -1,8 +1,8 @@
 "use strict";
 
-var auth_main = function auth_main(ns_prefix, cookie_expiration) {
+var auth_main = function auth_main(ns_prefix, cookie_expires) {
   var cookie_options = {
-    expires: cookie_expiration
+    expires: cookie_expires
   };
 
   if (location.protocol === 'https:') {
@@ -45,7 +45,7 @@ var auth_main = function auth_main(ns_prefix, cookie_expiration) {
 
     var polished_cookie = "p" + Math.random();
     Cookies.set('polished', polished_cookie, {
-      expires: cookie_expiration
+      expires: cookie_expires
     });
     Shiny.setInputValue("".concat(ns_prefix, "register_js"), {
       email: email,

@@ -14,7 +14,7 @@ global_sessions_config(
   is_email_verification_required = TRUE,
   is_auth_required = TRUE,
   sentry_dsn = NULL,
-  cookie_expiration = 365L
+  cookie_expires = 365L
 )
 }
 \arguments{
@@ -51,7 +51,7 @@ and only require users to sign in if they want to save data to your database.}
 
 \item{sentry_dsn}{either \code{NULL}, the default, or your Sentry project DSN.}
 
-\item{cookie_expiration}{the number of days before a User's cookie expires.
+\item{cookie_expires}{the number of days before a User's cookie expires.
 Set to \code{NULL} to force Sign Out at session end. Default is \code{365} (i.e. 1 year)}
 }
 \description{
