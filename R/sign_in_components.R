@@ -26,7 +26,7 @@ sign_in_js <- function(ns) {
       firebase_dependencies(),
       firebase_init(firebase_config),
       tags$script(src = "polish/js/auth_firebase.js?version=5"),
-      tags$script(paste0("auth_firebase('", ns(''), "', ", getOption("polished")$cookie_expires, "')"))
+      tags$script(paste0("auth_firebase('", ns(''), "', ", getOption("polished")$cookie_expires, ")"))
     )
   }
 
