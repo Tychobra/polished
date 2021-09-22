@@ -25,8 +25,8 @@ sign_in_js <- function(ns) {
     firebase_deps <- htmltools::tagList(
       firebase_dependencies(),
       firebase_init(firebase_config),
-      tags$script(src = "polish/js/auth_firebase.js?version=4"),
-      tags$script(paste0("auth_firebase('", ns(''), "')"))
+      tags$script(src = "polish/js/auth_firebase.js?version=5"),
+      tags$script(paste0("auth_firebase('", ns(''), "', ", getOption("polished")$cookie_expires, "')"))
     )
   }
 
@@ -35,8 +35,8 @@ sign_in_js <- function(ns) {
     tags$script(src = "polish/js/toast_options.js"),
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
     firebase_deps,
-    tags$script(src = "polish/js/auth_main.js?version=4"),
-    tags$script(paste0("auth_main('", ns(''), "')"))
+    tags$script(src = "polish/js/auth_main.js?version=5"),
+    tags$script(paste0("auth_main('", ns(''), "', ", getOption("polished")$cookie_expires, ")"))
   )
 }
 

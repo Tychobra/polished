@@ -29,6 +29,10 @@
 #' allow user to do certain actions (such as viewing charts and tables) without signing in,
 #' and only require users to sign in if they want to save data to your database.
 #' @param sentry_dsn either \code{NULL}, the default, or your Sentry project DSN.
+#' @param cookie_expires the number of days before a user's cookie expires.
+#' Set to \code{NULL} to force Sign Out at session end. This argument is passed to
+#' the `expires` option in js-cookie: \url{https://github.com/js-cookie/js-cookie#expires}.
+#' Default value is `365` (i.e. 1 year)
 #'
 #' @export
 #'
@@ -56,11 +60,16 @@ global_sessions_config <- function(
   sign_in_providers = "email",
   is_email_verification_required = TRUE,
   is_auth_required = TRUE,
-  sentry_dsn = NULL
+  sentry_dsn = NULL,
+  cookie_expires = 365L
 ) {
 
   if (!(length(api_key) == 1 && is.character(api_key))) {
     stop("invalid `api_key` argument passed to `global_sessions_config()`", call. = FALSE)
+  }
+
+  if ((is.numeric(cookie_expires) && cookie_expires <= 0) || !is.null(cookie_expires)) {
+    stop("invalid `cookie_expires` argument passed to `global_sessions_config()`", call. = FALSE)
   }
 
   current_polished_options <- getOption("polished")
@@ -107,6 +116,7 @@ global_sessions_config <- function(
   options_out$app_uid <- app$uid
   options_out$app_name_display <- app_name_display
   options_out$sentry_dsn <- sentry_dsn
+  options_out$cookie_expires <- cookie_expires
   options("polished" = options_out)
 
 

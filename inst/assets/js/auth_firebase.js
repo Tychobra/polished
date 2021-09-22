@@ -2,10 +2,10 @@
 
 var auth = firebase.auth();
 
-var auth_firebase = function auth_firebase(ns_prefix) {
+var auth_firebase = function auth_firebase(ns_prefix, cookie_expires) {
   var cookie_options = {
-    expires: 365
-  }; // set cookie to expire in 1 year
+    expires: cookie_expires
+  };
 
   if (location.protocol === 'https:') {
     // add cookie options that browsers are starting to require to allow you to
