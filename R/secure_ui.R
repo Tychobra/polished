@@ -20,8 +20,6 @@
 #' @param admin_ui_options list of HTML elements to customize branding of the \code{polished} Admin Panel.  Valid
 #' list element names are \code{title}, \code{sidebar_branding}, and \code{browser_tab_icon}.  See
 #' \code{\link{default_admin_ui_options}}, the default.
-#' @param account_module_ui the UI portion for the user's account module.
-#' @param splash_module_ui the UI portion for the splash page module.
 #'
 #' @return Secured Shiny app UI
 #'
@@ -38,9 +36,7 @@ secure_ui <- function(
   sign_in_page_ui = NULL,
   custom_admin_ui = NULL,
   custom_admin_button_ui = admin_button_ui(),
-  admin_ui_options = default_admin_ui_options(),
-  account_module_ui = NULL,
-  splash_module_ui = NULL
+  admin_ui_options = default_admin_ui_options()
 ) {
 
 
@@ -137,15 +133,7 @@ secure_ui <- function(
 
     if (is.null(user)) {
 
-      if (!is.null(splash_module_ui) && is.null(page_query)) {
-
-        page_out <- tagList(
-          splash_module_ui,
-          tags$script(src = "polish/js/router.js?version=3"),
-          sentry_ui_out("splash")
-        )
-
-      } else if (identical(page_query, "sign_in")) {
+      if (identical(page_query, "sign_in")) {
         # go to the sign in page
         if (is.null(sign_in_page_ui)) {
 
@@ -208,22 +196,7 @@ secure_ui <- function(
           isFALSE(.global_sessions$is_email_verification_required)) {
 
 
-        if (identical(page_query, "account")) {
-
-          # server the payments module UI
-          if (is.null(account_module_ui)) {
-            stop("`account_module_ui` cannot be NULL", call. = FALSE)
-          } else {
-            page_out <- tagList(
-              account_module_ui,
-              tags$script(src = "polish/js/router.js?version=3"),
-              tags$script(src = "polish/js/polished_session.js?version=2"),
-              tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-              sentry_ui_out("account")
-            )
-          }
-
-        } else if (isTRUE(user$is_admin)) {
+        if (isTRUE(user$is_admin)) {
 
           if (identical(page_query, "admin_panel")) {
 

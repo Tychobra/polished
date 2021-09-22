@@ -12,8 +12,6 @@
 #' @param allow_reconnect argument to pass to the Shiny \code{session$allowReconnect()} function. Defaults to
 #' \code{FALSE}.  Set to \code{TRUE} to allow reconnect with shiny-server and Rstudio Connect.  Set to \code{"force"}
 #' for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.html} for more information.
-#' @param account_module the server code for the user account module.
-#' @param splash_module the server code for the splash page.
 #'
 #' @export
 #'
@@ -25,9 +23,7 @@ secure_server <- function(
   server,
   custom_sign_in_server = NULL,
   custom_admin_server = NULL,
-  allow_reconnect = FALSE,
-  account_module = NULL,
-  splash_module = NULL
+  allow_reconnect = FALSE
 ) {
 
   server <- force(server)
@@ -78,7 +74,7 @@ secure_server <- function(
         # user is not signed in
 
         # if the user is not on the sign in page, redirect to sign in and reload
-        if ((!identical(page, "sign_in") || (is.null(splash_module) && is.null(page))) &&
+        if ((!identical(page, "sign_in")) &&
             isTRUE(.global_sessions$is_auth_required)) {
 
           shiny::updateQueryString(
@@ -181,24 +177,6 @@ secure_server <- function(
 
 
           }
-        } else if (identical(query_list$page, "account")) {
-
-
-          # load up the account module
-          if (names(formals(account_module))[[1]] == "id") {
-            # new-style Shiny module
-            account_module("account")
-          } else {
-            # old-style Shiny module
-            shiny::callModule(
-              account_module,
-              "account"
-            )
-          }
-
-
-
-
         } else if (is.null(query_list$page)) {
 
           # go to the custom app
@@ -281,20 +259,6 @@ secure_server <- function(
             shiny::callModule(
               custom_sign_in_server,
               "sign_in"
-            )
-          }
-
-        }
-      } else if (is.null(page)) {
-
-        if (!is.null(splash_module) && isTRUE(isFALSE(.global_sessions$is_auth_required))) {
-
-          if (names(formals(splash_module))[[1]] == "id") {
-            splash_module("splash")
-          } else {
-            callModule(
-              splash_module,
-              "splash"
             )
           }
 
