@@ -32,7 +32,7 @@ so that you do not need to supply this argument with each function call.}
 Polished API - Add a User to an App
 }
 \details{
-supply either the \code{user_uid} or \code{email}. If both a provided, then
+supply either the \code{user_uid} or \code{email}. If both are provided, then
 the \code{user_uid} will be used, and the \code{email} will be ignored.
 }
 \seealso{

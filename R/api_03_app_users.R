@@ -65,7 +65,7 @@ get_app_users <- function(
 #'
 #' @inheritParams get_apps
 #'
-#' @details supply either the \code{user_uid} or \code{email}. If both a provided, then
+#' @details supply either the \code{user_uid} or \code{email}. If both are provided, then
 #' the \code{user_uid} will be used, and the \code{email} will be ignored.
 #'
 #' @export
