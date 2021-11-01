@@ -38,9 +38,9 @@ remove_query_string <- function(session = shiny::getDefaultReactiveDomain(), mod
 #' @examples
 #' cookies <- "cookie_name=cookie-value; cookie_name_2=cookie-value-2; cookie_name_3=cookie-with=sign"
 #'
-#' polished:::get_cookie(cookies, "cookie_name")
-#' polished:::get_cookie(cookies, "cookie_name_2")
-#' polished:::get_cookie(cookies, "cookie_name_3")
+#' #polished:::get_cookie(cookies, "cookie_name")
+#' #polished:::get_cookie(cookies, "cookie_name_2")
+#' #polished:::get_cookie(cookies, "cookie_name_3")
 #'
 get_cookie <- function(cookie_string, name) {
 

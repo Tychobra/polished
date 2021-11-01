@@ -375,7 +375,7 @@ Sessions <-  R6::R6Class(
       )
 
       if (!identical(httr::status_code(res), 200L)) {
-        stop(session_out$message)
+        stop(session_out$error, call. = FALSE)
       }
 
       session_out

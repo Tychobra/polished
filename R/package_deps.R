@@ -21,9 +21,9 @@
 #' @seealso [automagic::parse_packages()]
 #'
 #' @examples
-#' library(polished)
-#' dir <- system.file("examples", "polished_example_01", package = "polished")
-#' pkg_deps <- polished:::get_package_deps(dir)
+#' #library(polished)
+#' #dir <- system.file("examples", "polished_example_01", package = "polished")
+#' #pkg_deps <- polished:::get_package_deps(dir)
 #'
 #' @importFrom automagic get_package_details
 #' @importFrom dplyr %>%

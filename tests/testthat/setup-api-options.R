@@ -10,5 +10,5 @@ polished::set_api_key(the_config$api_key)
 
 polished:::set_api_url(
   api_url = "https://auth-api-dev.polished.tech/v1",
-  host_api_url = "http://host-dev.polished.tech/v1"
+  host_api_url = "https://host-dev.polished.tech/v1"
 )

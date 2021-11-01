@@ -28,9 +28,9 @@ validating that each detection is indeed a valid \code{CRAN} or public \code{Git
 and can be installed.
 }
 \examples{
-library(polished)
-dir <- system.file("examples", "polished_example_01", package = "polished")
-pkg_deps <- polished:::get_package_deps(dir)
+#library(polished)
+#dir <- system.file("examples", "polished_example_01", package = "polished")
+#pkg_deps <- polished:::get_package_deps(dir)
 
 }
 \seealso{
