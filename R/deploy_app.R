@@ -43,11 +43,14 @@ valid_gcp_regions <- c(
 #' \code{deploy_app()} will detect the R version you are currently running.  The R version must be a version
 #' supported by an r-ver Docker image.  You can see all the r-ver Docker image versions
 #' of R here \url{https://github.com/rocker-org/rocker-versioned2/tree/master/dockerfiles} and here
-#' \code{https://github.com/rocker-org/rocker-versioned/tree/master/r-ver}.
+#' \url{https://github.com/rocker-org/rocker-versioned/tree/master/r-ver}.
 #' @param tlmgr a character vector of TeX Live packages to install.  This is only used if your Shiny
 #' app generates pdf documents.  Defaults to \code{character(0)} for no TeX Live installation.  Set to
 #' \code{TRUE} for a minimal TeX Live installation, and pass a character vector of your TeX Live package
 #' dependencies to have all your TeX Live packages installed at build time.
+#' @param golem_package_name if Shiny app was created as a package with the
+#' \href{"https://github.com/ThinkR-open/golem"}{golem} package, provide the
+#' name of the package as a character string. Defaults to \code{NULL}
 #'
 #' @importFrom utils browseURL
 #' @importFrom httr POST authenticate status_code content upload_file
@@ -74,7 +77,8 @@ deploy_app <- function(
   region = "us-east1",
   ram_gb = 2,
   r_ver = NULL,
-  tlmgr = character(0)
+  tlmgr = character(0),
+  golem_package_name = NULL
 ) {
 
   if (identical(Sys.getenv("SHINY_HOSTING"), "polished")) {
@@ -95,8 +99,10 @@ deploy_app <- function(
 
   # check that app_dir contains either an "app.R" file or a "ui.R" and a "server.R" file
   file_names <- tolower(list.files(path = app_dir))
-  if (!("app.r" %in% file_names || ("ui.r" %in% file_names && "server.r" %in% file_names))) {
+  if (!("app.r" %in% file_names || ("ui.r" %in% file_names && "server.r" %in% file_names)) && is.null(golem_package_name)) {
     stop('"app_dir" must contain a file named "app.R" or files named "ui.R" and "server.R"', call. = FALSE)
+  } else if (!is.null(golem_package_name) && !is.character(golem_package_name)) {
+    stop('"golem_package_name" must be a character string')
   }
 
   if (is.null(r_ver)) {
@@ -139,7 +145,8 @@ deploy_app <- function(
       region = region,
       ram_gb = ram_gb,
       r_ver = r_ver,
-      tlmgr = paste(tlmgr, collapse = ",")
+      tlmgr = paste(tlmgr, collapse = ","),
+      golem_package_name = golem_package_name
     ),
     encode = "multipart",
     http_version = 0,
