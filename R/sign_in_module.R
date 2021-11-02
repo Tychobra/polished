@@ -460,8 +460,8 @@ sign_in_module <- function(input, output, session) {
     hold_password <- input$register_js$password
     cookie <- input$register_js$cookie
 
-
-    if (!is_valid_email(hold_email)) {
+    is_email <- is.null(input$check_jwt$jwt)
+    if (isTRUE(is_email) && !is_valid_email(hold_email)) {
 
       shinyFeedback::showFeedbackDanger(
         "register_email",
@@ -501,7 +501,8 @@ sign_in_module <- function(input, output, session) {
   check_jwt_email_valid <- reactive({
     req(input$check_jwt)
 
-    if (!is_valid_email(isolate({input$sign_in_email}))) {
+    is_email <- is.null(input$check_jwt$jwt)
+    if (isTRUE(is_email) && !is_valid_email(isolate({input$sign_in_email}))) {
 
       shinyFeedback::showFeedbackDanger(
         "sign_in_email",
