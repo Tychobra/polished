@@ -51,6 +51,7 @@ valid_gcp_regions <- c(
 #' @param golem_package_name if Shiny app was created as a package with the
 #' \href{"https://github.com/ThinkR-open/golem"}{golem} package, provide the
 #' name of the package as a character string. Defaults to \code{NULL}
+#' @param cache boolean - whether or not to cache the Docker image.
 #'
 #' @importFrom utils browseURL
 #' @importFrom httr POST authenticate status_code content upload_file
@@ -78,7 +79,8 @@ deploy_app <- function(
   ram_gb = 2,
   r_ver = NULL,
   tlmgr = character(0),
-  golem_package_name = NULL
+  golem_package_name = NULL,
+  cache = TRUE
 ) {
 
   if (identical(Sys.getenv("SHINY_HOSTING"), "polished")) {
@@ -105,9 +107,15 @@ deploy_app <- function(
     stop('"golem_package_name" must be a character string')
   }
 
+  if (!is.logical(cache)) {
+    stop("`cache` must be logical", call. = FALSE)
+  }
+
   if (is.null(r_ver)) {
     r_ver <- paste0(R.Version()$major, ".", R.Version()$minor)
   }
+
+
 
   cat("Creating app bundle...")
   app_zip_path <- bundle_app(
@@ -124,6 +132,8 @@ deploy_app <- function(
     path = app_zip_path,
     type = "application/x-gzip"
   )
+
+
 
   url_ <- paste0(getOption("polished")$host_api_url, "/hosted-apps")
   # reset the handle.  This allows us to redeploy the app after a failed deploy.  Without
@@ -146,7 +156,8 @@ deploy_app <- function(
       ram_gb = ram_gb,
       r_ver = r_ver,
       tlmgr = paste(tlmgr, collapse = ","),
-      golem_package_name = golem_package_name
+      golem_package_name = golem_package_name,
+      cache = cache
     ),
     encode = "multipart",
     http_version = 0,

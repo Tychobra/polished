@@ -1,6 +1,10 @@
 
 # polished v0.4.0.9000 (development version)
 
+* added "cache" argument to `deploy()` app to set whether or not to use a cached build of your Shiny
+app on Polished Hosting.
+* added "golem_package_name" argument to `deploy_app()` to allow for deploying Golem Shiny apps
+to Polished Hosting.
 * removed options to pass an "account module" and/or a "splash page module" to the `secure_ui()` and
 `secure_server()` functions.  These were experimental arguments for extending polished. We now have a better generalized solution for extending polished -- more to come soon.
 * export the `api_list_to_df` function

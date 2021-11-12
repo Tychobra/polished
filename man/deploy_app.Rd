@@ -13,7 +13,8 @@ deploy_app(
   ram_gb = 2,
   r_ver = NULL,
   tlmgr = character(0),
-  golem_package_name = NULL
+  golem_package_name = NULL,
+  cache = TRUE
 )
 }
 \arguments{
@@ -48,6 +49,8 @@ dependencies to have all your TeX Live packages installed at build time.}
 \item{golem_package_name}{if Shiny app was created as a package with the
 \href{"https://github.com/ThinkR-open/golem"}{golem} package, provide the
 name of the package as a character string. Defaults to \code{NULL}}
+
+\item{cache}{boolean - whether or not to cache the Docker image.}
 }
 \description{
 Deploy a Shiny app to Polished Hosting
