@@ -37,10 +37,10 @@ valid_gcp_regions <- c(
 #' @param api_key Your polished.tech API key.  Defaults to \code{getOption("polished")$api_key}.
 #' @param launch_browser Whether or not to open your default browser to your newly deployed app
 #' after it is successfully deployed.  \code{TRUE} by default.
-#' @param region the region to deploy the app to on Google Cloud Platform.  See
-#' \url{https://cloud.google.com/compute/docs/regions-zones} for all available regions
-#' on Google Cloud Platform.  Currently on "us-east1" is supported, but soon, all regions
-#' will be supported.
+#' @param region the region to deploy the app to on Google Cloud Platform. See
+#' \url{https://cloud.google.com/run/docs/locations} for all available regions
+#' on Google Cloud Platform. Currently, database connections are only supported for
+#' "us-east1". See \url{https://polished.tech/docs/06-database-connections} for details.
 #' @param ram_gb the amount of memory to allocate to your Shiny app server. Valid values are
 #' 2, 4, or 8.
 #' @param r_ver Character string of R version.  If kept as \code{NULL}, the default, then
@@ -210,7 +210,7 @@ deploy_app <- function(
 #' }
 #'
 #'
-bundle_app <- function (
+bundle_app <- function(
   app_dir = "."
 ) {
 
