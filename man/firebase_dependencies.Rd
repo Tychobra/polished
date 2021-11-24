@@ -16,9 +16,9 @@ firebase_dependencies(services = c("auth"), firebase_version = "7.15.5")
 the HTML \code{<script>} tags for the Firebase JavaScript dependencies
 }
 \description{
-Under the hood, \code{polished} uses Firebase JavaScript dependencies to handle user
-authentication.  This function loads the required Firebase JavaScript dependencies
-in the the UI of your Shiny app.
+For \verb{Social Sign In}, \code{polished} uses Firebase JavaScript dependencies.
+This function loads the required Firebase JavaScript dependencies in the the
+UI of your Shiny app.
 }
 \examples{
 

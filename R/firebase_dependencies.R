@@ -1,8 +1,8 @@
 #' Load the Firebase JavaScript dependencies into the UI
 #'
-#' Under the hood, \code{polished} uses Firebase JavaScript dependencies to handle user
-#' authentication.  This function loads the required Firebase JavaScript dependencies
-#' in the the UI of your Shiny app.
+#' For `Social Sign In`, \code{polished} uses Firebase JavaScript dependencies.
+#' This function loads the required Firebase JavaScript dependencies in the the
+#' UI of your Shiny app.
 #'
 #' @param services character vector of Firebase services to load into the UI.  Valid strings are
 #' \code{"auth"} (default), \code{"firestore"}, \code{"functions"}, \code{"messaging"}, and \code{"storage"}
