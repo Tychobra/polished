@@ -6,7 +6,7 @@
 [![CRAN](https://www.r-pkg.org/badges/version/polished)](https://cran.r-project.org/package=polished) [![Downloads](https://cranlogs.r-pkg.org/badges/polished)](https://www.r-pkg.org/pkg/polished)
 <!-- badges: end -->
 
-Authentication and user administration for Shiny apps.  `polished` provides a way to secure your Shiny application behind an authentication layer.  It also provides a UI for controlling user access. 
+Authentication, user administration, and web hosting for Shiny apps.  `polished` provides a way to secure your Shiny application behind an authentication layer.  It also provides a UI for controlling user access. 
 
 ### Live Demo
 
