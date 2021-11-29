@@ -91,8 +91,6 @@ user_access_module <- function(input, output, session) {
   users <- reactive({
     users_trigger()
 
-    hold_app_name <- getOption("polished")$app_uid
-
     out <- NULL
     tryCatch({
 
