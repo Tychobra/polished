@@ -99,22 +99,14 @@ global_sessions_config <- function(
     stop(paste0("app_name `", app_name, "` does not exist"), call. = FALSE)
   }
 
-  # create app display name.  Creating this here and setting it in options will
-  # make it easy to reuse in various locations without repeating code.
-  app_name_display <- gsub("[_|-]", " ", app_name)
-  app_name_display <- tools::toTitleCase(app_name_display)
-
   if (!(is.null(sentry_dsn) || (length(sentry_dsn) == 1 && is.character(sentry_dsn)) ) ) {
     stop("invalid `sentry_dsn` argument passed to `global_sessions_config()`", call. = FALSE)
   }
 
-
-
-
   options_out <- current_polished_options
   options_out$api_key <- api_key
   options_out$app_uid <- app$uid
-  options_out$app_name_display <- app_name_display
+  options_out$app_name_display <- app_name
   options_out$sentry_dsn <- sentry_dsn
   options_out$cookie_expires <- cookie_expires
   options("polished" = options_out)
