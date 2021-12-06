@@ -4,12 +4,7 @@
 \alias{update_app}
 \title{Polished API - Update an App}
 \usage{
-update_app(
-  app_uid,
-  app_name = NULL,
-  app_url = NULL,
-  api_key = getOption("polished")$api_key
-)
+update_app(app_uid, app_name = NULL, app_url = NULL, api_key = get_api_key())
 }
 \arguments{
 \item{app_uid}{the app uid of the app to update.}

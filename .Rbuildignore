@@ -8,3 +8,4 @@ rsconnect/
 cran-comments.md
 ^CRAN-RELEASE$
 ^\.github$
+^polished\.Rproj$

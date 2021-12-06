@@ -100,7 +100,7 @@ user_access_module <- function(input, output, session) {
           app_uid = getOption("polished")$app_uid
         ),
         httr::authenticate(
-          user = getOption("polished")$api_key,
+          user = get_api_key(),
           password = ""
         )
       )
@@ -122,7 +122,7 @@ user_access_module <- function(input, output, session) {
           app_uid = getOption("polished")$app_uid
         ),
         httr::authenticate(
-          user = getOption("polished")$api_key,
+          user = get_api_key(),
           password = ""
         )
       )
@@ -358,7 +358,7 @@ user_access_module <- function(input, output, session) {
           req_user_uid = session$userData$user()$user_uid
         ),
         httr::authenticate(
-          user = getOption("polished")$api_key,
+          user = get_api_key(),
           password = ""
         ),
         encode = "json"

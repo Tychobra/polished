@@ -141,7 +141,7 @@ is_email_registered <- function(email) {
       email = email
     ),
     httr::authenticate(
-      user = getOption("polished")$api_key,
+      user = get_api_key(),
       password = ""
     )
   )

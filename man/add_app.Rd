@@ -4,7 +4,7 @@
 \alias{add_app}
 \title{Polished API - Add an App}
 \usage{
-add_app(app_name, app_url = NULL, api_key = getOption("polished")$api_key)
+add_app(app_name, app_url = NULL, api_key = get_api_key())
 }
 \arguments{
 \item{app_name}{the app name.}

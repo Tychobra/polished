@@ -2,9 +2,12 @@
 % Please edit documentation in R/api_00.R
 \name{set_api_key}
 \alias{set_api_key}
+\alias{get_api_key}
 \title{set Polished API key}
 \usage{
 set_api_key(api_key)
+
+get_api_key()
 }
 \arguments{
 \item{api_key}{the Polished API key}
@@ -13,7 +16,8 @@ set_api_key(api_key)
 a list of the newly set polished R options
 }
 \description{
-The API key is set as an R option at \code{getOption("polished")$api_key}.
+The API key is set as an R option at \code{getOption("polished")$api_key}
+or via \code{Sys.getenv("POLISHED_API_KEY")}.
 }
 \examples{
 

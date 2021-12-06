@@ -4,12 +4,7 @@
 \alias{update_app_user}
 \title{Polished API - Update an App User}
 \usage{
-update_app_user(
-  app_uid,
-  user_uid,
-  is_admin,
-  api_key = getOption("polished")$api_key
-)
+update_app_user(app_uid, user_uid, is_admin, api_key = get_api_key())
 }
 \arguments{
 \item{app_uid}{the app uid to update.}

@@ -46,7 +46,7 @@ send_password_reset_email_module <- function(input, output, session, email) {
       res <- httr::POST(
         url = paste0(getOption("polished")$api_url, "/send-password-reset-email"),
         httr::authenticate(
-          user = getOption("polished")$api_key,
+          user = get_api_key(),
           password = ""
         ),
         body = list(

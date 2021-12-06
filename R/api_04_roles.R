@@ -18,7 +18,7 @@
 #'
 get_roles <- function(
   role_uid = NULL,
-  api_key = getOption("polished")$api_key
+  api_key = get_api_key()
 ) {
 
   query_out <- list()
@@ -54,7 +54,7 @@ get_roles <- function(
 #'
 #' @importFrom httr GET authenticate
 #'
-add_role <- function(role_name, api_key = getOption("polished")$api_key) {
+add_role <- function(role_name, api_key = get_api_key()) {
 
   body_out <- list(
     role_name = role_name
@@ -89,7 +89,7 @@ add_role <- function(role_name, api_key = getOption("polished")$api_key) {
 #'
 #' @importFrom httr DELETE authenticate
 #'
-delete_role <- function(role_uid, api_key = getOption("polished")$api_key) {
+delete_role <- function(role_uid, api_key = get_api_key()) {
 
   query_out <- list(
     role_uid = role_uid
