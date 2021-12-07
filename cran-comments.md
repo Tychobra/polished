@@ -1,5 +1,5 @@
 ## Test environments
-* local OS X install, R 4.1.1
+* local OS X install, R 4.1.2
 * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
 * Fedora Linux, R-devel, clang, gfortran
 * Ubuntu Linux 20.04.1 LTS, R-release, GCC
