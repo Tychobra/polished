@@ -3,7 +3,7 @@
 * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
 * Fedora Linux, R-devel, clang, gfortran
 * Ubuntu Linux 20.04.1 LTS, R-release, GCC
-* win-builder, R Under development (unstable) (2021-09-11 r80888)
+* win-builder, R Under development (unstable) (2021-12-03 r81290)
 
 ## R CMD check results
 
