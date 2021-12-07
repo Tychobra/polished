@@ -1,5 +1,5 @@
 
-# polished v0.4.0.9000 (development version)
+# polished v0.5.0
 
 * Added 4 additional Polished Hosting regions (see documentation for `region` argument of `polished::deploy_app()`)
 * App names (i.e. `app_name`) can now include upper case letters & spaces (Example: `app_name = "Example App Name"`)
