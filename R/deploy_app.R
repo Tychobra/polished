@@ -53,7 +53,7 @@ valid_gcp_regions <- c(
 #' \code{TRUE} for a minimal TeX Live installation, and pass a character vector of your TeX Live package
 #' dependencies to have all your TeX Live packages installed at build time.
 #' @param golem_package_name if Shiny app was created as a package with the
-#' \href{"https://github.com/ThinkR-open/golem"}{golem} package, provide the
+#' \href{"https://github.com/thinkr-open/golem"}{golem} package, provide the
 #' name of the package as a character string. Defaults to \code{NULL}
 #' @param cache boolean - whether or not to cache the Docker image.
 #'

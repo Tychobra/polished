@@ -47,7 +47,7 @@ app generates pdf documents.  Defaults to \code{character(0)} for no TeX Live in
 dependencies to have all your TeX Live packages installed at build time.}
 
 \item{golem_package_name}{if Shiny app was created as a package with the
-\href{"https://github.com/ThinkR-open/golem"}{golem} package, provide the
+\href{"https://github.com/thinkr-open/golem"}{golem} package, provide the
 name of the package as a character string. Defaults to \code{NULL}}
 
 \item{cache}{boolean - whether or not to cache the Docker image.}
