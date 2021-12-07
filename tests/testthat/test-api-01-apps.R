@@ -57,7 +57,7 @@ test_that("can update an app", {
   api_res <- update_app(
     app_uid = test_app_info$uid,
     app_name = "test_app2",
-    app_url = "http:/127.0.0.01:5000"
+    app_url = "http://127.0.0.01:5000"
   )
 
   expect_equal(length(api_res), 2L)
