@@ -1,7 +1,7 @@
 Package: polished
 Type: Package
 Title: Authentication, User Administration, and Hosting for 'shiny' Apps
-Version: 0.5.0
+Version: 0.5.0.9000
 Authors@R: c(
   person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre")),
   person("Patrick", "Howard", email = "patrick.howard@tychobra.com", role = c("aut")),
@@ -16,7 +16,6 @@ URL: https://github.com/tychobra/polished,
 BugReports: https://github.com/tychobra/polished/issues
 Encoding: UTF-8
 Imports:
-    automagic,
     digest,
     dplyr,
     DT,
@@ -26,6 +25,7 @@ Imports:
     jsonlite,
     lubridate,
     purrr,
+    renv,
     R6,
     rlang,
     shiny,
@@ -39,8 +39,7 @@ Imports:
     tibble,
     tidyr,
     utils,
-    uuid,
-    yaml
+    uuid
 Suggests:
     testthat (>= 3.0.0),
     knitr,

@@ -197,7 +197,7 @@ deploy_app <- function(
 #'
 #' @export
 #'
-#' @importFrom yaml write_yaml
+#' @importFrom renv snapshot
 #' @importFrom utils tar
 #' @importFrom uuid UUIDgenerate
 #'
@@ -215,11 +215,13 @@ bundle_app <- function(
 ) {
 
 
-  deps_list <- get_package_deps(app_dir)
-
-  # create yaml file with all the dependencies
-  yml_path <- file.path(app_dir, "deps.yaml")
-  yaml::write_yaml(deps_list, yml_path)
+  # create lock file
+  renv::snapshot(
+    project = app_dir,
+    prompt = FALSE,
+    force = TRUE,
+    lockfile = file.path(app_dir, "renv.lock")
+  )
 
 
   tar_name <- "shiny_app.tar.gz"
