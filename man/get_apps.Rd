@@ -4,11 +4,7 @@
 \alias{get_apps}
 \title{Polished API - Get App(s)}
 \usage{
-get_apps(
-  app_uid = NULL,
-  app_name = NULL,
-  api_key = getOption("polished")$api_key
-)
+get_apps(app_uid = NULL, app_name = NULL, api_key = get_api_key())
 }
 \arguments{
 \item{app_uid}{an optional app uid.}

@@ -25,7 +25,7 @@ get_app_users <- function(
   app_uid = NULL,
   user_uid = NULL,
   email = NULL,
-  api_key = getOption("polished")$api_key
+  api_key = get_api_key()
 ) {
 
   query_out <- list()
@@ -80,7 +80,7 @@ add_app_user <- function(
   email = NULL,
   is_admin = FALSE,
   send_invite_email = FALSE,
-  api_key = getOption("polished")$api_key
+  api_key = get_api_key()
 ){
 
   if (is.null(user_uid) && is.null(email)) {
@@ -141,7 +141,7 @@ update_app_user <- function(
   app_uid,
   user_uid,
   is_admin,
-  api_key = getOption("polished")$api_key
+  api_key = get_api_key()
 ) {
 
   body_out <- list(
@@ -178,7 +178,7 @@ update_app_user <- function(
 #'
 #' @importFrom httr DELETE authenticate
 #'
-delete_app_user <- function(app_uid, user_uid, api_key = getOption("polished")$api_key) {
+delete_app_user <- function(app_uid, user_uid, api_key = get_api_key()) {
 
   query_out <- list(
     app_uid = app_uid,

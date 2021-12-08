@@ -29,7 +29,7 @@
 get_apps <- function(
   app_uid = NULL,
   app_name = NULL,
-  api_key = getOption("polished")$api_key
+  api_key = get_api_key()
 ) {
 
   query_out <- list()
@@ -68,7 +68,7 @@ get_apps <- function(
 #'
 #' @importFrom httr POST authenticate
 #'
-add_app <- function(app_name, app_url = NULL, api_key = getOption("polished")$api_key) {
+add_app <- function(app_name, app_url = NULL, api_key = get_api_key()) {
 
   body_out <- list(
     app_name = app_name
@@ -107,7 +107,8 @@ add_app <- function(app_name, app_url = NULL, api_key = getOption("polished")$ap
 #'
 #' @importFrom httr PUT authenticate
 #'
-update_app <- function(app_uid, app_name = NULL, app_url = NULL, api_key = getOption("polished")$api_key) {
+update_app <- function(app_uid, app_name = NULL, app_url = NULL,
+                       api_key = get_api_key()) {
 
   body_out <- list(
     app_uid = app_uid
@@ -147,7 +148,7 @@ update_app <- function(app_uid, app_name = NULL, app_url = NULL, api_key = getOp
 #'
 #' @importFrom httr DELETE authenticate
 #'
-delete_app <- function(app_uid, api_key = getOption("polished")$api_key) {
+delete_app <- function(app_uid, api_key = get_api_key()) {
 
   query_out <- list(
     app_uid = app_uid

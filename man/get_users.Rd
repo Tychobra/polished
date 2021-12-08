@@ -4,11 +4,7 @@
 \alias{get_users}
 \title{Polished API - Get User(s)}
 \usage{
-get_users(
-  user_uid = NULL,
-  email = NULL,
-  api_key = getOption("polished")$api_key
-)
+get_users(user_uid = NULL, email = NULL, api_key = get_api_key())
 }
 \arguments{
 \item{user_uid}{an optional user uid.}

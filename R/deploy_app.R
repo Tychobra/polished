@@ -77,7 +77,7 @@ valid_gcp_regions <- c(
 deploy_app <- function(
   app_name,
   app_dir = ".",
-  api_key = getOption("polished")$api_key,
+  api_key = get_api_key(),
   launch_browser = TRUE,
   region = "us-east1",
   ram_gb = 2,

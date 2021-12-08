@@ -55,7 +55,8 @@ print.polished_api_res <- function(x, ...) {
 
 #' set Polished API key
 #'
-#' The API key is set as an R option at \code{getOption("polished")$api_key}.
+#' The API key is set as an R option at \code{getOption("polished")$api_key}
+#' or via \code{Sys.getenv("POLISHED_API_KEY")}.
 #'
 #' @param api_key the Polished API key
 #'
@@ -86,6 +87,19 @@ set_api_key <- function(api_key) {
   invisible(out)
 }
 
+#' @export
+#' @rdname set_api_key
+get_api_key = function() {
+  current_polished_options <- getOption("polished")
+  api_key <- current_polished_options$api_key
+  if (is.null(api_key)) {
+    api_key <- Sys.getenv("POLISHED_API_KEY", unset = NA)
+    if (is.na(api_key)) {
+      api_key <- NULL
+    }
+  }
+  api_key
+}
 
 set_api_url <- function(
   api_url = "https://auth-api.polished.tech/v1",

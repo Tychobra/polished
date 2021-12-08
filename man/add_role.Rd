@@ -4,7 +4,7 @@
 \alias{add_role}
 \title{Polished API - Add a Role}
 \usage{
-add_role(role_name, api_key = getOption("polished")$api_key)
+add_role(role_name, api_key = get_api_key())
 }
 \arguments{
 \item{role_name}{a role name.}

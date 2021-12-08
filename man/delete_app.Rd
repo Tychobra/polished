@@ -4,7 +4,7 @@
 \alias{delete_app}
 \title{Polished API - Delete an App}
 \usage{
-delete_app(app_uid, api_key = getOption("polished")$api_key)
+delete_app(app_uid, api_key = get_api_key())
 }
 \arguments{
 \item{app_uid}{the app uid.}

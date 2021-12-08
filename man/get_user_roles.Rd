@@ -4,11 +4,7 @@
 \alias{get_user_roles}
 \title{Polished API - Get User Role(s)}
 \usage{
-get_user_roles(
-  user_uid = NULL,
-  role_uid = NULL,
-  api_key = getOption("polished")$api_key
-)
+get_user_roles(user_uid = NULL, role_uid = NULL, api_key = get_api_key())
 }
 \arguments{
 \item{user_uid}{an optional user uid.}

@@ -4,7 +4,7 @@
 \alias{get_roles}
 \title{Polished API - Get Role(s)}
 \usage{
-get_roles(role_uid = NULL, api_key = getOption("polished")$api_key)
+get_roles(role_uid = NULL, api_key = get_api_key())
 }
 \arguments{
 \item{role_uid}{an optional role uid.}

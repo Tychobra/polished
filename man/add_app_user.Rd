@@ -10,7 +10,7 @@ add_app_user(
   email = NULL,
   is_admin = FALSE,
   send_invite_email = FALSE,
-  api_key = getOption("polished")$api_key
+  api_key = get_api_key()
 )
 }
 \arguments{

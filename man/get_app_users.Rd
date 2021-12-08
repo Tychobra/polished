@@ -8,7 +8,7 @@ get_app_users(
   app_uid = NULL,
   user_uid = NULL,
   email = NULL,
-  api_key = getOption("polished")$api_key
+  api_key = get_api_key()
 )
 }
 \arguments{

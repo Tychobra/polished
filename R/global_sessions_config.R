@@ -53,7 +53,7 @@
 #'
 global_sessions_config <- function(
   app_name,
-  api_key,
+  api_key = get_api_key(),
   firebase_config = NULL,
   admin_mode = FALSE,
   is_invite_required = TRUE,

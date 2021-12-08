@@ -32,7 +32,7 @@
 get_users <- function(
   user_uid = NULL,
   email = NULL,
-  api_key = getOption("polished")$api_key
+  api_key = get_api_key()
 ) {
 
   query_out <- list()
@@ -69,7 +69,7 @@ get_users <- function(
 #'
 #' @importFrom httr POST authenticate
 #'
-add_user <- function(email, api_key = getOption("polished")$api_key) {
+add_user <- function(email, api_key = get_api_key()) {
 
   body_out <- list(
     email = email
@@ -104,7 +104,7 @@ add_user <- function(email, api_key = getOption("polished")$api_key) {
 #'
 #' @importFrom httr DELETE authenticate
 #'
-delete_user <- function(user_uid, api_key = getOption("polished")$api_key) {
+delete_user <- function(user_uid, api_key = get_api_key()) {
 
   query_out <- list(
     user_uid = user_uid
