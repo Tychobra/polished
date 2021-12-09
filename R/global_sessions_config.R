@@ -106,7 +106,7 @@ global_sessions_config <- function(
   options_out <- current_polished_options
   options_out$api_key <- api_key
   options_out$app_uid <- app$uid
-  options_out$app_name_display <- app_name
+  options_out$app_name <- app_name
   options_out$sentry_dsn <- sentry_dsn
   options_out$cookie_expires <- cookie_expires
   options("polished" = options_out)
