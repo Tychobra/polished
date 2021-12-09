@@ -103,6 +103,18 @@ global_sessions_config <- function(
     stop("invalid `sentry_dsn` argument passed to `global_sessions_config()`", call. = FALSE)
   }
 
+  # Throw warning for no Firebase config w/ Social Sign in Providers
+  if (is.null(firebase_config) && any(sign_in_providers != "email")) {
+    warning(
+"
+#########################################################################
+Sign In providers (`sign_in_providers`) will not work correctly without a
+Firebase configuration (`firebase_config`) provided!
+#########################################################################",
+      call. = FALSE
+    )
+  }
+
   options_out <- current_polished_options
   options_out$api_key <- api_key
   options_out$app_uid <- app$uid
