@@ -114,6 +114,12 @@ Sessions <-  R6::R6Class(
         }
         self$firebase_config <- firebase_config
       }
+      if (is.null(firebase_config) &&
+          any(sign_in_providers %in% c("google", "microsoft", "facebook"))) {
+        warning(paste0("`firebase_config` is NULL, but ",
+                       "Google/Microsoft set as providers, ",
+                       "these will not properly work"))
+      }
 
 
 
