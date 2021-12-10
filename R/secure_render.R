@@ -34,6 +34,7 @@ secure_render <- function(
   global_sessions_config_args = list(
     api_key = get_api_key()
   ),
+  sign_in_page_args = list(),
   sign_out_button = shiny::actionLink(
     "sign_out",
     "Sign Out",
@@ -44,6 +45,10 @@ secure_render <- function(
   yaml_header <- yamlFromRmd(rmd_file_path)
 
   yaml_polished <- yaml_header$polished
+
+  if (is.null(yaml_polished)) {
+    stop('"polished" must be included in the YAML header', call. = FALSE)
+  }
 
   global_sessions_config_args <- modifyList(
     global_sessions_config_args,
@@ -56,6 +61,21 @@ secure_render <- function(
   if (is.null(global_sessions_config_args$api_key)) {
     stop('polished "api_key" must be provided', call. = FALSE)
   }
+
+  do.call(
+    global_sessions_config,
+    global_sessions_config_args
+  )
+
+  if (!is.null(yaml_polished$sign_in_page)) {
+    sign_in_page_args <- modifyList(
+      sign_in_page_args,
+      yaml_polished$sign_in_page
+    )
+  }
+
+
+
 
 
   if (!is.null(yaml_header$runtime) && yaml_header$runtime %in% c("shiny", "shinyrmd", "shiny_prerendered")) {
@@ -81,7 +101,8 @@ secure_render <- function(
     )
 
   } else {
-    # static (non shiny) document
+    # static (non shiny) document (html or pdf)
+
     static_file_path <- rmarkdown::render(rmd_file_path)
 
     static_file_name <- basename(static_file_path)
@@ -123,8 +144,8 @@ secure_render <- function(
     embeded_app
   )
 
-  ui_out <- secure_ui(
-    ui,
+  secure_ui_args <- list(
+    ui = ui,
     custom_admin_button_ui = shiny::actionButton(
       "polished-go_to_admin_panel",
       "Admin Panel",
@@ -132,6 +153,12 @@ secure_render <- function(
       style = "position: fixed; bottom: 15px; right: 15px; color: #FFFFFF; z-index: 9999; background-color: #0000FF; padding: 15px;"
     )
   )
+
+  if (length(sign_in_page_args) > 0) {
+    secure_ui_args$sign_in_page_ui <- do.call(sign_in_ui_default, sign_in_page_args)
+  }
+
+  ui_out <- do.call(secure_ui, secure_ui_args)
 
   server <- secure_server(function(input, output, session) {
 
@@ -148,15 +175,7 @@ secure_render <- function(
   })
 
 
-  shiny::shinyApp(ui_out, server, onStart = function() {
-    library(polished)
-
-    # configure the global sessions when the app initially starts up.
-    do.call(
-      "global_sessions_config",
-      global_sessions_config_args
-    )
-  })
+  shiny::shinyApp(ui_out, server)
 }
 
 # copied internal function from rsconnect package
