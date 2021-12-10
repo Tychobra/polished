@@ -24,10 +24,10 @@
 #'
 #' \dontrun{
 #'
-#' secure_render(system.file("examples/rmds/flexdashboard.Rmd", package = "polished")
-#' secure_render(system.file("examples/rmds/flexdashboard_shiny.Rmd", package = "polished")
-#' secure_render(system.file("examples/rmds/html_document.Rmd", package = "polished")
-#' secure_render(system.file("examples/rmds/pdf_document.Rmd", package = "polished")
+#' secure_render(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"))
+#' secure_render(system.file("examples/rmds/flexdashboard_shiny.Rmd", package = "polished"))
+#' secure_render(system.file("examples/rmds/html_document.Rmd", package = "polished"))
+#' secure_render(system.file("examples/rmds/pdf_document.Rmd", package = "polished"))
 #' }
 secure_render <- function(
   rmd_file_path,
@@ -52,7 +52,7 @@ secure_render <- function(
 
   global_sessions_config_args <- modifyList(
     global_sessions_config_args,
-    yaml_header$polished$global_sessions_config
+    yaml_polished$global_sessions_config
   )
 
   if (is.null(global_sessions_config_args$app_name)) {
@@ -62,33 +62,54 @@ secure_render <- function(
     stop('polished "api_key" must be provided', call. = FALSE)
   }
 
+  # check that no invalid values passed in via global_sessions_config YAML values
+  if (!all(names(global_sessions_config_args) %in% c(
+    "app_name",
+    "api_key",
+    "firebase_config",
+    "admin_mode",
+    "is_invite_required",
+    "sign_in_providers",
+    "is_email_verification_required",
+    "is_auth_required",
+    "sentry_dsn",
+    "cookie_expires"
+  ))) {
+    stop("Invalid value passed to polished global_session", call. = FALSE)
+  }
+
   do.call(
     global_sessions_config,
     global_sessions_config_args
   )
 
+
   hold_sign_in_page <- yaml_polished$sign_in_page
 
-  if (!is.null(hold_sign_in_page$logo)) {
-    sign_in_page_args$logo_top <- tags$img(
-      src = hold_sign_in_page$logo,
-      alt = "Tychobra Logo",
-      style = "width: 125px; margin-top: 30px; margin-bottom: 30px;"
-    )
-    sign_in_page_args$icon_href <- sign_in_page_args
+  if (!is.null(hold_sign_in_page)) {
+    # check that sign in page args only contain the 4 valid values
+    if (!all(names(hold_sign_in_page) %in% c("color", "company_name", "logo", "background_image"))) {
+      stop("Invalid value passed to polished sign_in_page.", call. = FALSE)
+    }
 
-    # remove the logo from the sign in page value passed from the YAML header
-    hold_sign_in_page$logo <- NULL
-  }
+    if (!is.null(hold_sign_in_page$logo)) {
+      sign_in_page_args$logo_top <- tags$img(
+        src = hold_sign_in_page$logo,
+        alt = "Tychobra Logo",
+        style = "width: 125px; margin-top: 30px; margin-bottom: 30px;"
+      )
+      sign_in_page_args$icon_href <- hold_sign_in_page$logo
 
-  if (!is.null(yaml_polished$sign_in_page)) {
+      # remove the logo from the sign in page value passed from the YAML header
+      hold_sign_in_page$logo <- NULL
+    }
+
     sign_in_page_args <- modifyList(
       sign_in_page_args,
       hold_sign_in_page
     )
+
   }
-
-
 
 
   if (!is.null(yaml_header$runtime) && yaml_header$runtime %in% c("shiny", "shinyrmd", "shiny_prerendered")) {
