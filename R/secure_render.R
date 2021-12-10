@@ -14,9 +14,10 @@
 #'
 #' @return a Shiny app object
 #'
-#' @importFrom shiny shinyApp actionLink
+#' @importFrom shiny shinyApp actionLink addResourcePath
 #' @importFrom htmltools tags tagList includeHTML
-#' @importFrom rmarkdown render
+#' @importFrom rmarkdown render run
+#' @importFrom callr r_session
 #'
 #'
 #' @examples
@@ -84,7 +85,7 @@ secure_render <- function(
     static_file_path <- rmarkdown::render(rmd_file_path)
 
     static_file_name <- basename(static_file_path)
-    addResourcePath("polished_static", dirname(static_file_path))
+    shiny::addResourcePath("polished_static", dirname(static_file_path))
 
     embeded_app <- tags$iframe(
       src = file.path("polished_static", static_file_name),
