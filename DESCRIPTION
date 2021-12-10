@@ -29,6 +29,7 @@ Imports:
     purrr,
     R6,
     rlang,
+    rmarkdown,
     shiny,
     shinycssloaders,
     shinydashboard,
@@ -45,7 +46,6 @@ Imports:
 Suggests:
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown,
     config
 VignetteBuilder: 
     knitr

@@ -6,6 +6,7 @@
 #'
 #' @param rmd_file_path the path the to .Rmd file.
 #' @param global_sessions_config_args arguments to be passed to \code{\link{global_sessions_config}}.
+#' @param sign_in_page_args argument to customize the sign in page.
 #' @param sign_out_button action button or link with \code{inputId = "sign_out"}. Set to \code{NULL} to not include a sign out button.
 #'
 #' @md
@@ -18,6 +19,7 @@
 #' @importFrom htmltools tags tagList includeHTML
 #' @importFrom rmarkdown render run
 #' @importFrom callr r_session
+#' @importFrom utils modifyList
 #'
 #'
 #' @examples
