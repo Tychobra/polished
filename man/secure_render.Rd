@@ -7,6 +7,7 @@
 secure_render(
   rmd_file_path,
   global_sessions_config_args = list(api_key = get_api_key()),
+  sign_in_page_args = list(),
   sign_out_button = shiny::actionLink("sign_out", "Sign Out", icon =
     shiny::icon("sign-out-alt"), class = "polished_sign_out_link")
 )
@@ -30,9 +31,9 @@ is secured with \code{polished} authentication.
 
 \dontrun{
 
-secure_render("inst/examples/rmds/flexdashboard.Rmd")
-secure_render("inst/examples/rmds/flexdashboard_shiny.Rmd")
-secure_render("inst/examples/rmds/html_document.Rmd")
-secure_render("inst/examples/rmds/pdf_document.Rmd")
+secure_render(system.file("examples/rmds/flexdashboard.Rmd", package = "polished")
+secure_render(system.file("examples/rmds/flexdashboard_shiny.Rmd", package = "polished")
+secure_render(system.file("examples/rmds/html_document.Rmd", package = "polished")
+secure_render(system.file("examples/rmds/pdf_document.Rmd", package = "polished")
 }
 }
