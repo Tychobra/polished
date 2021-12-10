@@ -2,7 +2,6 @@
 title: "Untitled"
 polished:
   global_sessions_config_args:
-    api_key: "< required >"
     app_name: "flex_dashboad"
 output:  
   flexdashboard::flex_dashboard: 
