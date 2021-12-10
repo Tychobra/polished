@@ -67,13 +67,26 @@ secure_render <- function(
     global_sessions_config_args
   )
 
+  hold_sign_in_page <- yaml_polished$sign_in_page
+
+  if (!is.null(hold_sign_in_page$logo)) {
+    sign_in_page_args$logo_top <- tags$img(
+      src = hold_sign_in_page$logo,
+      alt = "Tychobra Logo",
+      style = "width: 125px; margin-top: 30px; margin-bottom: 30px;"
+    )
+    sign_in_page_args$icon_href <- sign_in_page_args
+
+    # remove the logo from the sign in page value passed from the YAML header
+    hold_sign_in_page$logo <- NULL
+  }
+
   if (!is.null(yaml_polished$sign_in_page)) {
     sign_in_page_args <- modifyList(
       sign_in_page_args,
-      yaml_polished$sign_in_page
+      hold_sign_in_page
     )
   }
-
 
 
 

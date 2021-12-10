@@ -6,6 +6,8 @@ polished:
   sign_in_page:
     color: "#006CB5"
     company_name: "Tychobra"
+    logo: "polish/images/tychobra_logo_white.svg"
+    background_image: "https://raw.githubusercontent.com/Tychobra/polished_example_apps/master/02_custom_sign_in/www/images/milky_way.jpeg"
 output:  
   flexdashboard::flex_dashboard: 
     orientation: row
