@@ -2,7 +2,7 @@
 % Please edit documentation in R/secure_render.R
 \name{secure_render}
 \alias{secure_render}
-\title{Render and secure an Rmarkdown document}
+\title{Render and secure Rmarkdown document}
 \usage{
 secure_render(
   rmd_file_path,
@@ -25,4 +25,14 @@ a Shiny app object
 \code{secure_render()} can be used to render and secure any Rmarkdown document.
 Rendering is handled by \code{rmarkdown::render} and the then the rendered document
 is secured with \code{polished} authentication.
+}
+\examples{
+
+\dontrun{
+
+secure_render("inst/examples/rmds/flexdashboard.Rmd")
+secure_render("inst/examples/rmds/flexdashboard_shiny.Rmd")
+secure_render("inst/examples/rmds/html_document.Rmd")
+secure_render("inst/examples/rmds/pdf_document.Rmd")
+}
 }

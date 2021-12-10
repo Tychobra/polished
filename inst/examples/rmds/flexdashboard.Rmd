@@ -1,0 +1,51 @@
+---
+title: "Palmer Penguins"
+polished:
+  global_sessions_config:
+    app_name: "flex_dashboard"
+output:  
+  flexdashboard::flex_dashboard: 
+    orientation: row
+---
+
+```{r setup, include=FALSE}
+library(highcharter)
+library(DT)
+# install.packages("palmerpenguins")
+data(penguins, package = "palmerpenguins")
+
+penguins <- penguins[, c("species", "island", "bill_length_mm", "flipper_length_mm", "body_mass_g")]
+penguins <- na.omit(penguins)
+```
+
+### Chart
+
+```{r}
+hchart(
+  penguins, "scatter", 
+  hcaes(x = flipper_length_mm, y = bill_length_mm, group = species)
+) %>%
+  hc_yAxis(title = list(text = "Bill Length (mm)")) %>%
+  hc_xAxis(title = list(text = "Flipper Length (mm)")) 
+```
+
+### Table
+
+```{r}
+DT::datatable(
+  penguins,
+  rownames = FALSE,
+  colnames = c(
+    "Species",
+    "Island",
+    "Bill Length (mm)",
+    "Flipper Length (mm)",
+    "Body Mass (g)"
+  ),
+  options = list(
+    pageLength = nrow(penguins),
+    scrollY = FALSE,
+    dom = "fti"
+  )
+)
+```

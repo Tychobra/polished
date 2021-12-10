@@ -1,4 +1,4 @@
-#' Render and secure an Rmarkdown document
+#' Render and secure Rmarkdown document
 #'
 #' \code{secure_render()} can be used to render and secure any Rmarkdown document.
 #' Rendering is handled by \code{rmarkdown::render} and the then the rendered document
@@ -18,6 +18,16 @@
 #' @importFrom htmltools tags tagList includeHTML
 #' @importFrom rmarkdown render
 #'
+#'
+#' @examples
+#'
+#' \dontrun{
+#'
+#' secure_render("inst/examples/rmds/flexdashboard.Rmd")
+#' secure_render("inst/examples/rmds/flexdashboard_shiny.Rmd")
+#' secure_render("inst/examples/rmds/html_document.Rmd")
+#' secure_render("inst/examples/rmds/pdf_document.Rmd")
+#' }
 secure_render <- function(
   rmd_file_path,
   global_sessions_config_args = list(
@@ -39,11 +49,53 @@ secure_render <- function(
     yaml_header$polished$global_sessions_config
   )
 
-  if (global_sessions_config_args$app_name) {
+  if (is.null(global_sessions_config_args$app_name)) {
     stop('polished "app_name" must be provided', call. = FALSE)
   }
+  if (is.null(global_sessions_config_args$api_key)) {
+    stop('polished "api_key" must be provided', call. = FALSE)
+  }
 
-  # TODO: check runtime in YAML header and return
+
+  if (!is.null(yaml_header$runtime) && yaml_header$runtime %in% c("shiny", "shinyrmd", "shiny_prerendered")) {
+    # runtime = shiny
+
+    rs <- callr::r_session$new()
+    rs$call(
+      function(rmd_path) {
+        rmarkdown::run(file = rmd_path, shiny_args = list(port = 8241, launch.browser = FALSE))
+      },
+      args = list(
+        rmd_file_path
+      )
+    )
+
+
+    embeded_app <- tags$iframe(
+      src = "http://127.0.0.1:8241",
+      height = "100%",
+      width = "100%",
+      style="height: 100%; width: 100%; overflow: hidden; position: absolute; top:0; left: 0; right: 0; bottom:0",
+      frameborder="0"
+    )
+
+  } else {
+    # static (non shiny) document
+    static_file_path <- rmarkdown::render(rmd_file_path)
+
+    static_file_name <- basename(static_file_path)
+    addResourcePath("polished_static", dirname(static_file_path))
+
+    embeded_app <- tags$iframe(
+      src = file.path("polished_static", static_file_name),
+      height = "100%",
+      width = "100%",
+      style="height: 100%; width: 100%; overflow: hidden; position: absolute; top:0; left: 0; right: 0; bottom:0",
+      frameborder="0"
+    )
+  }
+
+
 
   ui <- htmltools::tagList(
     sign_out_button,
@@ -67,13 +119,7 @@ secure_render <- function(
       }
     "),
     ),
-    tags$iframe(
-      srcdoc = htmltools::includeHTML(rmarkdown::render(rmd_file_path)),
-      height = "100%",
-      width = "100%",
-      style="height: 100%; width: 100%; overflow: hidden; position: absolute; top:0; left: 0; right: 0; bottom:0",
-      frameborder="0"
-    )
+    embeded_app
   )
 
   ui_out <- secure_ui(
