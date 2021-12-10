@@ -89,7 +89,7 @@ set_api_key <- function(api_key) {
 
 #' @export
 #' @rdname set_api_key
-get_api_key = function() {
+get_api_key <- function() {
   current_polished_options <- getOption("polished")
   api_key <- current_polished_options$api_key
   if (is.null(api_key)) {
