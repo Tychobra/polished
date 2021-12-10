@@ -17,7 +17,9 @@ secure_render(
 
 \item{global_sessions_config_args}{arguments to be passed to \code{\link{global_sessions_config}}.}
 
-\item{sign_in_page_args}{argument to customize the sign in page.}
+\item{sign_in_page_args}{a named \code{list()} to customize the Sign In page
+UI if values aren't included in YAML header. Valid names are \code{color}, \code{company_name},
+\code{logo}, & \code{background_image}. (\strong{NOTE:} YAML header values override these values if both provided).}
 
 \item{sign_out_button}{action button or link with \code{inputId = "sign_out"}. Set to \code{NULL} to not include a sign out button.}
 }

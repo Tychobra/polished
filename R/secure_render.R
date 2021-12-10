@@ -6,7 +6,9 @@
 #'
 #' @param rmd_file_path the path the to .Rmd file.
 #' @param global_sessions_config_args arguments to be passed to \code{\link{global_sessions_config}}.
-#' @param sign_in_page_args argument to customize the sign in page.
+#' @param sign_in_page_args a named \code{list()} to customize the Sign In page
+#' UI if values aren't included in YAML header. Valid names are `color`, `company_name`,
+#' `logo`, & `background_image`. (**NOTE:** YAML header values override these values if both provided).
 #' @param sign_out_button action button or link with \code{inputId = "sign_out"}. Set to \code{NULL} to not include a sign out button.
 #'
 #' @md
@@ -15,11 +17,12 @@
 #'
 #' @return a Shiny app object
 #'
-#' @importFrom shiny shinyApp actionLink addResourcePath
+#' @importFrom shiny shinyApp actionButton actionLink addResourcePath icon observeEvent
 #' @importFrom htmltools tags tagList includeHTML
 #' @importFrom rmarkdown render run
 #' @importFrom callr r_session
 #' @importFrom utils modifyList
+#' @importFrom yaml yaml.load
 #'
 #'
 #' @examples
@@ -91,7 +94,7 @@ secure_render <- function(
   if (!is.null(hold_sign_in_page)) {
     # check that sign in page args only contain the 4 valid values
     if (!all(names(hold_sign_in_page) %in% c("color", "company_name", "logo", "background_image"))) {
-      stop("Invalid value passed to polished sign_in_page.", call. = FALSE)
+      stop("Invalid value passed to polished `sign_in_page` in YAML header.", call. = FALSE)
     }
 
     if (!is.null(hold_sign_in_page$logo)) {
@@ -132,8 +135,8 @@ secure_render <- function(
       src = "http://127.0.0.1:8241",
       height = "100%",
       width = "100%",
-      style="height: 100%; width: 100%; overflow: hidden; position: absolute; top:0; left: 0; right: 0; bottom:0",
-      frameborder="0"
+      style = "height: 100%; width: 100%; overflow: hidden; position: absolute; top:0; left: 0; right: 0; bottom:0",
+      frameborder = "0"
     )
 
   } else {
@@ -148,8 +151,8 @@ secure_render <- function(
       src = file.path("polished_static", static_file_name),
       height = "100%",
       width = "100%",
-      style="height: 100%; width: 100%; overflow: hidden; position: absolute; top:0; left: 0; right: 0; bottom:0",
-      frameborder="0"
+      style = "height: 100%; width: 100%; overflow: hidden; position: absolute; top:0; left: 0; right: 0; bottom:0",
+      frameborder = "0"
     )
   }
 
@@ -186,6 +189,7 @@ secure_render <- function(
       "polished-go_to_admin_panel",
       "Admin Panel",
       icon = shiny::icon("cog"),
+      class = "btn-primary btn-lg",
       style = "position: fixed; bottom: 15px; right: 15px; color: #FFFFFF; z-index: 9999; background-color: #0000FF; padding: 15px;"
     )
   )
@@ -216,7 +220,7 @@ secure_render <- function(
 
 # copied internal function from rsconnect package
 # https://github.com/rstudio/rsconnect/blob/250aa5c0c5071c1ae3f7ecc407164da5801bc17e/R/bundle.R#L496
-yamlFromRmd <- function (filename) {
+yamlFromRmd <- function(filename) {
   lines <- readLines(filename, warn = FALSE, encoding = "UTF-8")
   delim <- grep("^(---|\\.\\.\\.)\\s*$", lines)
   if (length(delim) >= 2) {
