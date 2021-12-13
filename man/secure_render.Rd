@@ -8,8 +8,7 @@ secure_render(
   rmd_file_path,
   global_sessions_config_args = list(api_key = get_api_key()),
   sign_in_page_args = list(),
-  sign_out_button = shiny::actionLink("sign_out", "Sign Out", icon =
-    shiny::icon("sign-out-alt"), class = "polished_sign_out_link")
+  sign_out_button = NULL
 )
 }
 \arguments{
@@ -21,7 +20,10 @@ secure_render(
 UI if values aren't included in YAML header. Valid names are \code{color}, \code{company_name},
 \code{logo}, & \code{background_image}. (\strong{NOTE:} YAML header values override these values if both provided).}
 
-\item{sign_out_button}{action button or link with \code{inputId = "sign_out"}. Set to \code{NULL} to not include a sign out button.}
+\item{sign_out_button}{A Shiny \code{actionButton} or \code{actionLink} with \code{inputId = "sign_out"}.
+If this argument is left as \code{NULL}, \code{secure_render} will attempt to add in an appropriate sign
+out button/link depending on the output format of your .Rmd document.  Set this argument to \code{list()}
+to not include a sign out button.}
 }
 \value{
 a Shiny app object

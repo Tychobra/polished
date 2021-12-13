@@ -1,3 +1,58 @@
+
+
+
+flex_sign_out <- function() {
+  shiny::actionLink(
+    "sign_out",
+    "Sign Out",
+    icon = shiny::icon("sign-out-alt"),
+    style = "
+      font-family: 'Source Sans Pro',Calibri,Candara,Arial,sans-serif;
+      position: absolute;
+      top: 0;
+      right: 15px;
+      color: #FFFFFF;
+      z-index: 9999;
+      padding: 15px;
+      text-decoration: none;"
+  )
+}
+
+pdf_sign_out <- function() {
+  shiny::actionButton(
+    "sign_out",
+    "Sign Out",
+    icon = shiny::icon("sign-out-alt"),
+    style = "
+      font-family: 'Source Sans Pro',Calibri,Candara,Arial,sans-serif;
+      position: absolute;
+      top: 56px;
+      right: 15px;;
+      z-index: 9999;
+      padding: 15px;
+    "
+  )
+}
+
+html_sign_out <- function() {
+  shiny::actionButton(
+    "sign_out",
+    "Sign Out",
+    icon = shiny::icon("sign-out-alt"),
+    style = "
+      font-family: 'Source Sans Pro',Calibri,Candara,Arial,sans-serif;
+      position: absolute;
+      top: 0;
+      right: 15px;
+      z-index: 9999;
+      padding: 15px;
+    "
+  )
+}
+
+
+
+
 #' Render and secure Rmarkdown document
 #'
 #' \code{secure_render()} can be used to render and secure any Rmarkdown document.
@@ -9,7 +64,10 @@
 #' @param sign_in_page_args a named \code{list()} to customize the Sign In page
 #' UI if values aren't included in YAML header. Valid names are `color`, `company_name`,
 #' `logo`, & `background_image`. (**NOTE:** YAML header values override these values if both provided).
-#' @param sign_out_button action button or link with \code{inputId = "sign_out"}. Set to \code{NULL} to not include a sign out button.
+#' @param sign_out_button A Shiny \code{actionButton} or \code{actionLink} with \code{inputId = "sign_out"}.
+#' If this argument is left as \code{NULL}, \code{secure_render} will attempt to add in an appropriate sign
+#' out button/link depending on the output format of your .Rmd document.  Set this argument to \code{list()}
+#' to not include a sign out button.
 #'
 #' @md
 #'
@@ -22,7 +80,6 @@
 #' @importFrom rmarkdown render run
 #' @importFrom callr r_session
 #' @importFrom utils modifyList
-#' @importFrom yaml yaml.load
 #'
 #'
 #' @examples
@@ -40,12 +97,8 @@ secure_render <- function(
     api_key = get_api_key()
   ),
   sign_in_page_args = list(),
-  sign_out_button = shiny::actionLink(
-    "sign_out",
-    "Sign Out",
-    icon = shiny::icon("sign-out-alt"),
-    class = "polished_sign_out_link"
-  )) {
+  sign_out_button = NULL
+) {
 
   yaml_header <- yamlFromRmd(rmd_file_path)
 
@@ -157,9 +210,30 @@ secure_render <- function(
   }
 
 
+  if (is.null(sign_out_button)) {
+
+    # use the output format to choose a default sign out button
+    if (!is.null(names(yaml_header$output)[1])) {
+      output_format <- names(yaml_header$output)[1]
+    } else {
+      output_format <- yaml_header$output[1]
+    }
+
+    # remove package prefix from output format
+    output_format <- gsub("^.*::", "", output_format)
+
+    # set the default sign out button
+    if (identical(output_format, "flex_dashboard")) {
+      sign_out_button <- flex_sign_out()
+    } else if (identical(output_format, "pdf_document")) {
+      sign_out_button <- pdf_sign_out()
+    } else {
+      sign_out_button <- html_sign_out()
+    }
+  }
+
 
   ui <- htmltools::tagList(
-    sign_out_button,
     tags$head(
       tags$style("
       body {
@@ -167,19 +241,9 @@ secure_render <- function(
         padding: 0;
         overflow: hidden
       }
-
-      .polished_sign_out_link {
-        font-family: 'Source Sans Pro',Calibri,Candara,Arial,sans-serif;
-        position: absolute;
-        top: 0;
-        right: 15px;
-        color: #FFFFFF;
-        z-index: 9999;
-        padding: 15px;
-        text-decoration: none;
-      }
     "),
     ),
+    sign_out_button,
     embeded_app
   )
 
@@ -218,8 +282,13 @@ secure_render <- function(
   shiny::shinyApp(ui_out, server)
 }
 
-# copied internal function from rsconnect package
-# https://github.com/rstudio/rsconnect/blob/250aa5c0c5071c1ae3f7ecc407164da5801bc17e/R/bundle.R#L496
+#' copied internal function from rsconnect package
+#' https://github.com/rstudio/rsconnect/blob/250aa5c0c5071c1ae3f7ecc407164da5801bc17e/R/bundle.R#L496
+#'
+#' @importFrom yaml yaml.load
+#'
+#' @noRd
+#'
 yamlFromRmd <- function(filename) {
   lines <- readLines(filename, warn = FALSE, encoding = "UTF-8")
   delim <- grep("^(---|\\.\\.\\.)\\s*$", lines)
