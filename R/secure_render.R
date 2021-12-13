@@ -184,6 +184,14 @@ secure_render <- function(
     )
 
 
+    on_start <- function() {
+
+      # clean up the R subprocess when the app exists
+      shiny::onStop(function() {
+        rs$close()
+      })
+    }
+
     embeded_app <- tags$iframe(
       src = "http://127.0.0.1:8241",
       height = "100%",
@@ -199,6 +207,8 @@ secure_render <- function(
 
     static_file_name <- basename(static_file_path)
     shiny::addResourcePath("polished_static", dirname(static_file_path))
+
+    on_start <- NULL
 
     embeded_app <- tags$iframe(
       src = file.path("polished_static", static_file_name),
@@ -241,7 +251,7 @@ secure_render <- function(
         padding: 0;
         overflow: hidden
       }
-    "),
+    ")
     ),
     sign_out_button,
     embeded_app
@@ -266,7 +276,7 @@ secure_render <- function(
 
   server <- secure_server(function(input, output, session) {
 
-    observeEvent(input$sign_out, {
+    shiny::observeEvent(input$sign_out, {
 
       tryCatch({
         sign_out_from_shiny(session)
@@ -276,10 +286,11 @@ secure_render <- function(
       })
 
     })
+
   })
 
 
-  shiny::shinyApp(ui_out, server)
+  shiny::shinyApp(ui_out, server, onStart = on_start)
 }
 
 #' copied internal function from rsconnect package
