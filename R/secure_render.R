@@ -90,7 +90,10 @@ html_sign_out <- function() {
 #' secure_render(system.file("examples/rmds/flexdashboard_shiny.Rmd", package = "polished"))
 #' secure_render(system.file("examples/rmds/html_document.Rmd", package = "polished"))
 #' secure_render(system.file("examples/rmds/pdf_document.Rmd", package = "polished"))
-#' io_file_path <- system.file("examples/rmds/ioslides/ioslides_presentation.Rmd", package = "polished")
+#' io_file_path <- system.file(
+#'   "examples/rmds/ioslides/ioslides_presentation.Rmd",
+#'   package = "polished"
+#' )
 #' secure_render(io_file_path)
 #' }
 secure_render <- function(
