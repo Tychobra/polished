@@ -1,0 +1,42 @@
+---
+title: "Untitled"
+polished:
+  global_sessions_config:
+    app_name: "flex_dashboad"
+  sign_in_page:
+    color: "#006CB5"
+    company_name: "Tychobra"
+    logo: "polish/images/tychobra_logo_white.svg"
+    background_image: "https://raw.githubusercontent.com/Tychobra/polished_example_apps/master/02_custom_sign_in/www/images/milky_way.jpeg"
+output:  
+  flexdashboard::flex_dashboard: 
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+# use the `polished::secure_render()` function to render this document with polished authentication.
+
+library(flexdashboard)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+```
+
+### Chart C
+
+```{r}
+```

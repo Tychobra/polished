@@ -1,4 +1,8 @@
 
+# polished v0.5.0.9000
+
+* Added `secure_render()`, which can be used to render and secure any Rmarkdown document. Rendering is handled by `rmarkdown::render` and the then the rendered document is secured with `polished` authentication.
+
 # polished v0.5.0
 
 * Added 4 additional Polished Hosting regions (see documentation for `region` argument of `polished::deploy_app()`)

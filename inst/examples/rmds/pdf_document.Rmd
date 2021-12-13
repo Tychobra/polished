@@ -1,0 +1,45 @@
+---
+title: "Palmer Penguins"
+polished:
+  global_sessions_config:
+    app_name: "flex_dashboard"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(knitr)
+# install.packages("palmerpenguins")
+data(penguins, package = "palmerpenguins")
+
+penguins <- penguins[, c("species", "island", "bill_length_mm", "flipper_length_mm", "body_mass_g")]
+penguins <- na.omit(penguins)
+```
+
+### Chart
+
+```{r}
+ggplot(
+  penguins,
+  aes(x = flipper_length_mm, y = bill_length_mm, color = species)
+) + 
+  geom_point() +
+  xlab("Flipper Length (mm)") +
+  ylab("Bill Length (mm)") 
+```
+
+### Table
+
+```{r}
+knitr::kable(
+  penguins[1:50, ],
+  row.names = FALSE,
+  col.names = c(
+    "Species",
+    "Island",
+    "Bill Length (mm)",
+    "Flipper Length (mm)",
+    "Body Mass (g)"
+  )
+)
+```
