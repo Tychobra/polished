@@ -1,0 +1,320 @@
+
+
+
+flex_sign_out <- function() {
+  shiny::actionLink(
+    "sign_out",
+    "Sign Out",
+    icon = shiny::icon("sign-out-alt"),
+    style = "
+      font-family: 'Source Sans Pro',Calibri,Candara,Arial,sans-serif;
+      position: absolute;
+      top: 0;
+      right: 15px;
+      color: #FFFFFF;
+      z-index: 9999;
+      padding: 15px;
+      text-decoration: none;"
+  )
+}
+
+pdf_sign_out <- function() {
+  shiny::actionButton(
+    "sign_out",
+    "Sign Out",
+    icon = shiny::icon("sign-out-alt"),
+    style = "
+      font-family: 'Source Sans Pro',Calibri,Candara,Arial,sans-serif;
+      position: absolute;
+      top: 56px;
+      right: 15px;;
+      z-index: 9999;
+      padding: 15px;
+    "
+  )
+}
+
+html_sign_out <- function() {
+  shiny::actionButton(
+    "sign_out",
+    "Sign Out",
+    icon = shiny::icon("sign-out-alt"),
+    style = "
+      font-family: 'Source Sans Pro',Calibri,Candara,Arial,sans-serif;
+      position: absolute;
+      top: 0;
+      right: 15px;
+      z-index: 9999;
+      padding: 15px;
+    "
+  )
+}
+
+
+
+
+#' Render and secure Rmarkdown document
+#'
+#' \code{secure_render()} can be used to render and secure any Rmarkdown document.
+#' Rendering is handled by \code{rmarkdown::render} and the then the rendered document
+#' is secured with \code{polished} authentication.
+#'
+#' @param rmd_file_path the path the to .Rmd file.
+#' @param global_sessions_config_args arguments to be passed to \code{\link{global_sessions_config}}.
+#' @param sign_in_page_args a named \code{list()} to customize the Sign In page
+#' UI if values aren't included in YAML header. Valid names are `color`, `company_name`,
+#' `logo`, & `background_image`. (**NOTE:** YAML header values override these values if both provided).
+#' @param sign_out_button A Shiny \code{actionButton} or \code{actionLink} with \code{inputId = "sign_out"}.
+#' If this argument is left as \code{NULL}, \code{secure_render} will attempt to add in an appropriate sign
+#' out button/link depending on the output format of your .Rmd document.  Set this argument to \code{list()}
+#' to not include a sign out button.
+#'
+#' @md
+#'
+#' @export
+#'
+#' @return a Shiny app object
+#'
+#' @importFrom shiny shinyApp actionButton actionLink addResourcePath icon observeEvent onStop
+#' @importFrom htmltools tags tagList includeHTML
+#' @importFrom rmarkdown render run
+#' @importFrom callr r_session
+#' @importFrom utils modifyList
+#'
+#'
+#' @examples
+#'
+#' \dontrun{
+#'
+#' secure_render(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"))
+#' secure_render(system.file("examples/rmds/flexdashboard_shiny.Rmd", package = "polished"))
+#' secure_render(system.file("examples/rmds/html_document.Rmd", package = "polished"))
+#' secure_render(system.file("examples/rmds/pdf_document.Rmd", package = "polished"))
+#' io_file_path <- system.file("examples/rmds/ioslides/ioslides_presentation.Rmd", package = "polished")
+#' secure_render(io_file_path)
+#' }
+secure_render <- function(
+  rmd_file_path,
+  global_sessions_config_args = list(
+    api_key = get_api_key()
+  ),
+  sign_in_page_args = list(),
+  sign_out_button = NULL
+) {
+
+  yaml_header <- yamlFromRmd(rmd_file_path)
+
+  yaml_polished <- yaml_header$polished
+
+  if (is.null(yaml_polished)) {
+    stop('"polished" must be included in the YAML header', call. = FALSE)
+  }
+
+  global_sessions_config_args <- modifyList(
+    global_sessions_config_args,
+    yaml_polished$global_sessions_config
+  )
+
+  if (is.null(global_sessions_config_args$app_name)) {
+    stop('polished "app_name" must be provided', call. = FALSE)
+  }
+  if (is.null(global_sessions_config_args$api_key)) {
+    stop('polished "api_key" must be provided', call. = FALSE)
+  }
+
+  # check that no invalid values passed in via global_sessions_config YAML values
+  if (!all(names(global_sessions_config_args) %in% c(
+    "app_name",
+    "api_key",
+    "firebase_config",
+    "admin_mode",
+    "is_invite_required",
+    "sign_in_providers",
+    "is_email_verification_required",
+    "is_auth_required",
+    "sentry_dsn",
+    "cookie_expires"
+  ))) {
+    stop("Invalid value passed to polished global_session", call. = FALSE)
+  }
+
+  do.call(
+    global_sessions_config,
+    global_sessions_config_args
+  )
+
+
+  hold_sign_in_page <- yaml_polished$sign_in_page
+
+  if (!is.null(hold_sign_in_page)) {
+    # check that sign in page args only contain the 4 valid values
+    if (!all(names(hold_sign_in_page) %in% c("color", "company_name", "logo", "background_image"))) {
+      stop("Invalid value passed to polished `sign_in_page` in YAML header.", call. = FALSE)
+    }
+
+    if (!is.null(hold_sign_in_page$logo)) {
+      sign_in_page_args$logo_top <- tags$img(
+        src = hold_sign_in_page$logo,
+        alt = "Tychobra Logo",
+        style = "width: 125px; margin-top: 30px; margin-bottom: 30px;"
+      )
+      sign_in_page_args$icon_href <- hold_sign_in_page$logo
+
+      # remove the logo from the sign in page value passed from the YAML header
+      hold_sign_in_page$logo <- NULL
+    }
+
+    sign_in_page_args <- modifyList(
+      sign_in_page_args,
+      hold_sign_in_page
+    )
+
+  }
+
+
+  if (!is.null(yaml_header$runtime) && yaml_header$runtime %in% c("shiny", "shinyrmd", "shiny_prerendered")) {
+    # runtime = shiny
+
+    rs <- callr::r_session$new()
+    rs$call(
+      function(rmd_path) {
+        rmarkdown::run(file = rmd_path, shiny_args = list(port = 8241, launch.browser = FALSE))
+      },
+      args = list(
+        rmd_file_path
+      )
+    )
+
+
+    on_start <- function() {
+
+      # clean up the R subprocess when the app exists
+      shiny::onStop(function() {
+        rs$close()
+      })
+    }
+
+    embeded_app <- tags$iframe(
+      src = "http://127.0.0.1:8241",
+      height = "100%",
+      width = "100%",
+      style = "height: 100%; width: 100%; overflow: hidden; position: absolute; top:0; left: 0; right: 0; bottom:0",
+      frameborder = "0"
+    )
+
+  } else {
+    # static (non shiny) document (html or pdf)
+
+    static_file_path <- rmarkdown::render(rmd_file_path)
+
+    static_file_name <- basename(static_file_path)
+    shiny::addResourcePath("polished_static", dirname(static_file_path))
+
+    on_start <- NULL
+
+    embeded_app <- tags$iframe(
+      src = file.path("polished_static", static_file_name),
+      height = "100%",
+      width = "100%",
+      style = "height: 100%; width: 100%; overflow: hidden; position: absolute; top:0; left: 0; right: 0; bottom:0",
+      frameborder = "0"
+    )
+  }
+
+
+  if (is.null(sign_out_button)) {
+
+    # use the output format to choose a default sign out button
+    if (!is.null(names(yaml_header$output)[1])) {
+      output_format <- names(yaml_header$output)[1]
+    } else {
+      output_format <- yaml_header$output[1]
+    }
+
+    # remove package prefix from output format
+    output_format <- gsub("^.*::", "", output_format)
+
+    # set the default sign out button
+    if (identical(output_format, "flex_dashboard")) {
+      sign_out_button <- flex_sign_out()
+    } else if (identical(output_format, "pdf_document")) {
+      sign_out_button <- pdf_sign_out()
+    } else {
+      sign_out_button <- html_sign_out()
+    }
+  }
+
+
+  ui <- htmltools::tagList(
+    tags$head(
+      tags$style("
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden
+      }
+    ")
+    ),
+    sign_out_button,
+    embeded_app
+  )
+
+  secure_ui_args <- list(
+    ui = ui,
+    custom_admin_button_ui = shiny::actionButton(
+      "polished-go_to_admin_panel",
+      "Admin Panel",
+      icon = shiny::icon("cog"),
+      class = "btn-primary btn-lg",
+      style = "position: fixed; bottom: 15px; right: 15px; color: #FFFFFF; z-index: 9999; background-color: #0000FF; padding: 15px;"
+    )
+  )
+
+  if (length(sign_in_page_args) > 0) {
+    secure_ui_args$sign_in_page_ui <- do.call(sign_in_ui_default, sign_in_page_args)
+  }
+
+  ui_out <- do.call(secure_ui, secure_ui_args)
+
+  server <- secure_server(function(input, output, session) {
+
+    shiny::observeEvent(input$sign_out, {
+
+      tryCatch({
+        sign_out_from_shiny(session)
+        session$reload()
+      }, error = function(err) {
+        print(err)
+      })
+
+    })
+
+  })
+
+
+  shiny::shinyApp(ui_out, server, onStart = on_start)
+}
+
+#' copied internal function from rsconnect package
+#' https://github.com/rstudio/rsconnect/blob/250aa5c0c5071c1ae3f7ecc407164da5801bc17e/R/bundle.R#L496
+#'
+#' @importFrom yaml yaml.load
+#'
+#' @noRd
+#'
+yamlFromRmd <- function(filename) {
+  lines <- readLines(filename, warn = FALSE, encoding = "UTF-8")
+  delim <- grep("^(---|\\.\\.\\.)\\s*$", lines)
+  if (length(delim) >= 2) {
+    if (delim[[1]] == 1 || all(grepl("^\\s*$", lines[1:delim[[1]]]))) {
+      if (grepl("^---\\s*$", lines[delim[[1]]])) {
+        if (diff(delim[1:2]) > 1) {
+          yamlData <- paste(lines[(delim[[1]] + 1):(delim[[2]] -
+                                                      1)], collapse = "\n")
+          return(yaml::yaml.load(yamlData))
+        }
+      }
+    }
+  }
+  return(NULL)
+}

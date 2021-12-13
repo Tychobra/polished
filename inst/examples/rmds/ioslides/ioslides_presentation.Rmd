@@ -1,0 +1,59 @@
+---
+title: 'ioslides with polished'
+author: "Andy Merlino"
+date: "12/31/2050"
+polished:
+  global_sessions_config:
+    app_name: "flex_dashboard"
+runtime: shiny
+output: 
+  ioslides_presentation:
+    widescreen: true
+---
+
+## Shiny
+
+- R package for creating web apps with R
+- Tool to Communicate your R analysis
+- Interact with and explore your data
+- State of the art data science: use all of R's packages
+- Leverage the web's javascript charting and visualization libraries
+
+## Slide 2
+
+```{r, echo = FALSE, message = FALSE}
+library(highcharter)
+library(shiny)
+
+selectInput(
+  "species",
+  "Species",
+  choices = c(
+    "Adelie",
+    "Chinstrap",
+    "Gentoo"
+  ),
+  multiple = TRUE,
+  selected = c(
+    "Adelie",
+    "Chinstrap",
+    "Gentoo"
+  ),
+  width = "100%"
+)
+
+# install.packages("palmerpenguins")
+data(penguins, package = "palmerpenguins")
+
+penguins <- penguins[, c("species", "island", "bill_length_mm", "flipper_length_mm", "body_mass_g")]
+penguins <- na.omit(penguins)
+
+hchart(
+  penguins, "scatter", 
+  hcaes(x = flipper_length_mm, y = bill_length_mm, group = species)
+) %>%
+  hc_yAxis(title = list(text = "Bill Length (mm)")) %>%
+  hc_xAxis(title = list(text = "Flipper Length (mm)")) 
+```
+
+## The End
