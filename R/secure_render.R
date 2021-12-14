@@ -174,57 +174,6 @@ secure_render <- function(
 
   }
 
-
-  if (!is.null(yaml_header$runtime) && yaml_header$runtime %in% c("shiny", "shinyrmd", "shiny_prerendered")) {
-    # runtime = shiny
-
-    rs <- callr::r_session$new()
-    rs$call(
-      function(rmd_path) {
-        rmarkdown::run(file = rmd_path, shiny_args = list(port = 8241, launch.browser = FALSE))
-      },
-      args = list(
-        rmd_file_path
-      )
-    )
-
-
-    on_start <- function() {
-
-      # clean up the R subprocess when the app exists
-      shiny::onStop(function() {
-        rs$close()
-      })
-    }
-
-    embeded_app <- tags$iframe(
-      src = "http://127.0.0.1:8241",
-      height = "100%",
-      width = "100%",
-      style = "height: 100%; width: 100%; overflow: hidden; position: absolute; top:0; left: 0; right: 0; bottom:0",
-      frameborder = "0"
-    )
-
-  } else {
-    # static (non shiny) document (html or pdf)
-
-    static_file_path <- rmarkdown::render(rmd_file_path)
-
-    static_file_name <- basename(static_file_path)
-    shiny::addResourcePath("polished_static", dirname(static_file_path))
-
-    on_start <- NULL
-
-    embeded_app <- tags$iframe(
-      src = file.path("polished_static", static_file_name),
-      height = "100%",
-      width = "100%",
-      style = "height: 100%; width: 100%; overflow: hidden; position: absolute; top:0; left: 0; right: 0; bottom:0",
-      frameborder = "0"
-    )
-  }
-
-
   if (is.null(sign_out_button)) {
 
     # use the output format to choose a default sign out button
@@ -248,19 +197,121 @@ secure_render <- function(
   }
 
 
-  ui <- htmltools::tagList(
-    tags$head(
-      tags$style("
-      body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden
+  if (!is.null(yaml_header$runtime) && yaml_header$runtime %in% c("shiny", "shinyrmd", "shiny_prerendered")) {
+    # runtime = shiny
+
+    rmd_file_name <- basename(rmd_file_path)
+    #rmd_no_ext <- tools::file_path_sans_ext(rmd_file_name)
+
+    dir <- dirname(rmd_file_path)
+    # form and test locations
+    dir <- normalizePath(dir)
+    if (!dir.exists(dir)) {
+      stop(paste0("The directory '", dir, "' does not exist"), call. = FALSE)
+    }
+
+    # add rmd_resources handler on start
+    on_start <- function() {
+      global_r <- file.path(dir, "global.R")
+      if (file.exists(global_r)) {
+        source(global_r, local = FALSE)
       }
-    ")
-    ),
-    sign_out_button,
-    embeded_app
-  )
+      shiny::addResourcePath("rmd_resources", system.file("rmd/h/rmarkdown", package = "rmarkdown"))
+    }
+
+    # use rmarkdown internal functions to generate the shiny ui and server
+    ui_rmd <- rmarkdown:::rmarkdown_shiny_ui(dir, rmd_file_name)
+
+    server_rmd <- rmarkdown:::rmarkdown_shiny_server(
+      dir,
+      rmd_file_name,
+      auto_reload = FALSE,
+      render_args = list(
+        envir = parent.frame()
+      )
+    )
+
+
+    ui <- function(req) {
+      tagList(
+        sign_out_button,
+        ui_rmd(req)
+      )
+    }
+
+
+
+    server_out <- secure_server(function(input, output, session) {
+
+      shiny::observeEvent(input$sign_out, {
+
+        tryCatch({
+          sign_out_from_shiny(session)
+          session$reload()
+        }, error = function(err) {
+          print(err)
+        })
+
+      })
+
+      server_rmd(input, output, session)
+
+    })
+
+  } else {
+    # static (non shiny) document (html or pdf)
+
+    static_file_path <- rmarkdown::render(rmd_file_path)
+
+    static_file_name <- basename(static_file_path)
+    static_file_dir <- dirname(static_file_path)
+    shiny::addResourcePath("polished_static", static_file_dir)
+
+    on_start <- function() {
+      global_r <- file.path(static_file_dir, "global.R")
+      if (file.exists(global_r)) {
+        source(global_r, local = FALSE)
+      }
+    }
+
+    embeded_app <- tags$iframe(
+      src = file.path("polished_static", static_file_name),
+      height = "100%",
+      width = "100%",
+      style = "height: 100%; width: 100%; overflow: hidden; position: absolute; top:0; left: 0; right: 0; bottom:0",
+      frameborder = "0"
+    )
+
+    ui <- htmltools::tagList(
+      tags$head(
+        tags$style("
+          body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden
+          }
+        ")
+      ),
+      sign_out_button,
+      embeded_app
+    )
+
+    server_out <- secure_server(function(input, output, session) {
+
+      shiny::observeEvent(input$sign_out, {
+
+        tryCatch({
+          sign_out_from_shiny(session)
+          session$reload()
+        }, error = function(err) {
+          print(err)
+        })
+
+      })
+
+    })
+  }
+
 
   secure_ui_args <- list(
     ui = ui,
@@ -279,23 +330,8 @@ secure_render <- function(
 
   ui_out <- do.call(secure_ui, secure_ui_args)
 
-  server <- secure_server(function(input, output, session) {
 
-    shiny::observeEvent(input$sign_out, {
-
-      tryCatch({
-        sign_out_from_shiny(session)
-        session$reload()
-      }, error = function(err) {
-        print(err)
-      })
-
-    })
-
-  })
-
-
-  shiny::shinyApp(ui_out, server, onStart = on_start)
+  shiny::shinyApp(ui_out, server_out, onStart = on_start)
 }
 
 #' copied internal function from rsconnect package
