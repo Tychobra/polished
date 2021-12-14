@@ -105,10 +105,12 @@ deploy_app <- function(
 
   # check that app_dir contains either an "app.R" file or a "ui.R" and a "server.R" file
   file_names <- tolower(list.files(path = app_dir))
-  if (!("app.r" %in% file_names || ("ui.r" %in% file_names && "server.r" %in% file_names)) && is.null(golem_package_name)) {
-    stop('"app_dir" must contain a file named "app.R" or files named "ui.R" and "server.R"', call. = FALSE)
-  } else if (!is.null(golem_package_name) && !is.character(golem_package_name)) {
-    stop('"golem_package_name" must be a character string')
+
+  if (!is.null(golem_package_name) && !is.character(golem_package_name)) {
+    # deploying a golem app
+    stop('"golem_package_name" must be a character string', call. = FALSE)
+  } else if (!("app.r" %in% file_names || ("ui.r" %in% file_names && "server.r" %in% file_names) || ("app.rmd" %in% file_names))) {
+    stop('"app_dir" must contain a file named "app.R", "app.Rmd", or files named "ui.R" and "server.R"', call. = FALSE)
   }
 
   if (!is.logical(cache)) {
