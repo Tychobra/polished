@@ -55,9 +55,10 @@ html_sign_out <- function() {
 
 #' Render and secure Rmarkdown document
 #'
-#' \code{secure_render()} can be used to render and secure any Rmarkdown document.
-#' Rendering is handled by \code{rmarkdown::render} and the then the rendered document
-#' is secured with \code{polished} authentication.
+#' \code{secure_rmd()} can be used to render (or run) and secure many
+#' types of Rmarkdown documents. Rendering is handled by either by \code{rmarkdown::render}
+#' or, if using \code{shiny}, a \code{shiny} app is constructed, and the then
+#' the output is secured with \code{polished} authentication.
 #'
 #' @param rmd_file_path the path the to .Rmd file.
 #' @param global_sessions_config_args arguments to be passed to \code{\link{global_sessions_config}}.
@@ -69,16 +70,13 @@ html_sign_out <- function() {
 #' out button/link depending on the output format of your .Rmd document.  Set this argument to \code{list()}
 #' to not include a sign out button.
 #'
-#' @md
-#'
 #' @export
 #'
 #' @return a Shiny app object
 #'
 #' @importFrom shiny shinyApp actionButton actionLink addResourcePath icon observeEvent onStop
 #' @importFrom htmltools tags tagList includeHTML
-#' @importFrom rmarkdown render run
-#' @importFrom callr r_session
+#' @importFrom rmarkdown render
 #' @importFrom utils modifyList
 #'
 #'
@@ -86,17 +84,17 @@ html_sign_out <- function() {
 #'
 #' \dontrun{
 #'
-#' secure_render(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"))
-#' secure_render(system.file("examples/rmds/flexdashboard_shiny.Rmd", package = "polished"))
-#' secure_render(system.file("examples/rmds/html_document.Rmd", package = "polished"))
-#' secure_render(system.file("examples/rmds/pdf_document.Rmd", package = "polished"))
+#' secure_rmd(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"))
+#' secure_rmd(system.file("examples/rmds/flexdashboard_shiny.Rmd", package = "polished"))
+#' secure_rmd(system.file("examples/rmds/html_document.Rmd", package = "polished"))
+#' secure_rmd(system.file("examples/rmds/pdf_document.Rmd", package = "polished"))
 #' io_file_path <- system.file(
 #'   "examples/rmds/ioslides/ioslides_presentation.Rmd",
 #'   package = "polished"
 #' )
-#' secure_render(io_file_path)
+#' secure_rmd(io_file_path)
 #' }
-secure_render <- function(
+secure_rmd <- function(
   rmd_file_path,
   global_sessions_config_args = list(
     api_key = get_api_key()
