@@ -56,17 +56,17 @@ html_sign_out <- function() {
 #' Render and secure Rmarkdown document
 #'
 #' \code{secure_rmd()} can be used to render (or run) and secure many
-#' types of Rmarkdown documents. Rendering is handled by either by \code{rmarkdown::render}
+#' types of Rmarkdown documents. Rendering is handled either by \code{rmarkdown::render}
 #' or, if using \code{shiny}, a \code{shiny} app is constructed, and the then
 #' the output is secured with \code{polished} authentication.
 #'
 #' @param rmd_file_path the path the to .Rmd file.
 #' @param global_sessions_config_args arguments to be passed to \code{\link{global_sessions_config}}.
 #' @param sign_in_page_args a named \code{list()} to customize the Sign In page
-#' UI if values aren't included in YAML header. Valid names are `color`, `company_name`,
-#' `logo`, & `background_image`. (**NOTE:** YAML header values override these values if both provided).
-#' @param sign_out_button A Shiny \code{actionButton} or \code{actionLink} with \code{inputId = "sign_out"}.
-#' If this argument is left as \code{NULL}, \code{secure_render} will attempt to add in an appropriate sign
+#' UI. Valid names are `color`, `company_name`, `logo`, & `background_image`.
+#' (**NOTE:** YAML header values override these values if both provided).
+#' @param sign_out_button A \code{shiny::actionButton} or \code{shiny::actionLink} with \code{inputId = "sign_out"}.
+#' If this argument is left as \code{NULL}, \code{secure_rmd} will attempt to add in an appropriate sign
 #' out button/link depending on the output format of your .Rmd document.  Set this argument to \code{list()}
 #' to not include a sign out button.
 #'
