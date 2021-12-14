@@ -156,7 +156,7 @@ secure_rmd <- function(
     if (!is.null(hold_sign_in_page$logo)) {
       sign_in_page_args$logo_top <- tags$img(
         src = hold_sign_in_page$logo,
-        alt = "Tychobra Logo",
+        alt = "Logo",
         style = "width: 125px; margin-top: 30px; margin-bottom: 30px;"
       )
       sign_in_page_args$icon_href <- hold_sign_in_page$logo
@@ -199,7 +199,6 @@ secure_rmd <- function(
     # runtime = shiny
 
     rmd_file_name <- basename(rmd_file_path)
-    #rmd_no_ext <- tools::file_path_sans_ext(rmd_file_name)
 
     dir <- dirname(rmd_file_path)
     # form and test locations
