@@ -7,14 +7,18 @@ server <- function(input, output, session) {
 
   observeEvent(input$sign_out, {
 
-    sign_out_from_shiny(session)
-    session$reload()
+    tryCatch({
 
-  })
+      sign_out_from_shiny(session)
+      session$reload()
 
-  output$test_render <- renderUI({
+    }, error = function(err) {
 
-    session$userData$user()
+      msg <- "unable to sign out"
+      print(msg)
+      print(err)
+
+    })
 
   })
 

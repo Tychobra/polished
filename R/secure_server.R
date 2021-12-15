@@ -15,7 +15,7 @@
 #'
 #' @export
 #'
-#' @importFrom shiny observeEvent getQueryString callModule
+#' @importFrom shiny observeEvent getQueryString updateQueryString callModule onStop reactiveVal
 #' @importFrom digest digest
 #'
 #'

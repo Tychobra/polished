@@ -97,6 +97,9 @@ get_api_key <- function() {
     if (is.na(api_key)) {
       api_key <- NULL
     }
+    if (is.null(api_key)) {
+      stop("polished API key cannot be `NULL`", call. = FALSE)
+    }
   }
   api_key
 }
