@@ -93,7 +93,10 @@ get_api_key <- function() {
   current_polished_options <- getOption("polished")
   api_key <- current_polished_options$api_key
   if (is.null(api_key)) {
-    api_key <- Sys.getenv("POLISHED_API_KEY", unset = NA_character_)
+    api_key <- Sys.getenv("POLISHED_API_KEY", unset = NULL)
+    if (is.null(api_key)) {
+      stop("polished API key cannot be `NULL`", call. = FALSE)
+    }
   }
   api_key
 }
