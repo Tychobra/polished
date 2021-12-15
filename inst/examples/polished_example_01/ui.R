@@ -19,8 +19,7 @@ ui <- fluidPage(
     ),
     column(
       12,
-      verbatimTextOutput("secure_content"),
-      uiOutput("test_render")
+      verbatimTextOutput("secure_content")
     )
   )
 )
