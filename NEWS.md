@@ -7,7 +7,7 @@
 
 * Added 4 additional Polished Hosting regions (see documentation for `region` argument of `polished::deploy_app()`)
 * App names (i.e. `app_name`) can now include upper case letters & spaces (Example: `app_name = "Example App Name"`)
-* added "cache" argument to `deploy()` app to set whether or not to use a cached build of your Shiny
+* added "cache" argument to `deploy_app()` to set whether or not to use a cached build of your Shiny
 app on Polished Hosting.
 * added "golem_package_name" argument to `deploy_app()` to allow for deploying Golem Shiny apps
 to Polished Hosting.
