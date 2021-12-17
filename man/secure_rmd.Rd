@@ -14,11 +14,12 @@ secure_rmd(
 \arguments{
 \item{rmd_file_path}{the path the to .Rmd file.}
 
-\item{global_sessions_config_args}{arguments to be passed to \code{\link{global_sessions_config}}.}
+\item{global_sessions_config_args}{arguments to be passed to \code{\link{global_sessions_config}}.
+(\strong{NOTE:} Values passed in this list will override YAML header values if both provided).}
 
 \item{sign_in_page_args}{a named \code{list()} to customize the Sign In page
 UI. Valid names are \code{color}, \code{company_name}, \code{logo}, & \code{background_image}.
-(\strong{NOTE:} YAML header values override these values if both provided).}
+(\strong{NOTE:} Values passed in this list will override YAML header values if both provided).}
 
 \item{sign_out_button}{A \code{shiny::actionButton} or \code{shiny::actionLink} with \code{inputId = "sign_out"}.
 If this argument is left as \code{NULL}, \code{secure_rmd} will attempt to add in an appropriate sign
@@ -39,8 +40,15 @@ the output is secured with \code{polished} authentication.
 \dontrun{
 
 secure_rmd(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"))
-secure_rmd(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"),
-global_sessions_config_args = list(app_name = "different_name")
+secure_rmd(
+  system.file("examples/rmds/flexdashboard.Rmd", package = "polished"),
+  global_sessions_config_args = list(
+    # any values in this list will override values in YAML header
+    app_name = "different_name"
+  ),
+  sign_in_page_args = list(
+    color = "#FF5700"
+  )
 )
 secure_rmd(system.file("examples/rmds/flexdashboard_shiny.Rmd", package = "polished"))
 secure_rmd(system.file("examples/rmds/html_document.Rmd", package = "polished"))

@@ -74,7 +74,7 @@ overwrite_args <- function(x, y, xname) {
   }
   x <- as.list(x)
   y <- as.list(y)
-  x <- modifyList(
+  x <- utils::modifyList(
     y,
     x
   )
@@ -93,9 +93,10 @@ overwrite_args <- function(x, y, xname) {
 #'
 #' @param rmd_file_path the path the to .Rmd file.
 #' @param global_sessions_config_args arguments to be passed to \code{\link{global_sessions_config}}.
+#' (**NOTE:** Values passed in this list will override YAML header values if both provided).
 #' @param sign_in_page_args a named \code{list()} to customize the Sign In page
 #' UI. Valid names are `color`, `company_name`, `logo`, & `background_image`.
-#' (**NOTE:** YAML header values override these values if both provided).
+#' (**NOTE:** Values passed in this list will override YAML header values if both provided).
 #' @param sign_out_button A \code{shiny::actionButton} or \code{shiny::actionLink} with \code{inputId = "sign_out"}.
 #' If this argument is left as \code{NULL}, \code{secure_rmd} will attempt to add in an appropriate sign
 #' out button/link depending on the output format of your .Rmd document.  Set this argument to \code{list()}
@@ -108,16 +109,21 @@ overwrite_args <- function(x, y, xname) {
 #' @importFrom shiny shinyApp actionButton actionLink addResourcePath icon observeEvent onStop
 #' @importFrom htmltools tags tagList includeHTML
 #' @importFrom rmarkdown render
-#' @importFrom utils modifyList
-#'
 #'
 #' @examples
 #'
 #' \dontrun{
 #'
 #' secure_rmd(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"))
-#' secure_rmd(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"),
-#' global_sessions_config_args = list(app_name = "different_name")
+#' secure_rmd(
+#'   system.file("examples/rmds/flexdashboard.Rmd", package = "polished"),
+#'   global_sessions_config_args = list(
+#'     # any values in this list will override values in YAML header
+#'     app_name = "different_name"
+#'   ),
+#'   sign_in_page_args = list(
+#'     color = "#FF5700"
+#'   )
 #' )
 #' secure_rmd(system.file("examples/rmds/flexdashboard_shiny.Rmd", package = "polished"))
 #' secure_rmd(system.file("examples/rmds/html_document.Rmd", package = "polished"))
