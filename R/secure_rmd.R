@@ -134,6 +134,9 @@ secure_rmd <- function(
     ]
   }
 
+  yaml_polished_global_config <- as.list(yaml_polished_global_config)
+  global_sessions_config_args <- as.list(global_sessions_config_args)
+
   global_sessions_config_args <- modifyList(
     global_sessions_config_args,
     yaml_polished_global_config
