@@ -127,7 +127,7 @@ secure_rmd <- function(
       )
     )
     yaml_polished_global_config <- yaml_polished_global_config[
-      !names(yaml_polished_global_config) %in%inames
+      !names(yaml_polished_global_config) %in% inames
     ]
   }
 
