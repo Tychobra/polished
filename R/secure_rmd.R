@@ -96,9 +96,7 @@ html_sign_out <- function() {
 #' }
 secure_rmd <- function(
   rmd_file_path,
-  global_sessions_config_args = list(
-    api_key = get_api_key()
-  ),
+  global_sessions_config_args = list(),
   sign_in_page_args = list(),
   sign_out_button = NULL
 ) {
@@ -109,6 +107,10 @@ secure_rmd <- function(
 
   if (is.null(yaml_polished)) {
     stop('"polished" must be included in the YAML header', call. = FALSE)
+  }
+
+  if (is.null(yaml_polished$global_sessions_config$api_key)) {
+    yaml_polished$global_sessions_config$api_key <- get_api_key()
   }
 
   global_sessions_config_args <- modifyList(
