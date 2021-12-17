@@ -107,15 +107,12 @@ secure_rmd <- function(
 
   yaml_polished <- yaml_header$polished
 
-  if (is.null(yaml_polished)) {
-    stop('"polished" must be included in the YAML header', call. = FALSE)
-  }
-
   global_sessions_config_args <- modifyList(
     global_sessions_config_args,
     yaml_polished$global_sessions_config
   )
 
+  # Minimum args needed for an app
   if (is.null(global_sessions_config_args$app_name)) {
     stop('polished "app_name" must be provided', call. = FALSE)
   }
