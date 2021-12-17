@@ -50,6 +50,37 @@ html_sign_out <- function() {
   )
 }
 
+overwrite_args <- function(x, y, xname) {
+  x <- x[
+    !sapply(x, is.null)
+  ]
+  y <- y[
+    !sapply(x, is.null)
+  ]
+  inames <- intersect(names(x),
+                      names(y))
+  if (length(inames) > 0) {
+    warning(
+      paste0(
+        paste0(inames, collapse = ", "),
+        " specified in ",
+        xname, " and YAML polished header,",
+        " using ", xname
+      )
+    )
+    y <- y[
+      !names(y) %in% inames
+    ]
+  }
+  x <- as.list(x)
+  y <- as.list(y)
+  x <- modifyList(
+    y,
+    x
+  )
+  x
+}
+
 
 
 
@@ -112,35 +143,12 @@ secure_rmd <- function(
   # global_sessions_config_args overrides
   # global_sessions_config_args
   # remove any NULL
-  yaml_polished_global_config <- yaml_polished_global_config[
-    !sapply(yaml_polished_global_config, is.null)
-  ]
-  global_sessions_config_args <- global_sessions_config_args[
-    !sapply(global_sessions_config_args, is.null)
-  ]
-  inames <- intersect(names(global_sessions_config_args),
-                      names(yaml_polished_global_config))
-  if (length(inames) > 0) {
-    warning(
-      paste0(
-        paste0(inames, collapse = ", "),
-        " specified in ",
-        "global_sessions_config_args and YAML polished header,",
-        " using global_sessions_config_args"
-      )
-    )
-    yaml_polished_global_config <- yaml_polished_global_config[
-      !names(yaml_polished_global_config) %in% inames
-    ]
-  }
+  global_sessions_config_args <-
+    overwrite_args(global_sessions_config_args,
+                   yaml_polished_global_config,
+                   xname = "global_sessions_config_args")
 
-  yaml_polished_global_config <- as.list(yaml_polished_global_config)
-  global_sessions_config_args <- as.list(global_sessions_config_args)
 
-  global_sessions_config_args <- modifyList(
-    yaml_polished_global_config,
-    global_sessions_config_args
-  )
   if (is.null(global_sessions_config_args$api_key)) {
     global_sessions_config_args$api_key <- get_api_key()
   }
@@ -183,6 +191,9 @@ secure_rmd <- function(
       stop("Invalid value passed to polished `sign_in_page` in YAML header.", call. = FALSE)
     }
 
+    hold_sign_in_page <- as.list(hold_sign_in_page)
+    sign_in_page_args <- as.list(sign_in_page_args)
+
     if (!is.null(hold_sign_in_page$logo)) {
       sign_in_page_args$logo_top <- tags$img(
         src = hold_sign_in_page$logo,
@@ -195,10 +206,10 @@ secure_rmd <- function(
       hold_sign_in_page$logo <- NULL
     }
 
-    sign_in_page_args <- modifyList(
-      sign_in_page_args,
-      hold_sign_in_page
-    )
+    sign_in_page_args <-
+      overwrite_args(sign_in_page_args,
+                     hold_sign_in_page,
+                     xname = "sign_in_page_args")
 
   }
 
