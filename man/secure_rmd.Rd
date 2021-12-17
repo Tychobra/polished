@@ -6,7 +6,7 @@
 \usage{
 secure_rmd(
   rmd_file_path,
-  global_sessions_config_args = list(api_key = get_api_key()),
+  global_sessions_config_args = list(),
   sign_in_page_args = list(),
   sign_out_button = NULL
 )

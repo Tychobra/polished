@@ -96,9 +96,7 @@ html_sign_out <- function() {
 #' }
 secure_rmd <- function(
   rmd_file_path,
-  global_sessions_config_args = list(
-    api_key = get_api_key()
-  ),
+  global_sessions_config_args = list(),
   sign_in_page_args = list(),
   sign_out_button = NULL
 ) {
@@ -106,18 +104,40 @@ secure_rmd <- function(
   yaml_header <- yamlFromRmd(rmd_file_path)
 
   yaml_polished <- yaml_header$polished
+  yaml_polished_global_config <- yaml_polished$global_sessions_config
 
-  if (!is.null(yaml_polished$global_sessions_config$app_name) &&
-      !is.null(global_sessions_config_args$app_name)) {
-    warning(paste0("app_name specified in ",
-                   "global_sessions_config_args and YAML polished header,",
-                   " using global_sessions_config_args$app_name"))
-    yaml_polished$global_sessions_config$app_name <- NULL
+  # global_sessions_config_args overrides
+  # global_sessions_config_args
+  # remove any NULL
+  yaml_polished_global_config <- yaml_polished_global_config[
+    !sapply(yaml_polished_global_config, is.null)
+  ]
+  global_sessions_config_args <- global_sessions_config_args[
+    !sapply(global_sessions_config_args, is.null)
+  ]
+  inames <- intersect(names(global_sessions_config_args),
+                      names(yaml_polished_global_config))
+  if (length(inames) > 0) {
+    warning(
+      paste0(
+        paste0(inames, collapse = ", "),
+        " specified in ",
+        "global_sessions_config_args and YAML polished header,",
+        " using global_sessions_config_args"
+      )
+    )
+    yaml_polished_global_config <- yaml_polished_global_config[
+      !names(yaml_polished_global_config) %in%inames
+    ]
   }
+
   global_sessions_config_args <- modifyList(
     global_sessions_config_args,
-    yaml_polished$global_sessions_config
+    yaml_polished_global_config
   )
+  if (is.null(global_sessions_config_args$api_key)) {
+    global_sessions_config_args$api_key <- get_api_key()
+  }
 
   # Minimum args needed for an app
   if (is.null(global_sessions_config_args$app_name)) {
@@ -199,7 +219,8 @@ secure_rmd <- function(
   }
 
 
-  if (!is.null(yaml_header$runtime) && yaml_header$runtime %in% c("shiny", "shinyrmd", "shiny_prerendered")) {
+  if (!is.null(yaml_header$runtime) &&
+      yaml_header$runtime %in% c("shiny", "shinyrmd", "shiny_prerendered")) {
     # runtime = shiny
 
     rmd_file_name <- basename(rmd_file_path)
