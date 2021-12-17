@@ -138,8 +138,8 @@ secure_rmd <- function(
   global_sessions_config_args <- as.list(global_sessions_config_args)
 
   global_sessions_config_args <- modifyList(
-    global_sessions_config_args,
-    yaml_polished_global_config
+    yaml_polished_global_config,
+    global_sessions_config_args
   )
   if (is.null(global_sessions_config_args$api_key)) {
     global_sessions_config_args$api_key <- get_api_key()
