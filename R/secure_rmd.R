@@ -50,6 +50,37 @@ html_sign_out <- function() {
   )
 }
 
+overwrite_args <- function(x, y, xname) {
+  x <- x[
+    !sapply(x, is.null)
+  ]
+  y <- y[
+    !sapply(y, is.null)
+  ]
+  inames <- intersect(names(x),
+                      names(y))
+  if (length(inames) > 0) {
+    warning(
+      paste0(
+        paste0(inames, collapse = ", "),
+        " specified in ",
+        xname, " and YAML polished header,",
+        " using ", xname
+      )
+    )
+    y <- y[
+      !names(y) %in% inames
+    ]
+  }
+  x <- as.list(x)
+  y <- as.list(y)
+  x <- modifyList(
+    y,
+    x
+  )
+  x
+}
+
 
 
 
@@ -85,6 +116,9 @@ html_sign_out <- function() {
 #' \dontrun{
 #'
 #' secure_rmd(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"))
+#' secure_rmd(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"),
+#' global_sessions_config_args = list(app_name = "different_name")
+#' )
 #' secure_rmd(system.file("examples/rmds/flexdashboard_shiny.Rmd", package = "polished"))
 #' secure_rmd(system.file("examples/rmds/html_document.Rmd", package = "polished"))
 #' secure_rmd(system.file("examples/rmds/pdf_document.Rmd", package = "polished"))
@@ -104,20 +138,22 @@ secure_rmd <- function(
   yaml_header <- yamlFromRmd(rmd_file_path)
 
   yaml_polished <- yaml_header$polished
+  yaml_polished_global_config <- yaml_polished$global_sessions_config
 
-  if (is.null(yaml_polished)) {
-    stop('"polished" must be included in the YAML header', call. = FALSE)
+  # global_sessions_config_args overrides
+  # global_sessions_config_args
+  # remove any NULL
+  global_sessions_config_args <-
+    overwrite_args(global_sessions_config_args,
+                   yaml_polished_global_config,
+                   xname = "global_sessions_config_args")
+
+
+  if (is.null(global_sessions_config_args$api_key)) {
+    global_sessions_config_args$api_key <- get_api_key()
   }
 
-  if (is.null(yaml_polished$global_sessions_config$api_key)) {
-    yaml_polished$global_sessions_config$api_key <- get_api_key()
-  }
-
-  global_sessions_config_args <- modifyList(
-    global_sessions_config_args,
-    yaml_polished$global_sessions_config
-  )
-
+  # Minimum args needed for an app
   if (is.null(global_sessions_config_args$app_name)) {
     stop('polished "app_name" must be provided', call. = FALSE)
   }
@@ -155,6 +191,9 @@ secure_rmd <- function(
       stop("Invalid value passed to polished `sign_in_page` in YAML header.", call. = FALSE)
     }
 
+    hold_sign_in_page <- as.list(hold_sign_in_page)
+    sign_in_page_args <- as.list(sign_in_page_args)
+
     if (!is.null(hold_sign_in_page$logo)) {
       sign_in_page_args$logo_top <- tags$img(
         src = hold_sign_in_page$logo,
@@ -167,10 +206,10 @@ secure_rmd <- function(
       hold_sign_in_page$logo <- NULL
     }
 
-    sign_in_page_args <- modifyList(
-      sign_in_page_args,
-      hold_sign_in_page
-    )
+    sign_in_page_args <-
+      overwrite_args(sign_in_page_args,
+                     hold_sign_in_page,
+                     xname = "sign_in_page_args")
 
   }
 
@@ -197,7 +236,8 @@ secure_rmd <- function(
   }
 
 
-  if (!is.null(yaml_header$runtime) && yaml_header$runtime %in% c("shiny", "shinyrmd", "shiny_prerendered")) {
+  if (!is.null(yaml_header$runtime) &&
+      yaml_header$runtime %in% c("shiny", "shinyrmd", "shiny_prerendered")) {
     # runtime = shiny
 
     rmd_file_name <- basename(rmd_file_path)
