@@ -107,6 +107,13 @@ secure_rmd <- function(
 
   yaml_polished <- yaml_header$polished
 
+  if (!is.null(yaml_polished$global_sessions_config$app_name) &&
+      !is.null(global_sessions_config_args$app_name)) {
+    warning(paste0("app_name specified in ",
+                   "global_sessions_config_args and YAML polished header,",
+                   " using global_sessions_config_args$app_name"))
+    yaml_polished$global_sessions_config$app_name <- NULL
+  }
   global_sessions_config_args <- modifyList(
     global_sessions_config_args,
     yaml_polished$global_sessions_config
