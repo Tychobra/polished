@@ -85,6 +85,9 @@ html_sign_out <- function() {
 #' \dontrun{
 #'
 #' secure_rmd(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"))
+#' secure_rmd(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"),
+#' global_sessions_config_args = list(app_name = "different_name")
+#' )
 #' secure_rmd(system.file("examples/rmds/flexdashboard_shiny.Rmd", package = "polished"))
 #' secure_rmd(system.file("examples/rmds/html_document.Rmd", package = "polished"))
 #' secure_rmd(system.file("examples/rmds/pdf_document.Rmd", package = "polished"))
