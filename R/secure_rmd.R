@@ -55,7 +55,7 @@ overwrite_args <- function(x, y, xname) {
     !sapply(x, is.null)
   ]
   y <- y[
-    !sapply(x, is.null)
+    !sapply(y, is.null)
   ]
   inames <- intersect(names(x),
                       names(y))
