@@ -145,6 +145,10 @@ secure_rmd <- function(
 
   yaml_polished <- yaml_header$polished
   yaml_polished_global_config <- yaml_polished$global_sessions_config
+  if (is.null(yaml_polished_global_config$app_name) &&
+      !is.null(yaml_polished$app_name)) {
+    yaml_polished_global_config$app_name <- yaml_polished$app_name
+  }
 
   # global_sessions_config_args overrides
   # global_sessions_config_args
