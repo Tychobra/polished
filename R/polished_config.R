@@ -1,4 +1,4 @@
-#' Configuration for global sessions
+#' global configuration for polished authentication
 #'
 #' This is the primary function for configuring \code{polished}.  It configures your app's instance of the
 #' \code{Sessions} class that manages your user's \code{polished} sessions.  Call this function in
@@ -44,14 +44,14 @@
 #' \dontrun{
 #' # global.R
 #'
-#' global_sessions_config(
+#' polished_config(
 #'   app_name = "<your app name>",
 #'   api_key = "<your API key>"
 #' )
 #'
 #' }
 #'
-global_sessions_config <- function(
+polished_config <- function(
   app_name,
   api_key = get_api_key(),
   firebase_config = NULL,
@@ -65,11 +65,11 @@ global_sessions_config <- function(
 ) {
 
   if (!(length(api_key) == 1 && is.character(api_key))) {
-    stop("invalid `api_key` argument passed to `global_sessions_config()`", call. = FALSE)
+    stop("invalid `api_key` argument passed to `polished_config()`", call. = FALSE)
   }
 
   if (!((is.numeric(cookie_expires) && cookie_expires > 0) || is.null(cookie_expires))) {
-    stop("invalid `cookie_expires` argument passed to `global_sessions_config()`", call. = FALSE)
+    stop("invalid `cookie_expires` argument passed to `polished_config()`", call. = FALSE)
   }
 
   current_polished_options <- getOption("polished")
@@ -100,7 +100,7 @@ global_sessions_config <- function(
   }
 
   if (!(is.null(sentry_dsn) || (length(sentry_dsn) == 1 && is.character(sentry_dsn)) ) ) {
-    stop("invalid `sentry_dsn` argument passed to `global_sessions_config()`", call. = FALSE)
+    stop("invalid `sentry_dsn` argument passed to `polished_config()`", call. = FALSE)
   }
 
   # Throw warning for no Firebase config w/ Social Sign in Providers
@@ -133,4 +133,38 @@ Firebase configuration (`firebase_config`) provided!
     is_auth_required = is_auth_required
   )
 
+}
+
+
+#' @rdname polished_config
+#'
+#' @export
+#'
+global_sessions_config <- function(
+  app_name,
+  api_key = get_api_key(),
+  firebase_config = NULL,
+  admin_mode = FALSE,
+  is_invite_required = TRUE,
+  sign_in_providers = "email",
+  is_email_verification_required = TRUE,
+  is_auth_required = TRUE,
+  sentry_dsn = NULL,
+  cookie_expires = 365L
+) {
+
+  .Deprecated("polished_config")
+
+  polished_config(
+    app_name,
+    api_key,
+    firebase_config,
+    admin_mode,
+    is_invite_required,
+    sign_in_providers,
+    is_email_verification_required,
+    is_auth_required,
+    sentry_dsn,
+    cookie_expires
+  )
 }

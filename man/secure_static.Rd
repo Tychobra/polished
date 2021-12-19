@@ -6,7 +6,7 @@
 \usage{
 secure_static(
   html_file_path,
-  global_sessions_config_args,
+  polished_config_args,
   sign_out_button = shiny::actionLink("sign_out", "Sign Out", icon =
     shiny::icon("sign-out-alt"), class = "polished_sign_out_link")
 )
@@ -14,7 +14,7 @@ secure_static(
 \arguments{
 \item{html_file_path}{the path the to HTML file.  See the details for more info.}
 
-\item{global_sessions_config_args}{arguments to be passed to \code{\link{global_sessions_config}}.}
+\item{polished_config_args}{arguments to be passed to \code{\link{polished_config}}.}
 
 \item{sign_out_button}{action button or link with \code{inputId = "sign_out"}. Set to \code{NULL} to not include a sign out button.}
 }

@@ -6,7 +6,7 @@
 \usage{
 secure_rmd(
   rmd_file_path,
-  global_sessions_config_args = list(),
+  polished_config_args = list(),
   sign_in_page_args = list(),
   sign_out_button = NULL
 )
@@ -14,7 +14,7 @@ secure_rmd(
 \arguments{
 \item{rmd_file_path}{the path the to .Rmd file.}
 
-\item{global_sessions_config_args}{arguments to be passed to \code{\link{global_sessions_config}}.
+\item{polished_config_args}{arguments to be passed to \code{\link{polished_config}}.
 (\strong{NOTE:} Values passed in this list will override YAML header values if both provided).}
 
 \item{sign_in_page_args}{a named \code{list()} to customize the Sign In page
@@ -42,7 +42,7 @@ the output is secured with \code{polished} authentication.
 secure_rmd(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"))
 secure_rmd(
   system.file("examples/rmds/flexdashboard.Rmd", package = "polished"),
-  global_sessions_config_args = list(
+  polished_config_args = list(
     # any values in this list will override values in YAML header
     app_name = "different_name"
   ),

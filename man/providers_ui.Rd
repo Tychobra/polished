@@ -27,5 +27,5 @@ the HTML UI of the "Sign in with *" buttons.
 \description{
 Creates the HTML UI of the "Sign in with *" buttons.  These buttons are only
 necessary if you enable social sign in via the \code{sign_in_providers} argument
-passed to \code{\link{global_sessions_config}}.
+passed to \code{\link{polished_config}}.
 }

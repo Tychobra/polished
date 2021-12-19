@@ -87,10 +87,10 @@ Sessions <-  R6::R6Class(
     #' polished Sessions configuration function
     #'
     #' @details
-    #' This function is called via `global_sessions_config()` in global.R
+    #' This function is called via `polished_config()` in global.R
     #' of all Shiny apps using polished.
     #'
-    #' @inheritParams global_sessions_config
+    #' @inheritParams polished_config
     #'
     config = function(
       firebase_config = NULL,
@@ -102,7 +102,7 @@ Sessions <-  R6::R6Class(
     ) {
 
       if (!(length(sign_in_providers) >= 1 && is.character(sign_in_providers))) {
-        stop("invalid `sign_in_providers` argument passed to `global_sessions_config()`", call. = FALSE)
+        stop("invalid `sign_in_providers` argument passed to `polished_config()`", call. = FALSE)
       }
 
       self$sign_in_providers <- sign_in_providers
@@ -110,7 +110,7 @@ Sessions <-  R6::R6Class(
       if (!is.null(firebase_config)) {
         if (length(firebase_config) != 3 ||
             !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
-          stop("invalid `firebase_config` argument passed to `global_sessions_config()`", call. = FALSE)
+          stop("invalid `firebase_config` argument passed to `polished_config()`", call. = FALSE)
         }
         self$firebase_config <- firebase_config
       }
@@ -121,13 +121,13 @@ Sessions <-  R6::R6Class(
         stop("invalid `admin_mode` argument passed to `global_sessions_config()`", call. = FALSE)
       }
       if (!(length(is_invite_required) == 1 && is.logical(is_invite_required))) {
-        stop("invalid `is_invite_required` argument passed to `global_sessions_config()`", call. = FALSE)
+        stop("invalid `is_invite_required` argument passed to `polished_config()`", call. = FALSE)
       }
       if (!(length(is_email_verification_required) == 1 && is.logical(is_email_verification_required))) {
-        stop("invalid `is_email_verification_required` argument passed to `global_sessions_config()`", call. = FALSE)
+        stop("invalid `is_email_verification_required` argument passed to `polished_config()`", call. = FALSE)
       }
       if (!(length(is_auth_required) == 1 && is.logical(is_auth_required))) {
-        stop("invalid `is_auth_required` argument passed to `global_sessions_config()`", call. = FALSE)
+        stop("invalid `is_auth_required` argument passed to `polished_config()`", call. = FALSE)
       }
 
 

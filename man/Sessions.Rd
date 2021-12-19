@@ -43,7 +43,7 @@ polished Sessions configuration function
 }
 
 \subsection{Details}{
-This function is called via \code{global_sessions_config()} in global.R
+This function is called via \code{polished_config()} in global.R
 of all Shiny apps using polished.
 }
 
