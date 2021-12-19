@@ -92,7 +92,7 @@ overwrite_args <- function(x, y, xname) {
 #' the output is secured with \code{polished} authentication.
 #'
 #' @param rmd_file_path the path the to .Rmd file.
-#' @param global_sessions_config_args arguments to be passed to \code{\link{global_sessions_config}}.
+#' @param polished_config_args arguments to be passed to \code{\link{polished_config}}.
 #' (**NOTE:** Values passed in this list will override YAML header values if both provided).
 #' @param sign_in_page_args a named \code{list()} to customize the Sign In page
 #' UI. Valid names are `color`, `company_name`, `logo`, & `background_image`.
@@ -117,7 +117,7 @@ overwrite_args <- function(x, y, xname) {
 #' secure_rmd(system.file("examples/rmds/flexdashboard.Rmd", package = "polished"))
 #' secure_rmd(
 #'   system.file("examples/rmds/flexdashboard.Rmd", package = "polished"),
-#'   global_sessions_config_args = list(
+#'   polished_config_args = list(
 #'     # any values in this list will override values in YAML header
 #'     app_name = "different_name"
 #'   ),
@@ -136,7 +136,7 @@ overwrite_args <- function(x, y, xname) {
 #' }
 secure_rmd <- function(
   rmd_file_path,
-  global_sessions_config_args = list(),
+  polished_config_args = list(),
   sign_in_page_args = list(),
   sign_out_button = NULL
 ) {
@@ -144,39 +144,33 @@ secure_rmd <- function(
   yaml_header <- yamlFromRmd(rmd_file_path)
 
   yaml_polished <- yaml_header$polished
-  yaml_polished_global_config <- yaml_polished$global_sessions_config
-  if (is.null(yaml_polished_global_config$app_name) &&
-      !is.null(yaml_polished$app_name)) {
-    yaml_polished_global_config$app_name <- yaml_polished$app_name
-  }
-  if (is.null(yaml_polished_global_config$api_key) &&
-      !is.null(yaml_polished$api_key)) {
-    yaml_polished_global_config$api_key <- yaml_polished$api_key
-  }
+  yaml_polished_config <- yaml_polished
+  # sign_in_page is the only polished YAML value that is not passed to polished_config()
+  yaml_polished_config$sign_in_page <- NULL
 
-  # global_sessions_config_args overrides
-  # global_sessions_config_args
+  # polished_config_args overrides
+  # polished_config_args
   # remove any NULL
-  global_sessions_config_args <-
-    overwrite_args(global_sessions_config_args,
-                   yaml_polished_global_config,
-                   xname = "global_sessions_config_args")
+  polished_config_args <-
+    overwrite_args(polished_config_args,
+                   yaml_polished_config,
+                   xname = "polished_config_args")
 
 
-  if (is.null(global_sessions_config_args$api_key)) {
-    global_sessions_config_args$api_key <- get_api_key()
+  if (is.null(polished_config_args$api_key)) {
+    polished_config_args$api_key <- get_api_key()
   }
 
   # Minimum args needed for an app
-  if (is.null(global_sessions_config_args$app_name)) {
+  if (is.null(polished_config_args$app_name)) {
     stop('polished "app_name" must be provided', call. = FALSE)
   }
-  if (is.null(global_sessions_config_args$api_key)) {
+  if (is.null(polished_config_args$api_key)) {
     stop('polished "api_key" must be provided', call. = FALSE)
   }
 
-  # check that no invalid values passed in via global_sessions_config YAML values
-  if (!all(names(global_sessions_config_args) %in% c(
+  # check that no invalid values passed in via polished YAML values
+  if (!all(names(polished_config_args) %in% c(
     "app_name",
     "api_key",
     "firebase_config",
@@ -188,12 +182,12 @@ secure_rmd <- function(
     "sentry_dsn",
     "cookie_expires"
   ))) {
-    stop("Invalid value passed to polished global_session", call. = FALSE)
+    stop('Invalid value passed to "polished_config_args"', call. = FALSE)
   }
 
   do.call(
-    global_sessions_config,
-    global_sessions_config_args
+    polished_config,
+    polished_config_args
   )
 
 

@@ -3,8 +3,7 @@ title: 'ioslides with polished'
 author: "Andy Merlino"
 date: "12/31/2050"
 polished:
-  global_sessions_config:
-    app_name: "flex_dashboard"
+  app_name: "flex_dashboard"
 runtime: shiny
 output: 
   ioslides_presentation:

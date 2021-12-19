@@ -4,11 +4,11 @@
 #'
 #' Creates the HTML UI of the "Sign in with *" buttons.  These buttons are only
 #' necessary if you enable social sign in via the \code{sign_in_providers} argument
-#' passed to \code{\link{global_sessions_config}}.
+#' passed to \code{\link{polished_config}}.
 #'
 #' @param ns the Shiny namespace function created with \code{shiny::NS()}.
 #'
-#' @inheritParams global_sessions_config
+#' @inheritParams polished_config
 #'
 #' @param title The title to be used above the provider buttons. Set to \code{NULL} to not include
 #' @param fancy Should the buttons be large and colorful?

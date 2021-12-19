@@ -5,7 +5,7 @@
 #' and flexdashboards.
 #'
 #' @param html_file_path the path the to HTML file.  See the details for more info.
-#' @param global_sessions_config_args arguments to be passed to \code{\link{global_sessions_config}}.
+#' @param polished_config_args arguments to be passed to \code{\link{polished_config}}.
 #' @param sign_out_button action button or link with \code{inputId = "sign_out"}. Set to \code{NULL} to not include a sign out button.
 #'
 #' @md
@@ -29,7 +29,7 @@
 #'
 secure_static <- function(
   html_file_path,
-  global_sessions_config_args,
+  polished_config_args,
   sign_out_button = shiny::actionLink(
     "sign_out",
     "Sign Out",
@@ -98,8 +98,8 @@ secure_static <- function(
 
     # configure the global sessions when the app initially starts up.
     do.call(
-      "global_sessions_config",
-      global_sessions_config_args
+      "polished_config",
+      polished_config_args
     )
   })
 }

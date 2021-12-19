@@ -1,8 +1,7 @@
 ---
 title: "Untitled"
 polished:
-  global_sessions_config:
-    app_name: "flex_dashboad"
+  app_name: "flex_dashboad"
   sign_in_page:
     color: "#006CB5"
     company_name: "Tychobra"

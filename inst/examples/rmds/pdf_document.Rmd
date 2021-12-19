@@ -1,8 +1,7 @@
 ---
 title: "Palmer Penguins"
 polished:
-  global_sessions_config:
-    app_name: "flex_dashboard"
+  app_name: "flex_dashboard"
 output: pdf_document
 ---
 

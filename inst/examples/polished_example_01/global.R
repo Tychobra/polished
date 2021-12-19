@@ -5,7 +5,7 @@ library(config)
 app_config <- config::get()
 
 # configure polished
-global_sessions_config(
+polished_config(
   app_name = "polished_example_01",
-  api_key = app_config$api_key
+  #api_key = app_config$api_key
 )
