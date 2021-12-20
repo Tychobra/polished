@@ -3,11 +3,14 @@
 \name{set_api_key}
 \alias{set_api_key}
 \alias{get_api_key}
+\alias{have_api_key}
 \title{set Polished API key}
 \usage{
 set_api_key(api_key)
 
 get_api_key()
+
+have_api_key()
 }
 \arguments{
 \item{api_key}{the Polished API key}
