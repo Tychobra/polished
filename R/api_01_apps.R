@@ -148,8 +148,18 @@ update_app <- function(app_uid, app_name = NULL, app_url = NULL,
 #'
 #' @importFrom httr DELETE authenticate
 #'
-delete_app <- function(app_uid, api_key = get_api_key()) {
+delete_app <- function(app_uid, api_key = get_api_key(),
+                       app_name = NULL) {
 
+  if (missing(app_uid) && !is.null(app_name)) {
+    df <- get_apps(app_name = app_name, api_key = apk_key)
+    app_uid <- df$uid[df$app_name %in% app_name]
+    if (length(app_uid) > 1) {
+      stop("`delete_app` requires app_uid, cannot infer from app listing",
+           .call = FALSE)
+    }
+    if (length(app_uid) == 0) app_uid <- NULL
+  }
   query_out <- list(
     app_uid = app_uid
   )

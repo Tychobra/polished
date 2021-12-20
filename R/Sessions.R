@@ -118,7 +118,7 @@ Sessions <-  R6::R6Class(
 
 
       if (!(length(admin_mode) == 1 && is.logical(admin_mode))) {
-        stop("invalid `admin_mode` argument passed to `global_sessions_config()`", call. = FALSE)
+        stop("invalid `admin_mode` argument passed to `polished_config()`", call. = FALSE)
       }
       if (!(length(is_invite_required) == 1 && is.logical(is_invite_required))) {
         stop("invalid `is_invite_required` argument passed to `polished_config()`", call. = FALSE)
