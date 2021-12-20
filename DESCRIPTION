@@ -17,7 +17,6 @@ BugReports: https://github.com/tychobra/polished/issues
 Encoding: UTF-8
 Imports:
     automagic,
-    callr,
     digest,
     dplyr,
     DT,
