@@ -138,9 +138,16 @@ update_app <- function(app_uid, app_name = NULL, app_url = NULL,
 
 #' Polished API - Delete an App
 #'
-#' @param app_uid the app uid.
+#' @param app_uid an optional app uid.  One of either \code{app_uid} or
+#' \code{app_name} must be provided.
+#' @param app_name an optional app name.  One of either \code{app_uid} or
+#' \code{app_name} must be provided.
+#'
 #'
 #' @inheritParams get_apps
+#'
+#' @details If both \code{app_uid} and \code{app_name} arguments are provided, then
+#' the \code{app_uid} will be used and the \code{app_name} will be ignored.
 #'
 #' @export
 #'
@@ -148,11 +155,18 @@ update_app <- function(app_uid, app_name = NULL, app_url = NULL,
 #'
 #' @importFrom httr DELETE authenticate
 #'
-delete_app <- function(app_uid, api_key = get_api_key(),
-                       app_name = NULL) {
+delete_app <- function(
+  app_uid = NULL,
+  app_name = NULL,
+  api_key = get_api_key()
+) {
+
+  if (is.null(app_uid) && is.null(app_name)) {
+    stop("`app_uid` and `app_name` cannot both be `NULL`", call. = FALSE)
+  }
 
   if (missing(app_uid) && !is.null(app_name)) {
-    df <- get_apps(app_name = app_name, api_key = apk_key)
+    df <- get_apps(app_name = app_name, api_key = api_key)
     app_uid <- df$uid[df$app_name %in% app_name]
     if (length(app_uid) > 1) {
       stop("`delete_app` requires app_uid, cannot infer from app listing",
