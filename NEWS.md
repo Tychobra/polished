@@ -1,6 +1,7 @@
 
 # polished v0.5.0.9000
 
+* Bug Fix (#172) - browser previously refreshed when url query or hash parameters changed, but user remained on the Shiny app.  This has been updated to be consistent with normal Shiny behavior (i.e. shiny session does not reload when url query or hash parameters update).
 * Added `secure_rmd()`, which can be used to render and secure any Rmarkdown (`.Rmd`) document. Rendering is handled by `rmarkdown::render` and the then the rendered document is secured with `polished` authentication.
 
 # polished v0.5.0
