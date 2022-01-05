@@ -18,7 +18,7 @@
 #'
 sign_out_from_shiny <- function(
   session = shiny::getDefaultReactiveDomain(),
-  redirect_page = "?page=sign_in"
+  redirect_page = "?page=signin"
 ) {
 
   # using isolate() allows this function to be called in onStop()

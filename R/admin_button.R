@@ -54,7 +54,7 @@ admin_button <- function(input, output, session) {
 
     # remove admin_panel=false from query
     shiny::updateQueryString(
-      queryString = paste0("?page=admin_panel"),
+      queryString = paste0("?page=admin"),
       session = session,
       mode = "push"
     )

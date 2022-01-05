@@ -72,6 +72,7 @@ secure_ui <- function(
       hashed_cookie <- digest::digest(polished_cookie)
     }
 
+
     # if a token exists attempt to sign in the user using the token.  This is used to automatically
     # sign a user in via an email link without requiring the user to enter their email
     # and password.
@@ -133,7 +134,7 @@ secure_ui <- function(
 
     if (is.null(user)) {
 
-      if (identical(page_query, "sign_in")) {
+      if (identical(page_query, "signin")) {
         # go to the sign in page
         if (is.null(sign_in_page_ui)) {
 
@@ -184,7 +185,7 @@ secure_ui <- function(
     } else {
       # user is not NULL
 
-      if (identical(page_query, "sign_in")) {
+      if (identical(page_query, "signin")) {
         # send signed in session to polished_session.  This will trigger
         # a redirect to the app
         page_out <- tagList(
@@ -198,7 +199,7 @@ secure_ui <- function(
 
         if (isTRUE(user$is_admin)) {
 
-          if (identical(page_query, "admin_panel")) {
+          if (identical(page_query, "admin")) {
 
             # go to Admin Panel
             page_out <- tagList(
@@ -208,7 +209,7 @@ secure_ui <- function(
               tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
               sentry_ui_out("admin_panel")
             )
-          } else if (is.null(page_query)) {
+          } else {
 
             # go to Shiny app with admin button.  User is an admin.
             page_out <- tagList(

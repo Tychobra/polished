@@ -52,7 +52,7 @@ secure_server <- function(
         ))
 
         shiny::updateQueryString(
-          queryString = paste0("?page=admin_panel"),
+          queryString = paste0("?page=admin"),
           session = session,
           mode = "push"
         )
@@ -74,11 +74,11 @@ secure_server <- function(
         # user is not signed in
 
         # if the user is not on the sign in page, redirect to sign in and reload
-        if ((!identical(page, "sign_in")) &&
+        if ((!identical(page, "signin")) &&
             isTRUE(.global_sessions$is_auth_required)) {
 
           shiny::updateQueryString(
-            queryString = paste0("?page=sign_in"),
+            queryString = paste0("?page=signin"),
             session = session,
             mode = "replace"
           )
@@ -97,13 +97,13 @@ secure_server <- function(
         # if the user somehow ends up on the sign_in page, redirect them to the
         # Shiny app and reload
 
-        if (identical(query_list$page, "sign_in")) {
+        if (identical(query_list$page, "signin")) {
           remove_query_string()
           session$reload()
         }
 
         #if (isTRUE(global_user$email_verified)) {
-        if (is.na(global_user$signed_in_as) || !is.null(query_list$page)) {
+        if (is.na(global_user$signed_in_as) || identical(query_list$page, "admin")) {
 
           # user is not on the custom Shiny app, so clear the signed in as user
           if (!is.na(global_user$signed_in_as)) {
@@ -151,7 +151,7 @@ secure_server <- function(
 
         is_on_admin_page <- if (
           isTRUE(.global_sessions$get_admin_mode()) ||
-          identical(query_list$page, 'admin_panel')) TRUE else FALSE
+          identical(query_list$page, 'admin')) TRUE else FALSE
 
 
         if (isTRUE(hold_user$is_admin) && isTRUE(is_on_admin_page)) {
@@ -177,7 +177,7 @@ secure_server <- function(
 
 
           }
-        } else if (is.null(query_list$page)) {
+        } else {
 
           # go to the custom app
           if (isTRUE(.global_sessions$is_auth_required)) {
@@ -241,7 +241,7 @@ secure_server <- function(
       query_list <- shiny::getQueryString()
       page <- query_list$page
 
-      if (identical(page, "sign_in")) {
+      if (identical(page, "signin")) {
 
         if (is.null(custom_sign_in_server)) {
 
