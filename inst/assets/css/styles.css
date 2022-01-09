@@ -6,3 +6,13 @@
   /* Hides top bar (& logo) when screen becomes too narrow (i.e. mobile) */
   position: absolute;
 }
+
+.skin-black .left-side, .skin-black .main-sidebar, .skin-black .wrapper {
+  background-color: #f9fafc !important;
+}
+
+.skin-black .sidebar-menu>li.active>a, .skin-black .sidebar-menu>li:hover>a {
+  color: #000 !important;
+  background: #f4f4f5 !important;
+  border-left-color: #fff !important;
+}
