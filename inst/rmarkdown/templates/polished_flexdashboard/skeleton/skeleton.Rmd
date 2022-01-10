@@ -1,11 +1,13 @@
 ---
 title: "Untitled"
+runtime: "shiny" # use polished with or without runtime shiny
 polished:
-  app_name: "flex_dashboad"
+  # run polished::secure_rmd() to render this document with polished authentication
+  app_name: "flex_dashboard"
   sign_in_page:
     color: "#006CB5"
     company_name: "Tychobra"
-    logo: "polish/images/tychobra_logo_white.svg"
+    logo: "https://github.com/Tychobra/polished/blob/master/inst/assets/images/tychobra_logo_white.svg"
     background_image: "https://raw.githubusercontent.com/Tychobra/polished_example_apps/master/02_custom_sign_in/www/images/milky_way.jpeg"
 output:  
   flexdashboard::flex_dashboard: 
