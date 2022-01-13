@@ -16,3 +16,7 @@
   background: #f4f4f5 !important;
   border-left-color: #fff !important;
 }
+
+.skin-black .sidebar a {
+    color: #444 !important;
+}

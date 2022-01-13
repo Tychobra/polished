@@ -107,7 +107,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
   body <- shinydashboard::dashboardBody(
     htmltools::tags$head(
       options$browser_tab_icon,
-      tags$link(rel = "stylesheet", href = "polish/css/styles.css")
+      tags$link(rel = "stylesheet", href = "polish/css/styles.css?version=1")
     ),
     shinyjs::useShinyjs(),
     shinyFeedback::useShinyFeedback(),
