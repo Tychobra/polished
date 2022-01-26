@@ -74,11 +74,11 @@ secure_server <- function(
         # user is not signed in
 
         # if the user is not on the sign in page, redirect to sign in and reload
-        if ((!identical(page, "signin")) &&
+        if ((!identical(page, "sign_in")) &&
             isTRUE(.global_sessions$is_auth_required)) {
 
           shiny::updateQueryString(
-            queryString = paste0("?page=signin"),
+            queryString = paste0("?page=sign_in"),
             session = session,
             mode = "replace"
           )
@@ -97,7 +97,7 @@ secure_server <- function(
         # if the user somehow ends up on the sign_in page, redirect them to the
         # Shiny app and reload
 
-        if (identical(query_list$page, "signin")) {
+        if (identical(query_list$page, "sign_in")) {
           remove_query_string()
           session$reload()
         }
@@ -241,7 +241,7 @@ secure_server <- function(
       query_list <- shiny::getQueryString()
       page <- query_list$page
 
-      if (identical(page, "signin")) {
+      if (identical(page, "sign_in")) {
 
         if (is.null(custom_sign_in_server)) {
 

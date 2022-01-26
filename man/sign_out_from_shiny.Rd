@@ -6,7 +6,7 @@
 \usage{
 sign_out_from_shiny(
   session = shiny::getDefaultReactiveDomain(),
-  redirect_page = "?page=signin"
+  redirect_page = "?page=sign_in"
 )
 }
 \arguments{

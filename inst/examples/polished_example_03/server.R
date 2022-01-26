@@ -32,7 +32,7 @@ server <- function(input, output, session) {
 
     # set query string to sign in page
     shiny::updateQueryString(
-      queryString = paste0("?page=signin"),
+      queryString = paste0("?page=sign_in"),
       session = session,
       mode = "push"
     )

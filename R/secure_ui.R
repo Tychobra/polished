@@ -134,7 +134,7 @@ secure_ui <- function(
 
     if (is.null(user)) {
 
-      if (identical(page_query, "signin")) {
+      if (identical(page_query, "sign_in")) {
         # go to the sign in page
         if (is.null(sign_in_page_ui)) {
 
@@ -185,7 +185,7 @@ secure_ui <- function(
     } else {
       # user is not NULL
 
-      if (identical(page_query, "signin")) {
+      if (identical(page_query, "sign_in")) {
         # send signed in session to polished_session.  This will trigger
         # a redirect to the app
         page_out <- tagList(
