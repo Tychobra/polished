@@ -17,12 +17,12 @@ sentry_ui <- function(sentry_dsn, app_uid, user = NULL, r_env = "default") {
   function(page) {
     htmltools::tagList(
       shiny::includeScript(
-        path="https://browser.sentry-cdn.com/5.29.1/bundle.tracing.min.js",
-        integrity="sha384-oMewZ7UOLvGpEKmWrXEBuQZA7ftGffl8JUn8O1yhF41YQdhxpVAMP0y0e83AWhDL",
+        path = "https://browser.sentry-cdn.com/6.17.2/bundle.tracing.min.js",
+        integrity = "sha384-/06LGwfzQ1pgdFsQEtOB+4auE4K6SV85cy/7wKx5H+8Uhtmb5dajgm6/AM31blzh",
         type = "text/javascript",
-        crossorigin="anonymous"
+        crossorigin = "anonymous"
       ),
-      tags$script(src="polish/js/sentry.js"),
+      tags$script(src = "polish/js/sentry.js"),
       tags$script(
         sprintf(
           "sentry_init('%s', '%s', %s, '%s', '%s')",
