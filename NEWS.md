@@ -1,4 +1,6 @@
 
+# polished v0.6.0.9000
+
 # polished v0.6.0
 
 * The admin panel query string has been changed from ?page=admin_panel to ?page=admin
