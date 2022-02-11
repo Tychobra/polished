@@ -14,7 +14,7 @@
 #'
 set_config_env <- function(override = NULL) {
 
-  if (!(is.null(override) || override %in% c("default", "production"))) {
+  if (!(is.null(override) || override %in% c("default", "development", "production"))) {
     stop("invalid `override` argument passed to `set_config_env`", call. = FALSE)
   }
 

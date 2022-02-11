@@ -16,8 +16,9 @@ default_admin_ui_options <- function() {
     title = tagList(
       tags$a(
         href = "https://polished.tech/",
+        target = "_blank",
         tags$img(
-          src="polish/images/polished_logo_transparent_text_2.png",
+          src = "polish/images/polished_logo_transparent_text_2.png",
           style = "height: 37.5px; width: 180px; padding: 0",
           alt = "Polished Logo"
         )
@@ -28,6 +29,7 @@ default_admin_ui_options <- function() {
 
     sidebar_branding = tags$a(
       href = "https://www.tychobra.com/",
+      target = "_blank",
       tags$img(
         style = "position: fixed; bottom: 0; left: 0; width: 230px;",
         src = "polish/images/tychobra_logo_blue_co_name.png"
