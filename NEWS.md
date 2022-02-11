@@ -1,6 +1,11 @@
 
-# polished v0.5.0.9000
+# polished v0.6.0
 
+* The admin panel query string has been changed from ?page=admin_panel to ?page=admin
+* new `get_api_key()` function that will check for the environment variable "POLISHED_API_KEY"
+if the api key is not found in the polished options.
+* new `polished_config()` function to replace `global_sessions_config()` which has been 
+deprecated.
 * Bug Fix (#172) - browser previously refreshed when url query or hash parameters changed, but user remained on the Shiny app.  This has been updated to be consistent with normal Shiny behavior (i.e. shiny session does not reload when url query or hash parameters update).
 * Added `secure_rmd()`, which can be used to render and secure any Rmarkdown (`.Rmd`) document. Rendering is handled by `rmarkdown::render` and the then the rendered document is secured with `polished` authentication.
 
