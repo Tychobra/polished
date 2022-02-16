@@ -81,7 +81,8 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
       user_access_module_ui(ns("user_access"))
     )
   } else {
-    tab_items <- shinydashboard::tabItems(
+    tab_items <- tags$div(
+      class = "tab-content",
       user_access_module_ui(ns("user_access")),
       custom_admin_ui$tab_items
     )
