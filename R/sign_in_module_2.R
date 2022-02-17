@@ -281,9 +281,14 @@ sign_in_module_2 <- function(input, output, session) {
     invite <- NULL
     tryCatch({
 
-      invite <- .polished$get_invite_by_email(email)
+      invite_res <- get_app_users(
+        app_uid = .polished$app_uid,
+        email = email
+      )
 
-      if (is.null(invite)) {
+      invite <- invite_res$content
+
+      if (!identical(nrow(invite), 1L)) {
 
         shinyWidgets::sendSweetAlert(
           session,
@@ -375,9 +380,15 @@ sign_in_module_2 <- function(input, output, session) {
 
     invite <- NULL
     tryCatch({
-      invite <- .polished$get_invite_by_email(email)
 
-      if (is.null(invite)) {
+      invite_res <- get_app_users(
+        app_uid = private$.app_uid,
+        email = email
+      )
+
+      invite <- invite_res$content
+
+      if (!identical(nrow(invite), 1L)) {
 
         shinyWidgets::sendSweetAlert(
           session,

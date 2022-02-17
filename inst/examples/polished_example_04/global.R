@@ -6,7 +6,7 @@ library(shinyjs)
 app_config <- config::get()
 
 # configure polished
-polished_config(
+Polished$new(
   app_name = "polished_example_04",
   api_key = app_config$api_key,
   # add sentry to polished.  This will log all JS error to Sentry.io.

@@ -19,17 +19,63 @@
 Polished <-  R6::R6Class(
   classname = 'Polished',
   public = list(
+
     #' @description
-    #' polished Sessions configuration function
+    #' global configuration for polished authentication
     #'
     #' @details
-    #' This function is called via `polished_config()` in global.R
-    #' of all Shiny apps using polished.
+    #' This is the primary function for configuring \code{polished}.  It configures your app's instance of
+    #' the \code{Polished} class that manages \code{polished} authentication.  Call this function in
+    #' your \code{global.R} file.  See \url{https://github.com/Tychobra/polished/blob/master/inst/examples/polished_example_01/global.R}
+    #' for a complete example.
     #'
-    #' @inheritParams polished_config
+    #' @param app_name the name of the app.
+    #' @param api_key the API key. Either from \url{https://polished.tech} or your on premise \code{polished} API
+    #' deployment.
+    #' @param firebase_config a list containing your Firebase project configuration.  This list should have the
+    #' following named elements:
+    #' \itemize{
+    #'   \item{\code{apiKey}}
+    #'   \item{\code{authDomain}}
+    #'   \item{\code{projectId}}
+    #' }
+    #' @param admin_mode \code{FALSE} by default.  Set to \code{TRUE} to enter the \code{polished} Admin Panel without needing
+    #' to register and sign in.  This is useful during development for inviting the first users to your app.
+    #' Make sure to set \code{admin_mode = FALSE} before deploying your app.
+    #' @param is_invite_required \code{TRUE} by default.  Whether or not to require the user to have an
+    #' invite before registering/signing in
+    #' @param sign_in_providers the sign in providers to enable.  Valid values are \code{"google"}
+    #' \code{"email"}, \code{"microsoft"}, and/or \code{"facebook"}. Defaults to \code{"email"}.
+    #' @param is_email_verification_required \code{TRUE} by default.  Whether or not to require the user to
+    #' verify their email before accessing your Shiny app.
+    #' @param is_auth_required \code{TRUE} by default.  Whether or not to require users to be signed
+    #' in to access the app.  It can be useful to set this argument to \code{FALSE} if you want to
+    #' allow user to do certain actions (such as viewing charts and tables) without signing in,
+    #' and only require users to sign in if they want to save data to your database.
+    #' @param sentry_dsn either \code{NULL}, the default, or your Sentry project DSN.
+    #' @param cookie_expires the number of days before a user's cookie expires.
+    #' Set to \code{NULL} to force Sign Out at session end. This argument is passed to
+    #' the `expires` option in js-cookie: \url{https://github.com/js-cookie/js-cookie#expires}.
+    #' Default value is `365` (i.e. 1 year)
+    #'
+    #' @export
+    #'
+    #'
+    #' @examples
+    #'
+    #' \dontrun{
+    #' # global.R
+    #'
+    #' Polished$new(
+    #'   app_name = "<your app name>",
+    #'   api_key = "<your API key>"
+    #' )
+    #'
+    #' }
     #'
     initialize = function(
       app_name,
+      api_key = get_api_key(),
       firebase_config = NULL,
       admin_mode = FALSE,
       is_invite_required = TRUE,
@@ -39,6 +85,12 @@ Polished <-  R6::R6Class(
       cookie_expires = 365L,
       is_auth_required = TRUE
     ) {
+
+      if (!(length(api_key) == 1 && is.character(api_key))) {
+        stop("invalid `api_key` argument passed to `polished_config()`", call. = FALSE)
+      }
+
+      set_api_key(api_key)
 
       if (!((is.numeric(cookie_expires) && cookie_expires > 0) || is.null(cookie_expires))) {
         stop("invalid `cookie_expires` argument passed to `polished_config()`", call. = FALSE)
@@ -208,17 +260,6 @@ call. = FALSE
       }
 
       return(new_session)
-    },
-    get_invite_by_email = function(email) {
-
-      invite <- NULL
-
-      invite_res <- get_app_users(
-        app_uid = private$.app_uid,
-        email = email
-      )
-
-      return(invite_res$content)
     },
     find = function(hashed_cookie, page) {
       if (nchar(hashed_cookie) == 0) return(NULL)
