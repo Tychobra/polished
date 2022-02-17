@@ -51,8 +51,8 @@ send_password_reset_email_module <- function(input, output, session, email) {
         ),
         body = list(
           email = hold_email,
-          app_uid = getOption("polished")$app_uid,
-          is_invite_required = .global_sessions$is_invite_required
+          app_uid = .polished$app_uid,
+          is_invite_required = .polished$is_invite_required
         ),
         encode = "json"
       )

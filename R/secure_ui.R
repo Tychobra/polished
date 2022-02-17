@@ -46,7 +46,7 @@ secure_ui <- function(
 
   function(request) {
 
-    if (isTRUE(.global_sessions$get_admin_mode())) {
+    if (isTRUE(.polished$admin_mode)) {
 
       # go to Admin Panel
       return(tagList(
@@ -99,7 +99,7 @@ secure_ui <- function(
     user <- NULL
     if (!is.null(hashed_cookie) && length(hashed_cookie) > 0) {
       tryCatch({
-        user <- .global_sessions$find(hashed_cookie, paste0("ui-", page_query))
+        user <- .polished$find(hashed_cookie, paste0("ui-", page_query))
       }, error = function(error) {
         print("sign_in_ui_1")
         print(error)
@@ -118,12 +118,12 @@ secure_ui <- function(
 
     # UI to optionally add Sentry.io error monitoring
     sentry_ui_out <- function(x) NULL
-    sentry_dsn <- getOption("polished")$sentry_dsn
+    sentry_dsn <- .polished$sentry_dsn
     if (!is.null(sentry_dsn)) {
 
       sentry_ui_out <- sentry_ui(
         sentry_dsn = sentry_dsn,
-        app_uid = paste0(getOption("polished")$app_name, "@", getOption("polished")$app_uid),
+        app_uid = paste0(.polished$app_name, "@", .polished$app_uid),
         user = user,
         r_env = if (Sys.getenv("R_CONFIG_ACTIVE") == "") "default" else Sys.getenv("R_CONFIG_ACTIVE")
       )
@@ -158,7 +158,7 @@ secure_ui <- function(
       } else {
 
 
-        if (isFALSE(.global_sessions$is_auth_required)) {
+        if (isFALSE(.polished$is_auth_required)) {
 
           # auth is not required, so allow the user to go directly to the custom shiny app
           # go to Shiny app without admin button.  User is not an admin
@@ -194,7 +194,7 @@ secure_ui <- function(
           tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
         )
       } else if (isTRUE(user$email_verified) ||
-          isFALSE(.global_sessions$is_email_verification_required)) {
+          isFALSE(.polished$is_email_verification_required)) {
 
 
         if (isTRUE(user$is_admin)) {

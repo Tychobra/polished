@@ -1,65 +1,6 @@
 
-api_get_invite_by_email <- function(url, api_key, email, app_uid) {
 
-  res <- httr::GET(
-    url = paste0(url, "/app-users"),
-    query = list(
-      email = email,
-      app_uid = app_uid
-    ),
-    httr::authenticate(
-      user = api_key,
-      password = ""
-    )
-  )
-
-  invite <- jsonlite::fromJSON(
-    httr::content(res, "text", encoding = "UTF-8")
-  )
-
-  if (!identical(httr::status_code(res), 200L)) {
-    stop(invite$error, call. = FALSE)
-  }
-
-  invite <- tibble::as_tibble(invite)
-
-  if (nrow(invite) == 0) {
-    invite <- NULL
-  }
-
-  invite
-}
-
-api_get_invite <- function(url, api_key, app_uid, user_uid) {
-  res <- httr::GET(
-    url = paste0(url, "/app-users"),
-    query = list(
-      app_uid = app_uid,
-      user_uid = user_uid
-    ),
-    httr::authenticate(
-      user = api_key,
-      password = ""
-    )
-  )
-
-  httr::stop_for_status(res)
-
-  invite <- jsonlite::fromJSON(
-    httr::content(res, "text", encoding = "UTF-8")
-  )
-
-  invite <- tibble::as_tibble(invite)
-
-  # API returns a length 0 list when there is no invite
-  if (nrow(invite) == 0) {
-    invite <- NULL
-  }
-
-  invite
-}
-
-#' R6 class to track polished sessions
+#' R6 class to implement polished authentication
 #'
 #' @description
 #' An instance of this class handles the 'polished' user sessions for each 'shiny'
@@ -75,14 +16,9 @@ api_get_invite <- function(url, api_key, app_uid, user_uid) {
 #' @importFrom lubridate with_tz minutes
 #'
 #'
-Sessions <-  R6::R6Class(
-  classname = 'Sessions',
+Polished <-  R6::R6Class(
+  classname = 'Polished',
   public = list(
-    firebase_config = NULL,
-    is_invite_required = TRUE,
-    sign_in_providers = character(0),
-    is_email_verification_required = TRUE,
-    is_auth_required = TRUE,
     #' @description
     #' polished Sessions configuration function
     #'
@@ -92,27 +28,62 @@ Sessions <-  R6::R6Class(
     #'
     #' @inheritParams polished_config
     #'
-    config = function(
+    initialize = function(
+      app_name,
       firebase_config = NULL,
       admin_mode = FALSE,
       is_invite_required = TRUE,
       sign_in_providers = "email",
       is_email_verification_required = TRUE,
+      sentry_dsn = NULL,
+      cookie_expires = 365L,
       is_auth_required = TRUE
     ) {
+
+      if (!((is.numeric(cookie_expires) && cookie_expires > 0) || is.null(cookie_expires))) {
+        stop("invalid `cookie_expires` argument passed to `polished_config()`", call. = FALSE)
+      }
+
+      # get the app uid
+      app_res <- get_apps(app_name = app_name)
+      app <- app_res$content
+
+      if (identical(nrow(app), 0L)) {
+        stop(paste0("app_name `", app_name, "` does not exist"), call. = FALSE)
+      }
+
+      if (!(is.null(sentry_dsn) || (length(sentry_dsn) == 1 && is.character(sentry_dsn)) ) ) {
+        stop("invalid `sentry_dsn` argument passed to `polished_config()`", call. = FALSE)
+      }
+
+      # Throw warning for no Firebase config w/ Social Sign in Providers
+      if (is.null(firebase_config) && any(sign_in_providers != "email")) {
+        warning(
+          "
+#########################################################################
+Sign In providers (`sign_in_providers`) will not work correctly without a
+Firebase configuration (`firebase_config`) provided!
+#########################################################################",
+call. = FALSE
+        )
+      }
+
+      if (!is.logical(is_auth_required)) {
+        stop("`is_auth_required` must be `TRUE` or `FALSE`", call. = FALSE)
+      }
 
       if (!(length(sign_in_providers) >= 1 && is.character(sign_in_providers))) {
         stop("invalid `sign_in_providers` argument passed to `polished_config()`", call. = FALSE)
       }
 
-      self$sign_in_providers <- sign_in_providers
+
 
       if (!is.null(firebase_config)) {
         if (length(firebase_config) != 3 ||
             !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
           stop("invalid `firebase_config` argument passed to `polished_config()`", call. = FALSE)
         }
-        self$firebase_config <- firebase_config
+        private$.firebase_config <- firebase_config
       }
 
 
@@ -126,20 +97,28 @@ Sessions <-  R6::R6Class(
       if (!(length(is_email_verification_required) == 1 && is.logical(is_email_verification_required))) {
         stop("invalid `is_email_verification_required` argument passed to `polished_config()`", call. = FALSE)
       }
-      if (!(length(is_auth_required) == 1 && is.logical(is_auth_required))) {
-        stop("invalid `is_auth_required` argument passed to `polished_config()`", call. = FALSE)
-      }
 
 
-
-      private$admin_mode <- admin_mode
-      self$is_invite_required <- is_invite_required
-      self$is_email_verification_required <- is_email_verification_required
-      self$is_auth_required <- is_auth_required
+      private$.sign_in_providers <- sign_in_providers
+      private$.admin_mode <- admin_mode
+      private$.is_invite_required <- is_invite_required
+      private$.is_email_verification_required <- is_email_verification_required
+      private$.app_name <- app_name
+      private$.app_uid <- app$uid
+      private$.sentry_dsn <- sentry_dsn
+      private$.cookie_expires <- cookie_expires
+      private$.is_auth_required <- is_auth_required
 
       private$refresh_jwt_pub_key()
 
-      invisible(self)
+
+      assign(
+        ".polished",
+        self,
+        envir = .GlobalEnv
+      )
+
+      invisible(.polished)
     },
 
 
@@ -188,43 +167,32 @@ Sessions <-  R6::R6Class(
 
 
 
-        invite <- api_get_invite_by_email(
-          getOption("polished")$api_url,
-          get_api_key(),
-          new_session$email,
-          getOption("polished")$app_uid
+        invite_res <- get_app_users(
+          app_uid = private$.app_uid,
+          email = new_session$email,
         )
+        invite <- invite_res$content
 
-        if (isFALSE(self$is_invite_required) && is.null(invite)) {
+        if (isFALSE(private$.is_invite_required) && identical(nrow(invite), 0L)) {
           # if invite is not required, and this is the first time that the user is signing in,
           # then create the app_users
-          res <- httr::POST(
-            url = paste0(getOption("polished")$api_url, "/app-users"),
-            body = list(
-              email = new_session$email,
-              app_uid = getOption("polished")$app_uid,
-              is_admin = FALSE,
-              req_user_uid = "00000000-0000-0000-0000-000000000000"
-            ),
-            httr::authenticate(
-              user = get_api_key(),
-              password = ""
-            ),
-            encode = "json"
+          add_app_user_res <- add_app_user(
+            app_uid = private$.app_uid,
+            email = new_session$email,
+            is_admin = FALSE
           )
 
-          httr::stop_for_status(res)
 
-          invite <- api_get_invite_by_email(
-            getOption("polished")$api_url,
-            get_api_key(),
-            new_session$email,
-            getOption("polished")$app_uid
+          invite_res <- get_app_users(
+            app_uid = private.$app_uid,
+            email = new_session$email
           )
+
+          invite <- invite_res$content
 
         }
 
-        if (is.null(invite)) {
+        if (identical(nrow(invite), 0L)) {
           stop("[polished] error checking user invite", call. = FALSE)
         }
 
@@ -245,14 +213,12 @@ Sessions <-  R6::R6Class(
 
       invite <- NULL
 
-      invite <- api_get_invite_by_email(
-        getOption("polished")$api_url,
-        get_api_key(),
-        email,
-        getOption("polished")$app_uid
+      invite_res <- get_app_users(
+        app_uid = private$.app_uid,
+        email = email
       )
 
-      return(invite)
+      return(invite_res$content)
     },
     find = function(hashed_cookie, page) {
       if (nchar(hashed_cookie) == 0) return(NULL)
@@ -261,7 +227,7 @@ Sessions <-  R6::R6Class(
         url = paste0(getOption("polished")$api_url, "/sessions"),
         query = list(
           hashed_cookie = hashed_cookie,
-          app_uid = getOption("polished")$app_uid,
+          app_uid = private$.app_uid,
           page = page
         ),
         httr::authenticate(
@@ -278,7 +244,7 @@ Sessions <-  R6::R6Class(
 
       status <- httr::status_code(res)
       if (!identical(httr::status_code(res), 200L)) {
-        print(paste0(".global_sessions$find() status: ", status))
+        print(paste0(".polished$find() status: ", status))
         stop(session_out, call. = FALSE)
       }
 
@@ -294,7 +260,7 @@ Sessions <-  R6::R6Class(
       res <- httr::POST(
         url = paste0(getOption("polished")$api_url, "/sign-in-email"),
         body = list(
-          app_uid = getOption("polished")$app_uid,
+          app_uid = private$.app_uid,
           email = email,
           password = password,
           hashed_cookie = hashed_cookie,
@@ -322,7 +288,7 @@ Sessions <-  R6::R6Class(
             url = paste0(getOption("polished")$api_url, "/send-password-reset-email"),
             body = list(
               email = email,
-              app_uid = getOption("polished")$app_uid,
+              app_uid = private$.app_uid,
               is_invite_required = self$is_invite_required
             ),
             httr::authenticate(
@@ -360,7 +326,7 @@ Sessions <-  R6::R6Class(
           password = ""
         ),
         body = list(
-          app_uid = getOption("polished")$app_uid,
+          app_uid = private$.app_uid,
           email = email,
           password = password,
           hashed_cookie = hashed_cookie,
@@ -452,32 +418,19 @@ Sessions <-  R6::R6Class(
     },
     get_signed_in_as_user = function(user_uid) {
 
-      invite <- api_get_invite(
-        getOption("polished")$api_url,
-        get_api_key(),
-        getOption("polished")$app_uid,
+      invite_res <- get_app_users(
+        private$.app_uid,
         user_uid
       )
+      invite <- invite_res$content
 
       email <- invite$email
 
-      res <- httr::GET(
-        url = paste0(getOption("polished")$api_url, "/user-roles"),
-        query = list(
-          user_uid = user_uid
-        ),
-        httr::authenticate(
-          user = get_api_key(),
-          password = ""
-        ),
-        encode = "json"
+      roles_res <- get_user_roles(
+        user_uid = user_uid
       )
 
-      httr::stop_for_status(res)
-
-      roles_df <- jsonlite::fromJSON(
-        httr::content(res, "text", encoding = "UTF-8")
-      )
+      roles_df <- roles_res$content
 
       if (length(roles_df) == 0) {
         roles_out <- NA
@@ -528,9 +481,6 @@ Sessions <-  R6::R6Class(
       )
 
       httr::stop_for_status(res)
-    },
-    get_admin_mode = function() {
-      private$admin_mode
     }
   ),
   private = list(
@@ -545,7 +495,7 @@ Sessions <-  R6::R6Class(
         ),
         body = list(
           data = session_data,
-          app_uid = getOption("polished")$app_uid
+          app_uid = private$.app_uid
         ),
         encode = "json"
       )
@@ -631,12 +581,88 @@ Sessions <-  R6::R6Class(
     firebase_token_grace_period_seconds = 300,
     # when `admin_mode == TRUE` the user will be taken directly to the admin panel and signed in
     # as a special "admin" user.
-    admin_mode = FALSE
+    .admin_mode = FALSE,
+    .firebase_config = NULL,
+    .is_invite_required = TRUE,
+    .sign_in_providers = character(0),
+    .is_email_verification_required = TRUE,
+    .app_name = NULL,
+    .app_uid = NULL,
+    .sentry_dsn = NULL,
+    .cookie_expires = 365L,
+    .is_auth_required = TRUE
+  ),
+  active = list(
+    # all the accessor functions for the private read only fields
+    admin_mode = function(value) {
+      if (missing(value)) {
+        private$.admin_mode
+      } else {
+        stop("`$admin_mode` is read only", call. = FALSE)
+      }
+    },
+    firebase_config = function(value) {
+      if (missing(value)) {
+        private$.firebase_config
+      } else {
+        stop("`$firebase_config` is read only", call. = FALSE)
+      }
+    },
+    is_invite_required = function(value) {
+      if (missing(value)) {
+        private$.is_invite_required
+      } else {
+        stop("`$is_invite_required` is read only", call. = FALSE)
+      }
+    },
+    sign_in_providers = function(value) {
+      if (missing(value)) {
+        private$.sign_in_providers
+      } else {
+        stop("`$sign_in_providers` is read only", call. = FALSE)
+      }
+    },
+    is_email_verification_required = function(value) {
+      if (missing(value)) {
+        private$.is_email_verification_required
+      } else {
+        stop("`$is_email_verification_required` is read only", call. = FALSE)
+      }
+    },
+    app_name = function(value) {
+      if (missing(value)) {
+        private$.app_name
+      } else {
+        stop("`$app_name` is read only", call. = FALSE)
+      }
+    },
+    sentry_dsn = function(value) {
+      if (missing(value)) {
+        private$.sentry_dsn
+      } else {
+        stop("`$sentry_dsn` is read only", call. = FALSE)
+      }
+    },
+    cookie_expires = function(value) {
+      if (missing(value)) {
+        private$.cookie_expires
+      } else {
+        stop("`$cookie_expires` is read only", call. = FALSE)
+      }
+    },
+    is_auth_required = function(value) {
+      if (missing(value)) {
+        private$.is_auth_required
+      } else {
+        stop("`$is_auth_required` is read only", call. = FALSE)
+      }
+    },
+    app_uid = function(value) {
+      if (missing(value)) {
+        private$.app_uid
+      } else {
+        stop("`$app_uid` is read only", call. = FALSE)
+      }
+    }
   )
 )
-
-.global_sessions <- Sessions$new()
-
-
-
-

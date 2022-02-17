@@ -91,27 +91,15 @@ user_access_module <- function(input, output, session) {
   users <- reactive({
     users_trigger()
 
+
     out <- NULL
     tryCatch({
 
-      res <- httr::GET(
-        url = paste0(getOption("polished")$api_url, "/app-users"),
-        query = list(
-          app_uid = getOption("polished")$app_uid
-        ),
-        httr::authenticate(
-          user = get_api_key(),
-          password = ""
-        )
+      app_users_res <- get_app_users(
+        app_uid = .polished$app_uid
       )
 
-      httr::stop_for_status(res)
-
-      app_users <- jsonlite::fromJSON(
-        httr::content(res, "text", encoding = "UTF-8")
-      )
-
-      app_users <- tibble::as_tibble(app_users)
+      app_users <- app_users_res$content
 
       app_users <- app_users %>%
         mutate(created_at = as.POSIXct(.data$created_at))
@@ -119,7 +107,7 @@ user_access_module <- function(input, output, session) {
       res <- httr::GET(
         url = paste0(getOption("polished")$api_url, "/last-active-session-time"),
         query = list(
-          app_uid = getOption("polished")$app_uid
+          app_uid = .polished$app_uid
         ),
         httr::authenticate(
           user = get_api_key(),
@@ -171,7 +159,7 @@ user_access_module <- function(input, output, session) {
 
         the_row <- out[row_num, ]
 
-        if (.global_sessions$get_admin_mode()) {
+        if (.polished$admin_mode) {
           buttons_out <- paste0('<div class="btn-group" style="width: 105px" role="group" aria-label="User Action Buttons">
             <button class="btn btn-default btn-sm sign_in_as_btn" data-toggle="tooltip" data-placement="top" title="Sign In As" id = ', the_row$user_uid, ' style="margin: 0" disabled><i class="fas fa-user-astronaut"></i></button>
             <button class="btn btn-primary btn-sm edit_btn" data-toggle="tooltip" data-placement="top" title="Edit User" id = ', the_row$user_uid, ' style="margin: 0"><i class="fa fa-pencil-square-o"></i></button>
@@ -346,7 +334,7 @@ user_access_module <- function(input, output, session) {
     shiny::removeModal()
 
     user_uid <- user_to_delete()$user_uid
-    app_uid <- getOption("polished")$app_uid
+    app_uid <- .polished$app_uid
 
     tryCatch({
 
@@ -385,7 +373,7 @@ user_access_module <- function(input, output, session) {
 
 
   shiny::observeEvent(input$sign_in_as_btn_user_uid, {
-    req(!.global_sessions$get_admin_mode())
+    req(isFALSE(.polished$admin_mode))
     hold_user <- session$userData$user()
 
     user_to_sign_in_as <- users() %>%
@@ -393,7 +381,7 @@ user_access_module <- function(input, output, session) {
       dplyr::pull("user_uid")
 
     # sign in as another user
-    .global_sessions$set_signed_in_as(
+    .polished$set_signed_in_as(
       hold_user$session_uid,
       user_to_sign_in_as,
       user_uid = hold_user$user_uid
