@@ -75,7 +75,7 @@ secure_server <- function(
 
         # if the user is not on the sign in page, redirect to sign in and reload
         if ((!identical(page, "sign_in")) &&
-            .polished$is_auth_required) {
+            isTRUE(.polished$is_auth_required)) {
 
           shiny::updateQueryString(
             queryString = paste0("?page=sign_in"),
