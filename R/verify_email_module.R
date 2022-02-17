@@ -11,7 +11,7 @@
 verify_email_module_ui <- function(id) {
   ns <- NS(id)
 
-  firebase_config <- .global_sessions$firebase_config
+  firebase_config <- .polished$firebase_config
 
   fluidPage(
     tags$head(
@@ -142,7 +142,7 @@ verify_email_module <- function(input, output, session) {
         body = list(
           email = hold_email,
           user_uid = session$userData$user()$user_uid,
-          app_uid = getOption("polished")$app_uid
+          app_uid = .polished$app_uid
         ),
         encode = "json"
       )

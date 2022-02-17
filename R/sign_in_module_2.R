@@ -67,7 +67,7 @@ sign_in_module_2_ui <- function(id) {
     ),
     tags$div(
       id = ns("sign_in_panel_bottom"),
-      if (isTRUE(.global_sessions$is_invite_required)) {
+      if (isTRUE(.polished$is_invite_required)) {
         tagList(continue_sign_in, shinyjs::hidden(sign_in_password_ui))
       } else {
         sign_in_password_ui
@@ -145,7 +145,7 @@ sign_in_module_2_ui <- function(id) {
       value = "",
       width = "100%"
     ),
-    if (isTRUE(.global_sessions$is_invite_required)) {
+    if (isTRUE(.polished$is_invite_required)) {
       tagList(continue_registration, shinyjs::hidden(register_passwords))
     } else {
       register_passwords
@@ -158,7 +158,7 @@ sign_in_module_2_ui <- function(id) {
     shiny::tabPanel("Register", register_ui)
   )
 
-  providers <- .global_sessions$sign_in_providers
+  providers <- .polished$sign_in_providers
 
   if (length(providers) == 1 && providers == "email") {
     sign_in_ui <- tags$div(
@@ -281,7 +281,7 @@ sign_in_module_2 <- function(input, output, session) {
     invite <- NULL
     tryCatch({
 
-      invite <- .global_sessions$get_invite_by_email(email)
+      invite <- .polished$get_invite_by_email(email)
 
       if (is.null(invite)) {
 
@@ -375,7 +375,7 @@ sign_in_module_2 <- function(input, output, session) {
 
     invite <- NULL
     tryCatch({
-      invite <- .global_sessions$get_invite_by_email(email)
+      invite <- .polished$get_invite_by_email(email)
 
       if (is.null(invite)) {
 
@@ -437,7 +437,7 @@ sign_in_module_2 <- function(input, output, session) {
 
 
     tryCatch({
-      .global_sessions$register_email(
+      .polished$register_email(
         hold_email,
         hold_password,
         hashed_cookie

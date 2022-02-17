@@ -36,7 +36,7 @@ user_edit_module <- function(input, output, session,
       res <- httr::GET(
         url = paste0(getOption("polished")$api_url, "/apps"),
         query = list(
-          app_uid = getOption("polished")$app_uid
+          app_uid = .polished$app_uid
         ),
         httr::authenticate(
           user = get_api_key(),
@@ -189,7 +189,7 @@ user_edit_module <- function(input, output, session,
           url = paste0(getOption("polished")$api_url, "/app-users"),
           body = list(
             email = input_email,
-            app_uid = getOption("polished")$app_uid,
+            app_uid = .polished$app_uid,
             is_admin = is_admin_out,
             req_user_uid = session$userData$user()$user_uid,
             send_invite_email = input$send_invite_email
@@ -273,7 +273,7 @@ user_edit_module <- function(input, output, session,
           url = paste0(getOption("polished")$api_url, "/app-users"),
           body = list(
             user_uid = hold_user$user_uid,
-            app_uid = getOption("polished")$app_uid,
+            app_uid = .polished$app_uid,
             is_admin = is_admin_out,
             req_user_uid = session$userData$user()$user_uid
           ),

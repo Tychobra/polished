@@ -68,71 +68,19 @@ polished_config <- function(
     stop("invalid `api_key` argument passed to `polished_config()`", call. = FALSE)
   }
 
-  if (!((is.numeric(cookie_expires) && cookie_expires > 0) || is.null(cookie_expires))) {
-    stop("invalid `cookie_expires` argument passed to `polished_config()`", call. = FALSE)
-  }
+  set_api_key(api_key)
 
-  current_polished_options <- getOption("polished")
-  # get the app uid
-  res <- httr::GET(
-    url = paste0(current_polished_options$api_url, "/apps"),
-    query = list(
-      app_name = app_name
-    ),
-    httr::authenticate(
-      user = api_key,
-      password = ""
-    )
-  )
-
-  app <- jsonlite::fromJSON(
-    httr::content(res, "text", encoding = "UTF-8")
-  )
-
-  if (!identical(httr::status_code(res), 200L)) {
-    stop(app, call. = FALSE)
-  }
-
-  app <- tibble::as_tibble(app)
-
-  if (identical(nrow(app), 0L)) {
-    stop(paste0("app_name `", app_name, "` does not exist"), call. = FALSE)
-  }
-
-  if (!(is.null(sentry_dsn) || (length(sentry_dsn) == 1 && is.character(sentry_dsn)) ) ) {
-    stop("invalid `sentry_dsn` argument passed to `polished_config()`", call. = FALSE)
-  }
-
-  # Throw warning for no Firebase config w/ Social Sign in Providers
-  if (is.null(firebase_config) && any(sign_in_providers != "email")) {
-    warning(
-"
-#########################################################################
-Sign In providers (`sign_in_providers`) will not work correctly without a
-Firebase configuration (`firebase_config`) provided!
-#########################################################################",
-      call. = FALSE
-    )
-  }
-
-  options_out <- current_polished_options
-  options_out$api_key <- api_key
-  options_out$app_uid <- app$uid
-  options_out$app_name <- app_name
-  options_out$sentry_dsn <- sentry_dsn
-  options_out$cookie_expires <- cookie_expires
-  options("polished" = options_out)
-
-
-  .global_sessions$config(
+  Polished$new(
     firebase_config = firebase_config,
     admin_mode = admin_mode,
     is_invite_required = is_invite_required,
     sign_in_providers = sign_in_providers,
     is_email_verification_required = is_email_verification_required,
+    app_name = app_name,
+    sentry_dsn = sentry_dsn,
+    cookie_expires = cookie_expires,
     is_auth_required = is_auth_required
   )
-
 }
 
 

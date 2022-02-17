@@ -17,7 +17,7 @@
 #'
 sign_in_js <- function(ns) {
 
-  firebase_config <- .global_sessions$firebase_config
+  firebase_config <- .polished$firebase_config
 
   if (is.null(firebase_config)) {
     firebase_deps <- list()
@@ -26,7 +26,7 @@ sign_in_js <- function(ns) {
       firebase_dependencies(),
       firebase_init(firebase_config),
       tags$script(src = "polish/js/auth_firebase.js?version=5"),
-      tags$script(paste0("auth_firebase('", ns(''), "', ", getOption("polished")$cookie_expires, ")"))
+      tags$script(paste0("auth_firebase('", ns(''), "', ", .polished$cookie_expires, ")"))
     )
   }
 
@@ -36,7 +36,7 @@ sign_in_js <- function(ns) {
     tags$script(src = "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"),
     firebase_deps,
     tags$script(src = "polish/js/auth_main.js?version=5"),
-    tags$script(paste0("auth_main('", ns(''), "', ", getOption("polished")$cookie_expires, ")"))
+    tags$script(paste0("auth_main('", ns(''), "', ", .polished$cookie_expires, ")"))
   )
 }
 
@@ -66,7 +66,7 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
       if (is.null(hold_jwt$jwt)) {
 
         # attempt sign in with email
-        new_user <- .global_sessions$sign_in_email(
+        new_user <- .polished$sign_in_email(
           email = hold_jwt$email,
           password = hold_jwt$password,
           hashed_cookie = digest::digest(hold_jwt$cookie)
@@ -84,7 +84,7 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
 
       } else {
         # attempt sign in with a social sign in provider
-        new_user <- .global_sessions$sign_in_social(
+        new_user <- .polished$sign_in_social(
           hold_jwt$jwt,
           digest::digest(hold_jwt$cookie)
         )

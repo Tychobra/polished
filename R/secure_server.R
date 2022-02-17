@@ -40,7 +40,7 @@ secure_server <- function(
     shiny::observeEvent(input$hashed_cookie, {
       hashed_cookie <- input$hashed_cookie
 
-      if (isTRUE(.global_sessions$get_admin_mode())) {
+      if (isTRUE(.polished$admin_mode)) {
         session$userData$user(list(
           session_uid = uuid::UUIDgenerate(),
           user_uid = "00000000-0000-0000-0000-000000000000",
@@ -66,7 +66,7 @@ secure_server <- function(
       page <- query_list$page
       global_user <- NULL
       try({
-        global_user <- .global_sessions$find(hashed_cookie, paste0("server-", page))
+        global_user <- .polished$find(hashed_cookie, paste0("server-", page))
       }, silent = TRUE)
 
 
@@ -75,7 +75,7 @@ secure_server <- function(
 
         # if the user is not on the sign in page, redirect to sign in and reload
         if ((!identical(page, "sign_in")) &&
-            isTRUE(.global_sessions$is_auth_required)) {
+            .polished$is_auth_required) {
 
           shiny::updateQueryString(
             queryString = paste0("?page=sign_in"),
@@ -107,8 +107,8 @@ secure_server <- function(
 
           # user is not on the custom Shiny app, so clear the signed in as user
           if (!is.na(global_user$signed_in_as)) {
-            # clear signed in as in .global_sessions
-            .global_sessions$set_signed_in_as(
+            # clear signed in as in .polished
+            .polished$set_signed_in_as(
               global_user$session_uid,
               NA,
               user_uid = global_user$user_uid
@@ -123,7 +123,7 @@ secure_server <- function(
 
         } else {
 
-          signed_in_as_user <- .global_sessions$get_signed_in_as_user(global_user$signed_in_as)
+          signed_in_as_user <- .polished$get_signed_in_as_user(global_user$signed_in_as)
           signed_in_as_user$session_uid <- global_user$session_uid
           signed_in_as_user$hashed_cookie <- global_user$hashed_cookie
 
@@ -146,11 +146,11 @@ secure_server <- function(
       hold_user <- session$userData$user()
 
       if (isTRUE(hold_user$email_verified) ||
-          isFALSE(.global_sessions$is_email_verification_required)) {
+          isFALSE(.polished$is_email_verification_required)) {
 
 
         is_on_admin_page <- if (
-          isTRUE(.global_sessions$get_admin_mode()) ||
+          isTRUE(.polished$admin_mode) ||
           identical(query_list$page, 'admin')) TRUE else FALSE
 
 
@@ -180,7 +180,7 @@ secure_server <- function(
         } else {
 
           # go to the custom app
-          if (isTRUE(.global_sessions$is_auth_required)) {
+          if (isTRUE(.polished$is_auth_required)) {
             server(input, output, session)
           }
 
@@ -200,7 +200,7 @@ secure_server <- function(
 
             tryCatch({
 
-              .global_sessions$set_inactive(
+              .polished$set_inactive(
                 session_uid = hold_user$session_uid,
                 user_uid = hold_user$user_uid
               )
@@ -229,7 +229,7 @@ secure_server <- function(
     }, once = TRUE)
 
 
-    if (isFALSE(.global_sessions$is_auth_required)) {
+    if (isFALSE(.polished$is_auth_required)) {
       server(input, output, session)
     }
 
