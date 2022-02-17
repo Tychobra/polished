@@ -91,27 +91,15 @@ user_access_module <- function(input, output, session) {
   users <- reactive({
     users_trigger()
 
+
     out <- NULL
     tryCatch({
 
-      res <- httr::GET(
-        url = paste0(getOption("polished")$api_url, "/app-users"),
-        query = list(
-          app_uid = .polished$app_uid
-        ),
-        httr::authenticate(
-          user = get_api_key(),
-          password = ""
-        )
+      app_users_res <- get_app_users(
+        app_uid = .polished$app_uid
       )
 
-      httr::stop_for_status(res)
-
-      app_users <- jsonlite::fromJSON(
-        httr::content(res, "text", encoding = "UTF-8")
-      )
-
-      app_users <- tibble::as_tibble(app_users)
+      app_users <- app_users_res$content
 
       app_users <- app_users %>%
         mutate(created_at = as.POSIXct(.data$created_at))

@@ -86,25 +86,16 @@ verify_email_module <- function(input, output, session) {
       if (count_polls < 100) {
         tryCatch({
 
-          res <- httr::GET(
-            url = paste0(getOption("polished")$api_url, "/users"),
-            httr::authenticate(
-              user = get_api_key(),
-              password = ""
-            ),
-            query = list(
-              user_uid = session$userData$user()$user_uid
-            )
+          user_res <- get_users(
+            user_uid = session$userData$user()$user_uid
           )
 
-          res_content <- jsonlite::fromJSON(
-            httr::content(res, type = "text", encoding = "UTF-8")
-          )
+          user <- user_res$content
 
           if (identical(httr::status_code(res), 200L)) {
-            return(res_content)
+            return(user)
           } else {
-            stop(res_content, call. = FALSE)
+            stop(user, call. = FALSE)
           }
         }, error = function(err) {
 

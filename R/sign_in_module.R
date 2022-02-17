@@ -243,7 +243,6 @@ sign_in_module_ui <- function(
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom shinyFeedback showToast hideFeedback showFeedbackDanger resetLoadingButton
 #' @importFrom digest digest
-#' @importFrom httr POST authenticate
 #'
 #' @export
 #'

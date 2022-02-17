@@ -1,63 +1,4 @@
 
-api_get_invite_by_email <- function(url, api_key, email, app_uid) {
-
-  res <- httr::GET(
-    url = paste0(url, "/app-users"),
-    query = list(
-      email = email,
-      app_uid = app_uid
-    ),
-    httr::authenticate(
-      user = api_key,
-      password = ""
-    )
-  )
-
-  invite <- jsonlite::fromJSON(
-    httr::content(res, "text", encoding = "UTF-8")
-  )
-
-  if (!identical(httr::status_code(res), 200L)) {
-    stop(invite$error, call. = FALSE)
-  }
-
-  invite <- tibble::as_tibble(invite)
-
-  if (nrow(invite) == 0) {
-    invite <- NULL
-  }
-
-  invite
-}
-
-api_get_invite <- function(url, api_key, app_uid, user_uid) {
-  res <- httr::GET(
-    url = paste0(url, "/app-users"),
-    query = list(
-      app_uid = app_uid,
-      user_uid = user_uid
-    ),
-    httr::authenticate(
-      user = api_key,
-      password = ""
-    )
-  )
-
-  httr::stop_for_status(res)
-
-  invite <- jsonlite::fromJSON(
-    httr::content(res, "text", encoding = "UTF-8")
-  )
-
-  invite <- tibble::as_tibble(invite)
-
-  # API returns a length 0 list when there is no invite
-  if (nrow(invite) == 0) {
-    invite <- NULL
-  }
-
-  invite
-}
 
 #' R6 class to implement polished authentication
 #'
@@ -226,43 +167,32 @@ call. = FALSE
 
 
 
-        invite <- api_get_invite_by_email(
-          getOption("polished")$api_url,
-          get_api_key(),
-          new_session$email,
-          private$.app_uid
+        invite_res <- get_app_users(
+          app_uid = private$.app_uid,
+          email = new_session$email,
         )
+        invite <- invite_res$content
 
-        if (isFALSE(self$is_invite_required) && is.null(invite)) {
+        if (isFALSE(private$.is_invite_required) && identical(nrow(invite), 0L)) {
           # if invite is not required, and this is the first time that the user is signing in,
           # then create the app_users
-          res <- httr::POST(
-            url = paste0(getOption("polished")$api_url, "/app-users"),
-            body = list(
-              email = new_session$email,
-              app_uid = private$.app_uid,
-              is_admin = FALSE,
-              req_user_uid = "00000000-0000-0000-0000-000000000000"
-            ),
-            httr::authenticate(
-              user = get_api_key(),
-              password = ""
-            ),
-            encode = "json"
+          add_app_user_res <- add_app_user(
+            app_uid = private$.app_uid,
+            email = new_session$email,
+            is_admin = FALSE
           )
 
-          httr::stop_for_status(res)
 
-          invite <- api_get_invite_by_email(
-            getOption("polished")$api_url,
-            get_api_key(),
-            new_session$email,
-            private.$app_uid
+          invite_res <- get_app_users(
+            app_uid = private.$app_uid,
+            email = new_session$email
           )
+
+          invite <- invite_res$content
 
         }
 
-        if (is.null(invite)) {
+        if (identical(nrow(invite), 0L)) {
           stop("[polished] error checking user invite", call. = FALSE)
         }
 
@@ -283,14 +213,12 @@ call. = FALSE
 
       invite <- NULL
 
-      invite <- api_get_invite_by_email(
-        getOption("polished")$api_url,
-        get_api_key(),
-        email,
-        private$.app_uid
+      invite_res <- get_app_users(
+        app_uid = private$.app_uid,
+        email = email
       )
 
-      return(invite)
+      return(invite_res$content)
     },
     find = function(hashed_cookie, page) {
       if (nchar(hashed_cookie) == 0) return(NULL)
@@ -490,32 +418,19 @@ call. = FALSE
     },
     get_signed_in_as_user = function(user_uid) {
 
-      invite <- api_get_invite(
-        getOption("polished")$api_url,
-        get_api_key(),
+      invite_res <- get_app_users(
         private$.app_uid,
         user_uid
       )
+      invite <- invite_res$content
 
       email <- invite$email
 
-      res <- httr::GET(
-        url = paste0(getOption("polished")$api_url, "/user-roles"),
-        query = list(
-          user_uid = user_uid
-        ),
-        httr::authenticate(
-          user = get_api_key(),
-          password = ""
-        ),
-        encode = "json"
+      roles_res <- get_user_roles(
+        user_uid = user_uid
       )
 
-      httr::stop_for_status(res)
-
-      roles_df <- jsonlite::fromJSON(
-        httr::content(res, "text", encoding = "UTF-8")
-      )
+      roles_df <- roles_res$content
 
       if (length(roles_df) == 0) {
         roles_out <- NA
