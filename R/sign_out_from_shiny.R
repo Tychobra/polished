@@ -22,9 +22,9 @@ sign_out_from_shiny <- function(
 ) {
 
   # using isolate() allows this function to be called in onStop()
-  user <- isolate(session$userData$user())
+  user <- isolate(session$user())
 
-  if (is.null(user)) stop("session$userData$user() does not exist", call. = FALSE)
+  if (is.null(user)) stop("session$user() does not exist", call. = FALSE)
 
   # sign the user out of polished
   .polished$sign_out(user$hashed_cookie)

@@ -343,7 +343,7 @@ user_access_module <- function(input, output, session) {
         body = list(
           user_uid = user_uid,
           app_uid = app_uid,
-          req_user_uid = session$userData$user()$user_uid
+          req_user_uid = session$user()$user_uid
         ),
         httr::authenticate(
           user = get_api_key(),
@@ -374,7 +374,7 @@ user_access_module <- function(input, output, session) {
 
   shiny::observeEvent(input$sign_in_as_btn_user_uid, {
     req(isFALSE(.polished$admin_mode))
-    hold_user <- session$userData$user()
+    hold_user <- session$user()
 
     user_to_sign_in_as <- users() %>%
       filter(.data$user_uid == input$sign_in_as_btn_user_uid) %>%

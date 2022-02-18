@@ -87,7 +87,7 @@ verify_email_module <- function(input, output, session) {
         tryCatch({
 
           user_res <- get_users(
-            user_uid = session$userData$user()$user_uid
+            user_uid = session$user()$user_uid
           )
 
           user <- user_res$content
@@ -121,7 +121,7 @@ verify_email_module <- function(input, output, session) {
   shiny::observeEvent(input$resend_verification_email, {
 
     tryCatch({
-      hold_email <- session$userData$user()$email
+      hold_email <- session$user()$email
 
 
       res <- httr::POST(
@@ -132,7 +132,7 @@ verify_email_module <- function(input, output, session) {
         ),
         body = list(
           email = hold_email,
-          user_uid = session$userData$user()$user_uid,
+          user_uid = session$user()$user_uid,
           app_uid = .polished$app_uid
         ),
         encode = "json"

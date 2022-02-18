@@ -168,7 +168,7 @@ user_edit_module <- function(input, output, session,
 
   # the firebase function to add the user is triggered in the client side js, not in Shiny
   shiny::observeEvent(input$submit, {
-    session_user <- session$userData$user()$user_uid
+    session_user <- session$user()$user_uid
     input_email <- tolower(input$user_email)
     input_is_admin <- input$user_is_admin
 
@@ -191,7 +191,7 @@ user_edit_module <- function(input, output, session,
             email = input_email,
             app_uid = .polished$app_uid,
             is_admin = is_admin_out,
-            req_user_uid = session$userData$user()$user_uid,
+            req_user_uid = session$user()$user_uid,
             send_invite_email = input$send_invite_email
           ),
           httr::authenticate(
@@ -275,7 +275,7 @@ user_edit_module <- function(input, output, session,
             user_uid = hold_user$user_uid,
             app_uid = .polished$app_uid,
             is_admin = is_admin_out,
-            req_user_uid = session$userData$user()$user_uid
+            req_user_uid = session$user()$user_uid
           ),
           httr::authenticate(
             user = get_api_key(),

@@ -29,7 +29,13 @@ secure_server <- function(
   server <- force(server)
 
   function(input, output, session) {
+    session$user <- reactiveVal(NULL)
+
+    # update the session$userData$user() for backward compatibility
     session$userData$user <- reactiveVal(NULL)
+    observeEvent(session$user(), {
+      session$userData$user(session$user())
+    }, ignoreNULL = FALSE)
 
     if (isTRUE(allow_reconnect) || allow_reconnect == "force") {
       session$allowReconnect(allow_reconnect)
@@ -41,7 +47,7 @@ secure_server <- function(
       hashed_cookie <- input$hashed_cookie
 
       if (isTRUE(.polished$admin_mode)) {
-        session$userData$user(list(
+        session$useruser(list(
           session_uid = uuid::UUIDgenerate(),
           user_uid = "00000000-0000-0000-0000-000000000000",
           email = "admin@tychobra.com",
@@ -85,7 +91,7 @@ secure_server <- function(
           session$reload()
         } else {
 
-        session$userData$user(NULL)
+        session$user(NULL)
           return()
         }
 
@@ -119,7 +125,7 @@ secure_server <- function(
             c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified", "roles")
           ]
 
-          session$userData$user(user_out)
+          session$user(user_out)
 
         } else {
 
@@ -129,7 +135,7 @@ secure_server <- function(
 
           # set email verified to TRUE, so that you go directly to app
           signed_in_as_user$email_verified <- TRUE
-          session$userData$user(signed_in_as_user)
+          session$user(signed_in_as_user)
         }
       }
 
@@ -141,9 +147,9 @@ secure_server <- function(
 
 
     # if the user is an admin and on the admin page, set up the admin server
-    shiny::observeEvent(session$userData$user(), {
+    shiny::observeEvent(session$user(), {
       query_list <- shiny::getQueryString()
-      hold_user <- session$userData$user()
+      hold_user <- session$user()
 
       if (isTRUE(hold_user$email_verified) ||
           isFALSE(.polished$is_email_verification_required)) {
@@ -235,8 +241,8 @@ secure_server <- function(
 
     # load up the sign in module server logic if the user in on "sign_in" page
 
-    observeEvent(session$userData$user(), {
-      req(is.null(session$userData$user()))
+    observeEvent(session$user(), {
+      req(is.null(session$user()))
 
       query_list <- shiny::getQueryString()
       page <- query_list$page

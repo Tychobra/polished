@@ -63,14 +63,14 @@ profile_module_ui <- function(id, other_lis = NULL) {
 profile_module <- function(input, output, session) {
 
   output$auth_user <- shiny::renderText({
-    shiny::req(session$userData$user())
+    shiny::req(session$user())
 
-    session$userData$user()$email
+    session$user()$email
   })
 
 
   shiny::observeEvent(input$polish__sign_out, {
-    shiny::req(session$userData$user()$email)
+    shiny::req(session$user()$email)
 
     tryCatch({
 
