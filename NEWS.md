@@ -1,6 +1,9 @@
 
 # polished v0.6.0.9000
 
+* new argument "override_user" added to `secure_server()`. When this argument is set
+to `TRUE` (the default), the `session$userData$user()` polished user will be accessible in
+the `session$user`.  Set this argument to `FALSE` if you are using RStudio Connect or another hosting option that uses the `session$user` and you need access to the value they set for `session$user`. 
 * fix to allow for multiple custom tabItems on the admin panel 
 
 # polished v0.6.0
