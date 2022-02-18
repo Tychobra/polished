@@ -46,6 +46,7 @@ secure_ui <- function(
 
   function(request) {
 
+
     if (isTRUE(.polished$admin_mode)) {
 
       # go to Admin Panel
@@ -98,8 +99,15 @@ secure_ui <- function(
 
     user <- NULL
     if (!is.null(hashed_cookie) && length(hashed_cookie) > 0) {
+
       tryCatch({
-        user <- .polished$find(hashed_cookie, paste0("ui-", page_query))
+        user_res <- get_sessions(
+          app_uid = .polished$app_uid,
+          hashed_cookie = hashed_cookie
+        )
+
+        user <- user_res$content
+
       }, error = function(error) {
         print("sign_in_ui_1")
         print(error)

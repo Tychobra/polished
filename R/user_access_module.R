@@ -381,10 +381,11 @@ user_access_module <- function(input, output, session) {
       dplyr::pull("user_uid")
 
     # sign in as another user
-    .polished$set_signed_in_as(
+    update_session(
       hold_user$session_uid,
-      user_to_sign_in_as,
-      user_uid = hold_user$user_uid
+      dat = list(
+        signed_in_as = user_to_sign_in_as
+      )
     )
 
     # to to the Shiny app

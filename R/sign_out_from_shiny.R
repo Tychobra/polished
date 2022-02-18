@@ -27,7 +27,7 @@ sign_out_from_shiny <- function(
   if (is.null(user)) stop("session$userData$user() does not exist", call. = FALSE)
 
   # sign the user out of polished
-  .polished$sign_out(user$hashed_cookie)
+  sign_out(user$hashed_cookie)
 
   # set query string to sign in page
   shiny::updateQueryString(

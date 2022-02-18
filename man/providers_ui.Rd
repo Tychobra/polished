@@ -14,6 +14,9 @@ providers_ui(
 \arguments{
 \item{ns}{the Shiny namespace function created with \code{shiny::NS()}.}
 
+\item{sign_in_providers}{the sign in providers to enable.  Valid values are \code{"google"}
+\code{"email"}, \code{"microsoft"}, and/or \code{"facebook"}. Defaults to \code{"email"}.}
+
 \item{title}{The title to be used above the provider buttons. Set to \code{NULL} to not include}
 
 \item{fancy}{Should the buttons be large and colorful?}

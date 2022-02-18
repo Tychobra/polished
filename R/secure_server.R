@@ -33,6 +33,10 @@ secure_server <- function(
 
   server <- force(server)
 
+  if (!exists(".polished")) {
+    stop("`.polished` does not exists.  Configure it with `polished_config()`", call. = FALSE)
+  }
+
   function(input, output, session) {
     session$userData$user <- reactiveVal(NULL)
 
@@ -78,7 +82,13 @@ secure_server <- function(
       page <- query_list$page
       global_user <- NULL
       try({
-        global_user <- .polished$find(hashed_cookie, paste0("server-", page))
+        global_user_res <- get_sessions(
+          app_uid = .polished$app_uid,
+          hashed_cookie = hashed_cookie
+        )
+
+        global_user <- global_user_res$content
+
       }, silent = TRUE)
 
 
@@ -120,10 +130,11 @@ secure_server <- function(
           # user is not on the custom Shiny app, so clear the signed in as user
           if (!is.na(global_user$signed_in_as)) {
             # clear signed in as in .polished
-            .polished$set_signed_in_as(
+            update_session(
               global_user$session_uid,
-              NA,
-              user_uid = global_user$user_uid
+              dat = list(
+                signed_in_as = NA
+              )
             )
           }
 
@@ -135,7 +146,7 @@ secure_server <- function(
 
         } else {
 
-          signed_in_as_user <- .polished$get_signed_in_as_user(global_user$signed_in_as)
+          signed_in_as_user <- get_signed_in_as_user(global_user$signed_in_as)
           signed_in_as_user$session_uid <- global_user$session_uid
           signed_in_as_user$hashed_cookie <- global_user$hashed_cookie
 
@@ -212,9 +223,11 @@ secure_server <- function(
 
             tryCatch({
 
-              .polished$set_inactive(
+              update_session(
                 session_uid = hold_user$session_uid,
-                user_uid = hold_user$user_uid
+                dat = list(
+                  is_active = FALSE
+                )
               )
 
             }, catch = function(err) {

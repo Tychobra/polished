@@ -26,7 +26,6 @@ Imports:
     jsonlite,
     lubridate,
     purrr,
-    R6,
     rlang,
     rmarkdown,
     shiny,

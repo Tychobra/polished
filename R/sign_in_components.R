@@ -66,7 +66,7 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
       if (is.null(hold_jwt$jwt)) {
 
         # attempt sign in with email
-        new_user <- .polished$sign_in_email(
+        new_user <- sign_in_email(
           email = hold_jwt$email,
           password = hold_jwt$password,
           hashed_cookie = digest::digest(hold_jwt$cookie)
@@ -84,7 +84,7 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
 
       } else {
         # attempt sign in with a social sign in provider
-        new_user <- .polished$sign_in_social(
+        new_user <- sign_in_social(
           hold_jwt$jwt,
           digest::digest(hold_jwt$cookie)
         )

@@ -382,7 +382,7 @@ sign_in_module_2 <- function(input, output, session) {
     tryCatch({
 
       invite_res <- get_app_users(
-        app_uid = private$.app_uid,
+        app_uid = .polished$app_uid,
         email = email
       )
 
@@ -448,7 +448,7 @@ sign_in_module_2 <- function(input, output, session) {
 
 
     tryCatch({
-      .polished$register_email(
+      register_email(
         hold_email,
         hold_password,
         hashed_cookie

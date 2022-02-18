@@ -486,7 +486,7 @@ sign_in_module <- function(input, output, session) {
 
 
     tryCatch({
-      .polished$register_email(
+      register_email(
         hold_email,
         hold_password,
         hashed_cookie
