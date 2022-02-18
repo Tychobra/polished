@@ -71,18 +71,14 @@ print.polished_api_res <- function(x, ...) {
 #'
 set_api_key <- function(api_key) {
 
-  current_polished_options <- getOption("polished")
-
-  if (is.null(current_polished_options)) {
+  if (exists(".polished")) {
+    out <- .polished
+  } else {
     out <- list(
       api_key = api_key
     )
-  } else {
-    out <- current_polished_options
-    out$api_key <- api_key
   }
-
-  options("polished" = out)
+  .polished <<- out
 
   invisible(out)
 }
@@ -90,8 +86,12 @@ set_api_key <- function(api_key) {
 #' @export
 #' @rdname set_api_key
 get_api_key <- function() {
-  current_polished_options <- getOption("polished")
-  api_key <- current_polished_options$api_key
+
+  api_key <- NULL
+  if (exists(".polished")) {
+    api_key <- .polished$api_key
+  }
+
   if (is.null(api_key)) {
     api_key <- Sys.getenv("POLISHED_API_KEY", unset = NA)
     if (is.na(api_key)) {
