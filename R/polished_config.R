@@ -131,26 +131,32 @@ call. = FALSE
   }
 
 
-  out <- structure(
-    list(
-      app_name = app_name,
-      app_uid = app$uid,
-      api_key = api_key,
-      firebase_config = firebase_config,
-      admin_mode = admin_mode,
-      is_invite_required = is_invite_required,
-      sign_in_providers = sign_in_providers,
-      is_email_verification_required = is_email_verification_required,
-      sentry_dsn = sentry_dsn,
-      cookie_expires = cookie_expires,
-      is_auth_required = TRUE
-    ),
-    class = "polished_config"
+  hold <- list(
+    app_name = app_name,
+    app_uid = app$uid,
+    api_key = api_key,
+    firebase_config = firebase_config,
+    admin_mode = admin_mode,
+    is_invite_required = is_invite_required,
+    sign_in_providers = sign_in_providers,
+    is_email_verification_required = is_email_verification_required,
+    sentry_dsn = sentry_dsn,
+    cookie_expires = cookie_expires,
+    is_auth_required = TRUE
   )
 
+  # if firebase is being used, then we need to get the jwt from Google.  Creating these
+  # two values to manage the JWT.
+  if (!is.null(firebase_config)) {
+    hold$jwt_pub_key <- NULL
+    hold$jwt_pub_key_expires <- NULL
+  }
 
 
-
+  out <- structure(
+    hold,
+    class = "polished_config"
+  )
 
   assign(
     ".polished",

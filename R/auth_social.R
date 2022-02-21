@@ -1,10 +1,9 @@
 
 
-.jwt_pub_key_expires <- NULL
 # Number of seconds to allow for clock skew
 # between our clock and the server that generates the firebase tokens.
 .firebase_token_grace_period = 300
-.jwt_pub_key <- NULL
+
 
 
 refresh_jwt_pub_key = function() {
@@ -16,7 +15,7 @@ refresh_jwt_pub_key = function() {
   # Error if we didn't get the keys successfully
   httr::stop_for_status(google_keys_resp)
 
-  .jwt_pub_key <<- jsonlite::fromJSON(
+  .polished$jwt_pub_key <<- jsonlite::fromJSON(
     httr::content(google_keys_resp, "text", encoding = "UTF-8")
   )
 
@@ -29,7 +28,7 @@ refresh_jwt_pub_key = function() {
 
       if (length(elem) == 2 && trimws(elem[1]) == "max-age") {
         max_age <- as.numeric(elem[2])
-        .jwt_pub_key_expires <- as.numeric(Sys.time()) + max_age
+        .polished$jwt_pub_key_expires <- as.numeric(Sys.time()) + max_age
         break
       }
 
@@ -42,7 +41,7 @@ verify_firebase_token = function(firebase_token) {
   # key is the first one, and sometimes it is the second.  I do not know how
   # to tell which key is the right one to use, so we try them both for now.
   decoded_jwt <- NULL
-  for (key in jwt_pub_key) {
+  for (key in .polished$jwt_pub_key) {
     # If a key isn't the right one for the Firebase token, then we get an error.
     # Ignore the errors and just don't set decoded_token if there's
     # an error. When we're done, we'll look at the the decoded_token
@@ -101,7 +100,7 @@ sign_in_social = function(
 
   # check if the jwt public key has expired or if it is about to expire.  If it
   # is about to epire, go ahead and refresh to be safe.
-  if (as.numeric(Sys.time()) + .firebase_token_grace_period > .jwt_pub_key_expires) {
+  if (as.numeric(Sys.time()) + .firebase_token_grace_period > .polished$jwt_pub_key_expires) {
     refresh_jwt_pub_key()
   }
 
