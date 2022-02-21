@@ -81,8 +81,10 @@ overwrite_args <- function(x, y, xname) {
   x
 }
 
-
-
+# get internal functions from rmarkdown.  We need to do it this way
+# rather than using the `:::` for CRAN to accept the package.
+rmarkdown_shiny_ui <- utils::getFromNamespace("rmarkdown_shiny_ui", "rmarkdown")
+rmarkdown_shiny_server <- utils::getFromNamespace("rmarkdown_shiny_server",  "rmarkdown")
 
 #' Render and secure Rmarkdown document
 #'
@@ -267,9 +269,9 @@ secure_rmd <- function(
     }
 
     # use rmarkdown internal functions to generate the shiny ui and server
-    ui_rmd <- rmarkdown:::rmarkdown_shiny_ui(dir, rmd_file_name)
+    ui_rmd <- rmarkdown_shiny_ui(dir, rmd_file_name)
 
-    server_rmd <- rmarkdown:::rmarkdown_shiny_server(
+    server_rmd <- rmarkdown_shiny_server(
       dir,
       rmd_file_name,
       auto_reload = FALSE,
