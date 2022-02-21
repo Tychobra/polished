@@ -1,13 +1,11 @@
+# polished v0.6.0
 
-# polished v0.6.0.9000
-
+* major internal refactor to simplify how user sessions are handled.  We remove the reliance
+on R6. We now just use a regular base R list to to hold the configuration and regular R functions (rather than R6 methods) to handle user sessions. 
 * new argument "override_user" added to `secure_server()`. When this argument is set
 to `TRUE` (the default), the `session$userData$user()` polished user will be accessible in
 the `session$user`.  Set this argument to `FALSE` if you are using RStudio Connect or another hosting option that uses the `session$user` and you need access to the value they set for `session$user`. 
 * fix to allow for multiple custom tabItems on the admin panel 
-
-# polished v0.6.0
-
 * The admin panel query string has been changed from ?page=admin_panel to ?page=admin
 * new `get_api_key()` function that will check for the environment variable "POLISHED_API_KEY"
 if the api key is not found in the polished options.
