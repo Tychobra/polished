@@ -4,7 +4,7 @@
 #'
 #' @param id the Shiny module id.
 #' @param options list of HTML elements to customize branding of "Admin Panel".  Valid
-#' list element names are `title`, `sidebar_branding`, and `browser_tab_icon.  See
+#' list element names are `title`, `sidebar_branding`, and `browser_tab_icon`.  See
 #' \code{\link{default_admin_ui_options}} for an example.
 #' @param include_go_to_shiny_app_button whether or not to include the button to go to
 #' the Shiny app.  This argument is set to \code{FALSE} when `polished` is in "admin_mode".
