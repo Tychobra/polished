@@ -88,36 +88,3 @@ register_email = function(email, password, hashed_cookie) {
 
   session_out
 }
-
-refresh_email_verification = function(session_uid, firebase_token) {
-
-  email_verified <- NULL
-
-
-  # check if the jwt public key has expired.  Add an extra minute to the
-  # current time for padding before checking if the key has expired.
-  if (Sys.time() + .firebase_token_grace_period > .jwt_pub_key_expires) {
-    refresh_jwt_pub_key()
-  }
-
-  decoded_jwt <- verify_firebase_token(firebase_token)
-
-  if (!is.null(decoded_jwt)) {
-    email_verified <- decoded_jwt$email_verified
-  }
-
-
-  if (is.null(email_verified)) {
-    stop("email verification user not found", call. = FALSE)
-  }
-
-  out <- update_session(
-    session_uid,
-    dat = list(
-      email_verified = email_verified
-    )
-  )
-
-
-  out
-}
