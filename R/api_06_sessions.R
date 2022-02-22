@@ -54,6 +54,7 @@ get_sessions = function(app_uid, hashed_cookie, api_key = get_api_key()) {
 #'
 #' @inheritParams get_apps
 #'
+#' @noRd
 #'
 #' @importFrom httr POST authenticate
 #'
@@ -86,6 +87,7 @@ add_session <- function(app_uid, session_data, api_key = get_api_key()) {
 #'
 #' @inheritParams get_apps
 #'
+#' @noRd
 #'
 #' @seealso [get_sessions()] [add_session()]
 #'
