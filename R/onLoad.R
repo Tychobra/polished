@@ -1,6 +1,6 @@
-#' Adds the content of inst/srcjs/ to polish/
+#' Adds the contents of `inst/srcjs/` to `polish/`
 #'
-#' @importFrom shiny addResourcePath registerInputHandler
+#' @importFrom shiny addResourcePath
 #' @importFrom httr set_config config
 #'
 #' @noRd

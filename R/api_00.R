@@ -6,7 +6,8 @@ ua <- httr::user_agent("http://github.com/tychobra/polished")
 #'
 #' @return an S3 object of class "polished_api_res".
 #'
-#' @importFrom httr http_type
+#' @importFrom httr content http_error http_type status_code
+#' @importFrom jsonlite fromJSON
 #'
 #' @export
 #'
@@ -55,14 +56,14 @@ print.polished_api_res <- function(x, ...) {
 
 #' set Polished API key
 #'
-#' The API key is set as an R option at \code{getOption("polished")$api_key}
-#' or via \code{Sys.getenv("POLISHED_API_KEY")}.
+#' The API key can be set as an Environment Variable via
+#' \code{Sys.getenv("POLISHED_API_KEY")}.
 #'
 #' @param api_key the Polished API key
 #'
 #' @export
 #'
-#' @return a list of the newly set polished R options
+#' @return a list of the newly set `polished` R options
 #'
 #' @examples
 #'

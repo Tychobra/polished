@@ -15,14 +15,14 @@ get_apps(app_uid = NULL, app_name = NULL, api_key = get_api_key())
 so that you do not need to supply this argument with each function call.}
 }
 \value{
-an object of class \code{polished_api_res}.  The "content" of the object is a
+an object of class \code{polished_api_res}.  The \code{content} of the object is a
 tibble of app(s) with the following columns:
 \itemize{
-\item uid
-\item app_name
-\item app_url
-\item created_at
-\item modified_at
+\item \code{uid}
+\item \code{app_name}
+\item \code{app_url}
+\item \code{created_at}
+\item \code{modified_at}
 }
 }
 \description{

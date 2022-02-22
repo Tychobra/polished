@@ -12,13 +12,13 @@
 #' and the \code{app_name} will be ignored.  If the app does not exists, a zero row tibble
 #' will be returned.
 #'
-#' @return an object of class \code{polished_api_res}.  The "content" of the object is a
+#' @return an object of class \code{polished_api_res}.  The `content` of the object is a
 #' tibble of app(s) with the following columns:
-#' - uid
-#' - app_name
-#' - app_url
-#' - created_at
-#' - modified_at
+#' - `uid`
+#' - `app_name`
+#' - `app_url`
+#' - `created_at`
+#' - `modified_at`
 #'
 #' @export
 #'

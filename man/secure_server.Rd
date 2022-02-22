@@ -28,7 +28,7 @@ for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.htm
 \item{override_user}{whether or not to override the \code{session$user} with the polished
 \code{session$userData$user} user.  By default this is now set to \code{TRUE}, but if you are
 using a hosting option that uses the \code{session$user} (e.g. RStudio Connect), then you
-may want to set this to FALSE.  The polished user can always be found at \code{session$userData$user}.}
+may want to set this to FALSE.  The polished user can always be found at \code{session$userData$user()}.}
 }
 \description{
 This function is used to secure your Shiny app's server function.  Make sure to pass

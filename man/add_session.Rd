@@ -9,7 +9,7 @@ add_session(app_uid, session_data, api_key = get_api_key())
 \arguments{
 \item{app_uid}{the app uid.}
 
-\item{session_data}{list of data to include in the session.}
+\item{session_data}{list of data to include in the added session.}
 
 \item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}

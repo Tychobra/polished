@@ -22,19 +22,23 @@ get_app_users(
 so that you do not need to supply this argument with each function call.}
 }
 \value{
-an object of class \code{polished_api_res}.  The "content" of the object is a
+an object of class \code{polished_api_res}.  The \code{content} of the object is a
 tibble of app(s) with the following columns:
 \itemize{
-\item uid
-\item app_uid
-\item user_uid
-\item is_admin
-\item created_at
-\item email
+\item \code{uid}
+\item \code{app_uid}
+\item \code{user_uid}
+\item \code{is_admin}
+\item \code{created_at}
+\item \code{email}
 }
 }
 \description{
 Polished API - Get App(s) User(s)
+}
+\details{
+If \code{app_uid}, \code{user_uid}, & \code{email} are all \code{NULL},
+then all app users will be returned.
 }
 \seealso{
 \code{\link[=add_app_user]{add_app_user()}} \code{\link[=update_app_user]{update_app_user()}} \code{\link[=delete_app_user]{delete_app_user()}}

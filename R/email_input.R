@@ -15,26 +15,25 @@
 #' @importFrom htmltools tags tagList
 #' @importFrom shiny restoreInput icon
 #'
-email_input <- function (
+email_input <- function(
   inputId,
-  label = tagList(icon("envelope"), "Email"),
+  label = tagList(shiny::icon("envelope"), "Email"),
   value = "",
   width = NULL,
   placeholder = NULL
 ) {
   value <- shiny::restoreInput(id = inputId, default = value)
 
-  tags$div(
+  htmltools::tags$div(
     class = "form-group shiny-input-container",
-    style = if (!is.null(width))
-    paste0("width: ", width, ";"),
-    tags$label(
+    style = if (!is.null(width)) paste0("width: ", width, ";"),
+    htmltools::tags$label(
       label,
       class = "control-label",
       class = if (is.null(label)) "shiny-label-null",
       `for` = inputId
     ),
-    tags$input(
+    htmltools::tags$input(
       id = inputId,
       type = "email",
       class = "form-control",

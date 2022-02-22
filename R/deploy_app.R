@@ -32,33 +32,32 @@ valid_gcp_regions <- c(
 
 #' Deploy a Shiny app to Polished Hosting
 #'
-#' @param app_name You Shiny app's name.
+#' @param app_name Your Shiny app's name.
 #' @param app_dir The path to the directory containing your Shiny app.
-#' @param api_key Your polished.tech API key.  Defaults to \code{getOption("polished")$api_key}.
-#' @param launch_browser Whether or not to open your default browser to your newly deployed app
-#' after it is successfully deployed.  \code{TRUE} by default.
+#' @param api_key Your `polished` API key. Defaults to \code{Sys.getenv("POLISHED_API_KEY")} if set.
+#' @param launch_browser Boolean (default: \code{TRUE}) - Whether or not to open
+#' your newly deployed app in your default web browser after successful deployment.
 #' @param region the region to deploy the app to on Google Cloud Platform. See
 #' \url{https://cloud.google.com/run/docs/locations} for all available regions
 #' on Google Cloud Platform. Currently, database connections are only supported for
-#' "us-east1". See \url{https://polished.tech/docs/06-database-connections} for details.
-#' @param ram_gb the amount of memory to allocate to your Shiny app server. Valid values are
-#' 2, 4, or 8.
-#' @param r_ver Character string of R version.  If kept as \code{NULL}, the default, then
+#' `us-east1`. See \url{https://polished.tech/docs/06-database-connections} for details.
+#' @param ram_gb the amount of memory (in `GiB`) to allocate to your Shiny app's server.
+#' Valid values are `2`, `4`, or `8`.
+#' @param r_ver Character string of desired `R` version.  If kept as \code{NULL} (the default),
 #' \code{deploy_app()} will detect the R version you are currently running.  The R version must be a version
-#' supported by an r-ver Docker image.  You can see all the r-ver Docker image versions
+#' supported by an `r-ver` Docker image.  You can see all the `r-ver` Docker image versions
 #' of R here \url{https://github.com/rocker-org/rocker-versioned2/tree/master/dockerfiles} and here
 #' \url{https://github.com/rocker-org/rocker-versioned/tree/master/r-ver}.
-#' @param tlmgr a character vector of TeX Live packages to install.  This is only used if your Shiny
-#' app generates pdf documents.  Defaults to \code{character(0)} for no TeX Live installation.  Set to
-#' \code{TRUE} for a minimal TeX Live installation, and pass a character vector of your TeX Live package
-#' dependencies to have all your TeX Live packages installed at build time.
-#' @param golem_package_name if Shiny app was created as a package with the
-#' golem package, provide the name of the Shiny app package as a character string.
-#' Defaults to \code{NULL}.  Keep as \code{NULL} for non golem Shiny apps.
-#' @param cache boolean - whether or not to cache the Docker image.
+#' @param tlmgr a character vector of `TeX Live` packages to install.  This is only used if your Shiny
+#' app generates `PDF` documents.  Defaults to \code{character(0)} for no `TeX Live` installation. Provide a
+#' character vector of your TeX Live package dependencies to have all your TeX Live packages installed at build time.
+#' @param golem_package_name if your Shiny app was created as a package with the
+#' `golem` package, provide the name of the Shiny app package as a character string.
+#' Defaults to \code{NULL}.  Keep as \code{NULL} for non `golem` Shiny apps.
+#' @param cache Boolean (default: \code{TRUE}) - whether or not to cache the Docker image.
 #'
 #' @importFrom utils browseURL
-#' @importFrom httr POST authenticate status_code content upload_file
+#' @importFrom httr POST authenticate handle_reset status_code content upload_file
 #' @importFrom jsonlite fromJSON
 #'
 #' @export

@@ -12,16 +12,16 @@
 #' and the \code{email} will be ignored.  If the user does not exists, a zero row tibble
 #' will be returned.
 #'
-#' @return an object of class \code{polished_api_res}.  The "content" of the object is a
+#' @return an object of class \code{polished_api_res}.  The `content` of the object is a
 #' tibble of users(s) with the following columns:
-#' - uid
-#' - email
-#' - email_verified
-#' - created_by
-#' - created_at
-#' - modified_by
-#' - modified_at
-#' - is_password_set
+#' - `uid`
+#' - `email`
+#' - `email_verified`
+#' - `created_by`
+#' - `created_at`
+#' - `modified_by`
+#' - `modified_at`
+#' - `is_password_set`
 #'
 #' @export
 #'
@@ -59,7 +59,7 @@ get_users <- function(
 
 #' Polished API - Add a User
 #'
-#' @param email an email address.
+#' @param email the new user's email address.
 #'
 #' @inheritParams get_apps
 #'
@@ -94,7 +94,7 @@ add_user <- function(email, api_key = get_api_key()) {
 
 #' Polished API - Delete a User
 #'
-#' @param user_uid the user uid of the user to be deleted.
+#' @param user_uid the uid of the user to be deleted.
 #'
 #' @inheritParams get_apps
 #'

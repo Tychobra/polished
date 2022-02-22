@@ -1,7 +1,8 @@
 #' Load the Firebase JavaScript dependencies into the UI
 #'
-#' Under the hood, \code{polished} uses Firebase JavaScript dependencies to handle user
-#' authentication.  This function loads the required Firebase JavaScript dependencies
+#' Under the hood, \code{polished} uses Firebase JavaScript dependencies to handle
+#' Social sign in & user authentication when \code{sign_in_providers} besides `"email"`
+#' are included in \code{polished_config()}. This function loads the required Firebase JavaScript dependencies
 #' in the the UI of your Shiny app.
 #'
 #' @param services character vector of Firebase services to load into the UI.  Valid strings are
@@ -28,7 +29,7 @@ firebase_dependencies <- function(services = c("auth"), firebase_version = "7.15
   scripts_to_load <- paste0("https://www.gstatic.com/firebasejs/", firebase_version, "/firebase-", services, ".js")
 
   htmltools::tagList(
-    tags$script(src = paste0("https://www.gstatic.com/firebasejs/", firebase_version, "/firebase-app.js")),
+    htmltools::tags$script(src = paste0("https://www.gstatic.com/firebasejs/", firebase_version, "/firebase-app.js")),
     lapply(scripts_to_load, function(script_src) {
       htmltools::tags$script(src = script_src)
     })

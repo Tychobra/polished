@@ -20,7 +20,7 @@ add_app_user(
 
 \item{email}{an optional email address for the user to be invited to the app.}
 
-\item{is_admin}{boolean - whether or not the user is a Polished admin.}
+\item{is_admin}{boolean (default: \code{FALSE}) - whether or not the user is a Polished admin.}
 
 \item{send_invite_email}{boolean - whether or not to send the user an invite email
 notifying them they have been invited to access the app.}

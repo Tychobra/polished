@@ -4,19 +4,19 @@
 \alias{update_session}
 \title{Polished API - Update a session}
 \usage{
-update_session(session_uid, dat, api_key = get_api_key())
+update_session(session_uid, session_data, api_key = get_api_key())
 }
 \arguments{
-\item{session_uid}{the role uid of the role to be deleted.}
+\item{session_uid}{the uid of the session to be updated.}
+
+\item{session_data}{list of data to include in the updated session.}
 
 \item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
-
-\item{user_uid}{the user uid that the role should be removed from.}
 }
 \description{
 Polished API - Update a session
 }
 \seealso{
-\code{\link[=get_user_roles]{get_user_roles()}} \code{\link[=add_user_role]{add_user_role()}}
+\code{\link[=get_sessions]{get_sessions()}} \code{\link[=add_session]{add_session()}}
 }

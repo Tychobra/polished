@@ -15,11 +15,11 @@
 #' @param override_user whether or not to override the \code{session$user} with the polished
 #' \code{session$userData$user} user.  By default this is now set to \code{TRUE}, but if you are
 #' using a hosting option that uses the \code{session$user} (e.g. RStudio Connect), then you
-#' may want to set this to FALSE.  The polished user can always be found at \code{session$userData$user}.
+#' may want to set this to FALSE.  The polished user can always be found at \code{session$userData$user()}.
 #'
 #' @export
 #'
-#' @importFrom shiny observeEvent getQueryString updateQueryString callModule onStop reactiveVal
+#' @importFrom shiny observe observeEvent getQueryString updateQueryString callModule onStop reactiveVal req
 #' @importFrom digest digest
 #'
 #'
@@ -38,11 +38,11 @@ secure_server <- function(
   }
 
   function(input, output, session) {
-    session$userData$user <- reactiveVal(NULL)
+    session$userData$user <- shiny::reactiveVal(NULL)
 
     if (isTRUE(override_user)) {
       #session$user <- reactiveVal(NULL)
-      observe({
+      shiny::observe({
         session$user <- session$userData$user()
       }, priority = 1)
     }
@@ -107,7 +107,7 @@ secure_server <- function(
           session$reload()
         } else {
 
-        session$userData$user(NULL)
+          session$userData$user(NULL)
           return()
         }
 
@@ -131,8 +131,8 @@ secure_server <- function(
           if (!is.na(global_user$signed_in_as)) {
             # clear signed in as in .polished
             update_session(
-              global_user$session_uid,
-              dat = list(
+              session_uid = global_user$session_uid,
+              session_data = list(
                 signed_in_as = NA
               )
             )
@@ -192,7 +192,7 @@ secure_server <- function(
               custom_admin_server("custom_admin")
             } else {
               # old-style Shiny module
-              callModule(
+              shiny::callModule(
                 custom_admin_server,
                 "custom_admin"
               )
@@ -225,7 +225,7 @@ secure_server <- function(
 
               update_session(
                 session_uid = hold_user$session_uid,
-                dat = list(
+                session_data = list(
                   is_active = FALSE
                 )
               )
@@ -245,7 +245,7 @@ secure_server <- function(
         # go to email verification view.
         # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
 
-        callModule(
+        shiny::callModule(
           verify_email_module,
           "verify"
         )
@@ -260,8 +260,8 @@ secure_server <- function(
 
     # load up the sign in module server logic if the user in on "sign_in" page
 
-    observeEvent(session$userData$user(), {
-      req(is.null(session$userData$user()))
+    shiny::observeEvent(session$userData$user(), {
+      shiny::req(is.null(session$userData$user()))
 
       query_list <- shiny::getQueryString()
       page <- query_list$page

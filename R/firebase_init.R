@@ -1,9 +1,13 @@
 #' Initialize Firebase
 #'
-#' Executes a couple lines of JavaScript to initialize Firebase.  This function should be
+#' Executes a few lines of JavaScript to initialize Firebase. This function should be
 #' called in your Shiny UI immediately after \code{\link{firebase_dependencies}}.
 #'
-#' @param firebase_config list of firebase configuration
+#' @param firebase_config named \code{list} of firebase configuration values.
+#' Required values are:
+#' - `apiKey`
+#' - `authDomain`
+#' - `projectId`
 #'
 #' @export
 #'
@@ -26,7 +30,7 @@
 firebase_init <- function(firebase_config) {
 
   htmltools::tagList(
-    tags$script(
+    htmltools::tags$script(
       paste0("
         var firebaseConfig = {
           apiKey: '", firebase_config$apiKey, "',

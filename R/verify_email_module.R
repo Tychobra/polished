@@ -92,7 +92,7 @@ verify_email_module <- function(input, output, session) {
 
           user <- user_res$content
 
-          if (identical(httr::status_code(res), 200L)) {
+          if (identical(httr::status_code(user_res), 200L)) {
             return(user)
           } else {
             stop(user, call. = FALSE)

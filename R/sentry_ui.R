@@ -6,6 +6,8 @@
 #' @param r_env the active R config env. Defaults to "default".
 #'
 #' @importFrom htmltools tagList tags
+#' @importFrom jsonlite toJSON
+#' @importFrom shiny includeScript
 #'
 #' @noRd
 #'

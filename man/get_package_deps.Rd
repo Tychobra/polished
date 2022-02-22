@@ -9,7 +9,7 @@ get_package_deps(app_dir = ".", verbose = TRUE)
 \arguments{
 \item{app_dir}{path to a directory containing R scripts or RMarkdown files. Defaults to current working directory if left blank.}
 
-\item{verbose}{logical - defaults to TRUE. Will provide feedback to detected or invalid R packages.}
+\item{verbose}{boolean (default: \code{TRUE}) - Provide feedback about detected invalid R packages.}
 }
 \value{
 a list of package dependencies

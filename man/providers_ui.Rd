@@ -2,7 +2,7 @@
 % Please edit documentation in R/providers_ui.R
 \name{providers_ui}
 \alias{providers_ui}
-\title{UI for the Firebase authentication providers buttons}
+\title{UI for the Social Sign In authentication providers' buttons}
 \usage{
 providers_ui(
   ns,
@@ -14,7 +14,7 @@ providers_ui(
 \arguments{
 \item{ns}{the Shiny namespace function created with \code{shiny::NS()}.}
 
-\item{sign_in_providers}{the sign in providers to enable.  Valid values are \code{"google"}
+\item{sign_in_providers}{a character vector of sign in providers to enable. Valid values are \code{"google"}
 \code{"email"}, \code{"microsoft"}, and/or \code{"facebook"}. Defaults to \code{"email"}.}
 
 \item{title}{The title to be used above the provider buttons. Set to \code{NULL} to not include}
@@ -26,6 +26,6 @@ the HTML UI of the "Sign in with *" buttons.
 }
 \description{
 Creates the HTML UI of the "Sign in with *" buttons.  These buttons are only
-necessary if you enable social sign in via the \code{sign_in_providers} argument
+necessary if you enable Social Sign In via the \code{sign_in_providers} argument
 passed to \code{\link{polished_config}}.
 }

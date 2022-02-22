@@ -2,7 +2,7 @@
 % Please edit documentation in R/polished_config.R
 \name{polished_config}
 \alias{polished_config}
-\title{global configuration for polished authentication}
+\title{global configuration for \code{polished} authentication}
 \usage{
 polished_config(
   app_name,
@@ -18,13 +18,13 @@ polished_config(
 )
 }
 \arguments{
-\item{app_name}{the name of the app.}
+\item{app_name}{the name of the Shiny app.}
 
-\item{api_key}{the API key. Either from \url{https://polished.tech} or your on premise \code{polished} API
-deployment.}
+\item{api_key}{the \code{polished} API key, available at \url{https://dashboard.polished.tech}.}
 
-\item{firebase_config}{a list containing your Firebase project configuration.  This list should have the
-following named elements:
+\item{firebase_config}{if using Social Sign In (see \url{https://polished.tech/docs/03-social-sign-in}
+for more documentation), a list containing your Firebase project configuration (Default: \code{NULL}).
+This list should have the following named elements:
 \itemize{
 \item{\code{apiKey}}
 \item{\code{authDomain}}
@@ -38,26 +38,26 @@ Make sure to set \code{admin_mode = FALSE} before deploying your app.}
 \item{is_invite_required}{\code{TRUE} by default.  Whether or not to require the user to have an
 invite before registering/signing in}
 
-\item{sign_in_providers}{the sign in providers to enable.  Valid values are \code{"google"}
+\item{sign_in_providers}{a character vector of sign in providers to enable. Valid values are \code{"google"}
 \code{"email"}, \code{"microsoft"}, and/or \code{"facebook"}. Defaults to \code{"email"}.}
 
 \item{is_email_verification_required}{\code{TRUE} by default.  Whether or not to require the user to
 verify their email before accessing your Shiny app.}
 
-\item{sentry_dsn}{either \code{NULL}, the default, or your Sentry project DSN.}
+\item{sentry_dsn}{either \code{NULL}, the default, or your Sentry project's DSN.}
 
 \item{cookie_expires}{the number of days before a user's cookie expires.
 Set to \code{NULL} to force Sign Out at session end. This argument is passed to
 the \code{expires} option in js-cookie: \url{https://github.com/js-cookie/js-cookie#expires}.
-Default value is \code{365} (i.e. 1 year)}
+Default value is \code{365L} (i.e. 1 year)}
 
 \item{is_auth_required}{\code{TRUE} by default.  Whether or not to require users to be signed
 in to access the app.  It can be useful to set this argument to \code{FALSE} if you want to
-allow user to do certain actions (such as viewing charts and tables) without signing in,
+allow users to do certain actions (such as viewing charts and tables) without signing in,
 and only require users to sign in if they want to save data to your database.}
 }
 \description{
-global configuration for polished authentication
+global configuration for \code{polished} authentication
 }
 \details{
 This is the primary function for configuring \code{polished}.  It configures your app's instance of
@@ -70,9 +70,19 @@ for a complete example.
 \dontrun{
 # global.R
 
-Polished$new(
+polished_config(
   app_name = "<your app name>",
-  api_key = "<your API key>"
+  api_key = "<your API key>",
+  firebase_config = list(
+    apiKey = "<Firebase apiKey>",
+    authDomain = "<Firebase authDomain",
+    projectId = "<Firebase projectId>"
+  ),
+  sign_in_providers = c(
+    "email",
+    "google",
+    "microsoft"
+  )
 )
 
 }

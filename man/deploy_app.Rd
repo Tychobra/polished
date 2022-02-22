@@ -18,39 +18,38 @@ deploy_app(
 )
 }
 \arguments{
-\item{app_name}{You Shiny app's name.}
+\item{app_name}{Your Shiny app's name.}
 
 \item{app_dir}{The path to the directory containing your Shiny app.}
 
-\item{api_key}{Your polished.tech API key.  Defaults to \code{getOption("polished")$api_key}.}
+\item{api_key}{Your \code{polished} API key. Defaults to \code{Sys.getenv("POLISHED_API_KEY")} if set.}
 
-\item{launch_browser}{Whether or not to open your default browser to your newly deployed app
-after it is successfully deployed.  \code{TRUE} by default.}
+\item{launch_browser}{Boolean (default: \code{TRUE}) - Whether or not to open
+your newly deployed app in your default web browser after successful deployment.}
 
 \item{region}{the region to deploy the app to on Google Cloud Platform. See
 \url{https://cloud.google.com/run/docs/locations} for all available regions
 on Google Cloud Platform. Currently, database connections are only supported for
-"us-east1". See \url{https://polished.tech/docs/06-database-connections} for details.}
+\code{us-east1}. See \url{https://polished.tech/docs/06-database-connections} for details.}
 
-\item{ram_gb}{the amount of memory to allocate to your Shiny app server. Valid values are
-2, 4, or 8.}
+\item{ram_gb}{the amount of memory (in \code{GiB}) to allocate to your Shiny app's server.
+Valid values are \code{2}, \code{4}, or \code{8}.}
 
-\item{r_ver}{Character string of R version.  If kept as \code{NULL}, the default, then
+\item{r_ver}{Character string of desired \code{R} version.  If kept as \code{NULL} (the default),
 \code{deploy_app()} will detect the R version you are currently running.  The R version must be a version
-supported by an r-ver Docker image.  You can see all the r-ver Docker image versions
+supported by an \code{r-ver} Docker image.  You can see all the \code{r-ver} Docker image versions
 of R here \url{https://github.com/rocker-org/rocker-versioned2/tree/master/dockerfiles} and here
 \url{https://github.com/rocker-org/rocker-versioned/tree/master/r-ver}.}
 
-\item{tlmgr}{a character vector of TeX Live packages to install.  This is only used if your Shiny
-app generates pdf documents.  Defaults to \code{character(0)} for no TeX Live installation.  Set to
-\code{TRUE} for a minimal TeX Live installation, and pass a character vector of your TeX Live package
-dependencies to have all your TeX Live packages installed at build time.}
+\item{tlmgr}{a character vector of \verb{TeX Live} packages to install.  This is only used if your Shiny
+app generates \code{PDF} documents.  Defaults to \code{character(0)} for no \verb{TeX Live} installation. Provide a
+character vector of your TeX Live package dependencies to have all your TeX Live packages installed at build time.}
 
-\item{golem_package_name}{if Shiny app was created as a package with the
-golem package, provide the name of the Shiny app package as a character string.
-Defaults to \code{NULL}.  Keep as \code{NULL} for non golem Shiny apps.}
+\item{golem_package_name}{if your Shiny app was created as a package with the
+\code{golem} package, provide the name of the Shiny app package as a character string.
+Defaults to \code{NULL}.  Keep as \code{NULL} for non \code{golem} Shiny apps.}
 
-\item{cache}{boolean - whether or not to cache the Docker image.}
+\item{cache}{Boolean (default: \code{TRUE}) - whether or not to cache the Docker image.}
 }
 \description{
 Deploy a Shiny app to Polished Hosting
