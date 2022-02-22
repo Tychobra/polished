@@ -15,7 +15,7 @@ refresh_jwt_pub_key = function() {
   # Error if we didn't get the keys successfully
   httr::stop_for_status(google_keys_resp)
 
-  .polished$jwt_pub_key <<- jsonlite::fromJSON(
+  .polished$jwt_pub_key <- jsonlite::fromJSON(
     httr::content(google_keys_resp, "text", encoding = "UTF-8")
   )
 
