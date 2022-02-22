@@ -98,6 +98,7 @@ secure_ui <- function(
 
 
     user <- NULL
+    polished_user <- NULL
     if (!is.null(hashed_cookie) && length(hashed_cookie) > 0) {
 
       tryCatch({
@@ -107,6 +108,20 @@ secure_ui <- function(
         )
 
         user <- user_res$content
+        if (!is.null(user)) {
+
+          if (is.na(user$signed_in_as)) {
+            polished_user <- user[
+              c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified", "roles")
+            ]
+          } else {
+            polished_user <- get_signed_in_as_user(
+              user_uid = user$signed_in_as
+            )
+          }
+
+        }
+
 
       }, error = function(error) {
         print("sign_in_ui_1")
@@ -114,7 +129,7 @@ secure_ui <- function(
       })
     }
 
-    request$polished_user <- user
+    request$polished_user <- polished_user
 
     if (is.function(ui)) {
       ui <- ui(request)
