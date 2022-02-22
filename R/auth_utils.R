@@ -16,7 +16,7 @@ get_signed_in_as_user = function(user_uid) {
 
   roles_df <- roles_res$content
 
-  if (length(roles_df) == 0) {
+  if (nrow(roles_df) == 0) {
     roles_out <- NA
   } else {
     roles_out <- roles_df$role_name
