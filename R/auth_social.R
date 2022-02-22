@@ -157,7 +157,10 @@ sign_in_social = function(
     new_session$hashed_cookie <- hashed_cookie
     new_session$session_uid <- uuid::UUIDgenerate()
     # add the session to the 'sessions' table
-    add_session(new_session)
+    add_session(
+      app_uid = .polished$app_uid,
+      session_data = new_session
+    )
   }
 
   return(new_session)
