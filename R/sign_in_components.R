@@ -50,6 +50,7 @@ sign_in_js <- function(ns) {
 #' @param jwt a reactive returning a Firebase JSON web token for the signed in user.
 #' @param session the shiny session.
 #'
+#' @importFrom digest digest
 #' @importFrom shinyFeedback resetLoadingButton showToast
 #' @importFrom shiny getDefaultReactiveDomain
 #'

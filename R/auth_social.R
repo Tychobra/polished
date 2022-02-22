@@ -12,7 +12,7 @@ refresh_jwt_pub_key = function() {
     #config = list(http_version = 0)
   )
 
-  # Error if we didn't get the keys successfully
+  # Error if keys aren't returned successfully
   httr::stop_for_status(google_keys_resp)
 
   .polished$jwt_pub_key <<- jsonlite::fromJSON(
@@ -50,7 +50,7 @@ verify_firebase_token = function(firebase_token) {
     try({
       decoded_jwt <- jose::jwt_decode_sig(firebase_token, key)
       break
-    }, silent=TRUE)
+    }, silent = TRUE)
   }
 
   if (is.null(decoded_jwt)) {
@@ -77,9 +77,11 @@ verify_firebase_token = function(firebase_token) {
 #'
 #' @param firebase_token the Firebase JWT.  This JWT is created client side
 #' (in JavaScript) via `firebase.auth()`.
-#' @param hashed_cookie the hashed polished cookie.  Used for tracking the user
+#' @param hashed_cookie the hashed `polished` cookie.  Used for tracking the user
 #' session.  This cookie is inserted into the "polished.sessions" table if the
 #' JWT is valid.
+#'
+#' @importFrom uuid UUIDgenerate
 #'
 #' @return NULL if sign in fails. If sign in is successful, a list containing the following:
 #' * email
@@ -100,7 +102,7 @@ sign_in_social = function(
 
 
   # check if the jwt public key has expired or if it is about to expire.  If it
-  # is about to epire, go ahead and refresh to be safe.
+  # is about to expire, go ahead and refresh to be safe.
   if (as.numeric(Sys.time()) + .firebase_token_grace_period > .polished$jwt_pub_key_expires) {
     refresh_jwt_pub_key()
   }
@@ -128,7 +130,7 @@ sign_in_social = function(
 
     if (isFALSE(.polished$is_invite_required) && identical(nrow(invite), 0L)) {
       # if invite is not required, and this is the first time that the user is signing in,
-      # then create the app_users
+      # then create the App User in the `app_users` table
       add_app_user_res <- add_app_user(
         app_uid = .polished$app_uid,
         email = new_session$email,

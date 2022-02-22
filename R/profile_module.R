@@ -9,16 +9,16 @@
 #' add a user "My Account" page/app where the user can set their account settings.
 #'
 #' @importFrom htmltools tags
-#' @importFrom shiny textOutput actionLink
+#' @importFrom shiny textOutput actionLink NS icon
 #'
 #' @export
 profile_module_ui <- function(id, other_lis = NULL) {
-  ns <- NS(id)
+  ns <- shiny::NS(id)
 
   htmltools::tags$li(
     class = "dropdown",
     htmltools::tags$a(
-      href="#",
+      href = "#",
       class = "dropdown-toggle",
       `data-toggle` = "dropdown",
       htmltools::tags$i(
@@ -29,7 +29,7 @@ profile_module_ui <- function(id, other_lis = NULL) {
       class = "dropdown-menu",
       htmltools::tags$li(
         shiny::textOutput(ns("auth_user")),
-        style='padding: 3px 20px;'
+        style = 'padding: 3px 20px;'
       ),
       # Other links that can be used to link anything.  Often used to take the
       # user to their "Account" app/page.
@@ -39,7 +39,7 @@ profile_module_ui <- function(id, other_lis = NULL) {
         shiny::actionLink(
           ns("polish__sign_out"),
           label = "Sign Out",
-          icon = icon("sign-out-alt")
+          icon = shiny::icon("sign-out-alt")
         )
       )
     )

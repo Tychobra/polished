@@ -10,7 +10,7 @@ sign_in_social(firebase_token, hashed_cookie)
 \item{firebase_token}{the Firebase JWT.  This JWT is created client side
 (in JavaScript) via \code{firebase.auth()}.}
 
-\item{hashed_cookie}{the hashed polished cookie.  Used for tracking the user
+\item{hashed_cookie}{the hashed \code{polished} cookie.  Used for tracking the user
 session.  This cookie is inserted into the "polished.sessions" table if the
 JWT is valid.}
 }

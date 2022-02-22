@@ -7,13 +7,19 @@
 firebase_init(firebase_config)
 }
 \arguments{
-\item{firebase_config}{list of firebase configuration}
+\item{firebase_config}{named \code{list} of firebase configuration values.
+Required values are:
+\itemize{
+\item \code{apiKey}
+\item \code{authDomain}
+\item \code{projectId}
+}}
 }
 \value{
 a character string of JavaScript code to initialize Firebase
 }
 \description{
-Executes a couple lines of JavaScript to initialize Firebase.  This function should be
+Executes a few lines of JavaScript to initialize Firebase. This function should be
 called in your Shiny UI immediately after \code{\link{firebase_dependencies}}.
 }
 \examples{

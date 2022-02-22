@@ -7,7 +7,7 @@
 add_user(email, api_key = get_api_key())
 }
 \arguments{
-\item{email}{an email address.}
+\item{email}{the new user's email address.}
 
 \item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}

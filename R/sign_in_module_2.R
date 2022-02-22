@@ -8,8 +8,8 @@
 #'
 #' @param id the Shiny module \code{id}
 #'
-#' @importFrom shiny textInput actionButton NS actionLink
-#' @importFrom htmltools tagList tags div h1 br hr
+#' @importFrom shiny textInput actionButton NS actionLink icon
+#' @importFrom htmltools tagList tags
 #' @importFrom shinyFeedback useShinyFeedback loadingButton
 #' @importFrom shinyjs useShinyjs hidden disabled
 #'

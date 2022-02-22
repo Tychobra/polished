@@ -1,4 +1,4 @@
-#' Polished API - Get Sessions
+#' Polished API - Get Session(s)
 #'
 #' This can currently only be used to get a single session
 #'
@@ -50,7 +50,7 @@ get_sessions = function(app_uid, hashed_cookie, api_key = get_api_key()) {
 #' Polished API - Add a session
 #'
 #' @param app_uid the app uid.
-#' @param session_data list of data to include in the session.
+#' @param session_data list of data to include in the added session.
 #'
 #' @inheritParams get_apps
 #'

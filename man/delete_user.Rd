@@ -7,7 +7,7 @@
 delete_user(user_uid, api_key = get_api_key())
 }
 \arguments{
-\item{user_uid}{the user uid of the user to be deleted.}
+\item{user_uid}{the uid of the user to be deleted.}
 
 \item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}

@@ -1,9 +1,9 @@
 
 
-#' UI for the Firebase authentication providers buttons
+#' UI for the Social Sign In authentication providers' buttons
 #'
 #' Creates the HTML UI of the "Sign in with *" buttons.  These buttons are only
-#' necessary if you enable social sign in via the \code{sign_in_providers} argument
+#' necessary if you enable Social Sign In via the \code{sign_in_providers} argument
 #' passed to \code{\link{polished_config}}.
 #'
 #' @param ns the Shiny namespace function created with \code{shiny::NS()}.
@@ -13,45 +13,53 @@
 #' @param title The title to be used above the provider buttons. Set to \code{NULL} to not include
 #' @param fancy Should the buttons be large and colorful?
 #'
+#' @importFrom htmltools tags
+#' @importFrom shiny actionButton icon
+#'
 #' @export
 #'
 #' @return the HTML UI of the "Sign in with *" buttons.
 #'
-providers_ui <- function(ns, sign_in_providers = c(
-  "google",
-  "email"
-), title = "Sign In", fancy = TRUE) {
+providers_ui <- function(
+  ns,
+  sign_in_providers = c(
+    "google",
+    "email"
+  ),
+  title = "Sign In",
+  fancy = TRUE
+) {
 
-  if(isTRUE(fancy)) {
+  if (isTRUE(fancy)) {
     providers_buttons <- list(
-      "google" = actionButton(
+      "google" = shiny::actionButton(
         ns("sign_in_with_google"),
         "Sign in with Google",
-        icon = icon("google"),
+        icon = shiny::icon("google"),
         width = "100%",
         class = "btn-lg",
         style = "background-color: #4285F4; color: #FFF; margin: 10px 0;"
       ),
-      "microsoft" = actionButton(
+      "microsoft" = shiny::actionButton(
         ns("sign_in_with_microsoft"),
         "Sign in with Microsoft",
-        icon = icon("microsoft"),
+        icon = shiny::icon("microsoft"),
         width = "100%",
         class = "btn-lg",
         style = "background-color: #7FBA00; color: #FFF; margin: 10px 0;"
       ),
-      "facebook" = actionButton(
+      "facebook" = shiny::actionButton(
         ns("sign_in_with_facebook"),
         "Sign in with Facebook",
-        icon = icon("facebook"),
+        icon = shiny::icon("facebook"),
         width = "100%",
         class = "btn-lg",
         style = "background-color: #3B5998; color: #FFF; margin: 10px 0;"
       ),
-      "email" = actionButton(
+      "email" = shiny::actionButton(
         ns("sign_in_with_email"),
         "Sign in with Email",
-        icon = icon("envelope"),
+        icon = shiny::icon("envelope"),
         width = "100%",
         class = "btn-lg",
         style = "background-color: #DB4437; color: #FFF; margin: 10px 0;"
@@ -59,31 +67,31 @@ providers_ui <- function(ns, sign_in_providers = c(
     )
   } else {
     providers_buttons <- list(
-      "google" = actionButton(
+      "google" = shiny::actionButton(
         ns("sign_in_with_google"),
         "Sign in with Google",
-        icon = icon("google"),
+        icon = shiny::icon("google"),
         width = "100%",
         style = "background-color: #e4e4e4; margin-bottom: 10px;"
       ),
-      "microsoft" = actionButton(
+      "microsoft" = shiny::actionButton(
         ns("sign_in_with_microsoft"),
         "Sign in with Microsoft",
-        icon = icon("microsoft"),
+        icon = shiny::icon("microsoft"),
         width = "100%",
         style = "background-color: #e4e4e4; margin-bottom: 10px;"
       ),
-      "facebook" = actionButton(
+      "facebook" = shiny::actionButton(
         ns("sign_in_with_facebook"),
         "Sign in with Facebook",
-        icon = icon("facebook"),
+        icon = shiny::icon("facebook"),
         width = "100%",
         style = "background-color: #e4e4e4; margin-bottom: 10px;"
       ),
-      "email" = actionButton(
+      "email" = shiny::actionButton(
         ns("sign_in_with_email"),
         "Sign in with Email",
-        icon = icon("envelope"),
+        icon = shiny::icon("envelope"),
         width = "100%",
         style = "background-color: #e4e4e4; margin-bottom: 10px;"
       )
@@ -94,14 +102,14 @@ providers_ui <- function(ns, sign_in_providers = c(
   providers_out <- providers_buttons[sign_in_providers]
 
   if (is.null(title)) {
-    tags$div(
+    htmltools::tags$div(
       id = ns("providers_ui"),
       providers_out,
-      br(),
-      br()
+      htmltools::tags$br(),
+      htmltools::tags$br()
     )
   } else {
-    tags$div(
+    htmltools::tags$div(
       id = ns("providers_ui"),
       htmltools::h1(
         class = "text-center",
@@ -109,8 +117,8 @@ providers_ui <- function(ns, sign_in_providers = c(
         "Sign In"
       ),
       providers_out,
-      br(),
-      br()
+      htmltools::tags$br(),
+      htmltools::tags$br()
     )
   }
 }

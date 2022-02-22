@@ -4,11 +4,11 @@
 #'
 #' @inheritParams get_apps
 #'
-#' @return an object of class \code{polished_api_res}.  The "content" of the object is a
-#' tibble of users(s) with the following columns:
-#' - uid
-#' - role_name
-#' - created_at
+#' @return an object of class \code{polished_api_res}.  The `content` of the object is a
+#' tibble of user(s) with the following columns:
+#' - `uid`
+#' - `role_name`
+#' - `created_at`
 #'
 #' @export
 #'
@@ -52,7 +52,7 @@ get_roles <- function(
 #'
 #' @seealso [get_roles()] [delete_role()]
 #'
-#' @importFrom httr GET authenticate
+#' @importFrom httr POST authenticate
 #'
 add_role <- function(role_name, api_key = get_api_key()) {
 

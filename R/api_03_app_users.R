@@ -6,14 +6,17 @@
 #'
 #' @inheritParams get_apps
 #'
-#' @return an object of class \code{polished_api_res}.  The "content" of the object is a
+#' @details If \code{app_uid}, \code{user_uid}, & \code{email} are all \code{NULL},
+#' then all app users will be returned.
+#'
+#' @return an object of class \code{polished_api_res}.  The `content` of the object is a
 #' tibble of app(s) with the following columns:
-#' - uid
-#' - app_uid
-#' - user_uid
-#' - is_admin
-#' - created_at
-#' - email
+#' - `uid`
+#' - `app_uid`
+#' - `user_uid`
+#' - `is_admin`
+#' - `created_at`
+#' - `email`
 #'
 #' @export
 #'
@@ -58,7 +61,7 @@ get_app_users <- function(
 #' @param app_uid the app uid.
 #' @param user_uid an optional user uid for the user to be invited to the app.
 #' @param email an optional user email address.
-#' @param is_admin boolean - whether or not the user is a Polished admin.
+#' @param is_admin boolean (default: \code{FALSE}) - whether or not the user is a Polished admin.
 #' @param send_invite_email boolean - whether or not to send the user an invite email
 #' notifying them they have been invited to access the app.
 #' @param email an optional email address for the user to be invited to the app.
@@ -126,7 +129,7 @@ add_app_user <- function(
 #'
 #' @param app_uid the app uid to update.
 #' @param user_uid the user uid to update.
-#' @param is_admin boolean - whether or not the user is an admin.
+#' @param is_admin boolean (default: \code{FALSE}) - whether or not the user is an admin.
 #'
 #' @inheritParams get_apps
 #'
@@ -174,7 +177,7 @@ update_app_user <- function(
 #'
 #' @export
 #'
-#' @seealso [get_apps()] [add_app()] [update_app()]
+#' @seealso [get_apps()] [add_app()] [update_app_user()]
 #'
 #' @importFrom httr DELETE authenticate
 #'

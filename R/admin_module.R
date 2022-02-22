@@ -1,18 +1,18 @@
-#' The UI for the "Admin Panel" 'shinydashboard'
+#' The UI for the "Admin Panel" dashboard
 #'
-#' The 'shiny' module UI for the Admin Panel.
+#' The `shiny` module UI for the `polished` Admin Panel, accessible to Admin users.
 #'
 #' @param id the Shiny module id.
-#' @param options list of html elements to customize branding of "Admin Panel".  Valid
-#' list element names are "title", "sidebar_branding", and "browser_tab_icon".  See
+#' @param options list of HTML elements to customize branding of "Admin Panel".  Valid
+#' list element names are `title`, `sidebar_branding`, and `browser_tab_icon.  See
 #' \code{\link{default_admin_ui_options}} for an example.
 #' @param include_go_to_shiny_app_button whether or not to include the button to go to
-#' the Shiny app.  This argument is set to \code{FALSE} when 'polished' is in "admin_mode".
+#' the Shiny app.  This argument is set to \code{FALSE} when `polished` is in "admin_mode".
 #'
 #' @inheritParams secure_ui
 #'
-#' @importFrom shiny NS icon
-#' @importFrom shinydashboard dashboardSidebar dashboardBody sidebarMenu menuItem tabItems
+#' @importFrom shiny actionButton NS icon
+#' @importFrom shinydashboard dashboardHeader dashboardPage dashboardSidebar dashboardBody sidebarMenu menuItem tabItems
 #' @importFrom htmltools HTML tags
 #' @importFrom shinyjs useShinyjs
 #' @importFrom shinyFeedback useShinyFeedback
@@ -48,7 +48,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
     sidebar <- shinydashboard::dashboardSidebar(
       shinydashboard::sidebarMenu(
         id = ns("sidebar_menu"),
-        menuItem(
+        shinydashboard::menuItem(
           text = "User Access",
           tabName = "user_access",
           icon = shiny::icon("users")
@@ -60,7 +60,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
     )
   } else {
     sidebar <- shinydashboard::dashboardSidebar(
-      sidebarMenu(
+      shinydashboard::sidebarMenu(
         id = ns("sidebar_menu"),
         shinydashboard::menuItem(
           text = "User Access",
@@ -81,7 +81,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
       user_access_module_ui(ns("user_access"))
     )
   } else {
-    tab_items <- tags$div(
+    tab_items <- htmltools::tags$div(
       class = "tab-content",
       user_access_module_ui(ns("user_access")),
       custom_admin_ui$tab_items
@@ -89,9 +89,9 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
   }
 
   if (isTRUE(include_go_to_shiny_app_button)) {
-    shiny_app_button <- div(
+    shiny_app_button <- htmltools::tags$div(
       style = "position: fixed; bottom: 15px; right: 15px; z-index: 1000;",
-      actionButton(
+      shiny::actionButton(
         ns("go_to_shiny_app"),
         "Shiny App",
         icon = shiny::icon("rocket"),
@@ -100,7 +100,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
       )
     )
   } else {
-    shiny_app_button <- div()
+    shiny_app_button <- htmltools::tags$div()
   }
 
 
@@ -108,7 +108,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
   body <- shinydashboard::dashboardBody(
     htmltools::tags$head(
       options$browser_tab_icon,
-      tags$link(rel = "stylesheet", href = "polish/css/styles.css?version=1")
+      htmltools::tags$link(rel = "stylesheet", href = "polish/css/styles.css?version=1")
     ),
     shinyjs::useShinyjs(),
     shinyFeedback::useShinyFeedback(),
@@ -131,9 +131,9 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 }
 
 
-#' The server logic for the "Admin Panel" 'shinydashboard'
+#' The server logic for the "Admin Panel" dashboard
 #'
-#' The 'shiny' module server logic for the Admin Panel.
+#' The `shiny` module server logic for the `polished` Admin Panel, accessible to Admin users.
 #'
 #' @param input the Shiny server input
 #' @param output the Shiny server output

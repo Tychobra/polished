@@ -2,12 +2,13 @@
 #'
 #' @param id the Shiny module \code{id}
 #'
-#' @importFrom shiny actionLink
+#' @importFrom htmltools tagList
+#' @importFrom shiny actionLink NS
 #' @importFrom shinyFeedback useShinyFeedback
 #'
 #' @export
 send_password_reset_email_module_ui <- function(id) {
-  ns <- NS(id)
+  ns <- shiny::NS(id)
 
   tagList(
     shinyFeedback::useShinyFeedback(feedback = FALSE),
@@ -30,7 +31,7 @@ send_password_reset_email_module_ui <- function(id) {
 #' reset email to.
 #'
 #' @importFrom shiny observeEvent
-#' @importFrom httr POST authenticate status_code
+#' @importFrom httr POST authenticate content status_code
 #' @importFrom jsonlite fromJSON
 #' @importFrom shinyFeedback showToast
 #'

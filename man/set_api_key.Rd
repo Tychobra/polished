@@ -16,11 +16,11 @@ have_api_key()
 \item{api_key}{the Polished API key}
 }
 \value{
-a list of the newly set polished R options
+a list of the newly set \code{polished} R options
 }
 \description{
-The API key is set as an R option at \code{getOption("polished")$api_key}
-or via \code{Sys.getenv("POLISHED_API_KEY")}.
+The API key can be set as an Environment Variable via
+\code{Sys.getenv("POLISHED_API_KEY")}.
 }
 \examples{
 

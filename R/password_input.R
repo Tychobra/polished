@@ -13,27 +13,27 @@
 #' @param placeholder A character string giving the user a hint as to what can
 #' be entered into the control. Internet Explorer 8 and 9 do not support this option.
 #'
-#' @importFrom htmltools tags
+#' @importFrom htmltools tags tagList
 #'
 #' @export
 #'
 password_input <- function(
   input_id,
-  label = tagList(icon("unlock-alt"), "Password"),
+  label = htmltools::tagList(icon("unlock-alt"), "Password"),
   value = "",
   style = "",
   placeholder = NULL
 ) {
-  tags$div(
+  htmltools::tags$div(
     class = "form-group",
     style = style,
-    tags$label(
+    htmltools::tags$label(
       label,
       class = "control-label",
       class = if (is.null(label)) "shiny-label-null",
       `for` = input_id
     ),
-    tags$input(
+    htmltools::tags$input(
       id = input_id,
       type = "password",
       class = "form-control",

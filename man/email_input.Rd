@@ -6,7 +6,7 @@
 \usage{
 email_input(
   inputId,
-  label = tagList(icon("envelope"), "Email"),
+  label = tagList(shiny::icon("envelope"), "Email"),
   value = "",
   width = NULL,
   placeholder = NULL

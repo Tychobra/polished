@@ -37,7 +37,7 @@ admin_button_ui <- function(align = "right", vertical_align = "bottom") {
 #' @param output the Shiny server output
 #' @param session the Shiny server session
 #'
-#' @importFrom shiny observeEvent updateQueryString
+#' @importFrom shiny observeEvent req updateQueryString
 #'
 #' @noRd
 #'
@@ -48,7 +48,7 @@ admin_button <- function(input, output, session) {
     # this fixes an error where session$userData is not set until after the
     # the initial data loads on apps that load large amounts of data during
     # the initial app load.
-    req(session$userData$user())
+    shiny::req(session$userData$user())
 
     # remove admin_panel=false from query
     shiny::updateQueryString(

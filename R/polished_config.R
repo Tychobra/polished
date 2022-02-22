@@ -1,6 +1,6 @@
 
 
-#' global configuration for polished authentication
+#' global configuration for `polished` authentication
 #'
 #' @details
 #' This is the primary function for configuring \code{polished}.  It configures your app's instance of
@@ -8,11 +8,11 @@
 #' your \code{global.R} file.  See \url{https://github.com/Tychobra/polished/blob/master/inst/examples/polished_example_01/global.R}
 #' for a complete example.
 #'
-#' @param app_name the name of the app.
-#' @param api_key the API key. Either from \url{https://polished.tech} or your on premise \code{polished} API
-#' deployment.
-#' @param firebase_config a list containing your Firebase project configuration.  This list should have the
-#' following named elements:
+#' @param app_name the name of the Shiny app.
+#' @param api_key the `polished` API key, available at \url{https://dashboard.polished.tech}.
+#' @param firebase_config if using Social Sign In (see \url{https://polished.tech/docs/03-social-sign-in}
+#' for more documentation), a list containing your Firebase project configuration (Default: \code{NULL}).
+#' This list should have the following named elements:
 #' \itemize{
 #'   \item{\code{apiKey}}
 #'   \item{\code{authDomain}}
@@ -23,19 +23,19 @@
 #' Make sure to set \code{admin_mode = FALSE} before deploying your app.
 #' @param is_invite_required \code{TRUE} by default.  Whether or not to require the user to have an
 #' invite before registering/signing in
-#' @param sign_in_providers the sign in providers to enable.  Valid values are \code{"google"}
+#' @param sign_in_providers a character vector of sign in providers to enable. Valid values are \code{"google"}
 #' \code{"email"}, \code{"microsoft"}, and/or \code{"facebook"}. Defaults to \code{"email"}.
 #' @param is_email_verification_required \code{TRUE} by default.  Whether or not to require the user to
 #' verify their email before accessing your Shiny app.
 #' @param is_auth_required \code{TRUE} by default.  Whether or not to require users to be signed
 #' in to access the app.  It can be useful to set this argument to \code{FALSE} if you want to
-#' allow user to do certain actions (such as viewing charts and tables) without signing in,
+#' allow users to do certain actions (such as viewing charts and tables) without signing in,
 #' and only require users to sign in if they want to save data to your database.
-#' @param sentry_dsn either \code{NULL}, the default, or your Sentry project DSN.
+#' @param sentry_dsn either \code{NULL}, the default, or your Sentry project's DSN.
 #' @param cookie_expires the number of days before a user's cookie expires.
 #' Set to \code{NULL} to force Sign Out at session end. This argument is passed to
 #' the `expires` option in js-cookie: \url{https://github.com/js-cookie/js-cookie#expires}.
-#' Default value is `365` (i.e. 1 year)
+#' Default value is \code{365L} (i.e. 1 year)
 #'
 #' @export
 #'
@@ -45,9 +45,19 @@
 #' \dontrun{
 #' # global.R
 #'
-#' Polished$new(
+#' polished_config(
 #'   app_name = "<your app name>",
-#'   api_key = "<your API key>"
+#'   api_key = "<your API key>",
+#'   firebase_config = list(
+#'     apiKey = "<Firebase apiKey>",
+#'     authDomain = "<Firebase authDomain",
+#'     projectId = "<Firebase projectId>"
+#'   ),
+#'   sign_in_providers = c(
+#'     "email",
+#'     "google",
+#'     "microsoft"
+#'   )
 #' )
 #'
 #' }
@@ -106,9 +116,6 @@ call. = FALSE
   if (!(length(sign_in_providers) >= 1 && is.character(sign_in_providers))) {
     stop("invalid `sign_in_providers` argument passed to `polished_config()`", call. = FALSE)
   }
-
-
-
 
   if (!(length(admin_mode) == 1 && is.logical(admin_mode))) {
     stop("invalid `admin_mode` argument passed to `polished_config()`", call. = FALSE)

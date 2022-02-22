@@ -24,7 +24,7 @@
 #'
 #' @return a Shiny app object
 #'
-#' @importFrom shiny shinyApp actionLink
+#' @importFrom shiny shinyApp actionButton actionLink icon observeEvent
 #' @importFrom htmltools tags tagList
 #'
 secure_static <- function(
@@ -80,7 +80,7 @@ secure_static <- function(
 
   server <- secure_server(function(input, output, session) {
 
-    observeEvent(input$sign_out, {
+    shiny::observeEvent(input$sign_out, {
 
       tryCatch({
         sign_out_from_shiny(session)
