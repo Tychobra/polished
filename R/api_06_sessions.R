@@ -54,7 +54,7 @@ get_sessions = function(app_uid, hashed_cookie, api_key = get_api_key()) {
 #'
 #' @importFrom httr POST authenticate
 #'
-add_session <- function(add_uid, session_data, api_key = get_api_key()) {
+add_session <- function(app_uid, session_data, api_key = get_api_key()) {
 
   # add session to "sessions" table via the API
   res <- httr::POST(
