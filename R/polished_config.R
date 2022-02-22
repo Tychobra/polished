@@ -109,16 +109,6 @@ call. = FALSE
 
 
 
-  if (!is.null(firebase_config)) {
-    if (length(firebase_config) != 3 ||
-        !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
-      stop("invalid `firebase_config` argument passed to `polished_config()`", call. = FALSE)
-    }
-
-    refresh_jwt_pub_key()
-  }
-
-
 
   if (!(length(admin_mode) == 1 && is.logical(admin_mode))) {
     stop("invalid `admin_mode` argument passed to `polished_config()`", call. = FALSE)
@@ -148,6 +138,11 @@ call. = FALSE
   # if firebase is being used, then we need to get the jwt from Google.  Creating these
   # two values to manage the JWT.
   if (!is.null(firebase_config)) {
+    if (length(firebase_config) != 3 ||
+        !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
+      stop("invalid `firebase_config` argument passed to `polished_config()`", call. = FALSE)
+    }
+
     hold$jwt_pub_key <- NULL
     hold$jwt_pub_key_expires <- NULL
   }
@@ -163,6 +158,10 @@ call. = FALSE
     out,
     envir = .GlobalEnv
   )
+
+  if (!is.null(firebase_config)) {
+    refresh_jwt_pub_key()
+  }
 
   invisible(out)
 }
