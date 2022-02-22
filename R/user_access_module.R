@@ -382,8 +382,8 @@ user_access_module <- function(input, output, session) {
 
     # sign in as another user
     update_session(
-      hold_user$session_uid,
-      dat = list(
+      session_uid = hold_user$session_uid,
+      session_data = list(
         signed_in_as = user_to_sign_in_as
       )
     )

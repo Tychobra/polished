@@ -81,17 +81,17 @@ add_session <- function(app_uid, session_data, api_key = get_api_key()) {
 
 #' Polished API - Update a session
 #'
-#' @param session_uid the role uid of the role to be deleted.
-#' @param user_uid the user uid that the role should be removed from.
+#' @param session_uid the uid of the session to be updated.
+#' @param session_data list of data to include in the updated session.
 #'
 #' @inheritParams get_apps
 #'
 #'
-#' @seealso [get_user_roles()] [add_user_role()]
+#' @seealso [get_sessions()] [add_session()]
 #'
 #' @importFrom httr PUT authenticate
 #'
-update_session <- function(session_uid, dat, api_key = get_api_key()) {
+update_session <- function(session_uid, session_data, api_key = get_api_key()) {
 
   res <- httr::PUT(
     url = paste0(getOption("polished")$api_url, "/sessions"),
@@ -101,7 +101,7 @@ update_session <- function(session_uid, dat, api_key = get_api_key()) {
     ),
     body = list(
       "session_uid" = session_uid,
-      "dat" = dat
+      "dat" = session_data
     ),
     encode = "json"
   )

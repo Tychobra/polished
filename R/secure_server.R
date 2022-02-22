@@ -131,8 +131,8 @@ secure_server <- function(
           if (!is.na(global_user$signed_in_as)) {
             # clear signed in as in .polished
             update_session(
-              global_user$session_uid,
-              dat = list(
+              session_uid = global_user$session_uid,
+              session_data = list(
                 signed_in_as = NA
               )
             )
@@ -225,7 +225,7 @@ secure_server <- function(
 
               update_session(
                 session_uid = hold_user$session_uid,
-                dat = list(
+                session_data = list(
                   is_active = FALSE
                 )
               )
