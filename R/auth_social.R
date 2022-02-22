@@ -15,7 +15,7 @@ refresh_jwt_pub_key = function() {
   # Error if we didn't get the keys successfully
   httr::stop_for_status(google_keys_resp)
 
-  .polished$jwt_pub_key <- jsonlite::fromJSON(
+  .polished$jwt_pub_key <<- jsonlite::fromJSON(
     httr::content(google_keys_resp, "text", encoding = "UTF-8")
   )
 
@@ -28,7 +28,7 @@ refresh_jwt_pub_key = function() {
 
       if (length(elem) == 2 && trimws(elem[1]) == "max-age") {
         max_age <- as.numeric(elem[2])
-        .polished$jwt_pub_key_expires <- as.numeric(Sys.time()) + max_age
+        .polished$jwt_pub_key_expires <<- as.numeric(Sys.time()) + max_age
         break
       }
 
