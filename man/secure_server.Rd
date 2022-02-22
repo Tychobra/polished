@@ -22,7 +22,7 @@ sign in server logic.}
 server functionality.}
 
 \item{allow_reconnect}{argument to pass to the Shiny \code{session$allowReconnect()} function. Defaults to
-\code{FALSE}.  Set to \code{TRUE} to allow reconnect with shiny-server and Rstudio Connect.  Set to \code{"force"}
+\code{FALSE}.  Set to \code{TRUE} to allow reconnect with shiny-server and RStudio Connect.  Set to \code{"force"}
 for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.html} for more information.}
 
 \item{override_user}{whether or not to override the \code{session$user} with the polished
