@@ -3,19 +3,22 @@
 #' This can currently only be used to get a single session
 #'
 #' @param app_uid the app uid
-#' @param hashed_cookie hashed cookie
+#' @param hashed_cookie the hashed cookie
 #'
 #' @inheritParams get_apps
 #'
-#' @return an object of class \code{polished_api_res}.  The "content" of the object is a
-#' tibble of users(s) with the following columns:
-#' - role_uid
-#' - role_name,
-#' - user_uid,
-#' - user_name,
-#' - created_at
+#' @return either \code{NULL} or object of class \code{polished_api_res}.  The "content" of the object is a
+#' list with the following elements:
+#' - user_uid
+#' - email
+#' - email_verified
+#' - is_admin
+#' - hashed_cookie
+#' - session_uid
+#' - signed_in_as
+#' - roles
 #'
-#'
+#' @noRd
 #'
 #' @importFrom httr GET authenticate
 #'
