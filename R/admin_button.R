@@ -44,8 +44,6 @@ admin_button_ui <- function(align = "right", vertical_align = "bottom") {
 admin_button <- function(input, output, session) {
 
   shiny::observeEvent(input$go_to_admin_panel, {
-    hold_user <- session$userData$user()
-
     # make sure session has loaded before navigating to admin panel.
     # this fixes an error where session$userData is not set until after the
     # the initial data loads on apps that load large amounts of data during
