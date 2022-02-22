@@ -135,17 +135,6 @@ call. = FALSE
     is_auth_required = TRUE
   )
 
-  # if firebase is being used, then we need to get the jwt from Google.  Creating these
-  # two values to manage the JWT.
-  if (!is.null(firebase_config)) {
-    if (length(firebase_config) != 3 ||
-        !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
-      stop("invalid `firebase_config` argument passed to `polished_config()`", call. = FALSE)
-    }
-
-    hold$jwt_pub_key <- NULL
-    hold$jwt_pub_key_expires <- NULL
-  }
 
 
   out <- structure(
@@ -160,6 +149,12 @@ call. = FALSE
   )
 
   if (!is.null(firebase_config)) {
+    if (length(firebase_config) != 3 ||
+        !all(names(firebase_config) %in% c("apiKey", "authDomain", "projectId"))) {
+      stop("invalid `firebase_config` argument passed to `polished_config()`", call. = FALSE)
+    }
+    # if firebase is being used, then we need to get the jwt from Google.  Creating these
+    # two values to manage the JWT.
     refresh_jwt_pub_key()
   }
 
