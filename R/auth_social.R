@@ -15,8 +15,13 @@ refresh_jwt_pub_key = function() {
   # Error if we didn't get the keys successfully
   httr::stop_for_status(google_keys_resp)
 
-  .polished$jwt_pub_key <<- jsonlite::fromJSON(
+  jwt_pub_key_out <- jsonlite::fromJSON(
     httr::content(google_keys_resp, "text", encoding = "UTF-8")
+  )
+  assign(
+    ".polished[['jwt_pub_key']]",
+    jwt_pub_key_out,
+    envir = .GlobalEnv
   )
 
   # Decode the expiration time of the keys from the Cache-Control header
@@ -28,7 +33,12 @@ refresh_jwt_pub_key = function() {
 
       if (length(elem) == 2 && trimws(elem[1]) == "max-age") {
         max_age <- as.numeric(elem[2])
-        .polished$jwt_pub_key_expires <<- as.numeric(Sys.time()) + max_age
+        jwt_pub_key_expires_out <- as.numeric(Sys.time()) + max_age
+        assign(
+          ".polished[['jwt_pub_key_expires']]",
+          jwt_pub_key_expires_out,
+          envir = .GlobalEnv
+        )
         break
       }
 
