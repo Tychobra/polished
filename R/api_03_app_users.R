@@ -140,7 +140,7 @@ add_app_user <- function(
 update_app_user <- function(
   app_uid,
   user_uid,
-  is_admin,
+  is_admin = FALSE,
   api_key = get_api_key()
 ) {
 
