@@ -1,3 +1,7 @@
+# polished v0.6.0.9000
+
+
+
 # polished v0.6.0
 
 * major internal refactor to simplify how user sessions are handled.  We remove the reliance
