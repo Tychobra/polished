@@ -93,13 +93,7 @@ get_api_key <- function() {
   api_key
 }
 
-#' @export
-#' @rdname set_api_key
-have_api_key <- function() {
-  api_key <- try({get_api_key()}, silent = TRUE)
-  if (inherits(api_key, "try-error")) return(FALSE)
-  nzchar(api_key)
-}
+
 
 set_api_url <- function(
   api_url = "https://auth-api.polished.tech/v1",
