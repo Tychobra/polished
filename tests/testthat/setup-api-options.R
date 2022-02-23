@@ -4,7 +4,6 @@ if (file.exists("config.yml")) {
 
   polished::set_api_key(the_config$api_key)
 }
-stopifnot(polished::have_api_key())
 
 #polished:::set_api_url(
 #  api_url = "http://0.0.0.0:8080/v1",
