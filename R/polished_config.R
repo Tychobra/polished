@@ -36,6 +36,13 @@
 #' Set to \code{NULL} to force Sign Out at session end. This argument is passed to
 #' the `expires` option in js-cookie: \url{https://github.com/js-cookie/js-cookie#expires}.
 #' Default value is \code{365L} (i.e. 1 year)
+#' @param two_fa a length 1 character vector that can be used to enabled 2 factor authentication.  Valid
+#' values are "none", "optional", or "required" which provide the following options:
+#'   - "none": 2FA is not enabled
+#'   - "optional": 2FA is not enabled by default, but a signed in user can enable it for
+#'   their account.
+#'   - "required": 2FA is required for all users
+#' The default value is "none".
 #'
 #' @export
 #'
@@ -72,7 +79,8 @@ polished_config <- function(
   is_email_verification_required = TRUE,
   sentry_dsn = NULL,
   cookie_expires = 365L,
-  is_auth_required = TRUE
+  is_auth_required = TRUE,
+  two_fa = "none"
 ) {
 
   if (!(length(api_key) == 1 && is.character(api_key))) {
