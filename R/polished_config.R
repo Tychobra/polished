@@ -139,7 +139,7 @@ call. = FALSE
   assign("is_email_verification_required", is_email_verification_required, envir = .polished)
   assign("sentry_dsn", sentry_dsn, envir = .polished)
   assign("cookie_expires", cookie_expires, envir = .polished)
-  assign("is_auth_required", TRUE, envir = .polished)
+  assign("is_auth_required", is_auth_required, envir = .polished)
 
 
   if (!is.null(firebase_config)) {
