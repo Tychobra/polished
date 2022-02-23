@@ -2,7 +2,7 @@
 
 * major internal refactor to simplify how user sessions are handled.  We remove the reliance
 on R6. We now just use a regular base R environment to to hold the configuration and regular R functions (rather than R6 methods) to handle user sessions.  You can now access all `polished` auth configuration from your Shiny app
-or other R packages that build on `polished` with via the `polished::.polished` environment. 
+or other R packages that build on `polished` via the `polished::.polished` environment. 
 * new argument "override_user" added to `secure_server()`. When this argument is set
 to `TRUE` (the default), the `session$userData$user()` polished user will be accessible in
 the `session$user`.  Set this argument to `FALSE` if you are using RStudio Connect or another hosting option that uses the `session$user` and you need access to the value they set for `session$user`. 
