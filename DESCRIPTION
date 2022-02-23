@@ -44,7 +44,8 @@ Imports:
 Suggests:
     testthat (>= 3.0.0),
     knitr,
-    config
+    config,
+    xfun
 VignetteBuilder: 
     knitr
 Roxygen: list(markdown = TRUE)
