@@ -1,6 +1,6 @@
-# polished v0.6.0.9000
+# polished v0.6.1
 
-
+Fixed bug with "is_auth_required" argument for `polished_config()`
 
 # polished v0.6.0
 
