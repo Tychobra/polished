@@ -86,10 +86,10 @@ overwrite_args <- function(x, y, xname) {
 rmarkdown_shiny_ui <- utils::getFromNamespace("rmarkdown_shiny_ui", "rmarkdown")
 rmarkdown_shiny_server <- utils::getFromNamespace("rmarkdown_shiny_server",  "rmarkdown")
 
-#' Render and secure Rmarkdown document
+#' Render and secure R Markdown document
 #'
 #' \code{secure_rmd()} can be used to render (or run) and secure many
-#' types of Rmarkdown documents. Rendering is handled either by \code{rmarkdown::render}
+#' types of R Markdown documents. Rendering is handled either by \code{rmarkdown::render}
 #' or, if using \code{shiny}, a \code{shiny} app is constructed, and the then
 #' the output is secured with \code{polished} authentication.
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/secure_rmd.R
 \name{secure_rmd}
 \alias{secure_rmd}
-\title{Render and secure Rmarkdown document}
+\title{Render and secure R Markdown document}
 \usage{
 secure_rmd(
   rmd_file_path,
@@ -31,7 +31,7 @@ a Shiny app object
 }
 \description{
 \code{secure_rmd()} can be used to render (or run) and secure many
-types of Rmarkdown documents. Rendering is handled either by \code{rmarkdown::render}
+types of R Markdown documents. Rendering is handled either by \code{rmarkdown::render}
 or, if using \code{shiny}, a \code{shiny} app is constructed, and the then
 the output is secured with \code{polished} authentication.
 }

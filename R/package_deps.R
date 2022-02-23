@@ -11,7 +11,7 @@
 #'   validating that each detection is indeed a valid `CRAN` or public `GitHub` package
 #'   and can be installed.
 #'
-#' @param app_dir path to a directory containing R scripts or RMarkdown files. Defaults to current working directory if left blank.
+#' @param app_dir path to a directory containing R scripts or R Markdown files. Defaults to current working directory if left blank.
 #' @param verbose boolean (default: \code{TRUE}) - Provide feedback about detected invalid R packages.
 #'
 #' @return a list of package dependencies
