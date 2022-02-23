@@ -105,7 +105,7 @@ user_access_module <- function(input, output, session) {
         mutate(created_at = as.POSIXct(.data$created_at))
 
       res <- httr::GET(
-        url = paste0(getOption("polished")$api_url, "/last-active-session-time"),
+        url = paste0(.polished$api_url, "/last-active-session-time"),
         query = list(
           app_uid = .polished$app_uid
         ),
@@ -339,7 +339,7 @@ user_access_module <- function(input, output, session) {
     tryCatch({
 
       res <- httr::DELETE(
-        url = paste0(getOption("polished")$api_url, "/app-users"),
+        url = paste0(.polished$api_url, "/app-users"),
         body = list(
           user_uid = user_uid,
           app_uid = app_uid,

@@ -1,7 +1,7 @@
 sign_in_email = function(email, password, hashed_cookie) {
 
   res <- httr::POST(
-    url = paste0(getOption("polished")$api_url, "/sign-in-email"),
+    url = paste0(.polished$api_url, "/sign-in-email"),
     body = list(
       app_uid = .polished$app_uid,
       email = email,
@@ -26,7 +26,7 @@ sign_in_email = function(email, password, hashed_cookie) {
 
       # send a password reset email and stop
       res2 <- httr::POST(
-        url = paste0(getOption("polished")$api_url, "/send-password-reset-email"),
+        url = paste0(.polished$api_url, "/send-password-reset-email"),
         body = list(
           email = email,
           app_uid = .polished$app_uid,
@@ -62,7 +62,7 @@ sign_in_email = function(email, password, hashed_cookie) {
 register_email = function(email, password, hashed_cookie) {
 
   res <- httr::POST(
-    url = paste0(getOption("polished")$api_url, "/register-email"),
+    url = paste0(.polished$api_url, "/register-email"),
     httr::authenticate(
       user = get_api_key(),
       password = ""

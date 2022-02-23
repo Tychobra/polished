@@ -125,7 +125,7 @@ verify_email_module <- function(input, output, session) {
 
 
       res <- httr::POST(
-        url = paste0(getOption("polished")$api_url, "/resend-verification-email"),
+        url = paste0(.polished$api_url, "/resend-verification-email"),
         httr::authenticate(
           user = get_api_key(),
           password = ""

@@ -34,7 +34,7 @@ user_edit_module <- function(input, output, session,
 
     tryCatch({
       res <- httr::GET(
-        url = paste0(getOption("polished")$api_url, "/apps"),
+        url = paste0(.polished$api_url, "/apps"),
         query = list(
           app_uid = .polished$app_uid
         ),
@@ -186,7 +186,7 @@ user_edit_module <- function(input, output, session,
       tryCatch({
 
         res <- httr::POST(
-          url = paste0(getOption("polished")$api_url, "/app-users"),
+          url = paste0(.polished$api_url, "/app-users"),
           body = list(
             email = input_email,
             app_uid = .polished$app_uid,
@@ -270,7 +270,7 @@ user_edit_module <- function(input, output, session,
 
         # update the app user
         res <- httr::PUT(
-          url = paste0(getOption("polished")$api_url, "/app-users"),
+          url = paste0(.polished$api_url, "/app-users"),
           body = list(
             user_uid = hold_user$user_uid,
             app_uid = .polished$app_uid,

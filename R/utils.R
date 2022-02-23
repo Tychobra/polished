@@ -136,7 +136,7 @@ is_valid_email <- function(x) {
 is_email_registered <- function(email) {
 
   user_res <- httr::GET(
-    paste0(getOption("polished")$api_url, "/users"),
+    paste0(.polished$api_url, "/users"),
     query = list(
       email = email
     ),

@@ -37,7 +37,7 @@ get_apps <- function(
   query_out$app_name <- app_name
 
   resp <- httr::GET(
-    url = paste0(getOption("polished")$api_url, "/apps"),
+    url = paste0(.polished$api_url, "/apps"),
     ua,
     httr::authenticate(
       user = api_key,
@@ -77,7 +77,7 @@ add_app <- function(app_name, app_url = NULL, api_key = get_api_key()) {
   body_out$app_url <- app_url
 
   resp <- httr::POST(
-    url = paste0(getOption("polished")$api_url, "/apps"),
+    url = paste0(.polished$api_url, "/apps"),
     ua,
     httr::authenticate(
       user = api_key,
@@ -122,7 +122,7 @@ update_app <- function(app_uid, app_name = NULL, app_url = NULL,
   }
 
   resp <- httr::PUT(
-    url = paste0(getOption("polished")$api_url, "/apps"),
+    url = paste0(.polished$api_url, "/apps"),
     ua,
     httr::authenticate(
       user = api_key,
@@ -179,7 +179,7 @@ delete_app <- function(
   )
 
   resp <- httr::DELETE(
-    url = paste0(getOption("polished")$api_url, "/apps"),
+    url = paste0(.polished$api_url, "/apps"),
     ua,
     httr::authenticate(
       user = api_key,

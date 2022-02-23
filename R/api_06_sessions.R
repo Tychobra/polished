@@ -25,7 +25,7 @@
 get_sessions = function(app_uid, hashed_cookie, api_key = get_api_key()) {
 
   res <- httr::GET(
-    url = paste0(getOption("polished")$api_url, "/sessions"),
+    url = paste0(.polished$api_url, "/sessions"),
     query = list(
       hashed_cookie = hashed_cookie,
       app_uid = app_uid
@@ -62,7 +62,7 @@ add_session <- function(app_uid, session_data, api_key = get_api_key()) {
 
   # add session to "sessions" table via the API
   res <- httr::POST(
-    url = paste0(getOption("polished")$api_url, "/sessions"),
+    url = paste0(.polished$api_url, "/sessions"),
     httr::authenticate(
       user = api_key,
       password = ""
@@ -96,7 +96,7 @@ add_session <- function(app_uid, session_data, api_key = get_api_key()) {
 update_session <- function(session_uid, session_data, api_key = get_api_key()) {
 
   res <- httr::PUT(
-    url = paste0(getOption("polished")$api_url, "/sessions"),
+    url = paste0(.polished$api_url, "/sessions"),
     httr::authenticate(
       user = api_key,
       password = ""

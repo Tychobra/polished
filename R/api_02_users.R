@@ -40,7 +40,7 @@ get_users <- function(
   query_out$email <- email
 
   resp <- httr::GET(
-    url = paste0(getOption("polished")$api_url, "/users"),
+    url = paste0(.polished$api_url, "/users"),
     ua,
     httr::authenticate(
       user = api_key,
@@ -76,7 +76,7 @@ add_user <- function(email, api_key = get_api_key()) {
   )
 
   resp <- httr::POST(
-    url = paste0(getOption("polished")$api_url, "/users"),
+    url = paste0(.polished$api_url, "/users"),
     ua,
     httr::authenticate(
       user = api_key,
@@ -111,7 +111,7 @@ delete_user <- function(user_uid, api_key = get_api_key()) {
   )
 
   resp <- httr::DELETE(
-    url = paste0(getOption("polished")$api_url, "/users"),
+    url = paste0(.polished$api_url, "/users"),
     ua,
     httr::authenticate(
       user = api_key,

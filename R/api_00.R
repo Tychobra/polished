@@ -99,22 +99,14 @@ set_api_url <- function(
   api_url = "https://auth-api.polished.tech/v1",
   host_api_url = "https://host-api.polished.tech/v1"
 ) {
-  current_polished_options <- getOption("polished")
 
-  if (is.null(current_polished_options)) {
-    out <- list(
-      api_url = api_url,
-      host_api_url = host_api_url
-    )
-  } else {
-    out <- current_polished_options
-    out$api_url <- api_url
-    out$host_api_url <- host_api_url
-  }
+  assign("api_url", api_url, envir = .polished)
+  assign("host_api_url", host_api_url, envir = .polished)
 
-  options("polished" = out)
-
-  invisible(out)
+  invisible(list(
+    api_url = api_url,
+    host_api_url = host_api_url
+  ))
 }
 
 

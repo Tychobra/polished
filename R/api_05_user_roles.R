@@ -30,7 +30,7 @@ get_user_roles <- function(
   query_out$role_uid <- role_uid
 
   resp <- httr::GET(
-    url = paste0(getOption("polished")$api_url, "/user-roles"),
+    url = paste0(.polished$api_url, "/user-roles"),
     ua,
     httr::authenticate(
       user = api_key,
@@ -68,7 +68,7 @@ add_user_role <- function(user_uid, role_uid, api_key = get_api_key()) {
   )
 
   resp <- httr::POST(
-    url = paste0(getOption("polished")$api_url, "/user-roles"),
+    url = paste0(.polished$api_url, "/user-roles"),
     ua,
     httr::authenticate(
       user = api_key,
@@ -105,7 +105,7 @@ delete_user_role <- function(role_uid, user_uid, api_key = get_api_key()) {
   )
 
   resp <- httr::DELETE(
-    url = paste0(getOption("polished")$api_url, "/user-roles"),
+    url = paste0(.polished$api_url, "/user-roles"),
     ua,
     httr::authenticate(
       user = api_key,
