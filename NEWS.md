@@ -1,7 +1,8 @@
 # polished v0.6.0
 
 * major internal refactor to simplify how user sessions are handled.  We remove the reliance
-on R6. We now just use a regular base R list to to hold the configuration and regular R functions (rather than R6 methods) to handle user sessions. 
+on R6. We now just use a regular base R environment to to hold the configuration and regular R functions (rather than R6 methods) to handle user sessions.  You can now access all `polished` auth configuration from your Shiny app
+or other R packages that build on `polished` with via the `polished::.polished` environment. 
 * new argument "override_user" added to `secure_server()`. When this argument is set
 to `TRUE` (the default), the `session$userData$user()` polished user will be accessible in
 the `session$user`.  Set this argument to `FALSE` if you are using RStudio Connect or another hosting option that uses the `session$user` and you need access to the value they set for `session$user`. 
@@ -12,7 +13,7 @@ if the api key is not found in the polished options.
 * new `polished_config()` function to replace `global_sessions_config()` which has been 
 deprecated.
 * Bug Fix (#172) - browser previously refreshed when url query or hash parameters changed, but user remained on the Shiny app.  This has been updated to be consistent with normal Shiny behavior (i.e. shiny session does not reload when url query or hash parameters update).
-* Added `secure_rmd()`, which can be used to render and secure any Rmarkdown (`.Rmd`) document. Rendering is handled by `rmarkdown::render` and the then the rendered document is secured with `polished` authentication.
+* Added `secure_rmd()`, which can be used to render and secure any R Markdown (`.Rmd`) document. Rendering is handled by `rmarkdown::render` and the then the rendered document is secured with `polished` authentication.
 
 # polished v0.5.0
 
