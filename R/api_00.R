@@ -72,26 +72,17 @@ print.polished_api_res <- function(x, ...) {
 #'
 set_api_key <- function(api_key) {
 
-  if (exists(".polished")) {
-    out <- .polished
-  } else {
-    out <- list(
-      api_key = api_key
-    )
-  }
-  .polished <<- out
+  assign("api_key", api_key, envir = .polished)
 
-  invisible(out)
+  invisible(api_key)
 }
 
 #' @export
 #' @rdname set_api_key
 get_api_key <- function() {
 
-  api_key <- NULL
-  if (exists(".polished")) {
-    api_key <- .polished$api_key
-  }
+  api_key <- .polished$api_key
+
 
   if (is.null(api_key)) {
     api_key <- Sys.getenv("POLISHED_API_KEY", unset = NA)

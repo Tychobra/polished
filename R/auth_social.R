@@ -6,7 +6,7 @@
 
 
 
-refresh_jwt_pub_key = function() {
+refresh_jwt_pub_key <- function() {
   google_keys_resp <- httr::GET(
     "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"#,
     #config = list(http_version = 0)
@@ -15,9 +15,10 @@ refresh_jwt_pub_key = function() {
   # Error if keys aren't returned successfully
   httr::stop_for_status(google_keys_resp)
 
-  .polished$jwt_pub_key <<- jsonlite::fromJSON(
+  jwt_pub_key_out <- jsonlite::fromJSON(
     httr::content(google_keys_resp, "text", encoding = "UTF-8")
   )
+  assign("jwt_pub_key", jwt_pub_key_out, envir = .polished)
 
   # Decode the expiration time of the keys from the Cache-Control header
   cache_controls <- httr::headers(google_keys_resp)[["Cache-Control"]]
@@ -29,7 +30,7 @@ refresh_jwt_pub_key = function() {
       if (length(elem) == 2 && trimws(elem[1]) == "max-age") {
         max_age <- as.numeric(elem[2])
 
-        .polished$jwt_pub_key_expires <<- as.numeric(Sys.time()) + max_age
+        assign("jwt_pub_key_expires", as.numeric(Sys.time()) + max_age, envir = .polished)
         break
       }
 

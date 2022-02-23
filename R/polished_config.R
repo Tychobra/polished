@@ -128,32 +128,19 @@ call. = FALSE
   }
 
 
-  hold <- list(
-    app_name = app_name,
-    app_uid = app$uid,
-    api_key = api_key,
-    firebase_config = firebase_config,
-    admin_mode = admin_mode,
-    is_invite_required = is_invite_required,
-    sign_in_providers = sign_in_providers,
-    is_email_verification_required = is_email_verification_required,
-    sentry_dsn = sentry_dsn,
-    cookie_expires = cookie_expires,
-    is_auth_required = TRUE
-  )
 
+  assign("app_name", app_name, envir = .polished)
+  assign("app_uid", app$uid, envir = .polished)
+  assign("api_key", api_key, envir = .polished)
+  assign("firebase_config", firebase_config, envir = .polished)
+  assign("admin_mode", admin_mode, envir = .polished)
+  assign("is_invite_required", is_invite_required, envir = .polished)
+  assign("sign_in_providers", sign_in_providers, envir = .polished)
+  assign("is_email_verification_required", is_email_verification_required, envir = .polished)
+  assign("sentry_dsn", sentry_dsn, envir = .polished)
+  assign("cookie_expires", cookie_expires, envir = .polished)
+  assign("is_auth_required", TRUE, envir = .polished)
 
-
-  out <- structure(
-    hold,
-    class = "polished_config"
-  )
-
-  assign(
-    ".polished",
-    out,
-    envir = .GlobalEnv
-  )
 
   if (!is.null(firebase_config)) {
     if (length(firebase_config) != 3 ||
@@ -165,10 +152,12 @@ call. = FALSE
     refresh_jwt_pub_key()
   }
 
-  invisible(out)
+  invisible(NULL)
 }
 
-#' @rdname Polished
+#' @rdname polished_config
+#'
+#' @param ... arguments to pass to \code{\link{polished_config}}
 #'
 #' @export
 #'
@@ -181,3 +170,8 @@ global_sessions_config <- function(
 
   polished_config(...)
 }
+
+
+#' @export
+.polished <- new.env()
+
