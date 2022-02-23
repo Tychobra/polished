@@ -32,16 +32,38 @@ two_fa_module_ui <- function(id) {
     shiny::fluidRow(
       shiny::column(
         12,
-        class = "text-center",
-        style = "margin-top: 100px",
         div(
-          id = ns("qrcode")
-        ),
-        h2("Enter your two-factor authentication code"),
-        textInput(
-          ns("two_fa_code"),
-          label = NULL,
-          value = ""
+          style = "
+            max-width: 630px;
+            width: 100%;
+            margin-top: 100px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            background-color: rgb(22, 102, 142);
+            border-radius: 8px;
+            padding-top: 30px;
+            padding-bottom: 30px;
+          ",
+          div(
+            id = ns("qrcode")
+          ),
+          h2(
+            style = "color: #FFF;",
+            "Enter your two-factor authentication code"
+          ),
+          br(),
+          div(
+            style = "
+              display: flex;
+              justify-content: center;
+            ",
+            textInput(
+              ns("two_fa_code"),
+              label = NULL,
+              value = ""
+            )
+          )
         )
       )
     ),

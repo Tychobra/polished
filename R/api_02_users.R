@@ -2,6 +2,7 @@
 #'
 #' @param user_uid an optional user uid.
 #' @param email an optional user email.
+#' @param email include_2fa boolean, whether or not to include the 2FA information.
 #'
 #' @inheritParams get_apps
 #'
@@ -32,12 +33,14 @@
 get_users <- function(
   user_uid = NULL,
   email = NULL,
+  include_2fa = FALSE,
   api_key = get_api_key()
 ) {
 
   query_out <- list()
   query_out$user_uid <- user_uid
   query_out$email <- email
+  query_out$include_2fa <- include_2fa
 
   resp <- httr::GET(
     url = paste0(.polished$api_url, "/users"),

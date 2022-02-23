@@ -96,9 +96,9 @@ secure_ui <- function(
       )
     }
 
-
     user <- NULL
     polished_user <- NULL
+    is_2fa_verified <- NULL
     if (!is.null(hashed_cookie) && length(hashed_cookie) > 0) {
 
       tryCatch({
@@ -108,12 +108,23 @@ secure_ui <- function(
         )
 
         user <- user_res$content
+
         if (!is.null(user)) {
 
           if (is.na(user$signed_in_as)) {
             polished_user <- user[
               c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified", "roles")
             ]
+
+            if (isTRUE(.polished$is_2fa_required)) {
+              two_fa_res <- get_users(
+                user_uid = user$user_uid,
+                include_2fa = TRUE
+              )
+
+              is_2fa_verified <- two_fa_res$content$two_fa_verified
+            }
+
           } else {
             polished_user <- get_signed_in_as_user(
               user_uid = user$signed_in_as
@@ -121,6 +132,7 @@ secure_ui <- function(
           }
 
         }
+
 
 
       }, error = function(error) {
@@ -219,45 +231,58 @@ secure_ui <- function(
       } else if (isTRUE(user$email_verified) ||
           isFALSE(.polished$is_email_verification_required)) {
 
+        if (isTRUE(.polished$is_2fa_required) && isFALSE(is_2fa_verified)) {
 
-        if (isTRUE(user$is_admin)) {
+          page_out <- tagList(
+            two_fa_module_ui("two_fa"),
+            tags$script(src = "polish/js/router.js?version=4"),
+            tags$script(src = "polish/js/polished_session.js?version=2"),
+            tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
+          )
 
-          if (identical(page_query, "admin")) {
+        } else {
 
-            # go to Admin Panel
-            page_out <- tagList(
-              admin_module_ui("admin", custom_admin_ui, options = admin_ui_options),
-              tags$script(src = "polish/js/router.js?version=4"),
-              tags$script(src = "polish/js/polished_session.js?version=2"),
-              tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-              sentry_ui_out("admin_panel")
-            )
+          if (isTRUE(user$is_admin)) {
+
+            if (identical(page_query, "admin")) {
+
+              # go to Admin Panel
+              page_out <- tagList(
+                admin_module_ui("admin", custom_admin_ui, options = admin_ui_options),
+                tags$script(src = "polish/js/router.js?version=4"),
+                tags$script(src = "polish/js/polished_session.js?version=2"),
+                tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
+                sentry_ui_out("admin_panel")
+              )
+            } else {
+
+              # go to Shiny app with admin button.  User is an admin.
+              page_out <- tagList(
+                ui,
+                custom_admin_button_ui,
+                tags$script(src = "polish/js/router.js?version=4"),
+                tags$script(src = "polish/js/polished_session.js?version=2"),
+                tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
+                sentry_ui_out("shiny_app")
+              )
+            }
+
+
           } else {
 
-            # go to Shiny app with admin button.  User is an admin.
+            # go to Shiny app without admin button.  User is not an admin
             page_out <- tagList(
               ui,
-              custom_admin_button_ui,
               tags$script(src = "polish/js/router.js?version=4"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
               sentry_ui_out("shiny_app")
             )
-          }
 
+          } # end is_admin check
 
-        } else {
+        } # end 2FA check
 
-          # go to Shiny app without admin button.  User is not an admin
-          page_out <- tagList(
-            ui,
-            tags$script(src = "polish/js/router.js?version=4"),
-            tags$script(src = "polish/js/polished_session.js?version=2"),
-            tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-            sentry_ui_out("shiny_app")
-          )
-
-        } # end is_admin check
       } else {
         # email is not verified.
         # go to email verification page
