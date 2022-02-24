@@ -36,7 +36,7 @@
 #' Set to \code{NULL} to force Sign Out at session end. This argument is passed to
 #' the `expires` option in js-cookie: \url{https://github.com/js-cookie/js-cookie#expires}.
 #' Default value is \code{365L} (i.e. 1 year)
-#' @param is_2fa_required boolean specifying whether or not 2 factor authentication is required.  Defaults
+#' @param is_two_fa_required boolean specifying whether or not 2 factor authentication is required.  Defaults
 #' to \code{FALSE}.
 #'
 #' @export
@@ -75,7 +75,7 @@ polished_config <- function(
   sentry_dsn = NULL,
   cookie_expires = 365L,
   is_auth_required = TRUE,
-  is_2fa_required = FALSE
+  is_two_fa_required = FALSE
 ) {
 
   if (!(length(api_key) == 1 && is.character(api_key))) {
@@ -129,8 +129,8 @@ call. = FALSE
   if (!(length(is_email_verification_required) == 1 && is.logical(is_email_verification_required))) {
     stop("invalid `is_email_verification_required` argument passed to `polished_config()`", call. = FALSE)
   }
-  if (!(length(is_2fa_required) == 1 && is.logical(is_2fa_required))) {
-    stop("invalid `is_2fa_required` argument passed to `polished_config()`", call. = FALSE)
+  if (!(length(is_two_fa_required) == 1 && is.logical(is_two_fa_required))) {
+    stop("invalid `is_two_fa_required` argument passed to `polished_config()`", call. = FALSE)
   }
 
 
@@ -146,7 +146,7 @@ call. = FALSE
   assign("sentry_dsn", sentry_dsn, envir = .polished)
   assign("cookie_expires", cookie_expires, envir = .polished)
   assign("is_auth_required", is_auth_required, envir = .polished)
-  assign("is_2fa_required", is_2fa_required, envir = .polished)
+  assign("is_two_fa_required", is_two_fa_required, envir = .polished)
 
 
   if (!is.null(firebase_config)) {

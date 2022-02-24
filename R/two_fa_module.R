@@ -12,6 +12,7 @@ two_fa_module_ui <- function(id) {
   ns <- NS(id)
 
   fluidPage(
+    shinyjs::useShinyjs(),
     tags$head(
       tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
       shinyFeedback::useShinyFeedback(feedback = FALSE, toastr = TRUE)
@@ -45,10 +46,24 @@ two_fa_module_ui <- function(id) {
             padding-top: 30px;
             padding-bottom: 30px;
           ",
-          div(
-            id = ns("qrcode")
-          ),
-          h2(
+          shinyjs::hidden(div(
+            id = ns("qrcode_div"),
+            style = "text-center",
+            h3(
+              style = "color: #FFF;",
+              "Scan QR in authenticator app"
+            ),
+            br(),
+            br(),
+            div(
+              style = "
+                display: flex;
+                justify-content: center;
+              ",
+              id = ns("qrcode")
+            )
+          )),
+          h3(
             style = "color: #FFF;",
             "Enter your two-factor authentication code"
           ),
@@ -68,7 +83,7 @@ two_fa_module_ui <- function(id) {
       )
     ),
     tags$script(src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"),
-    tags$script(src = "polish/js/two_fa_module.js?version=4"),
+    tags$script(src = "polish/js/two_fa_module.js?version=3"),
     tags$script(paste0("two_fa_module('", ns(''), "')"))
   )
 }
@@ -80,10 +95,9 @@ two_fa_module_ui <- function(id) {
 #' @param output the Shiny server output
 #' @param session the Shiny server session
 #'
-#' @importFrom shiny observeEvent reactivePoll
+#' @importFrom shiny reactive observeEvent
 #' @importFrom shinyFeedback showToast
-#' @importFrom httr GET POST content status_code
-#' @importFrom stats runif
+#' @importFrom otp TOTP
 #'
 #' @noRd
 #'
@@ -93,13 +107,13 @@ two_fa_module <- function(input, output, session) {
 
     out <- NULL
     tryCatch({
-
+      req(session$userData$user()$user_uid)
       # TODO: add option to get the 2FA code to get_user
-      hold <- get_user(
+      hold <- get_users(
         user_uid = session$userData$user()$user_uid,
-        app_uid = .polished$app_uid#,
-        #include_two_fa = TRUE
+        include_two_fa = TRUE
       )
+
       out <- hold$content$two_fa_code
 
     }, error = function(err) {
@@ -107,7 +121,7 @@ two_fa_module <- function(input, output, session) {
       msg <- "unable to get 2FA code"
       print(msg)
       print(err)
-      showToast(msg)
+      showToast("error", msg)
 
       invisible(NULL)
     })
@@ -115,23 +129,26 @@ two_fa_module <- function(input, output, session) {
     out
   })
 
-  time_pass <- reactiveVal(NULL)
+  totp_obj <- reactiveVal(NULL)
+  totp_secret <- reactiveVal("")
   observeEvent(two_fa_code(), {
 
     if (is.na(two_fa_code())) {
       # 2FA code has not been successfully verified and save to database, so create a
       # new secret
-      base_32_secret <- sample(c(LETTERS, 2:7), size = 16, replace = TRUE)
+      base_32_secret <- paste(sample(c(LETTERS, 2:7), size = 16, replace = TRUE), collapse = "")
+      shinyjs::showElement("qrcode_div")
     } else {
       base_32_secret <- two_fa_code()
     }
-    time_pass(TOTP$new(base_32_secret))
+    totp_obj(otp::TOTP$new(base_32_secret))
+    totp_secret(base_32_secret)
 
     # send the base 32 secret to the front end to generate the QR code using javascript
     session$sendCustomMessage(
       session$ns("create_qrcode"),
       message = list(
-        "base_32_secret" = base_32_secret
+        "url" = utils::URLencode(paste0("otpauth://totp/", session$userData$user()$email, "?secret=", base_32_secret, "&issuer=", .polished$app_name))
       )
     )
 
@@ -140,18 +157,50 @@ two_fa_module <- function(input, output, session) {
 
 
   observeEvent(input$two_fa_code, {
-    hold_time_pass <- time_pass()
+    hold_code <- input$two_fa_code
+    hold_totp_obj <- totp_obj()
+    hold_user <- session$userData$user()
 
-    if (nchar(input$two_fa_code) == 6) {
-      browser()
-      code <- hold_time_pass$now()
+    if (nchar(hold_code) == 6) {
 
-      is_verified <- hold_time_pass$verify(code)
+      is_verified <- hold_totp_obj$verify(hold_code)
 
-      if (isTRUE(is_verified)) {
+      if (!is.null(is_verified)) {
 
-        # user entered the time password correctly.
+        tryCatch({
+          # user entered the time password correctly.
+          if (is.na(two_fa_code())) {
 
+            update_user(
+              user_uid = hold_user$user_uid,
+              user_data = list(
+                two_fa_code = totp_secret()
+              )
+            )
+
+          }
+
+          update_session(
+            session_uid = hold_user$session_uid,
+            session_data = list(
+              two_fa_verified = TRUE
+            )
+          )
+
+          session$reload()
+
+        }, error = function(err) {
+
+          msg <- "unable to verify 2FA code"
+          print(msg)
+          print(err)
+          showToast("error", msg)
+
+          invisible(NULL)
+        })
+
+      } else {
+        showToast("error", "Invalid 2FA code")
       }
 
     }

@@ -19,5 +19,5 @@ polished:::set_api_url(
 polished_config(
   app_name = "polished_example_01",
   api_key = app_config$api_key,
-  is_2fa_required = TRUE
+  is_two_fa_required = TRUE
 )

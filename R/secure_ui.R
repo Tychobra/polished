@@ -98,7 +98,6 @@ secure_ui <- function(
 
     user <- NULL
     polished_user <- NULL
-    is_2fa_verified <- NULL
     if (!is.null(hashed_cookie) && length(hashed_cookie) > 0) {
 
       tryCatch({
@@ -116,19 +115,12 @@ secure_ui <- function(
               c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified", "roles")
             ]
 
-            if (isTRUE(.polished$is_2fa_required)) {
-              two_fa_res <- get_users(
-                user_uid = user$user_uid,
-                include_2fa = TRUE
-              )
-
-              is_2fa_verified <- two_fa_res$content$two_fa_verified
-            }
-
           } else {
             polished_user <- get_signed_in_as_user(
               user_uid = user$signed_in_as
             )
+            polished_user$session_uid <- user$session_uid
+            polished_user$hashed_cookie <- user$hashed_cookie
           }
 
         }
@@ -231,7 +223,7 @@ secure_ui <- function(
       } else if (isTRUE(user$email_verified) ||
           isFALSE(.polished$is_email_verification_required)) {
 
-        if (isTRUE(.polished$is_2fa_required) && isFALSE(is_2fa_verified)) {
+        if (isTRUE(.polished$is_two_fa_required) && isFALSE(user$two_fa_verified)) {
 
           page_out <- tagList(
             two_fa_module_ui("two_fa"),

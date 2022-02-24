@@ -64,7 +64,8 @@ secure_server <- function(
           is_admin = TRUE,
           hashed_cookie = character(0),
           email_verified = TRUE,
-          roles = NA
+          roles = NA,
+          two_fa_verified = TRUE
         ))
 
         shiny::updateQueryString(
@@ -139,7 +140,7 @@ secure_server <- function(
           }
 
           user_out <- global_user[
-            c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified", "roles")
+            c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified", "roles", "two_fa_verified")
           ]
 
           session$userData$user(user_out)
@@ -152,6 +153,7 @@ secure_server <- function(
 
           # set email verified to TRUE, so that you go directly to app
           signed_in_as_user$email_verified <- TRUE
+          signed_in_as_user$two_fa_verified <- TRUE
           session$userData$user(signed_in_as_user)
         }
       }
@@ -176,8 +178,14 @@ secure_server <- function(
           isTRUE(.polished$admin_mode) ||
           identical(query_list$page, 'admin')) TRUE else FALSE
 
+        if (.polished$is_two_fa_required && !isTRUE(hold_user$two_fa_verified)) {
 
-        if (isTRUE(hold_user$is_admin) && isTRUE(is_on_admin_page)) {
+          shiny::callModule(
+            two_fa_module,
+            "two_fa"
+          )
+
+        } else if (isTRUE(hold_user$is_admin) && isTRUE(is_on_admin_page)) {
 
 
           shiny::callModule(
