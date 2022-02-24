@@ -12,23 +12,16 @@ two_fa_module_ui <- function(id) {
   ns <- NS(id)
 
   fluidPage(
+    style = "background-color: #eee; height: 100vh;",
+    tags$style("
+      input {
+        text-align: right;
+      }
+    "),
     shinyjs::useShinyjs(),
     tags$head(
       tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
       shinyFeedback::useShinyFeedback(feedback = FALSE, toastr = TRUE)
-    ),
-    shinyFeedback::useShinyFeedback(),
-    shiny::fluidRow(
-      shiny::column(
-        12,
-        br(),
-        shiny::actionButton(
-          ns("sign_out"),
-          label = "Sign Out",
-          icon("sign-out-alt"),
-          class = "pull-right"
-        )
-      )
     ),
     shiny::fluidRow(
       shiny::column(
@@ -37,22 +30,18 @@ two_fa_module_ui <- function(id) {
           style = "
             max-width: 630px;
             width: 100%;
-            margin-top: 100px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 150px auto;
             text-align: center;
-            background-color: rgb(22, 102, 142);
+            background-color: #FFF;
             border-radius: 8px;
             padding-top: 30px;
-            padding-bottom: 30px;
+            padding-bottom: 35px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
           ",
           shinyjs::hidden(div(
             id = ns("qrcode_div"),
             style = "text-center",
-            h3(
-              style = "color: #FFF;",
-              "Scan QR in authenticator app"
-            ),
+            h3("Scan QR in authenticator app"),
             br(),
             br(),
             div(
@@ -64,7 +53,6 @@ two_fa_module_ui <- function(id) {
             )
           )),
           h3(
-            style = "color: #FFF;",
             "Enter your two-factor authentication code"
           ),
           br(),
@@ -77,6 +65,17 @@ two_fa_module_ui <- function(id) {
               ns("two_fa_code"),
               label = NULL,
               value = ""
+            ),
+          ),
+          br(),
+          div(
+            style = "
+              display: flex;
+              justify-content: center;
+            ",
+            actionLink(
+              ns("sign_out"),
+              "Return to sign in page"
             )
           )
         )
@@ -204,6 +203,22 @@ two_fa_module <- function(input, output, session) {
       }
 
     }
+
+  })
+
+  observeEvent(input$sign_out, {
+
+    tryCatch({
+      sign_out_from_shiny()
+      session$reload()
+    }, error = function(err) {
+      msg <- "error connecting to server"
+      print(msg)
+      print(err)
+      showToast("error", msg)
+
+      invisible(NULL)
+    })
 
   })
 
