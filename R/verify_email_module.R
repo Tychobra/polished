@@ -18,7 +18,6 @@ verify_email_module_ui <- function(id) {
       tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
       shinyFeedback::useShinyFeedback(feedback = FALSE, toastr = TRUE)
     ),
-    shinyFeedback::useShinyFeedback(),
     shiny::fluidRow(
       shiny::column(
         12,
