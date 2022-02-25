@@ -15,7 +15,8 @@ polished_config(
   is_email_verification_required = TRUE,
   sentry_dsn = NULL,
   cookie_expires = 365L,
-  is_auth_required = TRUE
+  is_auth_required = TRUE,
+  is_two_fa_required = FALSE
 )
 
 global_sessions_config(...)
@@ -58,6 +59,9 @@ Default value is \code{365L} (i.e. 1 year)}
 in to access the app.  It can be useful to set this argument to \code{FALSE} if you want to
 allow users to do certain actions (such as viewing charts and tables) without signing in,
 and only require users to sign in if they want to save data to your database.}
+
+\item{is_two_fa_required}{boolean specifying whether or not 2 factor authentication is required.  Defaults
+to \code{FALSE}.}
 
 \item{...}{arguments to pass to \code{\link{polished_config}}}
 }

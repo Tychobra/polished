@@ -2,6 +2,7 @@
 #'
 #' @param user_uid an optional user uid.
 #' @param email an optional user email.
+#' @param include_two_fa boolean, whether or not to include the 2FA information.
 #'
 #' @inheritParams get_apps
 #'
@@ -32,12 +33,14 @@
 get_users <- function(
   user_uid = NULL,
   email = NULL,
+  include_two_fa = FALSE,
   api_key = get_api_key()
 ) {
 
   query_out <- list()
   query_out$user_uid <- user_uid
   query_out$email <- email
+  query_out$include_two_fa <- include_two_fa
 
   resp <- httr::GET(
     url = paste0(.polished$api_url, "/users"),
@@ -121,4 +124,35 @@ delete_user <- function(user_uid, api_key = get_api_key()) {
   )
 
   polished_api_res(resp)
+}
+
+#' Polished API - Update a user
+#'
+#' @param user_uid the uid of the user to be updated.
+#' @param user_data list of data to update.
+#'
+#' @inheritParams get_apps
+#'
+#' @export
+#'
+#' @seealso [get_users()] [add_user()]
+#'
+#' @importFrom httr PUT authenticate
+#'
+update_user <- function(user_uid, user_data, api_key = get_api_key()) {
+
+  res <- httr::PUT(
+    url = paste0(.polished$api_url, "/users"),
+    httr::authenticate(
+      user = api_key,
+      password = ""
+    ),
+    body = list(
+      "user_uid" = user_uid,
+      "dat" = user_data
+    ),
+    encode = "json"
+  )
+
+  polished_api_res(res)
 }

@@ -1,3 +1,12 @@
+# polished v0.6.1.9000
+
+* improved UI of email verification page.
+* `update_user()` API wrapper has been created.
+* 2 factor authentication using TOTP has been implemented.  This works with authenticator apps
+like Google Authenticator.  You can eneable it by setting the `is_two_fa_required` argument of
+`polished_config()` to `TRUE`.
+* bug fix - fixed auto email verification check on email verification page.
+
 # polished v0.6.1
 
 * Fixed bug with `is_auth_required` argument for `polished_config()`.
