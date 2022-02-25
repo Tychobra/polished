@@ -1,9 +1,9 @@
-#' 2 Factor Auth page ui
+#' 2 Factor Auth page UI
 #'
 #' @param id the Shiny module id
 #'
 #' @importFrom htmltools tags
-#' @importFrom shiny fluidPage fluidRow column actionLink textInput
+#' @importFrom shiny fluidPage fluidRow NS column actionLink textInput
 #' @importFrom shinyFeedback useShinyFeedback
 #' @importFrom shinyjs useShinyjs hidden
 #'
@@ -95,10 +95,11 @@ two_fa_module_ui <- function(id) {
 #' @param output the Shiny server output
 #' @param session the Shiny server session
 #'
-#' @importFrom shiny reactive observeEvent
+#' @importFrom shiny reactive observeEvent req reactiveVal 
 #' @importFrom shinyFeedback showToast
 #' @importFrom otp TOTP
 #' @importFrom shinyjs showElement
+#' @importFrom utils URLencode
 #'
 #' @noRd
 #'
