@@ -62,6 +62,22 @@ test_that("can get a user by user_uid", {
   expect_equal(nrow(api_res$content), 1L)
 })
 
+### UPDATE ------
+test_that("can update a user", {
+  api_res <- update_user(
+    user_uid = test_user_info$uid,
+    user_data = list(
+      "two_fa_code" = "placeholder_code"
+    )
+  )
+
+  expect_equal(length(api_res), 2L)
+  expect_equal(status_code(api_res$response), 200L)
+  expect_equal(length(api_res$content), 1L)
+  expect_equal(api_res$content$message, "success")
+})
+
+
 ### DELETE ------
 test_that("can delete a user", {
 
