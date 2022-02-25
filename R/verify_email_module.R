@@ -3,7 +3,7 @@
 #' @param id the Shiny module id
 #'
 #' @importFrom htmltools tags h1
-#' @importFrom shiny fluidPage fluidRow column actionButton
+#' @importFrom shiny fluidPage fluidRow column actionButton actionLink
 #' @importFrom shinyFeedback useShinyFeedback
 #'
 #' @noRd
@@ -13,7 +13,7 @@ verify_email_module_ui <- function(id) {
 
   firebase_config <- .polished$firebase_config
 
-  fluidPage(
+  shiny::fluidPage(
     style = "background-color: #eee; height: 100vh;",
     tags$head(
       tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
@@ -48,7 +48,7 @@ verify_email_module_ui <- function(id) {
               display: flex;
               justify-content: center;
             ",
-            actionLink(
+            shiny::actionLink(
               ns("sign_out"),
               "Return to sign in page"
             )

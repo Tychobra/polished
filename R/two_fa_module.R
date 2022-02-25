@@ -2,9 +2,10 @@
 #'
 #' @param id the Shiny module id
 #'
-#' @importFrom htmltools tags h1
-#' @importFrom shiny fluidPage fluidRow column actionButton
+#' @importFrom htmltools tags
+#' @importFrom shiny fluidPage fluidRow column actionLink textInput
 #' @importFrom shinyFeedback useShinyFeedback
+#' @importFrom shinyjs useShinyjs hidden
 #'
 #' @noRd
 #'
@@ -26,7 +27,7 @@ two_fa_module_ui <- function(id) {
     shiny::fluidRow(
       shiny::column(
         12,
-        div(
+        tags$div(
           style = "
             max-width: 630px;
             width: 100%;
@@ -38,13 +39,13 @@ two_fa_module_ui <- function(id) {
             padding-bottom: 35px;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
           ",
-          shinyjs::hidden(div(
+          shinyjs::hidden(tags$div(
             id = ns("qrcode_div"),
             style = "text-center",
-            h3("Scan QR in authenticator app"),
-            br(),
-            br(),
-            div(
+            tags$h3("Scan QR in authenticator app"),
+            tags$br(),
+            tags$br(),
+            tags$div(
               style = "
                 display: flex;
                 justify-content: center;
@@ -52,28 +53,28 @@ two_fa_module_ui <- function(id) {
               id = ns("qrcode")
             )
           )),
-          h3(
+          tags$h3(
             "Enter your two-factor authentication code"
           ),
-          br(),
-          div(
+          tags$br(),
+          tags$div(
             style = "
               display: flex;
               justify-content: center;
             ",
-            textInput(
+            shiny::textInput(
               ns("two_fa_code"),
               label = NULL,
               value = ""
             )
           ),
-          br(),
-          div(
+          tags$br(),
+          tags$div(
             style = "
               display: flex;
               justify-content: center;
             ",
-            actionLink(
+            shiny::actionLink(
               ns("sign_out"),
               "Return to sign in page"
             )
@@ -97,6 +98,7 @@ two_fa_module_ui <- function(id) {
 #' @importFrom shiny reactive observeEvent
 #' @importFrom shinyFeedback showToast
 #' @importFrom otp TOTP
+#' @importFrom shinyjs showElement
 #'
 #' @noRd
 #'
