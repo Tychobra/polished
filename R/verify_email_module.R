@@ -92,15 +92,17 @@ verify_email_module <- function(input, output, session) {
 
           user <- user_res$content
 
-          if (identical(httr::status_code(user_res), 200L)) {
-            return(user)
-          } else {
-            stop(user, call. = FALSE)
-          }
+
+          return(user)
+
         }, error = function(err) {
 
+          msg <- "unable to check email verification statuc"
+          print(msg)
           print(err)
+          showToast("error", msg)
 
+          invisible(NULL)
         })
       }
 
