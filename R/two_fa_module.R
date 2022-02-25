@@ -65,7 +65,7 @@ two_fa_module_ui <- function(id) {
               ns("two_fa_code"),
               label = NULL,
               value = ""
-            ),
+            )
           ),
           br(),
           div(
