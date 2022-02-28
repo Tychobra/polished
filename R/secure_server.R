@@ -187,25 +187,24 @@ secure_server <- function(
 
         } else if (isTRUE(hold_user$is_admin) && isTRUE(is_on_admin_page)) {
 
+          if (is.null(custom_admin_server)) {
+            shiny::callModule(
+              admin_module,
+              "admin"
+            )
+          } else {
 
-          shiny::callModule(
-            admin_module,
-            "admin"
-          )
-
-          # custom admin server functionality
-          if (isTRUE(!is.null(custom_admin_server))) {
+            # custom admin server functionality
             if (names(formals(custom_admin_server))[[1]] == "id") {
               # new-style Shiny module
-              custom_admin_server("custom_admin")
+              custom_admin_server("admin")
             } else {
               # old-style Shiny module
               shiny::callModule(
                 custom_admin_server,
-                "custom_admin"
+                "admin"
               )
             }
-
 
           }
         } else {

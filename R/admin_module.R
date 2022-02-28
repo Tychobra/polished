@@ -9,7 +9,6 @@
 #' @param include_go_to_shiny_app_button whether or not to include the button to go to
 #' the Shiny app.  This argument is set to \code{FALSE} when `polished` is in "admin_mode".
 #'
-#' @inheritParams secure_ui
 #'
 #' @importFrom shiny actionButton NS icon
 #' @importFrom shinydashboard dashboardHeader dashboardPage dashboardSidebar dashboardBody sidebarMenu menuItem tabItems
@@ -19,15 +18,14 @@
 #'
 #' @return the UI for the "Admin Panel"
 #'
-#' @noRd
+#' @export
 #'
-admin_module_ui <- function(id, custom_admin_ui = NULL,
+admin_module_ui <- function(id,
   options = default_admin_ui_options(),
   include_go_to_shiny_app_button = TRUE
 ) {
   ns <- shiny::NS(id)
 
-  stopifnot(is.null(custom_admin_ui) || names(custom_admin_ui) == c("menu_items", "tab_items"))
 
 
   # don't show profile dropdown if in Admin mode.  User cannot log out of admin mode.
@@ -44,49 +42,27 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 
 
 
-  if (is.null(custom_admin_ui$menu_items)) {
-    sidebar <- shinydashboard::dashboardSidebar(
-      shinydashboard::sidebarMenu(
-        id = ns("sidebar_menu"),
-        shinydashboard::menuItem(
-          text = "User Access",
-          tabName = "user_access",
-          icon = shiny::icon("users")
-        ),
+
+  sidebar <- shinydashboard::dashboardSidebar(
+    shinydashboard::sidebarMenu(
+      id = ns("sidebar_menu"),
+      shinydashboard::menuItem(
+        text = "User Access",
+        tabName = "user_access",
+        icon = shiny::icon("users")
+      ),
 
 
-        options$sidebar_branding
-      )
+      options$sidebar_branding
     )
-  } else {
-    sidebar <- shinydashboard::dashboardSidebar(
-      shinydashboard::sidebarMenu(
-        id = ns("sidebar_menu"),
-        shinydashboard::menuItem(
-          text = "User Access",
-          tabName = "user_access",
-          icon = shiny::icon("users")
-        ),
-
-        custom_admin_ui$menu_items,
-
-        options$sidebar_branding
-      )
-    )
-  }
+  )
 
 
-  if (is.null(custom_admin_ui$tab_items)) {
-    tab_items <- shinydashboard::tabItems(
-      user_access_module_ui(ns("user_access"))
-    )
-  } else {
-    tab_items <- htmltools::tags$div(
-      class = "tab-content",
-      user_access_module_ui(ns("user_access")),
-      custom_admin_ui$tab_items
-    )
-  }
+
+  tab_items <- shinydashboard::tabItems(
+    user_access_module_ui(ns("user_access"))
+  )
+
 
   if (isTRUE(include_go_to_shiny_app_button)) {
     shiny_app_button <- htmltools::tags$div(
@@ -131,7 +107,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 }
 
 
-#' The server logic for the "Admin Panel" dashboard
+#' The server logic for the defaul "Admin Panel" dashboard
 #'
 #' The `shiny` module server logic for the `polished` Admin Panel, accessible to Admin users.
 #'
@@ -141,7 +117,7 @@ admin_module_ui <- function(id, custom_admin_ui = NULL,
 #'
 #' @importFrom shiny callModule observeEvent
 #'
-#' @noRd
+#' @export
 #'
 admin_module <- function(input, output, session) {
   ns <- session$ns
