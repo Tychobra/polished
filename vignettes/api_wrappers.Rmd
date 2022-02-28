@@ -29,6 +29,7 @@ Users  - functions to manage your account's users.
 
  - get_users()
  - add_user()
+ - update_user()
  - delete_user()
  
 App Users  - functions to manage user access to your Shiny apps.  These will be the most frequently used
