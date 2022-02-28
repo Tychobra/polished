@@ -7,14 +7,8 @@
 #' @param ui UI of the application.
 #' @param sign_in_page_ui Either \code{NULL}, the default (See \code{\link{sign_in_ui_default}}), or the HTML, CSS, and JavaScript
 #' to use for the UI of the Sign In page.
-#' @param custom_admin_ui Either \code{NULL}, the default, or a list of 2 Shiny module UI functions
-#' to add additional \code{shinydashboard} tabs to the \code{polished} Admin Panel. The list must be in the form:
-#' \preformatted{
-#' list(
-#'   "menu_items" = <your_custom_admin_menu_ui("custom_admin")>,
-#'   "tab_items" = <your_custom_admin_tabs_ui("custom_admin")>
-#' )
-#' }
+#' @param custom_admin_ui Either \code{NULL}, the default, or the custom UI for a Shiny app to
+#' display on the \code{polished} Admin Panel.
 #' @param custom_admin_button_ui Either \code{admin_button_ui()}, the default, or your custom
 #' UI to take Admins from the custom Shiny app to the \code{polished} Admin Panel.
 #' @param admin_ui_options list of HTML elements to customize branding of the \code{polished} Admin Panel.  Valid
@@ -50,16 +44,28 @@ secure_ui <- function(
     if (isTRUE(.polished$admin_mode)) {
 
       # go to Admin Panel
-      return(tagList(
-        admin_module_ui(
-          "admin",
+      if (is.null(custom_admin_ui)) {
+        # default admin panel
+        return(tagList(
+          admin_module_ui(
+            "admin",
+            options = admin_ui_options,
+            include_go_to_shiny_app_button = FALSE
+          ),
+          tags$script(src = "polish/js/polished_session.js?version=2"),
+          tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
+        ))
+      } else {
+        # custom, user provided, admin panel
+        return(tagList(
           custom_admin_ui,
-          options = admin_ui_options,
-          include_go_to_shiny_app_button = FALSE
-        ),
-        tags$script(src = "polish/js/polished_session.js?version=2"),
-        tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
-      ))
+          tags$script(src = "polish/js/polished_session.js?version=2"),
+          tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
+        ))
+      }
+
+
+
 
     }
 
@@ -239,13 +245,24 @@ secure_ui <- function(
             if (identical(page_query, "admin")) {
 
               # go to Admin Panel
-              page_out <- tagList(
-                admin_module_ui("admin", custom_admin_ui, options = admin_ui_options),
-                tags$script(src = "polish/js/router.js?version=4"),
-                tags$script(src = "polish/js/polished_session.js?version=2"),
-                tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-                sentry_ui_out("admin_panel")
-              )
+              if (is.null(custom_admin_ui)) {
+                page_out <- tagList(
+                  admin_module_ui("admin", options = admin_ui_options),
+                  tags$script(src = "polish/js/router.js?version=4"),
+                  tags$script(src = "polish/js/polished_session.js?version=2"),
+                  tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
+                  sentry_ui_out("default_admin_panel")
+                )
+              } else {
+                page_out <- tagList(
+                  custom_admin_ui,
+                  tags$script(src = "polish/js/router.js?version=4"),
+                  tags$script(src = "polish/js/polished_session.js?version=2"),
+                  tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
+                  sentry_ui_out("custom_admin_panel")
+                )
+              }
+
             } else {
 
               # go to Shiny app with admin button.  User is an admin.

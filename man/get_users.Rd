@@ -47,5 +47,5 @@ and the \code{email} will be ignored.  If the user does not exists, a zero row t
 will be returned.
 }
 \seealso{
-\code{\link[=add_user]{add_user()}} \code{\link[=delete_user]{delete_user()}}
+\code{\link[=add_user]{add_user()}} \code{\link[=update_user]{update_user()}} \code{\link[=delete_user]{delete_user()}}
 }

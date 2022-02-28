@@ -18,14 +18,8 @@ secure_ui(
 \item{sign_in_page_ui}{Either \code{NULL}, the default (See \code{\link{sign_in_ui_default}}), or the HTML, CSS, and JavaScript
 to use for the UI of the Sign In page.}
 
-\item{custom_admin_ui}{Either \code{NULL}, the default, or a list of 2 Shiny module UI functions
-to add additional \code{shinydashboard} tabs to the \code{polished} Admin Panel. The list must be in the form:
-\preformatted{
-list(
-  "menu_items" = <your_custom_admin_menu_ui("custom_admin")>,
-  "tab_items" = <your_custom_admin_tabs_ui("custom_admin")>
-)
-}}
+\item{custom_admin_ui}{Either \code{NULL}, the default, or the custom UI for a Shiny app to
+display on the \code{polished} Admin Panel.}
 
 \item{custom_admin_button_ui}{Either \code{admin_button_ui()}, the default, or your custom
 UI to take Admins from the custom Shiny app to the \code{polished} Admin Panel.}

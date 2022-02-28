@@ -26,7 +26,7 @@
 #'
 #' @export
 #'
-#' @seealso [add_user()] [delete_user()]
+#' @seealso [add_user()] [update_user()] [delete_user()]
 #'
 #' @importFrom httr GET authenticate
 #'
@@ -68,7 +68,7 @@ get_users <- function(
 #'
 #' @export
 #'
-#' @seealso [get_users()] [delete_user()]
+#' @seealso [get_users()] [update_user()] [delete_user()]
 #'
 #' @importFrom httr POST authenticate
 #'
@@ -103,7 +103,7 @@ add_user <- function(email, api_key = get_api_key()) {
 #'
 #' @export
 #'
-#' @seealso [get_users()] [add_user()]
+#' @seealso [get_users()] [add_user()] [update_user()]
 #'
 #' @importFrom httr DELETE authenticate
 #'
@@ -135,7 +135,7 @@ delete_user <- function(user_uid, api_key = get_api_key()) {
 #'
 #' @export
 #'
-#' @seealso [get_users()] [add_user()]
+#' @seealso [get_users()] [add_user()] [delete_user()]
 #'
 #' @importFrom httr PUT authenticate
 #'

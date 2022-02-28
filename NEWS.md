@@ -1,5 +1,9 @@
 # polished v0.6.1.9000
 
+* the `custom_admin_ui` argument for `secure_ui` now takes a fully custom shiny app.  This allows
+users to now fully customize their Admin Panel.  Previously you could only add tabs to the existing
+default Admin Panel, but with this change, you can fully replace the default Admin Panel with a 
+custom Shiny app.
 * improved UI of email verification page.
 * `update_user()` API wrapper function has been created.
 * 2 factor authentication using TOTP has been implemented.  This works with authenticator apps

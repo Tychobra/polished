@@ -16,5 +16,5 @@ so that you do not need to supply this argument with each function call.}
 Polished API - Add a User
 }
 \seealso{
-\code{\link[=get_users]{get_users()}} \code{\link[=delete_user]{delete_user()}}
+\code{\link[=get_users]{get_users()}} \code{\link[=update_user]{update_user()}} \code{\link[=delete_user]{delete_user()}}
 }
