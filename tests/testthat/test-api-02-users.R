@@ -63,7 +63,7 @@ test_that("can get a user by user_uid", {
 })
 
 ### UPDATE ------
-test_that("can update a user", {
+test_that("can update a user's 2FA code", {
   api_res <- update_user(
     user_uid = test_user_info$uid,
     user_data = list(
@@ -77,6 +77,19 @@ test_that("can update a user", {
   expect_equal(api_res$content$message, "success")
 })
 
+test_that("can update a user's password to NA", {
+  api_res <- update_user(
+    user_uid = test_user_info$uid,
+    user_data = list(
+      "password" = NA
+    )
+  )
+
+  expect_equal(length(api_res), 2L)
+  expect_equal(status_code(api_res$response), 200L)
+  expect_equal(length(api_res$content), 1L)
+  expect_equal(api_res$content$message, "success")
+})
 
 ### DELETE ------
 test_that("can delete a user", {
