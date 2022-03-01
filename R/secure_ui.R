@@ -104,6 +104,7 @@ secure_ui <- function(
 
     user <- NULL
     polished_user <- NULL
+    force_sign_out <- FALSE
     if (!is.null(hashed_cookie) && length(hashed_cookie) > 0) {
 
       tryCatch({
@@ -133,11 +134,27 @@ secure_ui <- function(
 
 
 
-      }, error = function(error) {
+      }, error = function(err) {
         print("sign_in_ui_1")
-        print(error)
+
+        if (isTRUE(.polished$is_auth_required) && identical(err$message, "user not invited") && !identical(page_query, "sign_in")) {
+          force_sign_out <<- TRUE
+        }
+
+        print(err)
       })
     }
+
+    if (isTRUE(force_sign_out)) {
+      # send a random uuid as the polished_session.  This will trigger a session
+      # reload and a redirect to the sign in page
+      return(tagList(
+        tags$script(src = "polish/js/router.js?version=4"),
+        tags$script(src = "polish/js/polished_session.js?version=2"),
+        tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
+      ))
+    }
+
 
     request$polished_user <- polished_user
 
