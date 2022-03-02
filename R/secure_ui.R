@@ -119,7 +119,7 @@ secure_ui <- function(
 
           if (is.na(user$signed_in_as)) {
             polished_user <- user[
-              c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified", "roles")
+              c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified", "roles", "two_fa_verified")
             ]
 
           } else {
@@ -160,9 +160,9 @@ secure_ui <- function(
 
     if (is.function(ui)) {
       ui <- ui(request)
-    } else {
+      } else {
       ui <- (function(request) ui)()
-    }
+      }
     ui <- force(ui)
 
 
