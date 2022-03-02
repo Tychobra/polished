@@ -1,4 +1,6 @@
-#' admin_user_access_ui
+#' admin user access_ui
+#'
+#' Shiny module UI for the default user access tab in the \code{polished} Admin Panel.
 #'
 #' @param id the module id
 #'
@@ -8,7 +10,7 @@
 #' @importFrom htmltools br tags
 #' @importFrom DT DTOutput
 #'
-#' @noRd
+#' @export
 #'
 user_access_module_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -65,7 +67,10 @@ user_access_module_ui <- function(id) {
   )
 }
 
-#' admin_user_access
+#' admin user access module
+#'
+#' Server function for the default Shiny module to control user access in the \code{polished}
+#' Admin Panel.
 #'
 #' @param input the Shiny server input
 #' @param output the Shiny server output
@@ -81,7 +86,7 @@ user_access_module_ui <- function(id) {
 #' @importFrom lubridate force_tz as_datetime
 #' @importFrom rlang .data
 #'
-#' @noRd
+#' @export
 #'
 user_access_module <- function(input, output, session) {
   ns <- session$ns
