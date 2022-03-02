@@ -1,20 +1,21 @@
 #' the UI for a Shiny module to send a password reset email
 #'
 #' @param id the Shiny module \code{id}
+#' @param link_text text to use for the password reset link.
 #'
 #' @importFrom htmltools tagList
 #' @importFrom shiny actionLink NS
 #' @importFrom shinyFeedback useShinyFeedback
 #'
 #' @export
-send_password_reset_email_module_ui <- function(id) {
+send_password_reset_email_module_ui <- function(id, link_text = "Forgot your password?") {
   ns <- shiny::NS(id)
 
   tagList(
     shinyFeedback::useShinyFeedback(feedback = FALSE),
     shiny::actionLink(
       inputId = ns("reset_password"),
-      "Forgot your password?"
+      link_text
     )
   )
 }

@@ -6,6 +6,9 @@
 #' @param register_link The text that will be displayed in the link to go to the
 #' user registration page.  The default is \code{"First time user? Register here!"}.
 #' Set to \code{NULL} if you don't want to use the registration page.
+#' @param forgot_password_link The text that will be displayed in the link to go to the
+#' receive an email to reset your password.  The default is \code{"Forgot your password?"}.
+#' Set to \code{NULL} if you don't want to use the registration page.
 #'
 #' @importFrom shiny textInput actionButton NS actionLink
 #' @importFrom htmltools tagList tags div h1 br hr
@@ -17,7 +20,8 @@
 #'
 sign_in_module_ui <- function(
   id,
-  register_link = "First time user? Register here!"
+  register_link = "First time user? Register here!",
+  password_reset_link = "Forgot your password?"
 ) {
   ns <- shiny::NS(id)
 
@@ -117,6 +121,12 @@ sign_in_module_ui <- function(
     )
   )
 
+  if (is.null(password_reset_link)) {
+    pass_link_ui <- NULL
+  } else {
+    pass_link_ui <- send_password_reset_email_module_ui(ns("reset_password"), password_reset_link)
+  }
+
   email_ui <- tags$div(
     id = ns("email_ui"),
     tags$div(
@@ -155,7 +165,7 @@ sign_in_module_ui <- function(
           )
         },
         br(),
-        send_password_reset_email_module_ui(ns("reset_password"))
+        pass_link_ui
       )
     ),
 

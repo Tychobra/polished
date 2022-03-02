@@ -4,10 +4,12 @@
 \alias{send_password_reset_email_module_ui}
 \title{the UI for a Shiny module to send a password reset email}
 \usage{
-send_password_reset_email_module_ui(id)
+send_password_reset_email_module_ui(id, link_text = "Forgot your password?")
 }
 \arguments{
 \item{id}{the Shiny module \code{id}}
+
+\item{link_text}{text to use for the password reset link.}
 }
 \description{
 the UI for a Shiny module to send a password reset email

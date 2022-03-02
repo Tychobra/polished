@@ -4,13 +4,21 @@
 \alias{sign_in_module_ui}
 \title{UI for the Sign In & Register pages}
 \usage{
-sign_in_module_ui(id, register_link = "First time user? Register here!")
+sign_in_module_ui(
+  id,
+  register_link = "First time user? Register here!",
+  password_reset_link = "Forgot your password?"
+)
 }
 \arguments{
 \item{id}{the Shiny module \code{id}}
 
 \item{register_link}{The text that will be displayed in the link to go to the
 user registration page.  The default is \code{"First time user? Register here!"}.
+Set to \code{NULL} if you don't want to use the registration page.}
+
+\item{forgot_password_link}{The text that will be displayed in the link to go to the
+receive an email to reset your password.  The default is \code{"Forgot your password?"}.
 Set to \code{NULL} if you don't want to use the registration page.}
 }
 \description{
