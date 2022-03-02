@@ -128,6 +128,8 @@ secure_ui <- function(
             )
             polished_user$session_uid <- user$session_uid
             polished_user$hashed_cookie <- user$hashed_cookie
+            polished_user$email_verified <- user$email_verified
+            polished_user$two_fa_verified <- user$two_fa_verified
           }
 
         }

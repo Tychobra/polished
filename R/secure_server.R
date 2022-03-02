@@ -152,8 +152,8 @@ secure_server <- function(
           signed_in_as_user$hashed_cookie <- global_user$hashed_cookie
 
           # set email verified to TRUE, so that you go directly to app
-          signed_in_as_user$email_verified <- TRUE
-          signed_in_as_user$two_fa_verified <- TRUE
+          signed_in_as_user$email_verified <- global_user$email_verified
+          signed_in_as_user$two_fa_verified <- global_user$two_fa_verified
           session$userData$user(signed_in_as_user)
         }
       }

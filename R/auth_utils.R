@@ -27,9 +27,7 @@ get_signed_in_as_user = function(user_uid) {
     user_uid = user_uid,
     email = invite$email,
     is_admin = invite$is_admin,
-    email_verified = TRUE,
-    roles = roles_out,
-    two_fa_verified = TRUE
+    roles = roles_out
   )
 }
 
