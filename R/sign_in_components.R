@@ -15,7 +15,7 @@
 #' @export
 #'
 #'
-sign_in_js <- function(ns) {
+sign_in_js <- function(ns = function(x) x) {
 
   firebase_config <- .polished$firebase_config
 

@@ -15,16 +15,19 @@ secure_ui(
 \arguments{
 \item{ui}{UI of the application.}
 
-\item{sign_in_page_ui}{Either \code{NULL}, the default (See \code{\link{sign_in_ui_default}}), or the HTML, CSS, and JavaScript
-to use for the UI of the Sign In page.}
+\item{sign_in_page_ui}{Either \code{NULL}, the default (See \code{\link{sign_in_ui_default}}), or the Shiny
+UI for a custom Sign In page.}
 
-\item{custom_admin_ui}{Either \code{NULL}, the default, or the custom UI for a Shiny app to
-display on the \code{polished} Admin Panel.}
+\item{custom_admin_ui}{Either \code{NULL}, the default, or the Shiny UI for a custom
+Admin Panel.}
 
 \item{custom_admin_button_ui}{Either \code{admin_button_ui()}, the default, or your custom
-UI to take Admins from the custom Shiny app to the \code{polished} Admin Panel.}
+UI to take Admins from the custom Shiny app to the \code{polished} Admin Panel.  Set to
+\code{NULL} to exclude the button.}
 
-\item{admin_ui_options}{list of HTML elements to customize branding of the \code{polished} Admin Panel.  Valid
+\item{admin_ui_options}{list of HTML elements to customize branding of the \code{polished} Admin Panel.  This
+argument is only applicable if the \code{custom_admin_ui} is set to \code{NULL}.  If a \code{custom_admin_ui}
+is provided, then these options will be ignored. Valid
 list element names are \code{title}, \code{sidebar_branding}, and \code{browser_tab_icon}.  See
 \code{\link{default_admin_ui_options}}, the default.}
 }

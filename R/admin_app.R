@@ -2,7 +2,6 @@
 #'
 #' The `shiny` module UI for the `polished` Admin Panel, accessible to Admin users.
 #'
-#' @param id the Shiny module id.
 #' @param options list of HTML elements to customize branding of "Admin Panel".  Valid
 #' list element names are `title`, `sidebar_branding`, and `browser_tab_icon`.  See
 #' \code{\link{default_admin_ui_options}} for an example.
@@ -20,13 +19,10 @@
 #'
 #' @export
 #'
-admin_module_ui <- function(id,
+admin_ui <- function(
   options = default_admin_ui_options(),
   include_go_to_shiny_app_button = TRUE
 ) {
-  ns <- shiny::NS(id)
-
-
 
   # don't show profile dropdown if in Admin mode.  User cannot log out of admin mode.
   if (isTRUE(.polished$admin_mode)) {
@@ -36,7 +32,7 @@ admin_module_ui <- function(id,
   } else {
     head <- shinydashboard::dashboardHeader(
       title = options$title,
-      profile_module_ui(ns("polish__profile"))
+      profile_module_ui("polish__profile")
     )
   }
 
@@ -45,7 +41,7 @@ admin_module_ui <- function(id,
 
   sidebar <- shinydashboard::dashboardSidebar(
     shinydashboard::sidebarMenu(
-      id = ns("sidebar_menu"),
+      id = "sidebar_menu",
       shinydashboard::menuItem(
         text = "User Access",
         tabName = "user_access",
@@ -60,7 +56,7 @@ admin_module_ui <- function(id,
 
 
   tab_items <- shinydashboard::tabItems(
-    user_access_module_ui(ns("user_access"))
+    user_access_module_ui("user_access")
   )
 
 
@@ -68,7 +64,7 @@ admin_module_ui <- function(id,
     shiny_app_button <- htmltools::tags$div(
       style = "position: fixed; bottom: 15px; right: 15px; z-index: 1000;",
       shiny::actionButton(
-        ns("go_to_shiny_app"),
+        "go_to_shiny_app",
         "Shiny App",
         icon = shiny::icon("rocket"),
         class = "btn-primary btn-lg",
@@ -119,8 +115,7 @@ admin_module_ui <- function(id,
 #'
 #' @export
 #'
-admin_module <- function(input, output, session) {
-  ns <- session$ns
+admin_server <- function(input, output, session) {
 
   shiny::callModule(
     profile_module,

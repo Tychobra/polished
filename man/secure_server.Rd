@@ -15,10 +15,10 @@ secure_server(
 \arguments{
 \item{server}{A Shiny server function (e.g \code{function(input, output, session) {}})}
 
-\item{custom_sign_in_server}{Either \code{NULL}, the default, or a Shiny module server containing your custom
+\item{custom_sign_in_server}{Either \code{NULL}, the default, or a Shiny server containing your custom
 sign in server logic.}
 
-\item{custom_admin_server}{Either \code{NULL}, the default, or a Shiny module server function containing your custom admin
+\item{custom_admin_server}{Either \code{NULL}, the default, or a Shiny server function containing your custom admin
 server functionality.}
 
 \item{allow_reconnect}{argument to pass to the Shiny \code{session$allowReconnect()} function. Defaults to

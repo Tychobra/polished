@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-`polished` comes with the following pre built `shiny` modules to help you quickly add custom sign in pages to your shiny app:
+`polished` comes with the following pre built sign in pages to help you quickly add custom sign in pages to your shiny app:
 
 ```{r, eval = FALSE}
 sign_in_module()
@@ -55,62 +55,58 @@ library(shiny)
 library(polished)
 
 
-my_custom_sign_in_module_ui <- function(id) {
-  ns <- NS(id)
-  
-  tagList(
-    shinyjs::useShinyjs(),
-    # your custom sign in inputs
+my_custom_sign_in_module_ui <- tagList(
+  shinyjs::useShinyjs(),
+  # your custom sign in inputs
     
+  div(
+    id = "sign_in_page",
+    email_input(
+      "sign_in_email"
+    ),
+    password_input(
+      "sign_in_password"
+    ),
+    actionButton(
+      "sign_in_submit",
+      "Sign In"
+    ),
+    actionLink(
+      "go_to_register",
+      "Not a member? Register!"
+    )
+  ),
+    
+  # your custom registration inputs.  Your inputs
+  shinyjs::hidden(
     div(
-      id = ns("sign_in_page"),
-      email_input(
-        ns("sign_in_email")
+      id = ns("register_page"),
+      password_input(
+        "register_password"
       ),
       password_input(
-        ns("sign_in_password")
+        "register_password_verify"
       ),
       actionButton(
-        ns("sign_in_submit"),
-        "Sign In"
+        ns("register_submit"),
+        "Register"
       ),
       actionLink(
-        ns("go_to_register"),
-        "Not a member? Register!"
+        ns("go_to_sign_in"),
+        "Already a member? Sign in!"
       )
-    ),
-    
-    # your custom registration inputs.  Your inputs
-    shinyjs::hidden(
-      div(
-        id = ns("register_page"),
-        password_input(
-          ns("register_password")
-        ),
-        password_input(
-          ns("register_password_verify")
-        ),
-        actionButton(
-          ns("register_submit"),
-          "Register"
-        ),
-        actionLink(
-          ns("go_to_sign_in"),
-          "Already a member? Sign in!"
-        )
-      )
-    ),
+    )
+  ),
     
     
-    # make sure to call this function somewhere in your sign in page UI.  It loads
-    # the JavaScript used in the sign in and registration process.
-    sign_in_js(ns)  
-  )
+  # make sure to call this function somewhere in your sign in page UI.  It loads
+  # the JavaScript used in the sign in and registration process.
+  sign_in_js()  
+)
   
 }
 
 my_custom_sign_in_module <- function(input, output, session) {
-  ns <- session$ns
   # your custom sign in and registration server logic
   # We provide an example showing the sign in & registration pages separately
   
@@ -140,7 +136,7 @@ ui <- secure_ui(
   ),
   # you must pass "sign_in" sign in to your custom module `id` argument
   # as done below:
-  sign_in_page_ui = my_custom_sign_in_module_ui("sign_in")
+  sign_in_page_ui = my_custom_sign_in_module_ui
 )
 
 server <- secure_server(

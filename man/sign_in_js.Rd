@@ -4,7 +4,7 @@
 \alias{sign_in_js}
 \title{Sign in and register pages JavaScript dependencies}
 \usage{
-sign_in_js(ns)
+sign_in_js(ns = function(x) x)
 }
 \arguments{
 \item{ns}{the ns function from the Shiny module that this function is called

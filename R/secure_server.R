@@ -5,9 +5,9 @@
 #' the bottom of your Shiny app's \code{server.R} file.
 #'
 #' @param server A Shiny server function (e.g \code{function(input, output, session) {}})
-#' @param custom_admin_server Either \code{NULL}, the default, or a Shiny module server function containing your custom admin
+#' @param custom_admin_server Either \code{NULL}, the default, or a Shiny server function containing your custom admin
 #' server functionality.
-#' @param custom_sign_in_server Either \code{NULL}, the default, or a Shiny module server containing your custom
+#' @param custom_sign_in_server Either \code{NULL}, the default, or a Shiny server containing your custom
 #' sign in server logic.
 #' @param allow_reconnect argument to pass to the Shiny \code{session$allowReconnect()} function. Defaults to
 #' \code{FALSE}.  Set to \code{TRUE} to allow reconnect with shiny-server and RStudio Connect.  Set to \code{"force"}
@@ -180,33 +180,20 @@ secure_server <- function(
 
         if (.polished$is_two_fa_required && !isTRUE(hold_user$two_fa_verified)) {
 
-          shiny::callModule(
-            two_fa_module,
-            "two_fa"
-          )
+          two_fa_server(input, output, session)
 
         } else if (isTRUE(hold_user$is_admin) && isTRUE(is_on_admin_page)) {
 
           if (is.null(custom_admin_server)) {
-            shiny::callModule(
-              admin_module,
-              "admin"
-            )
+
+            admin_server(input, output, session)
+
           } else {
 
-            # custom admin server functionality
-            if (names(formals(custom_admin_server))[[1]] == "id") {
-              # new-style Shiny module
-              custom_admin_server("admin")
-            } else {
-              # old-style Shiny module
-              shiny::callModule(
-                custom_admin_server,
-                "admin"
-              )
-            }
+            custom_admin_server(input, output, session)
 
           }
+
         } else {
 
           # go to the custom app
@@ -251,11 +238,8 @@ secure_server <- function(
 
         # go to email verification view.
         # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
+        verify_email_server(input, output, session)
 
-        shiny::callModule(
-          verify_email_module,
-          "verify"
-        )
       }
 
     }, once = TRUE)
@@ -277,22 +261,16 @@ secure_server <- function(
 
         if (is.null(custom_sign_in_server)) {
 
-          shiny::callModule(
+          # this uses the a module rather than Shiny server to avoid breaking backwards
+          # compatibility
+          callModule(
             sign_in_module,
             "sign_in"
           )
 
         } else {
 
-
-          if (names(formals(custom_sign_in_server))[[1]] == "id") {
-            custom_sign_in_server("sign_in")
-          } else {
-            shiny::callModule(
-              custom_sign_in_server,
-              "sign_in"
-            )
-          }
+          custom_sign_in_server(input, output, session)
 
         }
       }

@@ -1,6 +1,5 @@
 #' 2 Factor Auth page UI
 #'
-#' @param id the Shiny module id
 #'
 #' @importFrom htmltools tags
 #' @importFrom shiny fluidPage fluidRow NS column actionLink textInput
@@ -9,8 +8,7 @@
 #'
 #' @noRd
 #'
-two_fa_module_ui <- function(id) {
-  ns <- NS(id)
+two_fa_ui <- function() {
 
   fluidPage(
     style = "background-color: #eee; height: 100vh;",
@@ -40,7 +38,7 @@ two_fa_module_ui <- function(id) {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
           ",
           shinyjs::hidden(tags$div(
-            id = ns("qrcode_div"),
+            id = "qrcode_div",
             style = "text-center",
             tags$h3("Scan QR in authenticator app"),
             tags$br(),
@@ -50,7 +48,7 @@ two_fa_module_ui <- function(id) {
                 display: flex;
                 justify-content: center;
               ",
-              id = ns("qrcode")
+              id = "qrcode"
             )
           )),
           tags$h3(
@@ -63,7 +61,7 @@ two_fa_module_ui <- function(id) {
               justify-content: center;
             ",
             shiny::textInput(
-              ns("two_fa_code"),
+              "two_fa_code",
               label = NULL,
               value = ""
             )
@@ -75,7 +73,7 @@ two_fa_module_ui <- function(id) {
               justify-content: center;
             ",
             shiny::actionLink(
-              ns("sign_out"),
+              "sign_out",
               "Return to sign in page"
             )
           )
@@ -83,8 +81,7 @@ two_fa_module_ui <- function(id) {
       )
     ),
     tags$script(src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"),
-    tags$script(src = "polish/js/two_fa_module.js?version=3"),
-    tags$script(paste0("two_fa_module('", ns(''), "')"))
+    tags$script(src = "polish/js/two_fa.js?version=4")
   )
 }
 
@@ -95,7 +92,7 @@ two_fa_module_ui <- function(id) {
 #' @param output the Shiny server output
 #' @param session the Shiny server session
 #'
-#' @importFrom shiny reactive observeEvent req reactiveVal 
+#' @importFrom shiny reactive observeEvent req reactiveVal
 #' @importFrom shinyFeedback showToast
 #' @importFrom otp TOTP
 #' @importFrom shinyjs showElement
@@ -103,14 +100,14 @@ two_fa_module_ui <- function(id) {
 #'
 #' @noRd
 #'
-two_fa_module <- function(input, output, session) {
+two_fa_server <- function(input, output, session) {
 
   two_fa_code <- reactive({
 
     out <- NULL
     tryCatch({
       req(session$userData$user()$user_uid)
-      # TODO: add option to get the 2FA code to get_user
+
       hold <- get_users(
         user_uid = session$userData$user()$user_uid,
         include_two_fa = TRUE

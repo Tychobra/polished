@@ -1,6 +1,5 @@
 #' Verify email page ui
 #'
-#' @param id the Shiny module id
 #'
 #' @importFrom htmltools tags h1
 #' @importFrom shiny fluidPage fluidRow column actionButton actionLink
@@ -8,8 +7,7 @@
 #'
 #' @noRd
 #'
-verify_email_module_ui <- function(id) {
-  ns <- NS(id)
+verify_email_ui <- function() {
 
   firebase_config <- .polished$firebase_config
 
@@ -37,7 +35,7 @@ verify_email_module_ui <- function(id) {
           h1("Verification Email Sent"),
           br(),
           shiny::actionButton(
-            ns("resend_verification_email"),
+            "resend_verification_email",
             label = "Resend Verification Email",
             class = "btn-default"
           ),
@@ -49,7 +47,7 @@ verify_email_module_ui <- function(id) {
               justify-content: center;
             ",
             shiny::actionLink(
-              ns("sign_out"),
+              "sign_out",
               "Return to sign in page"
             )
           )
@@ -73,7 +71,7 @@ verify_email_module_ui <- function(id) {
 #'
 #' @noRd
 #'
-verify_email_module <- function(input, output, session) {
+verify_email_server <- function(input, output, session) {
 
 
   ### check every 5 seconds if the user has verified their email address yet ---
