@@ -162,10 +162,10 @@ secure_ui <- function(
 
     if (is.function(ui)) {
       ui <- ui(request)
-      } else {
+    } else {
       ui <- (function(request) ui)()
-      }
-    ui <- force(ui)
+    }
+
 
 
     # UI to optionally add Sentry.io error monitoring
@@ -215,7 +215,7 @@ secure_ui <- function(
           # auth is not required, so allow the user to go directly to the custom shiny app
           # go to Shiny app without admin button.  User is not an admin
           page_out <- tagList(
-            ui,
+            force(ui),
             tags$script(src = "polish/js/router.js?version=4"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
             tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
@@ -286,7 +286,7 @@ secure_ui <- function(
 
               # go to Shiny app with admin button.  User is an admin.
               page_out <- tagList(
-                ui,
+                force(ui),
                 custom_admin_button_ui,
                 tags$script(src = "polish/js/router.js?version=4"),
                 tags$script(src = "polish/js/polished_session.js?version=2"),
@@ -300,7 +300,7 @@ secure_ui <- function(
 
             # go to Shiny app without admin button.  User is not an admin
             page_out <- tagList(
-              ui,
+              force(ui),
               tags$script(src = "polish/js/router.js?version=4"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
               tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
