@@ -107,9 +107,9 @@ admin_module_ui <- function(id,
 }
 
 
-#' The server logic for the defaul "Admin Panel" dashboard
+#' The server logic for the default Admin Panel dashboard
 #'
-#' The `shiny` module server logic for the `polished` Admin Panel, accessible to Admin users.
+#' The Shiny module server logic for the `polished` Admin Panel, accessible to Admin users.
 #'
 #' @param input the Shiny server input
 #' @param output the Shiny server output

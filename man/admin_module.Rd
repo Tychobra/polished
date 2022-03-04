@@ -2,7 +2,7 @@
 % Please edit documentation in R/admin_module.R
 \name{admin_module}
 \alias{admin_module}
-\title{The server logic for the defaul "Admin Panel" dashboard}
+\title{The server logic for the default Admin Panel dashboard}
 \usage{
 admin_module(input, output, session)
 }
@@ -14,5 +14,5 @@ admin_module(input, output, session)
 \item{session}{the Shiny server session}
 }
 \description{
-The \code{shiny} module server logic for the \code{polished} Admin Panel, accessible to Admin users.
+The Shiny module server logic for the \code{polished} Admin Panel, accessible to Admin users.
 }
