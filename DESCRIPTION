@@ -4,8 +4,7 @@ Title: Authentication, User Administration, and Hosting for 'shiny' Apps
 Version: 0.6.1.9000
 Authors@R: c(
   person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre")),
-  person("Patrick", "Howard", email = "patrick.howard@tychobra.com", role = c("aut")),
-  person("Jimmy", "Briggs", email = "jimmy.briggs@tychobra.com", role = c("aut")))
+  person("Patrick", "Howard", email = "patrick.howard@tychobra.com", role = c("aut")))
 Maintainer: Andy Merlino <andy.merlino@tychobra.com>
 Description: Easily add modern authentication and user administration to your 'shiny' apps. 
   Customize user sign in and registration pages to match your brand.  Control who can
