@@ -220,7 +220,8 @@ secure_server <- function(
               update_session(
                 session_uid = hold_user$session_uid,
                 session_data = list(
-                  is_active = FALSE
+                  is_active = FALSE,
+                  two_fa_verified = FALSE
                 )
               )
 
