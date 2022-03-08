@@ -228,6 +228,14 @@ sign_in_module_2_ui <- function(id) {
 #' @export
 #'
 sign_in_module_2 <- function(input, output, session) {
+  callModule(
+    sign_in_module_2_ns,
+    "sign_in"
+  )
+}
+
+
+sign_in_module_2_ns <- function(input, output, session) {
   ns <- session$ns
 
   # Email Sign-In validation

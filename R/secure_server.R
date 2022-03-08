@@ -170,6 +170,7 @@ secure_server <- function(
       query_list <- shiny::getQueryString()
       hold_user <- session$userData$user()
 
+      browser()
       if (isTRUE(hold_user$email_verified) ||
           isFALSE(.polished$is_email_verification_required)) {
 
@@ -261,12 +262,7 @@ secure_server <- function(
 
         if (is.null(custom_sign_in_server)) {
 
-          # this uses the a module rather than Shiny server to avoid breaking backwards
-          # compatibility
-          callModule(
-            sign_in_module,
-            "sign_in"
-          )
+          sign_in_module(input, output, session)
 
         } else {
 
