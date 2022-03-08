@@ -2,13 +2,33 @@
 #'
 #'
 #' @importFrom htmltools tags
-#' @importFrom shiny fluidPage fluidRow NS column actionLink textInput
+#' @importFrom shiny fluidPage fluidRow column actionLink textInput
 #' @importFrom shinyFeedback useShinyFeedback
-#' @importFrom shinyjs useShinyjs hidden
+
 #'
 #' @noRd
 #'
-two_fa_ui <- function() {
+two_fa_ui <- function(request) {
+
+  if (isTRUE(request$polished_user$two_fa_verified)) {
+    qr_div <- NULL
+  } else {
+    qr_div <- tags$div(
+      id = "qrcode_div",
+      style = "text-center",
+      tags$h3("Scan QR in authenticator app"),
+      tags$br(),
+      tags$div(
+        style = "
+                display: flex;
+                justify-content: center;
+                min-height: 265px;
+              ",
+        id = "qrcode"
+      )
+    )
+  }
+
 
   fluidPage(
     style = "background-color: #eee; height: 100vh;",
@@ -32,20 +52,7 @@ two_fa_ui <- function() {
             padding-bottom: 35px;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
           ",
-          shinyjs::hidden(tags$div(
-            id = "qrcode_div",
-            style = "text-center",
-            tags$h3("Scan QR in authenticator app"),
-            tags$br(),
-            tags$br(),
-            tags$div(
-              style = "
-                display: flex;
-                justify-content: center;
-              ",
-              id = "qrcode"
-            )
-          )),
+          qr_div,
           tags$h3(
             "Enter your two-factor authentication code"
           ),
@@ -130,7 +137,7 @@ two_fa_server <- function(input, output, session) {
       # 2FA code has not been successfully verified and save to database, so create a
       # new secret
       base_32_secret <- paste(sample(c(LETTERS, 2:7), size = 16, replace = TRUE), collapse = "")
-      shinyjs::showElement("qrcode_div")
+
     } else {
       base_32_secret <- two_fa_code()
     }
