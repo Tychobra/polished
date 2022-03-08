@@ -131,19 +131,18 @@ two_fa_server <- function(input, output, session) {
       # new secret
       base_32_secret <- paste(sample(c(LETTERS, 2:7), size = 16, replace = TRUE), collapse = "")
       shinyjs::showElement("qrcode_div")
+      # send the base 32 secret to the front end to generate the QR code using javascript
+      session$sendCustomMessage(
+        session$ns("create_qrcode"),
+        message = list(
+          "url" = utils::URLencode(paste0("otpauth://totp/", session$userData$user()$email, "?secret=", base_32_secret, "&issuer=", .polished$app_name))
+        )
+      )
     } else {
       base_32_secret <- two_fa_code()
     }
     totp_obj(otp::TOTP$new(base_32_secret))
     totp_secret(base_32_secret)
-
-    # send the base 32 secret to the front end to generate the QR code using javascript
-    session$sendCustomMessage(
-      session$ns("create_qrcode"),
-      message = list(
-        "url" = utils::URLencode(paste0("otpauth://totp/", session$userData$user()$email, "?secret=", base_32_secret, "&issuer=", .polished$app_name))
-      )
-    )
 
   })
 
