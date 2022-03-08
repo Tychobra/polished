@@ -264,7 +264,7 @@ secure_ui <- function(
         if (isTRUE(.polished$is_two_fa_required) && isFALSE(user$two_fa_verified)) {
 
           page_out <- tagList(
-            force(two_fa_ui(request)),
+            force(two_fa_ui()),
             tags$script(src = "polish/js/router.js?version=4"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
             tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
