@@ -12,15 +12,10 @@ two_fa_ui <- function() {
 
   fluidPage(
     style = "background-color: #eee; height: 100vh;",
-    tags$style("
-      input {
-        text-align: right;
-      }
-    "),
     shinyjs::useShinyjs(),
     tags$head(
       tags$link(rel = "shortcut icon", href = "polish/images/tychobra-icon-blue.png"),
-      shinyFeedback::useShinyFeedback(feedback = FALSE, toastr = TRUE)
+      shinyFeedback::useShinyFeedback()
     ),
     shiny::fluidRow(
       shiny::column(
@@ -54,7 +49,6 @@ two_fa_ui <- function() {
           tags$h3(
             "Enter your two-factor authentication code"
           ),
-          tags$br(),
           tags$div(
             style = "
               display: flex;
@@ -62,7 +56,7 @@ two_fa_ui <- function() {
             ",
             shiny::textInput(
               "two_fa_code",
-              label = NULL,
+              label = HTML("&nbsp;"),
               value = ""
             )
           ),
@@ -185,7 +179,15 @@ two_fa_server <- function(input, output, session) {
               two_fa_verified = TRUE
             )
           )
-
+          shinyjs::showElement("loading_spinner")
+          shinyFeedback::showFeedbackSuccess(
+            "two_fa_code",
+            text = NULL,
+            icon = shiny::icon(
+              "spinner",
+              class="fa-spin",
+            )
+          )
           session$reload()
 
         }, error = function(err) {
