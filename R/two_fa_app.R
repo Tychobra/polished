@@ -36,8 +36,7 @@ two_fa_ui <- function() {
             id = "qrcode_div",
             style = "text-center",
             tags$h3("Scan QR in authenticator app"),
-            tags$br(),
-            tags$br(),
+            tags$p("(Google Authenitcator and Authy are popular authenticator apps for Androind and iOS)"),
             tags$div(
               style = "
                 display: flex;
