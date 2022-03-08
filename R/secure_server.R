@@ -170,7 +170,6 @@ secure_server <- function(
       query_list <- shiny::getQueryString()
       hold_user <- session$userData$user()
 
-      browser()
       if (isTRUE(hold_user$email_verified) ||
           isFALSE(.polished$is_email_verification_required)) {
 
