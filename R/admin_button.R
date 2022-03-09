@@ -50,7 +50,7 @@ admin_button <- function(input, output, session) {
     # the initial app load.
     shiny::req(session$userData$user())
 
-    # remove admin_panel=false from query
+    # remove admin=false from query
     shiny::updateQueryString(
       queryString = paste0("?page=admin"),
       session = session,
