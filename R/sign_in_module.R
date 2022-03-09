@@ -6,7 +6,7 @@
 #' @param register_link The text that will be displayed in the link to go to the
 #' user registration page.  The default is \code{"First time user? Register here!"}.
 #' Set to \code{NULL} if you don't want to use the registration page.
-#' @param forgot_password_link The text that will be displayed in the link to go to the
+#' @param password_reset_link The text that will be displayed in the link to go to the
 #' receive an email to reset your password.  The default is \code{"Forgot your password?"}.
 #' Set to \code{NULL} if you don't want to use the registration page.
 #'

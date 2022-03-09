@@ -4,7 +4,7 @@
 #'
 #' @param id the module id
 #'
-#' @importFrom shiny fluidRow column actionButton
+#' @importFrom shiny NS fluidRow column actionButton icon
 #' @importFrom shinydashboard tabItem box
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom htmltools br tags
@@ -39,7 +39,7 @@ user_access_module_ui <- function(id) {
               class = "btn-success",
               #style = "color: #fff; position: absolute: top: 20, left: 15; margin-bottom: 0;",
               style = "color: #fff;",
-              icon = icon("user-plus")
+              icon = shiny::icon("user-plus")
             )
           )
         ),
@@ -80,11 +80,13 @@ user_access_module_ui <- function(id) {
 #' @importFrom htmltools tags
 #' @importFrom DT renderDT datatable dataTableProxy formatDate replaceData JS
 #' @importFrom dplyr filter select %>% left_join mutate
-#' @importFrom tibble tibble
+#' @importFrom tibble tibble as_tibble
 #' @importFrom shinyFeedback showToast
 #' @importFrom purrr map_chr
 #' @importFrom lubridate force_tz as_datetime
 #' @importFrom rlang .data
+#' @importFrom httr GET authenticate stop_for_status content
+#' @importFrom jsonlite fromJSON
 #'
 #' @export
 #'
