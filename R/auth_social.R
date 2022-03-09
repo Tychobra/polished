@@ -110,42 +110,31 @@ sign_in_social = function(
 
   decoded_jwt <- verify_firebase_token(firebase_token)
 
-
   new_session <- NULL
 
   if (!is.null(decoded_jwt)) {
 
-    new_session <- list(
-      email = decoded_jwt$email,
-      email_verified = decoded_jwt$email_verified
-    )
+    hold_session_email <- decoded_jwt$email
 
-
-
-
-    invite_res <- get_app_users(
+    invite <- get_app_users(
       app_uid = .polished$app_uid,
-      email = new_session$email,
-    )
-    invite <- invite_res$content
+      email = hold_session_email,
+    )$content
 
     if (isFALSE(.polished$is_invite_required) && identical(nrow(invite), 0L)) {
       # if invite is not required, and this is the first time that the user is signing in,
       # then create the App User in the `app_users` table
       add_app_user_res <- add_app_user(
         app_uid = .polished$app_uid,
-        email = new_session$email,
+        email = hold_session_email,
         is_admin = FALSE
       )
 
 
-      invite_res <- get_app_users(
+      invite <- get_app_users(
         app_uid = .polished$app_uid,
-        email = new_session$email
-      )
-
-      invite <- invite_res$content
-
+        email = hold_session_email
+      )$content
     }
 
     if (identical(nrow(invite), 0L)) {
@@ -153,12 +142,13 @@ sign_in_social = function(
     }
 
 
-    new_session$is_admin <- invite$is_admin
-    new_session$user_uid <- invite$user_uid
+    new_session <- list(
+      is_admin = invite$is_admin,
+      user_uid = invite$user_uid,
+      hashed_cookie = hashed_cookie,
+      session_uid = uuid::UUIDgenerate()
+    )
 
-
-    new_session$hashed_cookie <- hashed_cookie
-    new_session$session_uid <- uuid::UUIDgenerate()
     # add the session to the 'sessions' table
     add_session(
       app_uid = .polished$app_uid,
