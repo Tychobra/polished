@@ -107,7 +107,7 @@ verify_email_server <- function(input, output, session) {
 
         }, error = function(err) {
 
-          msg <- "unable to check email verification statuc"
+          msg <- "unable to check email verification status"
           print(msg)
           print(err)
           showToast("error", msg)
