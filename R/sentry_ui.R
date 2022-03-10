@@ -19,8 +19,8 @@ sentry_ui <- function(sentry_dsn, app_uid, user = NULL, r_env = "default") {
   function(page) {
     htmltools::tagList(
       shiny::includeScript(
-        path = "https://browser.sentry-cdn.com/6.17.5/bundle.tracing.min.js",
-        integrity = "sha384-WrynDI0HStBVeac9kJphtAdpOdSLy2mR/T0Fn0YTCrxPZ2VV0gkj/T4JHwhX+gHw",
+        path = "https://browser.sentry-cdn.com/6.18.2/bundle.tracing.min.js",
+        integrity = "sha384-mAvo+boV/DuDB7oEhXJlhWaxExqvniNXXZxhMk8Mp42k+1J6NbPlCbMHFis/KN2Y",
         type = "text/javascript",
         crossorigin = "anonymous"
       ),
