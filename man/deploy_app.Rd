@@ -33,7 +33,7 @@ on Google Cloud Platform. Currently, database connections are only supported for
 \code{us-east1}. See \url{https://polished.tech/docs/06-database-connections} for details.}
 
 \item{ram_gb}{the amount of memory (in \code{GiB}) to allocate to your Shiny app's server.
-Valid values are \code{2}, \code{4}, or \code{8}.}
+Valid values are \code{2}, \code{4}, \code{8}, or \code{16}.}
 
 \item{r_ver}{Character string of desired \code{R} version.  If kept as \code{NULL} (the default),
 \code{deploy_app()} will detect the R version you are currently running.  The R version must be a version
