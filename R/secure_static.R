@@ -18,9 +18,7 @@
 #' - www/
 #'   - index.html
 #'
-#' See an example here: \url{https://github.com/Tychobra/polished_example_apps/tree/master/05_flex_dashboard}
-#'
-#' @export
+#' @noRd
 #'
 #' @return a Shiny app object
 #'
