@@ -31,7 +31,7 @@ get_signed_in_as_user = function(user_uid) {
   )
 }
 
-sign_out = function(hashed_cookie) {
+sign_out <- function(hashed_cookie) {
 
   res <- httr::POST(
     url = paste0(.polished$api_url, "/sign-out"),
