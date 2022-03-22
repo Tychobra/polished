@@ -1,4 +1,4 @@
-get_signed_in_as_user = function(user_uid) {
+get_signed_in_as_user <- function(user_uid) {
 
   invite_res <- get_app_users(
     .polished$app_uid,

@@ -22,7 +22,7 @@
 #'
 #' @importFrom httr GET authenticate
 #'
-get_sessions = function(app_uid, hashed_cookie, api_key = get_api_key()) {
+get_sessions <- function(app_uid, hashed_cookie, api_key = get_api_key()) {
 
   res <- httr::GET(
     url = paste0(.polished$api_url, "/sessions"),

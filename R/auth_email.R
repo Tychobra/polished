@@ -1,4 +1,4 @@
-sign_in_email = function(email, password, hashed_cookie) {
+sign_in_email <- function(email, password, hashed_cookie) {
 
   res <- httr::POST(
     url = paste0(.polished$api_url, "/sign-in-email"),
@@ -59,7 +59,7 @@ sign_in_email = function(email, password, hashed_cookie) {
   session_out
 }
 
-register_email = function(email, password, hashed_cookie) {
+register_email <- function(email, password, hashed_cookie) {
 
   res <- httr::POST(
     url = paste0(.polished$api_url, "/register-email"),

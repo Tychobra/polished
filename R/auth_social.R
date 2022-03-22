@@ -38,7 +38,7 @@ refresh_jwt_pub_key <- function() {
   }
 }
 
-verify_firebase_token = function(firebase_token) {
+verify_firebase_token <- function(firebase_token) {
   # Google sends us 2 public keys to authenticate the JWT.  Sometimes the correct
   # key is the first one, and sometimes it is the second.  I do not know how
   # to tell which key is the right one to use, so we try them both for now.
@@ -94,7 +94,7 @@ verify_firebase_token = function(firebase_token) {
 #' @md
 #'
 #'
-sign_in_social = function(
+sign_in_social <- function(
   firebase_token,
   hashed_cookie
 ) {
