@@ -70,7 +70,7 @@ send_password_reset_email_module <- function(input, output, session, email) {
       )
 
       if (!identical(httr::status_code(res), 200L)) {
-        stop(res_content$error)
+        stop(res_content$error, call. = FALSE)
       }
 
       shinyFeedback::showToast(
@@ -79,7 +79,6 @@ send_password_reset_email_module <- function(input, output, session, email) {
         .options = polished_toast_options
       )
     }, error = function(err) {
-
       print(err)
       shinyFeedback::showToast(
         "error",
@@ -87,7 +86,6 @@ send_password_reset_email_module <- function(input, output, session, email) {
         .options = polished_toast_options
       )
     })
-
 
   })
 
