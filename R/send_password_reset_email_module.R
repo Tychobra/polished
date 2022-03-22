@@ -45,6 +45,12 @@ send_password_reset_email_module <- function(input, output, session, email) {
     hold_email <- email()
 
     tryCatch({
+      # Stop if email is empty
+      if (identical(nchar(trimws(hold_email, which = "both")), 0L)) {
+        stop("Enter a valid email before clicking 'Forgot your password?'", call. = FALSE)
+      }
+
+
       res <- httr::POST(
         url = paste0(.polished$api_url, "/send-password-reset-email"),
         httr::authenticate(
