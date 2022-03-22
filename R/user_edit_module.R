@@ -168,18 +168,12 @@ user_edit_module <- function(input, output, session,
 
   # the firebase function to add the user is triggered in the client side js, not in Shiny
   shiny::observeEvent(input$submit, {
-    session_user <- session$userData$user()$user_uid
     input_email <- tolower(input$user_email)
     input_is_admin <- input$user_is_admin
 
     is_admin_out <- if (input_is_admin == "Yes") TRUE else FALSE
 
-
     hold_user <- user_to_edit()
-
-    users_params <- list(
-      input_email
-    )
 
     if (is.null(hold_user)) {
       # adding a new user
@@ -262,12 +256,9 @@ user_edit_module <- function(input, output, session,
 
     } else {
       # editing an existing user
-
       shiny::removeModal()
 
       tryCatch({
-
-
         # update the app user
         res <- httr::PUT(
           url = paste0(.polished$api_url, "/app-users"),
@@ -300,18 +291,14 @@ user_edit_module <- function(input, output, session,
           .options = polished_toast_options
         )
       }, error = function(e) {
-
         shinyFeedback::showToast(
           "error",
           "Error editing user",
           .options = polished_toast_options
         )
         print(e)
-
       })
-
     }
-
 
   }, ignoreInit = TRUE)
 
