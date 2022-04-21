@@ -99,7 +99,7 @@ deploy_app <- function(
   }
 
   if (!(ram_gb %in% c(2, 4, 8, 16))) {
-    stop("`ram_db` must be 2, 4, 8, or 16", call. = FALSE)
+    stop("`ram_gb` must be 2, 4, 8, or 16", call. = FALSE)
   }
 
   # check that app_dir contains either an "app.R" file or a "ui.R" and a "server.R" file
