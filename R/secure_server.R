@@ -83,9 +83,11 @@ secure_server <- function(
       page <- query_list$page
       global_user <- NULL
       try({
+
         global_user_res <- get_sessions(
           app_uid = .polished$app_uid,
-          hashed_cookie = hashed_cookie
+          hashed_cookie = hashed_cookie,
+          session_started = if (is.null(page)) TRUE else FALSE
         )
 
         global_user <- global_user_res$content

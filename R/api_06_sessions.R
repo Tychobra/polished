@@ -4,6 +4,9 @@
 #'
 #' @param app_uid the app uid
 #' @param hashed_cookie the hashed cookie
+#' @param session_started whether or not the session is actually starting.  This is for
+#' internal use, and it should probably always be set to `FALSE` if you are calling this
+#' function directly.
 #'
 #' @inheritParams get_apps
 #'
@@ -22,13 +25,14 @@
 #'
 #' @importFrom httr GET authenticate
 #'
-get_sessions <- function(app_uid, hashed_cookie, api_key = get_api_key()) {
+get_sessions <- function(app_uid, hashed_cookie, session_started = FALSE, api_key = get_api_key()) {
 
   res <- httr::GET(
     url = paste0(.polished$api_url, "/sessions"),
     query = list(
       hashed_cookie = hashed_cookie,
-      app_uid = app_uid
+      app_uid = app_uid,
+      session_started = session_started
     ),
     httr::authenticate(
       user = api_key,
