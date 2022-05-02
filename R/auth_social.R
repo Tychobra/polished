@@ -111,7 +111,7 @@ sign_in_social <- function(
   decoded_jwt <- verify_firebase_token(firebase_token)
 
   new_session <- NULL
-
+  new_session_uid <- NA
   if (!is.null(decoded_jwt)) {
 
     hold_session_email <- decoded_jwt$email
@@ -141,12 +141,17 @@ sign_in_social <- function(
       stop("[polished] error checking user invite", call. = FALSE)
     }
 
+    if (uuid::is.UUID(add_app_user_res$session_uid)) {
+      new_session_uid <- add_app_user_res$session_uid
+    } else {
+      new_session_uid
+    }
 
     new_session <- list(
       is_admin = invite$is_admin,
       user_uid = invite$user_uid,
       hashed_cookie = hashed_cookie,
-      session_uid = uuid::UUIDgenerate()
+      session_uid = new_session_uid
     )
 
     # add the session to the 'sessions' table
