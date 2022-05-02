@@ -82,8 +82,9 @@ secure_server <- function(
       query_list <- shiny::getQueryString()
       page <- query_list$page
       global_user <- NULL
-      try({
 
+
+      tryCatch({
         global_user_res <- get_sessions(
           app_uid = .polished$app_uid,
           hashed_cookie = hashed_cookie,
@@ -92,7 +93,11 @@ secure_server <- function(
 
         global_user <- global_user_res$content
 
-      }, silent = TRUE)
+      }, error = function(err) {
+        print("secure_server: unable to get session")
+        print(err)
+        invisible(NULL)
+      })
 
 
       if (is.null(global_user)) {
