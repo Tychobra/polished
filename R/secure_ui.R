@@ -207,7 +207,9 @@ secure_ui <- function(
           page_out <- tagList(
             force(sign_in_ui_default()),
             tags$script(src = "polish/js/router.js?version=4"),
-            sentry_ui_out("sign_in_default")
+            sentry_ui_out("sign_in_default"),
+            tags$script(src = "polish/js/polished_session.js?version=2"),
+            tags$script(paste0("polished_session('sign_in-", uuid::UUIDgenerate(), "')"))
           )
 
         } else {
@@ -216,7 +218,9 @@ secure_ui <- function(
           page_out <- tagList(
             force(normalize_ui(sign_in_page_ui, request)),
             tags$script(src = "polish/js/router.js?version=4"),
-            sentry_ui_out("sign_in_custom")
+            sentry_ui_out("sign_in_custom"),
+            tags$script(src = "polish/js/polished_session.js?version=2"),
+            tags$script(paste0("polished_session('sign_in-", uuid::UUIDgenerate(), "')"))
           )
         }
 
