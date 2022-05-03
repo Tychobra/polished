@@ -83,22 +83,22 @@ secure_server <- function(
       page <- query_list$page
       global_user <- NULL
 
+      if (is.character(hashed_cookie) && identical(nchar(hashed_cookie), 32L)) {
+        tryCatch({
+          global_user_res <- get_sessions(
+            app_uid = .polished$app_uid,
+            hashed_cookie = hashed_cookie,
+            session_started = if (is.null(page)) TRUE else FALSE
+          )
 
-      tryCatch({
-        global_user_res <- get_sessions(
-          app_uid = .polished$app_uid,
-          hashed_cookie = hashed_cookie,
-          session_started = if (is.null(page)) TRUE else FALSE
-        )
+          global_user <- global_user_res$content
 
-        global_user <- global_user_res$content
-
-      }, error = function(err) {
-        print("secure_server: unable to get session")
-        print(err)
-        invisible(NULL)
-      })
-
+        }, error = function(err) {
+          print("secure_server: unable to get session")
+          print(err)
+          invisible(NULL)
+        })
+      }
 
       if (is.null(global_user)) {
         # user is not signed in
