@@ -137,6 +137,23 @@ secure_server <- function(
 
             }
           }
+        } else {
+
+          if (identical(page, "sign_in")) {
+            if (is.null(custom_sign_in_server)) {
+
+              sign_in_module(input, output, session)
+
+            } else {
+
+              custom_sign_in_server(input, output, session)
+
+            }
+          } else {
+
+            # go to the custom app
+            server(input, output, session)
+          }
         }
 
       } else if (isTRUE(global_user$email_verified)) {
