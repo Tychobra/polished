@@ -56,7 +56,7 @@ valid_gcp_regions <- c(
 #' Defaults to \code{NULL}.  Keep as \code{NULL} for non `golem` Shiny apps.
 #' @param cache Boolean (default: \code{TRUE}) - whether or not to cache the Docker image.
 #'
-#' @importFrom utils browseURL
+#' @importFrom utils browseURL object.size
 #' @importFrom httr POST authenticate handle_reset status_code content upload_file
 #' @importFrom jsonlite fromJSON
 #'
@@ -130,13 +130,18 @@ deploy_app <- function(
   if (isTRUE(launch_browser)) {
     cat("Your Shiny app will open in your default web browser once deployment is complete.\n")
   }
-  cat("Deployment status can be found at https://dashboard.polished.tech\n")
+
   zip_to_send <- httr::upload_file(
     path = app_zip_path,
     type = "application/x-gzip"
   )
 
+  # Check if zipped app is larger than Cloud Run's max request size (32 Mb)
+  if (as.numeric(utils::object.size(zip_to_send)) > 33554432) {
+    stop("Zipped application is too large (> 32 Mb)", call. = FALSE)
+  }
 
+  cat("Deployment status can be found at https://dashboard.polished.tech\n")
 
   url_ <- paste0(.polished$host_api_url, "/hosted-apps")
   # reset the handle.  This allows us to redeploy the app after a failed deploy.  Without
