@@ -1,5 +1,7 @@
 # polished v0.6.1.9000
 
+* `deploy_app()` now throw a more user friendly error message if the app is too large to 
+deploy to Polished Hosting.
 * Polished Hosting supports 16 GiB instances (i.e. `16` is a valid value for the `ram_gb` argument of `polished::deploy_app()`)
 * the `custom_admin_ui` argument for `secure_ui` now takes a fully custom shiny app.  This allows
 users to now fully customize their Admin Panel.  Previously you could only add tabs to the existing
