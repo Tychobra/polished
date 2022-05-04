@@ -56,7 +56,7 @@ valid_gcp_regions <- c(
 #' Defaults to \code{NULL}.  Keep as \code{NULL} for non `golem` Shiny apps.
 #' @param cache Boolean (default: \code{TRUE}) - whether or not to cache the Docker image.
 #'
-#' @importFrom utils browseURL object.size
+#' @importFrom utils browseURL
 #' @importFrom httr POST authenticate handle_reset status_code content upload_file
 #' @importFrom jsonlite fromJSON
 #'
