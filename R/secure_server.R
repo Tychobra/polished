@@ -12,10 +12,6 @@
 #' @param allow_reconnect argument to pass to the Shiny \code{session$allowReconnect()} function. Defaults to
 #' \code{FALSE}.  Set to \code{TRUE} to allow reconnect with shiny-server and RStudio Connect.  Set to \code{"force"}
 #' for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.html} for more information.
-#' @param override_user whether or not to override the \code{session$user} with the polished
-#' \code{session$userData$user} user.  By default this is now set to \code{TRUE}, but if you are
-#' using a hosting option that uses the \code{session$user} (e.g. RStudio Connect), then you
-#' may want to set this to FALSE.  The polished user can always be found at \code{session$userData$user()}.
 #'
 #' @export
 #'
@@ -27,8 +23,7 @@ secure_server <- function(
   server,
   custom_sign_in_server = NULL,
   custom_admin_server = NULL,
-  allow_reconnect = FALSE,
-  override_user = TRUE
+  allow_reconnect = FALSE
 ) {
 
   server <- force(server)
@@ -40,12 +35,6 @@ secure_server <- function(
   function(input, output, session) {
     session$userData$user <- shiny::reactiveVal(NULL)
 
-    if (isTRUE(override_user)) {
-      #session$user <- reactiveVal(NULL)
-      shiny::observe({
-        session$user <- session$userData$user()
-      }, priority = 1)
-    }
 
     if (isTRUE(allow_reconnect) || allow_reconnect == "force") {
       session$allowReconnect(allow_reconnect)
