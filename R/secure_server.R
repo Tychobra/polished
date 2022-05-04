@@ -29,7 +29,7 @@ secure_server <- function(
   }
 
   function(input, output, session) {
-    session$userData$user <- reactiveVal(NULL)
+    session$userData$user <- function(NULL)
 
 
     # handle the initial input$hashed_cookie
@@ -171,7 +171,7 @@ secure_server <- function(
               c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified", "roles", "two_fa_verified")
             ]
 
-            session$userData$user(user_out)
+            session$userData$user <- function() user_out
 
           } else {
 
@@ -182,7 +182,7 @@ secure_server <- function(
             # set email verified to TRUE, so that you go directly to app
             signed_in_as_user$email_verified <- global_user$email_verified
             signed_in_as_user$two_fa_verified <- global_user$two_fa_verified
-            session$userData$user(signed_in_as_user)
+            session$userData$user <- function() signed_in_as_user
           }
 
 
