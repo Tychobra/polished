@@ -30,6 +30,7 @@ secure_server <- function(
 
   function(input, output, session) {
     session$userData$user <- function() NULL
+    session$userData$p <- NULL
 
 
     # handle the initial input$hashed_cookie
@@ -172,6 +173,7 @@ secure_server <- function(
             ]
 
             session$userData$user <- function() user_out
+            session$userData$p <- user_out
 
           } else {
 
@@ -183,6 +185,7 @@ secure_server <- function(
             signed_in_as_user$email_verified <- global_user$email_verified
             signed_in_as_user$two_fa_verified <- global_user$two_fa_verified
             session$userData$user <- function() signed_in_as_user
+            session$userData$p <- signed_in_as_user
           }
 
 
