@@ -9,9 +9,6 @@
 #' server functionality.
 #' @param custom_sign_in_server Either \code{NULL}, the default, or a Shiny server containing your custom
 #' sign in server logic.
-#' @param allow_reconnect argument to pass to the Shiny \code{session$allowReconnect()} function. Defaults to
-#' \code{FALSE}.  Set to \code{TRUE} to allow reconnect with shiny-server and RStudio Connect.  Set to \code{"force"}
-#' for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.html} for more information.
 #'
 #' @export
 #'
@@ -22,8 +19,7 @@
 secure_server <- function(
   server,
   custom_sign_in_server = NULL,
-  custom_admin_server = NULL,
-  allow_reconnect = FALSE
+  custom_admin_server = NULL
 ) {
 
   server <- force(server)
@@ -33,12 +29,7 @@ secure_server <- function(
   }
 
   function(input, output, session) {
-    session$userData$user <- shiny::reactiveVal(NULL)
-
-
-    if (isTRUE(allow_reconnect) || allow_reconnect == "force") {
-      session$allowReconnect(allow_reconnect)
-    }
+    session$userData$user <- reactiveVal(NULL)
 
 
     # handle the initial input$hashed_cookie

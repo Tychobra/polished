@@ -4,12 +4,7 @@
 \alias{secure_server}
 \title{Secure your Shiny app's server}
 \usage{
-secure_server(
-  server,
-  custom_sign_in_server = NULL,
-  custom_admin_server = NULL,
-  allow_reconnect = FALSE
-)
+secure_server(server, custom_sign_in_server = NULL, custom_admin_server = NULL)
 }
 \arguments{
 \item{server}{A Shiny server function (e.g \code{function(input, output, session) {}})}
@@ -19,10 +14,6 @@ sign in server logic.}
 
 \item{custom_admin_server}{Either \code{NULL}, the default, or a Shiny server function containing your custom admin
 server functionality.}
-
-\item{allow_reconnect}{argument to pass to the Shiny \code{session$allowReconnect()} function. Defaults to
-\code{FALSE}.  Set to \code{TRUE} to allow reconnect with shiny-server and RStudio Connect.  Set to \code{"force"}
-for local testing.  See \url{https://shiny.rstudio.com/articles/reconnecting.html} for more information.}
 }
 \description{
 This function is used to secure your Shiny app's server function.  Make sure to pass
