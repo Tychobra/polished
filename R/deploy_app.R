@@ -131,15 +131,16 @@ deploy_app <- function(
     cat("Your Shiny app will open in your default web browser once deployment is complete.\n")
   }
 
+  # Check if zipped app is larger than Cloud Run's max request size (32 Mb)
+  if (as.numeric(file.size(app_zip_path)) > 33554432) {
+    stop("Zipped application is too large (> 32 Mb)", call. = FALSE)
+  }
+
   zip_to_send <- httr::upload_file(
     path = app_zip_path,
     type = "application/x-gzip"
   )
 
-  # Check if zipped app is larger than Cloud Run's max request size (32 Mb)
-  if (as.numeric(utils::object.size(zip_to_send)) > 33554432) {
-    stop("Zipped application is too large (> 32 Mb)", call. = FALSE)
-  }
 
   cat("Deployment status can be found at https://dashboard.polished.tech\n")
 
