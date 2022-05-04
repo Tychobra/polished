@@ -219,7 +219,7 @@ bundle_app <- function(
 ) {
 
 
-  deps_list <- polished:::get_package_deps(app_dir)
+  deps_list <- get_package_deps(app_dir)
 
   # create yaml file with all the dependencies
   yml_path <- file.path(app_dir, "deps.yaml")
