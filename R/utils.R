@@ -99,6 +99,29 @@ send_invite_checkbox <- function(ns, app_url) {
   email_invite_checkbox
 }
 
+#' normalize UI
+#'
+#' the UI passed a shiny app can be a function HTML.  This function normalized the 2 different
+#' formats so that they both use the character
+#'
+#' @param ui the Shiny ui
+#' @param request_ the request environment passed to the first argument of the UI
+#' function
+#'
+#' @export
+#'
+normalize_ui <- function(ui, request_) {
+  if (is.function(ui)) {
+    if (length(formals(ui)) > 0) {
+      ui <- ui(request_)
+    }  else {
+      ui <- ui()
+    }
+  } else {
+    ui <- ui
+  }
+  ui
+}
 
 # Default `.options` for `showToast`
 polished_toast_options <- list(

@@ -1,17 +1,6 @@
 
 
-normalize_ui <- function(ui, request) {
-  if (is.function(ui)) {
-    if (length(formals(ui)) > 0) {
-      ui <- ui(request)
-    }  else {
-      ui <- ui()
-    }
-  } else {
-    ui <- ui
-  }
-  ui
-}
+
 
 
 #' Secure your Shiny UI
