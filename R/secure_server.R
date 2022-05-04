@@ -29,7 +29,7 @@ secure_server <- function(
   }
 
   function(input, output, session) {
-    session$userData$user <- function(NULL)
+    session$userData$user <- function() NULL
 
 
     # handle the initial input$hashed_cookie
