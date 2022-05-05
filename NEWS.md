@@ -1,5 +1,6 @@
 # polished v0.6.1.9000
 
+* added optional `role_name` arg to `add_user_role()`
 * `deploy_app()` now throw a more user friendly error message if the app is too large to 
 deploy to Polished Hosting.
 * Polished Hosting supports 16 GiB instances (i.e. `16` is a valid value for the `ram_gb` argument of `polished::deploy_app()`)
