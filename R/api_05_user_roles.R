@@ -70,7 +70,7 @@ add_user_role <- function(user_uid, role_uid = NULL, role_name = NULL, api_key =
     user_uid = user_uid
   )
 
-  if (is.null(role_uid) && is.null(rolw_name)) {
+  if (is.null(role_uid) && is.null(role_name)) {
     stop("one of either `role_uid` or `role_name` must be provided", call. = FALSE)
   }
 
