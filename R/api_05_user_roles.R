@@ -50,7 +50,11 @@ get_user_roles <- function(
 #' Polished API - Add a User Role
 #'
 #' @param user_uid a user uid.
-#' @param role_uid a role name.
+#' @param role_uid an optional role uid.
+#' @param role_name an optional role name.
+#'
+#' @details one of either \code{role_uid} or \code{role_name} must be provided.  If
+#' both are provided, only the \code{role_uid} will be used.
 #'
 #' @inheritParams get_apps
 #'
@@ -60,12 +64,18 @@ get_user_roles <- function(
 #'
 #' @importFrom httr POST authenticate
 #'
-add_user_role <- function(user_uid, role_uid, api_key = get_api_key()) {
+add_user_role <- function(user_uid, role_uid = NULL, role_name = NULL, api_key = get_api_key()) {
 
   body_out <- list(
-    user_uid = user_uid,
-    role_uid = role_uid
+    user_uid = user_uid
   )
+
+  if (is.null(role_uid) && is.null(rolw_name)) {
+    stop("one of either `role_uid` or `role_name` must be provided", call. = FALSE)
+  }
+
+  body_out$role_uid <- role_uid
+  body_out$role_name <- role_name
 
   resp <- httr::POST(
     url = paste0(.polished$api_url, "/user-roles"),
