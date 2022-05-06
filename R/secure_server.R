@@ -140,56 +140,56 @@ secure_server <- function(
       } else {
         # the user is signed in
 
+
+
+
+        # if the user somehow ends up on the sign_in page, redirect them to the
+        # Shiny app and reload
+        if (identical(query_list$page, "sign_in")) {
+          remove_query_string()
+          session$reload()
+        }
+
+        if (is.na(global_user$signed_in_as) || identical(query_list$page, "admin")) {
+
+          # user is not on the custom Shiny app, so clear the signed in as user
+          if (!is.na(global_user$signed_in_as)) {
+            # clear signed in as in .polished
+            update_session(
+              session_uid = global_user$session_uid,
+              session_data = list(
+                signed_in_as = NA
+              )
+            )
+          }
+
+          user_out <- global_user[
+            c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified", "roles", "two_fa_verified")
+          ]
+
+          session$userData$user <- function() user_out
+          session$userData$p <- user_out
+
+        } else {
+
+          signed_in_as_user <- get_signed_in_as_user(global_user$signed_in_as)
+          signed_in_as_user$session_uid <- global_user$session_uid
+          signed_in_as_user$hashed_cookie <- global_user$hashed_cookie
+
+          # set email verified to TRUE, so that you go directly to app
+          signed_in_as_user$email_verified <- global_user$email_verified
+          signed_in_as_user$two_fa_verified <- global_user$two_fa_verified
+          session$userData$user <- function() signed_in_as_user
+          session$userData$p <- signed_in_as_user
+        }
+
+
         if (isFALSE(global_user$email_verified) && isTRUE(.polished$is_email_verification_required)) {
           # go to email verification view.
           # `secure_ui()` will go to email verification view if isTRUE(is_authed) && isFALSE(email_verified)
           verify_email_server(input, output, session)
 
         } else {
-
-
-          # if the user somehow ends up on the sign_in page, redirect them to the
-          # Shiny app and reload
-          if (identical(query_list$page, "sign_in")) {
-            remove_query_string()
-            session$reload()
-          }
-
-          if (is.na(global_user$signed_in_as) || identical(query_list$page, "admin")) {
-
-            # user is not on the custom Shiny app, so clear the signed in as user
-            if (!is.na(global_user$signed_in_as)) {
-              # clear signed in as in .polished
-              update_session(
-                session_uid = global_user$session_uid,
-                session_data = list(
-                  signed_in_as = NA
-                )
-              )
-            }
-
-            user_out <- global_user[
-              c("session_uid", "user_uid", "email", "is_admin", "hashed_cookie", "email_verified", "roles", "two_fa_verified")
-            ]
-
-            session$userData$user <- function() user_out
-            session$userData$p <- user_out
-
-          } else {
-
-            signed_in_as_user <- get_signed_in_as_user(global_user$signed_in_as)
-            signed_in_as_user$session_uid <- global_user$session_uid
-            signed_in_as_user$hashed_cookie <- global_user$hashed_cookie
-
-            # set email verified to TRUE, so that you go directly to app
-            signed_in_as_user$email_verified <- global_user$email_verified
-            signed_in_as_user$two_fa_verified <- global_user$two_fa_verified
-            session$userData$user <- function() signed_in_as_user
-            session$userData$p <- signed_in_as_user
-          }
-
-
-
           if (.polished$is_two_fa_required && !isTRUE(global_user$two_fa_verified)) {
 
             two_fa_server(input, output, session)
