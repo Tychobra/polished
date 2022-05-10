@@ -20,6 +20,7 @@
 #' @param button_color the color of the "Continue", "Sign In", and "Register" buttons.  If kept
 #' as \code{NULL}, the default, then the button color will be the same color as the color passed to
 #' the \code{color} argument.
+#' @param footer_color the text color for the copyright text in the footer.
 #'
 #' @export
 #'
@@ -45,7 +46,8 @@ sign_in_ui_default <- function(
   background_image = NULL,
   terms_and_privacy_footer = NULL,
   align = "center",
-  button_color = NULL
+  button_color = NULL,
+  footer_color = "#FFF"
 ) {
 
   if (is.null(background_image)) {
@@ -134,7 +136,7 @@ sign_in_ui_default <- function(
         }
 
         .footer {
-          color: #FFF;
+          color: ${footer_color};
           text-align: center;
           z-index: 1;
           margin-top: ${footer_margin}px;

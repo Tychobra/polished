@@ -17,7 +17,8 @@ sign_in_ui_default(
   background_image = NULL,
   terms_and_privacy_footer = NULL,
   align = "center",
-  button_color = NULL
+  button_color = NULL,
+  footer_color = "#FFF"
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ values are \code{"left"}, \code{"center"}, or \code{"right"}}
 \item{button_color}{the color of the "Continue", "Sign In", and "Register" buttons.  If kept
 as \code{NULL}, the default, then the button color will be the same color as the color passed to
 the \code{color} argument.}
+
+\item{footer_color}{the text color for the copyright text in the footer.}
 }
 \value{
 the UI for the Sign In & Registration pages
