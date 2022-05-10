@@ -4,18 +4,29 @@
 \alias{add_user_role}
 \title{Polished API - Add a User Role}
 \usage{
-add_user_role(user_uid, role_uid, api_key = get_api_key())
+add_user_role(
+  user_uid,
+  role_uid = NULL,
+  role_name = NULL,
+  api_key = get_api_key()
+)
 }
 \arguments{
 \item{user_uid}{a user uid.}
 
-\item{role_uid}{a role name.}
+\item{role_uid}{an optional role uid.}
+
+\item{role_name}{an optional role name.}
 
 \item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 }
 \description{
 Polished API - Add a User Role
+}
+\details{
+one of either \code{role_uid} or \code{role_name} must be provided.  If
+both are provided, only the \code{role_uid} will be used.
 }
 \seealso{
 \code{\link[=get_user_roles]{get_user_roles()}} \code{\link[=delete_user_role]{delete_user_role()}}
