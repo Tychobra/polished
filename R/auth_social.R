@@ -82,7 +82,7 @@ verify_firebase_token <- function(firebase_token) {
 #' session.  This cookie is inserted into the "polished.sessions" table if the
 #' JWT is valid.
 #'
-#' @importFrom uuid UUIDgenerate
+#' @importFrom uuid is.UUID
 #'
 #' @return NULL if sign in fails. If sign in is successful, a list containing the following:
 #' * email
@@ -135,16 +135,19 @@ sign_in_social <- function(
         app_uid = .polished$app_uid,
         email = hold_session_email
       )$content
+
+      if (identical(nrow(invite), 0L)) {
+        stop("[polished] error checking user invite", call. = FALSE)
+      }
+
+      if (uuid::is.UUID(add_app_user_res$session_uid)) {
+        new_session_uid <- add_app_user_res$session_uid
+      }
+
     }
 
     if (identical(nrow(invite), 0L)) {
       stop("[polished] error checking user invite", call. = FALSE)
-    }
-
-    if (uuid::is.UUID(add_app_user_res$session_uid)) {
-      new_session_uid <- add_app_user_res$session_uid
-    } else {
-      new_session_uid
     }
 
     new_session <- list(

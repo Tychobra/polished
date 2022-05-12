@@ -12,8 +12,8 @@
 #'
 #' @export
 #'
-#' @importFrom shiny observe observeEvent getQueryString updateQueryString callModule onStop reactiveVal req
-#' @importFrom digest digest
+#' @importFrom shiny observeEvent getQueryString updateQueryString callModule onStop
+#' @importFrom uuid UUIDgenerate
 #'
 #'
 secure_server <- function(
