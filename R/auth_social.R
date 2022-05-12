@@ -142,8 +142,6 @@ sign_in_social <- function(
 
       if (uuid::is.UUID(add_app_user_res$session_uid)) {
         new_session_uid <- add_app_user_res$session_uid
-      } else {
-        new_session_uid
       }
 
     }
