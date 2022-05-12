@@ -82,7 +82,7 @@ verify_firebase_token <- function(firebase_token) {
 #' session.  This cookie is inserted into the "polished.sessions" table if the
 #' JWT is valid.
 #'
-#' @importFrom uuid UUIDgenerate
+#' @importFrom uuid is.UUID
 #'
 #' @return NULL if sign in fails. If sign in is successful, a list containing the following:
 #' * email

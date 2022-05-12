@@ -37,7 +37,7 @@ Imports:
     tibble,
     tidyr,
     utils,
-    uuid,
+    uuid (>= 1.0-5),
     yaml
 Suggests:
     testthat (>= 3.0.0),
