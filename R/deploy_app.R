@@ -55,6 +55,7 @@ valid_gcp_regions <- c(
 #' `golem` package, provide the name of the Shiny app package as a character string.
 #' Defaults to \code{NULL}.  Keep as \code{NULL} for non `golem` Shiny apps.
 #' @param cache Boolean (default: \code{TRUE}) - whether or not to cache the Docker image.
+#' @param n_workers the number of R processes
 #'
 #' @importFrom utils browseURL
 #' @importFrom httr POST authenticate handle_reset status_code content upload_file

@@ -14,7 +14,8 @@ deploy_app(
   r_ver = NULL,
   tlmgr = character(0),
   golem_package_name = NULL,
-  cache = TRUE
+  cache = TRUE,
+  n_workers = 1
 )
 }
 \arguments{
@@ -50,6 +51,8 @@ character vector of your TeX Live package dependencies to have all your TeX Live
 Defaults to \code{NULL}.  Keep as \code{NULL} for non \code{golem} Shiny apps.}
 
 \item{cache}{Boolean (default: \code{TRUE}) - whether or not to cache the Docker image.}
+
+\item{n_workers}{the number of R processes}
 }
 \description{
 Deploy a Shiny app to Polished Hosting
