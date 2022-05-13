@@ -172,7 +172,7 @@ deploy_app <- function(
       n_workers = n_workers
     ),
     encode = "multipart",
-    http_version = 0,
+    #http_version = 0,
     # timeout after 30 minutes
     timeout = 1800
   )
