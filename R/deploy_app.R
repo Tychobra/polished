@@ -83,7 +83,8 @@ deploy_app <- function(
   r_ver = NULL,
   tlmgr = character(0),
   golem_package_name = NULL,
-  cache = TRUE
+  cache = TRUE,
+  n_workers = 1
 ) {
 
   if (identical(Sys.getenv("SHINY_HOSTING"), "polished")) {
@@ -166,7 +167,8 @@ deploy_app <- function(
       r_ver = r_ver,
       tlmgr = paste(tlmgr, collapse = ","),
       golem_package_name = golem_package_name,
-      cache = cache
+      cache = cache,
+      n_workers = n_workers
     ),
     encode = "multipart",
     http_version = 0,
