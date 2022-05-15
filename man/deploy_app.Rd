@@ -15,7 +15,7 @@ deploy_app(
   tlmgr = character(0),
   golem_package_name = NULL,
   cache = TRUE,
-  n_workers = 1
+  max_sessions = Inf
 )
 }
 \arguments{
@@ -52,7 +52,10 @@ Defaults to \code{NULL}.  Keep as \code{NULL} for non \code{golem} Shiny apps.}
 
 \item{cache}{Boolean (default: \code{TRUE}) - whether or not to cache the Docker image.}
 
-\item{n_workers}{the number of R processes}
+\item{max_sessions}{the max number of sessions to connect to a single R process before a
+new R process is started.  Set to \code{Inf}, the default, to only run a single R
+process for all sessions.  If you set \code{max_sessions} to 1, then a separate R process
+will be started for every session.}
 }
 \description{
 Deploy a Shiny app to Polished Hosting
