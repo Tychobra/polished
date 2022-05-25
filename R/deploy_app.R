@@ -42,7 +42,7 @@ valid_gcp_regions <- c(
 #' on Google Cloud Platform. Currently, database connections are only supported for
 #' `us-east1`. See \url{https://polished.tech/docs/06-database-connections} for details.
 #' @param ram_gb the amount of memory (in `GiB`) to allocate to your Shiny app's server.
-#' Valid values are `2`, `4`, `8`, or `16`.
+#' Valid values are `2`, `4`, `8`, `16`, or `32`.
 #' @param r_ver Character string of desired `R` version.  If kept as \code{NULL} (the default),
 #' \code{deploy_app()} will detect the R version you are currently running.  The R version must be a version
 #' supported by an `r-ver` Docker image.  You can see all the `r-ver` Docker image versions
@@ -103,8 +103,8 @@ deploy_app <- function(
     ))
   }
 
-  if (!(ram_gb %in% c(2, 4, 8, 16))) {
-    stop("`ram_gb` must be 2, 4, 8, or 16", call. = FALSE)
+  if (!(ram_gb %in% c(2, 4, 8, 16, 32))) {
+    stop("`ram_gb` must be 2, 4, 8, 16, 32", call. = FALSE)
   }
 
   # check that app_dir contains either an "app.R" file or a "ui.R" and a "server.R" file
