@@ -14,7 +14,8 @@ deploy_app(
   r_ver = NULL,
   tlmgr = character(0),
   golem_package_name = NULL,
-  cache = TRUE
+  cache = TRUE,
+  max_sessions = Inf
 )
 }
 \arguments{
@@ -33,7 +34,7 @@ on Google Cloud Platform. Currently, database connections are only supported for
 \code{us-east1}. See \url{https://polished.tech/docs/06-database-connections} for details.}
 
 \item{ram_gb}{the amount of memory (in \code{GiB}) to allocate to your Shiny app's server.
-Valid values are \code{2}, \code{4}, \code{8}, or \code{16}.}
+Valid values are \code{2}, \code{4}, \code{8}, \code{16}, or \code{32}.}
 
 \item{r_ver}{Character string of desired \code{R} version.  If kept as \code{NULL} (the default),
 \code{deploy_app()} will detect the R version you are currently running.  The R version must be a version
@@ -50,6 +51,11 @@ character vector of your TeX Live package dependencies to have all your TeX Live
 Defaults to \code{NULL}.  Keep as \code{NULL} for non \code{golem} Shiny apps.}
 
 \item{cache}{Boolean (default: \code{TRUE}) - whether or not to cache the Docker image.}
+
+\item{max_sessions}{the max number of sessions to connect to a single R process before a
+new R process is started.  Set to \code{Inf}, the default, to only run a single R
+process for all sessions.  If you set \code{max_sessions} to 1, then a separate R process
+will be started for every session.}
 }
 \description{
 Deploy a Shiny app to Polished Hosting

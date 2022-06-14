@@ -13,7 +13,6 @@ polished_config(
   is_invite_required = TRUE,
   sign_in_providers = "email",
   is_email_verification_required = TRUE,
-  sentry_dsn = NULL,
   cookie_expires = 365L,
   is_auth_required = TRUE,
   is_two_fa_required = FALSE
@@ -47,8 +46,6 @@ invite before registering/signing in}
 
 \item{is_email_verification_required}{\code{TRUE} by default.  Whether or not to require the user to
 verify their email before accessing your Shiny app.}
-
-\item{sentry_dsn}{either \code{NULL}, the default, or your Sentry project's DSN.}
 
 \item{cookie_expires}{the number of days before a user's cookie expires.
 Set to \code{NULL} to force Sign Out at session end. This argument is passed to

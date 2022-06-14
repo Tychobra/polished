@@ -31,7 +31,6 @@
 #' in to access the app.  It can be useful to set this argument to \code{FALSE} if you want to
 #' allow users to do certain actions (such as viewing charts and tables) without signing in,
 #' and only require users to sign in if they want to save data to your database.
-#' @param sentry_dsn either \code{NULL}, the default, or your Sentry project's DSN.
 #' @param cookie_expires the number of days before a user's cookie expires.
 #' Set to \code{NULL} to force Sign Out at session end. This argument is passed to
 #' the `expires` option in js-cookie: \url{https://github.com/js-cookie/js-cookie#expires}.
@@ -72,7 +71,6 @@ polished_config <- function(
   is_invite_required = TRUE,
   sign_in_providers = "email",
   is_email_verification_required = TRUE,
-  sentry_dsn = NULL,
   cookie_expires = 365L,
   is_auth_required = TRUE,
   is_two_fa_required = FALSE
@@ -94,10 +92,6 @@ polished_config <- function(
 
   if (identical(nrow(app), 0L)) {
     stop(paste0("app_name `", app_name, "` does not exist"), call. = FALSE)
-  }
-
-  if (!(is.null(sentry_dsn) || (length(sentry_dsn) == 1 && is.character(sentry_dsn)) ) ) {
-    stop("invalid `sentry_dsn` argument passed to `polished_config()`", call. = FALSE)
   }
 
   # Throw warning for no Firebase config w/ Social Sign in Providers
@@ -143,7 +137,6 @@ call. = FALSE
   assign("is_invite_required", is_invite_required, envir = .polished)
   assign("sign_in_providers", sign_in_providers, envir = .polished)
   assign("is_email_verification_required", is_email_verification_required, envir = .polished)
-  assign("sentry_dsn", sentry_dsn, envir = .polished)
   assign("cookie_expires", cookie_expires, envir = .polished)
   assign("is_auth_required", is_auth_required, envir = .polished)
   assign("is_two_fa_required", is_two_fa_required, envir = .polished)

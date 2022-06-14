@@ -42,7 +42,7 @@ valid_gcp_regions <- c(
 #' on Google Cloud Platform. Currently, database connections are only supported for
 #' `us-east1`. See \url{https://polished.tech/docs/06-database-connections} for details.
 #' @param ram_gb the amount of memory (in `GiB`) to allocate to your Shiny app's server.
-#' Valid values are `2`, `4`, `8`, or `16`.
+#' Valid values are `2`, `4`, `8`, `16`, or `32`.
 #' @param r_ver Character string of desired `R` version.  If kept as \code{NULL} (the default),
 #' \code{deploy_app()} will detect the R version you are currently running.  The R version must be a version
 #' supported by an `r-ver` Docker image.  You can see all the `r-ver` Docker image versions
@@ -55,6 +55,10 @@ valid_gcp_regions <- c(
 #' `golem` package, provide the name of the Shiny app package as a character string.
 #' Defaults to \code{NULL}.  Keep as \code{NULL} for non `golem` Shiny apps.
 #' @param cache Boolean (default: \code{TRUE}) - whether or not to cache the Docker image.
+#' @param max_sessions the max number of sessions to connect to a single R process before a
+#' new R process is started.  Set to \code{Inf}, the default, to only run a single R
+#' process for all sessions.  If you set \code{max_sessions} to 1, then a separate R process
+#' will be started for every session.
 #'
 #' @importFrom utils browseURL
 #' @importFrom httr POST authenticate handle_reset status_code content upload_file
@@ -83,7 +87,8 @@ deploy_app <- function(
   r_ver = NULL,
   tlmgr = character(0),
   golem_package_name = NULL,
-  cache = TRUE
+  cache = TRUE,
+  max_sessions = Inf
 ) {
 
   if (identical(Sys.getenv("SHINY_HOSTING"), "polished")) {
@@ -98,8 +103,8 @@ deploy_app <- function(
     ))
   }
 
-  if (!(ram_gb %in% c(2, 4, 8, 16))) {
-    stop("`ram_gb` must be 2, 4, 8, or 16", call. = FALSE)
+  if (!(ram_gb %in% c(2, 4, 8, 16, 32))) {
+    stop("`ram_gb` must be 2, 4, 8, 16, 32", call. = FALSE)
   }
 
   # check that app_dir contains either an "app.R" file or a "ui.R" and a "server.R" file
@@ -166,10 +171,11 @@ deploy_app <- function(
       r_ver = r_ver,
       tlmgr = paste(tlmgr, collapse = ","),
       golem_package_name = golem_package_name,
-      cache = cache
+      cache = cache,
+      max_sessions = max_sessions
     ),
     encode = "multipart",
-    http_version = 0,
+    #http_version = 0,
     # timeout after 30 minutes
     timeout = 1800
   )
