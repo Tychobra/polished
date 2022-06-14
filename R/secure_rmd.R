@@ -181,7 +181,6 @@ secure_rmd <- function(
     "sign_in_providers",
     "is_email_verification_required",
     "is_auth_required",
-    "sentry_dsn",
     "cookie_expires"
   ))) {
     stop('Invalid value passed to "polished_config_args"', call. = FALSE)

@@ -171,20 +171,6 @@ secure_ui <- function(
 
 
 
-    # UI to optionally add Sentry.io error monitoring
-    sentry_ui_out <- function(x) NULL
-    sentry_dsn <- .polished$sentry_dsn
-    if (!is.null(sentry_dsn)) {
-
-      sentry_ui_out <- sentry_ui(
-        sentry_dsn = sentry_dsn,
-        app_uid = paste0(.polished$app_name, "@", .polished$app_uid),
-        user = user,
-        r_env = if (Sys.getenv("R_CONFIG_ACTIVE") == "") "default" else Sys.getenv("R_CONFIG_ACTIVE")
-      )
-
-    }
-
     page_out <- NULL
     if (is.null(user)) {
 
@@ -196,7 +182,6 @@ secure_ui <- function(
           page_out <- tagList(
             force(sign_in_ui_default()),
             tags$script(src = "polish/js/router.js?version=4"),
-            sentry_ui_out("sign_in_default"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
             tags$script(paste0("polished_session('sign_in-", uuid::UUIDgenerate(), "')"))
           )
@@ -207,7 +192,6 @@ secure_ui <- function(
           page_out <- tagList(
             force(normalize_ui(sign_in_page_ui, request)),
             tags$script(src = "polish/js/router.js?version=4"),
-            sentry_ui_out("sign_in_custom"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
             tags$script(paste0("polished_session('sign_in-", uuid::UUIDgenerate(), "')"))
           )
@@ -224,8 +208,7 @@ secure_ui <- function(
             force(normalize_ui(ui, request)),
             tags$script(src = "polish/js/router.js?version=4"),
             tags$script(src = "polish/js/polished_session.js?version=2"),
-            tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-            sentry_ui_out("shiny_app")
+            tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
           )
         } else {
           # send a random uuid as the polished_session.  This will trigger a session
@@ -277,16 +260,14 @@ secure_ui <- function(
                   )),
                   tags$script(src = "polish/js/router.js?version=4"),
                   tags$script(src = "polish/js/polished_session.js?version=2"),
-                  tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-                  sentry_ui_out("default_admin_panel")
+                  tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
                 )
               } else {
                 page_out <- tagList(
                   force(normalize_ui(custom_admin_ui, request)),
                   tags$script(src = "polish/js/router.js?version=4"),
                   tags$script(src = "polish/js/polished_session.js?version=2"),
-                  tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-                  sentry_ui_out("custom_admin_panel")
+                  tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
                 )
               }
 
@@ -298,8 +279,7 @@ secure_ui <- function(
                 custom_admin_button_ui,
                 tags$script(src = "polish/js/router.js?version=4"),
                 tags$script(src = "polish/js/polished_session.js?version=2"),
-                tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-                sentry_ui_out("shiny_app")
+                tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
               )
             }
 
@@ -311,8 +291,7 @@ secure_ui <- function(
               force(normalize_ui(ui, request)),
               tags$script(src = "polish/js/router.js?version=4"),
               tags$script(src = "polish/js/polished_session.js?version=2"),
-              tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-              sentry_ui_out("shiny_app")
+              tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
             )
 
           } # end is_admin check
@@ -327,8 +306,7 @@ secure_ui <- function(
           force(verify_email_ui()),
           tags$script(src = "polish/js/router.js?version=4"),
           tags$script(src = "polish/js/polished_session.js?version=2"),
-          tags$script(paste0("polished_session('", user$hashed_cookie, "')")),
-          sentry_ui_out("email_verification")
+          tags$script(paste0("polished_session('", user$hashed_cookie, "')"))
         )
       }
 
