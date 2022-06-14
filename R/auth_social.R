@@ -74,6 +74,16 @@ verify_firebase_token <- function(firebase_token) {
   decoded_jwt
 }
 
+is_uuid <- function(x) {
+  if (identical(length(x), 1L)) {
+    out <- isTRUE(grepl("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", x))
+  } else {
+    out <- FALSE
+  }
+
+  return(out)
+}
+
 #' verify the users Firebase JWT and store the session
 #'
 #' @param firebase_token the Firebase JWT.  This JWT is created client side
@@ -82,7 +92,6 @@ verify_firebase_token <- function(firebase_token) {
 #' session.  This cookie is inserted into the "polished.sessions" table if the
 #' JWT is valid.
 #'
-#' @importFrom uuid is.UUID
 #'
 #' @return NULL if sign in fails. If sign in is successful, a list containing the following:
 #' * email
@@ -140,7 +149,7 @@ sign_in_social <- function(
         stop("[polished] error checking user invite", call. = FALSE)
       }
 
-      if (uuid::is.UUID(add_app_user_res$session_uid)) {
+      if (is_uuid(add_app_user_res$session_uid)) {
         new_session_uid <- add_app_user_res$session_uid
       }
 
