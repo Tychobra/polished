@@ -55,10 +55,6 @@ valid_gcp_regions <- c(
 #' `golem` package, provide the name of the Shiny app package as a character string.
 #' Defaults to \code{NULL}.  Keep as \code{NULL} for non `golem` Shiny apps.
 #' @param cache Boolean (default: \code{TRUE}) - whether or not to cache the Docker image.
-#' @param max_sessions the max number of sessions to connect to a single R process before a
-#' new R process is started.  Set to \code{Inf}, the default, to only run a single R
-#' process for all sessions.  If you set \code{max_sessions} to 1, then a separate R process
-#' will be started for every session.
 #'
 #' @importFrom utils browseURL
 #' @importFrom httr POST authenticate handle_reset status_code content upload_file
@@ -87,13 +83,14 @@ deploy_app <- function(
   r_ver = NULL,
   tlmgr = character(0),
   golem_package_name = NULL,
-  cache = TRUE,
-  max_sessions = Inf
+  cache = TRUE
 ) {
 
   if (identical(Sys.getenv("SHINY_HOSTING"), "polished")) {
     stop("You cannot run `polished::deploy_app()` from Polished Hosting.", call. = FALSE)
   }
+
+  max_sessions <- Inf
 
   if (!(region %in% valid_gcp_regions)) {
     stop(paste0(
