@@ -1,6 +1,14 @@
 "use strict";
 
 // force page reload after browser back and forward buttons are clicked
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/polish/js/sw.js').then(function (reg) {
+    console.log('service worker registered', reg);
+  })["catch"](function (err) {
+    console.log("service worker error", err);
+  });
+}
+
 (function () {
   // get the polished page from the "page" query parameter
   var get_polished_page = function get_polished_page() {
