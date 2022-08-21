@@ -18,9 +18,6 @@
 #'   \item{\code{authDomain}}
 #'   \item{\code{projectId}}
 #' }
-#' @param admin_mode \code{FALSE} by default.  Set to \code{TRUE} to enter the \code{polished} Admin Panel without needing
-#' to register and sign in.  This is useful during development for inviting the first users to your app.
-#' Make sure to set \code{admin_mode = FALSE} before deploying your app.
 #' @param is_invite_required \code{TRUE} by default.  Whether or not to require the user to have an
 #' invite before registering/signing in
 #' @param sign_in_providers a character vector of sign in providers to enable. Valid values are \code{"google"}
@@ -67,7 +64,6 @@ polished_config <- function(
   app_name,
   api_key = get_api_key(),
   firebase_config = NULL,
-  admin_mode = FALSE,
   is_invite_required = TRUE,
   sign_in_providers = "email",
   is_email_verification_required = TRUE,
@@ -114,9 +110,6 @@ call. = FALSE
     stop("invalid `sign_in_providers` argument passed to `polished_config()`", call. = FALSE)
   }
 
-  if (!(length(admin_mode) == 1 && is.logical(admin_mode))) {
-    stop("invalid `admin_mode` argument passed to `polished_config()`", call. = FALSE)
-  }
   if (!(length(is_invite_required) == 1 && is.logical(is_invite_required))) {
     stop("invalid `is_invite_required` argument passed to `polished_config()`", call. = FALSE)
   }
@@ -133,7 +126,6 @@ call. = FALSE
   assign("app_uid", app$uid, envir = .polished)
   assign("api_key", api_key, envir = .polished)
   assign("firebase_config", firebase_config, envir = .polished)
-  assign("admin_mode", admin_mode, envir = .polished)
   assign("is_invite_required", is_invite_required, envir = .polished)
   assign("sign_in_providers", sign_in_providers, envir = .polished)
   assign("is_email_verification_required", is_email_verification_required, envir = .polished)

@@ -5,8 +5,6 @@
 #' @param options list of HTML elements to customize branding of "Admin Panel".  Valid
 #' list element names are `title`, `sidebar_branding`, and `browser_tab_icon`.  See
 #' \code{\link{default_admin_ui_options}} for an example.
-#' @param include_go_to_shiny_app_button whether or not to include the button to go to
-#' the Shiny app.  This argument is set to \code{FALSE} when `polished` is in "admin_mode".
 #'
 #'
 #' @importFrom shiny actionButton NS icon
@@ -20,23 +18,15 @@
 #' @export
 #'
 admin_ui <- function(
-  options = default_admin_ui_options(),
-  include_go_to_shiny_app_button = TRUE
+  options = default_admin_ui_options()
 ) {
 
   # don't show profile dropdown if in Admin mode.  User cannot log out of admin mode.
-  if (isTRUE(.polished$admin_mode)) {
-    head <- shinydashboard::dashboardHeader(
-      title = options$title
-    )
-  } else {
-    head <- shinydashboard::dashboardHeader(
-      title = options$title,
-      profile_module_ui("polish__profile")
-    )
-  }
 
-
+  head <- shinydashboard::dashboardHeader(
+    title = options$title,
+    profile_module_ui("polish__profile")
+  )
 
 
   sidebar <- shinydashboard::dashboardSidebar(
@@ -60,20 +50,6 @@ admin_ui <- function(
   )
 
 
-  if (isTRUE(include_go_to_shiny_app_button)) {
-    shiny_app_button <- htmltools::tags$div(
-      style = "position: fixed; bottom: 15px; right: 15px; z-index: 1000;",
-      shiny::actionButton(
-        "go_to_shiny_app",
-        "Shiny App",
-        icon = shiny::icon("rocket"),
-        class = "btn-primary btn-lg",
-        style = "color: #FFFFFF;"
-      )
-    )
-  } else {
-    shiny_app_button <- htmltools::tags$div()
-  }
 
 
 
@@ -85,7 +61,16 @@ admin_ui <- function(
     shinyjs::useShinyjs(),
     shinyFeedback::useShinyFeedback(),
 
-    shiny_app_button,
+    htmltools::tags$div(
+      style = "position: fixed; bottom: 15px; right: 15px; z-index: 1000;",
+      shiny::actionButton(
+        "go_to_shiny_app",
+        "Shiny App",
+        icon = shiny::icon("rocket"),
+        class = "btn-primary btn-lg",
+        style = "color: #FFFFFF;"
+      )
+    ),
 
     tab_items
   )

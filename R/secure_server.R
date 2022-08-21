@@ -38,36 +38,6 @@ secure_server <- function(
       hashed_cookie <- input$hashed_cookie
 
       global_user <- NULL
-      if (isTRUE(.polished$admin_mode)) {
-        global_user <- list(
-          session_uid = uuid::UUIDgenerate(),
-          user_uid = "00000000-0000-0000-0000-000000000000",
-          email = "admin@tychobra.com",
-          is_admin = TRUE,
-          hashed_cookie = character(0),
-          email_verified = TRUE,
-          roles = NA,
-          two_fa_verified = TRUE
-        )
-
-        shiny::updateQueryString(
-          queryString = paste0("?page=admin"),
-          session = session,
-          mode = "push"
-        )
-
-        if (is.null(custom_admin_server)) {
-
-          admin_server(input, output, session)
-
-        } else {
-
-          custom_admin_server(input, output, session)
-
-        }
-
-        return(NULL)
-      }
 
       # attempt to find the signed in user.  If user is signed in, `global_user`
       # will be a list of user data.  If the user is not signed in, `global_user`

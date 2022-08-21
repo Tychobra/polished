@@ -48,34 +48,6 @@ secure_ui <- function(
 
   function(request) {
 
-
-    if (isTRUE(.polished$admin_mode)) {
-
-      # go to Admin Panel
-      if (is.null(custom_admin_ui)) {
-        # default admin panel
-        return(tagList(
-          admin_ui(
-            options = admin_ui_options,
-            include_go_to_shiny_app_button = FALSE
-          ),
-          tags$script(src = "polish/js/polished_session.js?version=2"),
-          tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
-        ))
-      } else {
-        # custom, user provided, admin panel
-        return(tagList(
-          custom_admin_ui,
-          tags$script(src = "polish/js/polished_session.js?version=2"),
-          tags$script(paste0("polished_session('", uuid::UUIDgenerate(), "')"))
-        ))
-      }
-
-
-
-
-    }
-
     query <- shiny::parseQueryString(request$QUERY_STRING)
     page_query <- query$page
     cookie_string <- request$HTTP_COOKIE
