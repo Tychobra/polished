@@ -1,18 +1,13 @@
 # polished v0.6.1.9000
 
+* removed `admin_mode` argument from `polished_config()`.
 * added optional `role_name` arg to `add_user_role()`
-* `deploy_app()` now throw a more user friendly error message if the app is too large to 
-deploy to Polished Hosting.
-* Polished Hosting supports 16 GiB instances (i.e. `16` is a valid value for the `ram_gb` argument of `polished::deploy_app()`)
-* the `custom_admin_ui` argument for `secure_ui` now takes a fully custom shiny app.  This allows
-users to now fully customize their Admin Panel.  Previously you could only add tabs to the existing
-default Admin Panel, but with this change, you can fully replace the default Admin Panel with a 
-custom Shiny app.
+* `deploy_app()` now throws a more user friendly error message if the app is too large to deploy to Polished Hosting.
+* Polished Hosting supports 16 and 32 GiB instances.
+* the `custom_admin_ui` argument for `secure_ui()` now takes a fully custom shiny app.  This allows users to fully customize their Admin Panel.  Previously you could only add tabs to the existing default Admin Panel, but with this change, you can fully replace the default Admin Panel with a custom Shiny app.
 * improved UI of email verification page.
 * `update_user()` API wrapper function has been created.
-* 2 factor authentication using TOTP has been implemented.  This works with authenticator apps
-like Google Authenticator.  You can enable it by setting the `is_two_fa_required` argument of
-`polished_config()` to `TRUE`.
+* 2 factor authentication using TOTP has been implemented.  This works with authenticator apps like Google Authenticator.  You can enable it by setting the `is_two_fa_required` argument of `polished_config()` to `TRUE`.
 * bug fix - fixed auto email verification check on email verification page.
 
 # polished v0.6.1
