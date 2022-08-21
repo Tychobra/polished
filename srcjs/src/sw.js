@@ -9,14 +9,17 @@ self.addEventListener('activate', evt => {
   console.log('sw activated')
 })
 
-setInterval(() => {
+self.addEventListener('periodicsync', (event) => {
 
-  fetch("/__keep_alive__").then(() => {
-    console.log("I'm alive")
-  }).catch(() => {
-    console.log("I'm dead")
-  })
-
-}, 5000);
+  console.log("periodic sync event fired: ", event.tag)
+  if (event.tag === 'get-latest-news') {
+    //event.waitUntil();
+    fetch("/__keep_alive__").then((res) => {
+      console.log("I'm alive: ", res.json())
+    }).catch((err) => {
+      console.log("I'm dead: ", err)
+    })
+  }
+})
 
 
