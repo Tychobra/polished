@@ -8,3 +8,4 @@ node_modules/
 config.yml
 rsconnect/
 inst/doc
+*deps.yaml
