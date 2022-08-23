@@ -4,18 +4,12 @@
 \alias{admin_ui}
 \title{The UI for the "Admin Panel" dashboard}
 \usage{
-admin_ui(
-  options = default_admin_ui_options(),
-  include_go_to_shiny_app_button = TRUE
-)
+admin_ui(options = default_admin_ui_options())
 }
 \arguments{
 \item{options}{list of HTML elements to customize branding of "Admin Panel".  Valid
 list element names are \code{title}, \code{sidebar_branding}, and \code{browser_tab_icon}.  See
 \code{\link{default_admin_ui_options}} for an example.}
-
-\item{include_go_to_shiny_app_button}{whether or not to include the button to go to
-the Shiny app.  This argument is set to \code{FALSE} when \code{polished} is in "admin_mode".}
 }
 \value{
 the UI for the "Admin Panel"

@@ -91,6 +91,8 @@ is_uuid <- function(x) {
 #' @param hashed_cookie the hashed `polished` cookie.  Used for tracking the user
 #' session.  This cookie is inserted into the "polished.sessions" table if the
 #' JWT is valid.
+#' @param error_message the error message to display when an error occurs
+#' due to a user not having access to the application.
 #'
 #'
 #' @return NULL if sign in fails. If sign in is successful, a list containing the following:
@@ -105,7 +107,8 @@ is_uuid <- function(x) {
 #'
 sign_in_social <- function(
   firebase_token,
-  hashed_cookie
+  hashed_cookie,
+  error_message = "[polished] error checking user invite"
 ) {
 
   decoded_jwt <- NULL
@@ -146,7 +149,7 @@ sign_in_social <- function(
       )$content
 
       if (identical(nrow(invite), 0L)) {
-        stop("[polished] error checking user invite", call. = FALSE)
+        stop(error_message, call. = FALSE)
       }
 
       if (is_uuid(add_app_user_res$session_uid)) {
@@ -156,7 +159,7 @@ sign_in_social <- function(
     }
 
     if (identical(nrow(invite), 0L)) {
-      stop("[polished] error checking user invite", call. = FALSE)
+      stop(error_message, call. = FALSE)
     }
 
     new_session <- list(

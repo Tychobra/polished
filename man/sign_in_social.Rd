@@ -4,7 +4,11 @@
 \alias{sign_in_social}
 \title{verify the users Firebase JWT and store the session}
 \usage{
-sign_in_social(firebase_token, hashed_cookie)
+sign_in_social(
+  firebase_token,
+  hashed_cookie,
+  error_message = "[polished] error checking user invite"
+)
 }
 \arguments{
 \item{firebase_token}{the Firebase JWT.  This JWT is created client side
@@ -13,6 +17,9 @@ sign_in_social(firebase_token, hashed_cookie)
 \item{hashed_cookie}{the hashed \code{polished} cookie.  Used for tracking the user
 session.  This cookie is inserted into the "polished.sessions" table if the
 JWT is valid.}
+
+\item{error_message}{the error message to display when an error occurs
+due to a user not having access to the application.}
 }
 \value{
 NULL if sign in fails. If sign in is successful, a list containing the following:
