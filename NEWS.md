@@ -1,4 +1,4 @@
-# polished v0.6.1.9000
+# polished v0.7.0
 
 * removed `admin_mode` argument from `polished_config()`.
 * added optional `role_name` arg to `add_user_role()`
