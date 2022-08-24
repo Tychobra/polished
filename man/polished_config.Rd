@@ -9,7 +9,6 @@ polished_config(
   app_name,
   api_key = get_api_key(),
   firebase_config = NULL,
-  admin_mode = FALSE,
   is_invite_required = TRUE,
   sign_in_providers = "email",
   is_email_verification_required = TRUE,
@@ -33,10 +32,6 @@ This list should have the following named elements:
 \item{\code{authDomain}}
 \item{\code{projectId}}
 }}
-
-\item{admin_mode}{\code{FALSE} by default.  Set to \code{TRUE} to enter the \code{polished} Admin Panel without needing
-to register and sign in.  This is useful during development for inviting the first users to your app.
-Make sure to set \code{admin_mode = FALSE} before deploying your app.}
 
 \item{is_invite_required}{\code{TRUE} by default.  Whether or not to require the user to have an
 invite before registering/signing in}
