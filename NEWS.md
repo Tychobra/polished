@@ -1,3 +1,7 @@
+# polished v0.7.0.9000
+
+- more user friendly error messages for toast notifications.
+
 # polished v0.7.0
 
 * removed `admin_mode` argument from `polished_config()`.
