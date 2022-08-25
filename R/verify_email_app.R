@@ -165,7 +165,7 @@ verify_email_server <- function(input, output, session) {
     }, error = function(err) {
 
 
-      print("[polished] error - resending verification email")
+      print("unable to resend verification email")
       print(err)
 
       shinyFeedback::showToast(

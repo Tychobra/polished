@@ -55,7 +55,7 @@ verify_firebase_token <- function(firebase_token) {
   }
 
   if (is.null(decoded_jwt)) {
-    stop("[polished] error decoding JWT", call. = FALSE)
+    stop("unable to decode JWT", call. = FALSE)
   }
 
   curr_time <- as.numeric(Sys.time())
@@ -68,7 +68,7 @@ verify_firebase_token <- function(firebase_token) {
         decoded_jwt$iss == paste0("https://securetoken.google.com/", .polished$firebase_config$projectId) &&
         nchar(decoded_jwt$sub) > 0)) {
 
-    stop("[polished] error verifying JWT", call. = FALSE)
+    stop("unable to verify JWT", call. = FALSE)
   }
 
   decoded_jwt
@@ -146,7 +146,7 @@ sign_in_social <- function(
       )$content
 
       if (identical(nrow(invite), 0L)) {
-        stop("[polished] error checking user invite", call. = FALSE)
+        stop("unable to find user invite", call. = FALSE)
       }
 
       if (is_uuid(add_app_user_res$session_uid)) {
@@ -156,7 +156,7 @@ sign_in_social <- function(
     }
 
     if (identical(nrow(invite), 0L)) {
-      stop("[polished] error checking user invite", call. = FALSE)
+      stop("unable to find user invite", call. = FALSE)
     }
 
     new_session <- list(

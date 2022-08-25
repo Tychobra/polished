@@ -138,8 +138,8 @@ user_access_module <- function(input, output, session) {
 
     }, error = function(err) {
 
-      msg <- "unable to get users from API"
-      print(paste0("[polished] error: ", msg))
+      msg <- "unable to get users"
+      print(msg)
       print(err)
 
       showToast(
