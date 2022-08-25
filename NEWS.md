@@ -1,3 +1,5 @@
+# polished v0.7.0.9000
+
 # polished v0.7.0
 
 * removed `admin_mode` argument from `polished_config()`.
