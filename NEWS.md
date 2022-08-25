@@ -46,7 +46,7 @@ to [Polished Hosting](https://polished.tech/docs/04-hosting-deploy-app).
 # polished v0.4.0
 
 * created API wrapper functions for programmatically managing users, apps, user invites,
-roles, etc.  See the new [API Wrappers vignette](https://cran.r-project.org/web/packages/polished/vignettes/api_wrappers.html) for details (`vignette("api_wrappers", package = "polished")`).
+roles, etc.  See the new [API Wrappers vignette](https://cran.r-project.org/package=polished/vignettes/api_wrappers.html) for details (`vignette("api_wrappers", package = "polished")`).
 * added 93 new tests for the above mentioned new API wrapper functions.
 * removed `api_url` argument from `global_sessions_config()`.  This argument is only used
 internally during development, so there is no reason to expose it to package users.
