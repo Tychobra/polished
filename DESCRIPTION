@@ -13,7 +13,6 @@ URL: https://github.com/tychobra/polished,
 BugReports: https://github.com/tychobra/polished/issues
 Encoding: UTF-8
 Imports:
-    automagic,
     digest,
     dplyr,
     DT,
@@ -22,7 +21,6 @@ Imports:
     jose,
     jsonlite,
     lubridate,
-    otp,
     purrr,
     rlang,
     rmarkdown,
@@ -37,13 +35,15 @@ Imports:
     tibble,
     tidyr,
     utils,
-    uuid,
-    yaml
+    uuid
 Suggests:
-    testthat (>= 3.0.0),
-    knitr,
+    automagic,
     config,
-    xfun
+    knitr,
+    otp,
+    testthat (>= 3.0.0),
+    xfun,
+    yaml
 VignetteBuilder: 
     knitr
 Roxygen: list(markdown = TRUE)
