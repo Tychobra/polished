@@ -1,6 +1,7 @@
 # polished v0.7.0.9000
 
 - more user friendly error messages for toast notifications.
+- added Hosting support for new "me-west1" region.
 
 # polished v0.7.0
 

@@ -21,6 +21,7 @@ valid_gcp_regions <- c(
   "europe-west6",
   "europe-west8",
   "europe-west9",
+  "me-west1",
   "northamerica-northeast1",
   "northamerica-northeast2",
   "southamerica-east1",
