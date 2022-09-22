@@ -4,7 +4,7 @@
 \alias{auth_filter}
 \title{Auth filter for a Plumber API}
 \usage{
-auth_filter(app_uid = .polished$app_uid)
+auth_filter(req, res)
 }
 \arguments{
 \item{req}{the request}
