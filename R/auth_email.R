@@ -1,4 +1,31 @@
-sign_in_email <- function(email, password, hashed_cookie) {
+
+#' @export
+#' @noRd
+create_cookie <- function(is_hashed = TRUE) {
+  out <- uuid::UUIDgenerate()
+
+  if (isTRUE(is_hashed)) {
+    out <- digest::digest(out)
+  }
+
+  out
+}
+
+
+#' sign in vial email password
+#'
+#' @param email the user's email address
+#' @param password the user's password
+#' @param cookie the hashed_cookie
+#'
+#'
+#' @export
+#'
+sign_in_email <- function(
+  email,
+  password,
+  hashed_cookie = create_cookie()
+) {
 
   res <- httr::POST(
     url = paste0(.polished$api_url, "/sign-in-email"),
@@ -16,50 +43,10 @@ sign_in_email <- function(email, password, hashed_cookie) {
     )
   )
 
-  session_out <- jsonlite::fromJSON(
-    httr::content(res, "text", encoding = "UTF-8")
-  )
-
-  if (!identical(httr::status_code(res), 200L)) {
-
-    if (identical(session_out$error, "Password reset required")) {
-
-      # send a password reset email and stop
-      res2 <- httr::POST(
-        url = paste0(.polished$api_url, "/send-password-reset-email"),
-        body = list(
-          email = email,
-          app_uid = .polished$app_uid,
-          is_invite_required = .polished$is_invite_required
-        ),
-        httr::authenticate(
-          user = get_api_key(),
-          password = ""
-        ),
-        encode = "json"
-      )
-
-      res2_content <- jsonlite::fromJSON(
-        httr::content(res2, "text", encoding = "UTF-8")
-      )
-
-      if (!identical(httr::status_code(res2), 200L)) {
-        stop(res2_content$error, call. = FALSE)
-      }
-
-      return(list(
-        message = "Password reset email sent"
-      ))
-
-    } else {
-      stop(session_out$error, call. = FALSE)
-    }
-  }
-
-  session_out
+  polished_api_res(res)
 }
 
-register_email <- function(email, password, hashed_cookie) {
+register_email <- function(email, password, hashed_cookie = create_cookie()) {
 
   res <- httr::POST(
     url = paste0(.polished$api_url, "/register-email"),
@@ -78,13 +65,5 @@ register_email <- function(email, password, hashed_cookie) {
     encode = "json"
   )
 
-  session_out <- jsonlite::fromJSON(
-    httr::content(res, "text", encoding = "UTF-8")
-  )
-
-  if (!identical(httr::status_code(res), 200L)) {
-    stop(session_out$error, call. = FALSE)
-  }
-
-  session_out
+  polished_api_res(res)
 }
