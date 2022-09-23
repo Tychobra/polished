@@ -15,6 +15,10 @@ auth_filter <- function(req, res) {
 
     # attempt to find session based on cookie
     polished_cookie <- req$cookies$polished
+    if (grepl("p0.", polished_cookie, fixed = TRUE)) {
+      polished_cookie <- digest::digest(polished_cookie)
+    }
+
     if (is.null(polished_cookie)) {
       res$status <- 401L # unauthorized
       stop("polished cookie not provided", call. = FALSE)
