@@ -12,6 +12,7 @@ auth_filter <- function(req, res) {
 
 
   err_msg <- NULL
+  req$polished_session <- NULL
   tryCatch({
 
     # attempt to find session based on cookie
