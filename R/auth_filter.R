@@ -83,13 +83,13 @@ auth_filter <- function(req, res, method = "cookie") {
       }
 
 
-      hold_user <- polished:::sign_in_email(
+      hold_session <- polished:::sign_in_email(
         email = credentials[1],
         password = credentials[2],
         hashed_cookie = digest::digest(polished_cookie)
       )
 
-      req$polished_user <- hold_user
+      req$polished_session <- hold_session
 
       if (!is.null(err_msg)) {
         return(list(
