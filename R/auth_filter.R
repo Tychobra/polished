@@ -16,14 +16,21 @@
 #'
 auth_filter <- function(req, res, method = "cookie") {
 
-  if (length(intersect(c("cookie", "basic"), method) == 0)) {
-    stop("invalid `method` argument", call. = FALSE)
-  }
-
 
   err_msg <- NULL
   req$polished_session <- NULL
   tryCatch({
+
+    if (length(intersect(c("cookie", "basic"), method)) == 0) {
+      res$status <- 400
+      stop("invalid `method` argument", call. = FALSE)
+    }
+
+    if (method %in% req$args) {
+      res$status <- 400
+      stop("auth `method` cannot be set from the request", call. = FALSE)
+    }
+
     # attempt to find session based on cookie
     polished_cookie <- req$cookies$polished
 
