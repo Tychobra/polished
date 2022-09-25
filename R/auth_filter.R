@@ -53,8 +53,10 @@ auth_filter <- function(req, res, method = "cookie") {
 
       sc <- status_code(hold_session$response)
       if (!identical(sc, 200L)) {
-        res$status_code <- sc
+        res$status <- sc
         err_msg <- sc$content$error
+      } else {
+        req$polished_session <- hold_session$content
       }
 
       if (is.null(hold_session$content)) {
@@ -62,7 +64,7 @@ auth_filter <- function(req, res, method = "cookie") {
         err_msg <- "session not found"
       }
 
-      req$polished_session <- hold_session$content
+
 
       if (!is.null(err_msg)) {
         return(list(
@@ -90,13 +92,20 @@ auth_filter <- function(req, res, method = "cookie") {
       }
 
 
-      hold_session <- polished:::sign_in_email(
+      r <- polished:::sign_in_email(
         email = credentials[1],
         password = credentials[2],
         hashed_cookie = digest::digest(polished_cookie)
       )
 
-      req$polished_session <- hold_session
+      sc <- status_code(hold_session$response)
+      if (!identical(sc, 200L)) {
+        res$status <- sc
+        err_msg <- r$content$error
+      } else {
+        req$polished_session <- r$content
+      }
+
 
       if (!is.null(err_msg)) {
         return(list(
