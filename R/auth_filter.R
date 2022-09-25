@@ -5,16 +5,18 @@
 #'
 #' @param req the request
 #' @param res the response
-#' @param method The authentication method.  Valid options are "cookie" and/or "basic".  If
-#' "cookie", the filter will authenticate the request using the cookie.  If
-#' "basic" is set, the filter will authenticate the request using basic auth.  If both
+#' @param method The authentication method.  Valid options are "basic" and/or "cookie".  If
+#' "basic" is set, the filter will authenticate the request using basic auth.  If
+#' "cookie", the filter will authenticate the request using the cookie.  If both
 #' "cookie" and "basic" are set, then the filter will first attempt to authenticate
 #' using the cookie, and, if that fails, it will attempt to authenticate using basic
-#' auth.
+#' auth.  If you use cookie based auth, and you want to send requests directly from the browser,
+#' then be sure to set your Plumber API to allow for cookies.  See
+#' \url{https://polished.tech/blog/polished-plumber} for details.
 #'
 #' @export
 #'
-auth_filter <- function(req, res, method = "cookie") {
+auth_filter <- function(req, res, method = "basic") {
 
 
   err_msg <- NULL
