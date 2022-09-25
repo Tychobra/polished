@@ -36,6 +36,48 @@ auth_filter <- function(req, res, method = "basic") {
     # attempt to find session based on cookie
     polished_cookie <- req$cookies$polished
 
+    if ("basic" %in% method) {
+      # check basic auth and attempt to sign in
+      auth_header <- req[["HTTP_AUTHORIZATION"]]
+      if (is.null(auth_header)) {
+        res$status <- 401L # unauthorized
+        err_msg <- "API key not provided in HTTP_AUTHORIZATION header"
+      }
+
+      credentials_encoded <- strsplit(auth_header, " ")[[1]][2]
+      credentials <- rawToChar(base64enc::base64decode(credentials_encoded))
+      credentials <- strsplit(credentials, ":", fixed = TRUE)[[1]]
+
+      if (is.null(polished_cookie)) {
+        polished_cookie <- paste0("api-", uuid::UUIDgenerate())
+      }
+
+
+      r <- polished:::sign_in_email(
+        email = credentials[1],
+        password = credentials[2],
+        hashed_cookie = digest::digest(polished_cookie)
+      )
+
+      sc <- status_code(hold_session$response)
+      if (!identical(sc, 200L)) {
+        res$status <- sc
+        err_msg <- r$content$error
+      } else {
+        req$polished_session <- r$content
+      }
+
+
+      if (!is.null(err_msg)) {
+        return(list(
+          error = jsonlite::unbox(err_msg)
+        ))
+      } else {
+        plumber::forward()
+      }
+    }
+
+
     if ("cookie" %in% method) {
 
       if (is.null(polished_cookie)) {
@@ -77,46 +119,6 @@ auth_filter <- function(req, res, method = "basic") {
       }
     }
 
-    if ("basic" %in% method) {
-      # check basic auth and attempt to sign in
-      auth_header <- req[["HTTP_AUTHORIZATION"]]
-      if (is.null(auth_header)) {
-        res$status <- 401L # unauthorized
-        err_msg <- "API key not provided in HTTP_AUTHORIZATION header"
-      }
-
-      credentials_encoded <- strsplit(auth_header, " ")[[1]][2]
-      credentials <- rawToChar(base64enc::base64decode(credentials_encoded))
-      credentials <- strsplit(credentials, ":", fixed = TRUE)[[1]]
-
-      if (is.null(polished_cookie)) {
-        polished_cookie <- paste0("api-", uuid::UUIDgenerate())
-      }
-
-
-      r <- polished:::sign_in_email(
-        email = credentials[1],
-        password = credentials[2],
-        hashed_cookie = digest::digest(polished_cookie)
-      )
-
-      sc <- status_code(hold_session$response)
-      if (!identical(sc, 200L)) {
-        res$status <- sc
-        err_msg <- r$content$error
-      } else {
-        req$polished_session <- r$content
-      }
-
-
-      if (!is.null(err_msg)) {
-        return(list(
-          error = jsonlite::unbox(err_msg)
-        ))
-      } else {
-        plumber::forward()
-      }
-    }
 
   }, error = function(err) {
     print(err)
