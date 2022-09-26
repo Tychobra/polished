@@ -74,7 +74,7 @@ auth_filter <- function(method = "basic") {
         err_msg <<- conditionMessage(err)
 
         invisible(NULL)
-      }
+      })
 
       if (!is.null(err_msg)) {
         return(list(
@@ -84,7 +84,7 @@ auth_filter <- function(method = "basic") {
         return(list(
           plumber::forward()
         ))
-      })
+      }
     }
 
 
