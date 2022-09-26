@@ -20,22 +20,27 @@ auth_filter <- function(method = "basic") {
 
     err_msg <- NULL
     req$polished_session <- NULL
-    tryCatch({
 
-      if (length(intersect(c("cookie", "basic"), method)) == 0) {
-        res$status <- 400
-        stop("invalid `method` argument", call. = FALSE)
-      }
+    if (length(intersect(c("cookie", "basic"), method)) == 0) {
+      res$status <- 400
+      return(list(
+        error = jsonlite::unbox("invalid `method` argument")
+      ))
+    }
 
-      # attempt to find session based on cookie
-      polished_cookie <- req$cookies$polished
 
-      if ("basic" %in% method) {
+    # attempt to find session based on cookie
+    polished_cookie <- req$cookies$polished
+
+    if ("basic" %in% method) {
+
+      tryCatch({
+
         # check basic auth and attempt to sign in
         auth_header <- req[["HTTP_AUTHORIZATION"]]
         if (is.null(auth_header)) {
           res$status <- 401L # unauthorized
-          err_msg <- "API key not provided in HTTP_AUTHORIZATION header"
+          stop("API key not provided in HTTP_AUTHORIZATION header", call. = FALSE)
         }
 
         credentials_encoded <- strsplit(auth_header, " ")[[1]][2]
@@ -56,27 +61,41 @@ auth_filter <- function(method = "basic") {
         sc <- status_code(hold_session$response)
         if (!identical(sc, 200L)) {
           res$status <- sc
-          err_msg <- r$content$error
+          stop(r$content$error, call. = FALSE)
         } else {
           req$polished_session <- r$content
         }
+      }, error = function(err) {
 
-
-        if (!is.null(err_msg)) {
-          return(list(
-            error = jsonlite::unbox(err_msg)
-          ))
-        } else {
-          plumber::forward()
+        print("basic auth error")
+        if (identical(res$status, 200L)) {
+          res$status <- 500L
         }
+        err_msg <<- conditionMessage(err)
+
+        invisible(NULL)
       }
 
+      if (!is.null(err_msg)) {
+        return(list(
+          error = jsonlite::unbox(err_msg)
+        ))
+      } else {
+        return(list(
+          plumber::forward()
+        ))
+      })
+    }
 
-      if ("cookie" %in% method) {
+
+
+    if ("cookie" %in% method) {
+
+      tryCatch({
 
         if (is.null(polished_cookie)) {
           res$status <- 401L # unauthorized
-          err_msg <- "polished cookie not provided"
+          stop("polished cookie not provided", call. = FALSE)
         }
 
         # hash the cookie if sent unhashed
@@ -92,42 +111,35 @@ auth_filter <- function(method = "basic") {
         sc <- status_code(hold_session$response)
         if (!identical(sc, 200L)) {
           res$status <- sc
-          err_msg <- sc$content$error
+          stop(sc$content$error, call. = FALSE)
         } else {
           req$polished_session <- hold_session$content
         }
 
         if (is.null(hold_session$content)) {
           res$status <- 401L
-          err_msg <- "session not found"
+          stop("session not found", call. = FALSE)
         }
 
+      }, error = function(err) {
+        print(err)
 
-
-        if (!is.null(err_msg)) {
-          return(list(
-            error = jsonlite::unbox(err_msg)
-          ))
-        } else {
-          plumber::forward()
+        if (res$status == 200L) {
+          res$status <- 500L
         }
+
+        err_msg <<- err$message
+
+        invisible(NULL)
+      })
+
+      if (!is.null(err_msg)) {
+        return(list(
+          error = jsonlite::unbox(err_msg)
+        ))
+      } else {
+        plumber::forward()
       }
-
-
-    }, error = function(err) {
-      print(err)
-
-      if (res$status == 200L) {
-        res$status <- 500L
-      }
-
-      err_msg <<- err$message
-
-      invisible(NULL)
-    })
-
-    return(list(
-      error = jsonlite::unbox(err_msg)
-    ))
+    }
   }
 }
