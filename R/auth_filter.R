@@ -1,5 +1,7 @@
 
-
+sign_in_errors <- c(
+  "email is not authorized to access this app"
+)
 
 #' Auth filter for a Plumber API
 #'
@@ -30,7 +32,12 @@ auth_filter <- function(method = "basic") {
 
 
     # attempt to find session based on cookie
-    polished_cookie <- req$cookies$polished
+    if (!is.null(body$hashed_cookie)) {
+      polished_cookie <- body$hashed_cookie
+    } else {
+      polished_cookie <- req$cookies$polished
+    }
+
 
     if ("basic" %in% method) {
 
@@ -59,6 +66,9 @@ auth_filter <- function(method = "basic") {
         )
 
         sc <- status_code(r$response)
+        print(list(
+          "sc" = sc
+        ))
         if (!identical(sc, 200L)) {
           res$status <- sc
           stop(r$content$error, call. = FALSE)
