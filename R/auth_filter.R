@@ -58,7 +58,7 @@ auth_filter <- function(method = "basic") {
           hashed_cookie = digest::digest(polished_cookie)
         )
 
-        sc <- status_code(hold_session$response)
+        sc <- status_code(r$response)
         if (!identical(sc, 200L)) {
           res$status <- sc
           stop(r$content$error, call. = FALSE)
