@@ -16,88 +16,101 @@ sign_in_errors <- c(
 #'
 #' @export
 #'
-auth_filter <- function(method = "basic") {
+auth_filter <- function(method = c("basic", "cookie")) {
+
+  method <- sort(method)
+  if (identical(length(method), 1L)) {
+    if (!(method %in% c("basic", "cookie"))) {
+      stop("invalid `method` argument", call. = FALSE)
+    }
+  } else {
+    if (!identical(method, c("basic", "cookie"))) {
+      stop("invalid `method` argument", call. = FALSE)
+    }
+  }
 
   function(req, res) {
 
     err_msg <- NULL
     req$polished_session <- NULL
 
-    if (length(intersect(c("cookie", "basic"), method)) == 0) {
-      res$status <- 400
-      return(list(
-        error = jsonlite::unbox("invalid `method` argument")
-      ))
-    }
-
-
     # attempt to find session based on cookie
-    if (!is.null(body$hashed_cookie)) {
-      polished_cookie <- body$hashed_cookie
-    } else {
-      polished_cookie <- req$cookies$polished
-    }
 
+    polished_cookie <- req$cookies$polished
+    # check basic auth and attempt to sign in
+    auth_header <- req[["HTTP_AUTHORIZATION"]]
 
     if ("basic" %in% method) {
 
-      tryCatch({
-
-        # check basic auth and attempt to sign in
-        auth_header <- req[["HTTP_AUTHORIZATION"]]
-        if (is.null(auth_header)) {
+      if (is.null(auth_header)) {
+        if (identical(length(method), 1L)) {
           res$status <- 401L # unauthorized
-          stop("API key not provided in HTTP_AUTHORIZATION header", call. = FALSE)
+          return(list(
+            error = jsonlite::unbox("API key not provided in HTTP_AUTHORIZATION header")
+          ))
         }
 
-        credentials_encoded <- strsplit(auth_header, " ")[[1]][2]
-        credentials <- rawToChar(base64enc::base64decode(credentials_encoded))
-        credentials <- strsplit(credentials, ":", fixed = TRUE)[[1]]
-
-        if (is.null(polished_cookie)) {
-          polished_cookie <- paste0("api-", uuid::UUIDgenerate())
-        }
-
-
-        r <- polished:::sign_in_email(
-          email = credentials[1],
-          password = credentials[2],
-          hashed_cookie = digest::digest(polished_cookie)
-        )
-
-        sc <- status_code(r$response)
-        print(list(
-          "sc" = sc
-        ))
-        if (!identical(sc, 200L)) {
-          res$status <- sc
-          stop(r$content$error, call. = FALSE)
-        } else {
-          req$polished_session <- r$content
-        }
-      }, error = function(err) {
-
-        print("basic auth error")
-        if (identical(res$status, 200L)) {
-          res$status <- 500L
-        }
-        err_msg <<- conditionMessage(err)
-
-        invisible(NULL)
-      })
-
-      if (!is.null(err_msg)) {
-        return(list(
-          error = jsonlite::unbox(err_msg)
-        ))
       } else {
-        return(list(
-          plumber::forward()
-        ))
+
+        tryCatch({
+
+          credentials_encoded <- strsplit(auth_header, " ")[[1]][2]
+          credentials <- rawToChar(base64enc::base64decode(credentials_encoded))
+          credentials <- strsplit(credentials, ":", fixed = TRUE)[[1]]
+
+          if (is.null(polished_cookie)) {
+            polished_cookie <- paste0("api-", uuid::UUIDgenerate())
+          }
+
+
+          r <- polished:::sign_in_email(
+            email = credentials[1],
+            password = credentials[2],
+            hashed_cookie = digest::digest(polished_cookie)
+          )
+
+          sc <- status_code(r$response)
+          if (!identical(sc, 200L)) {
+            res$status <- sc
+            stop(r$content$error, call. = FALSE)
+          }
+          rc <- r$content
+
+          hold_session <- get_sessions(
+            app_uid = .polished$app_uid,
+            hashed_cookie = rc$hashed_cookie
+          )
+
+          sc2 <- httr::status_code(hold_session$response)
+          if (!identical(sc, 200L)) {
+            res$status <- sc
+            stop(hold_session$content$error, call. = FALSE)
+          } else {
+            req$polished_session <- hold_session$content
+          }
+
+        }, error = function(err) {
+
+          print("basic auth error")
+          if (identical(res$status, 200L)) {
+            res$status <- 500L
+          }
+          err_msg <<- conditionMessage(err)
+
+          invisible(NULL)
+        })
+
+        if (!is.null(err_msg)) {
+          return(list(
+            error = jsonlite::unbox(err_msg)
+          ))
+        } else {
+          return(list(
+            plumber::forward()
+          ))
+        }
       }
     }
-
-
 
     if ("cookie" %in% method) {
 
@@ -117,6 +130,8 @@ auth_filter <- function(method = "basic") {
           app_uid = .polished$app_uid,
           hashed_cookie = polished_cookie
         )
+
+
 
         sc <- status_code(hold_session$response)
         if (!identical(sc, 200L)) {
@@ -143,12 +158,12 @@ auth_filter <- function(method = "basic") {
         invisible(NULL)
       })
 
-      if (!is.null(err_msg)) {
+      if (is.null(err_msg)) {
+        plumber::forward()
+      } else {
         return(list(
           error = jsonlite::unbox(err_msg)
         ))
-      } else {
-        plumber::forward()
       }
     }
   }
