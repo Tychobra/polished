@@ -4,13 +4,9 @@
 \alias{auth_filter}
 \title{Auth filter for a Plumber API}
 \usage{
-auth_filter(req, res, method = "basic")
+auth_filter(method = c("basic", "cookie"))
 }
 \arguments{
-\item{req}{the request}
-
-\item{res}{the response}
-
 \item{method}{The authentication method.  Valid options are "basic" and/or "cookie".  If
 "basic" is set, the filter will authenticate the request using basic auth.  If
 "cookie", the filter will authenticate the request using the cookie.  If both
