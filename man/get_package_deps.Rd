@@ -4,12 +4,10 @@
 \alias{get_package_deps}
 \title{Create a list of R Package Dependencies}
 \usage{
-get_package_deps(app_dir = ".", verbose = TRUE)
+get_package_deps(app_dir = ".")
 }
 \arguments{
 \item{app_dir}{path to a directory containing R scripts or R Markdown files. Defaults to current working directory if left blank.}
-
-\item{verbose}{boolean (default: \code{TRUE}) - Provide feedback about detected invalid R packages.}
 }
 \value{
 a list of package dependencies

@@ -1,5 +1,9 @@
 # polished v0.7.0.9000
 
+- `gh_pat` argument added to `deploy_app()` which can be set to deploy/use private GitHub
+packages on Polished Hosting.
+- new function `auth_filter()` which makes it very simple to add Polished Auth to
+Plumber APIs.
 - more user friendly error messages for toast notifications.
 - added Hosting support for new "me-west1" region.
 
