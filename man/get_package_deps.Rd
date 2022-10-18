@@ -7,10 +7,11 @@
 get_package_deps(app_dir = ".")
 }
 \arguments{
-\item{app_dir}{path to a directory containing R scripts or R Markdown files. Defaults to current working directory if left blank.}
+\item{app_dir}{path to a directory containing R scripts or R Markdown files. Defaults
+to current working directory.}
 }
 \value{
-a list of package dependencies
+a list of package dependencies with installation details
 }
 \description{
 Given a \code{path} to a directory this function will scan all \code{.R} and
@@ -26,9 +27,7 @@ validating that each detection is indeed a valid \code{CRAN} or public \code{Git
 and can be installed.
 }
 \examples{
-#library(polished)
-#dir <- system.file("examples", "polished_example_01", package = "polished")
-#pkg_deps <- polished:::get_package_deps(dir)
+#pkg_deps <- polished::get_package_deps("inst/examples/polished_example_01")
 
 }
 \seealso{

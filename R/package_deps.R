@@ -11,18 +11,17 @@
 #'   validating that each detection is indeed a valid `CRAN` or public `GitHub` package
 #'   and can be installed.
 #'
-#' @param app_dir path to a directory containing R scripts or R Markdown files. Defaults to current working directory if left blank.
+#' @param app_dir path to a directory containing R scripts or R Markdown files. Defaults
+#' to current working directory.
 #'
-#' @return a list of package dependencies
+#' @return a list of package dependencies with installation details
 #'
 #' @keywords internal
 #'
 #' @seealso [automagic::parse_packages()]
 #'
 #' @examples
-#' #library(polished)
-#' #dir <- system.file("examples", "polished_example_01", package = "polished")
-#' #pkg_deps <- polished:::get_package_deps(dir)
+#' #pkg_deps <- polished::get_package_deps("inst/examples/polished_example_01")
 #'
 #' @importFrom automagic parse_packages get_package_details
 #' @importFrom dplyr %>%
@@ -38,7 +37,7 @@ get_package_deps <- function(
 
   # detect R package dependencies
   fls <- list.files(
-    path = directory,
+    path = app_dir,
     pattern = '^.*\\.R$|^.*\\.Rmd$',
     full.names = TRUE,
     recursive = TRUE,
