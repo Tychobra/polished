@@ -45,14 +45,18 @@ get_package_deps <- function(
   )
 
   pkg_names <- unlist(lapply(fls, automagic::parse_packages))
-  pkg_names <- unique(pkg_names)
+  pkg_names <- sort(unique(pkg_names))
 
   # validate packages.  `automagic::get_package_details` will throw an error if the
   # package is not on CRAN or in a public GitHub repo.
-  return(lapply(
+  out <- lapply(
     pkg_names,
     automagic::get_package_details
-  ))
+  )
+
+  names(out) <- pkg_names
+
+  out
 }
 
 
