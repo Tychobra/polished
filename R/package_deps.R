@@ -67,14 +67,17 @@ get_package_deps <- function(
 
   # validate packages.  `automagic::get_package_details` will throw an error if the
   # package is not on CRAN or in a public GitHub repo.
-  out <- lapply(
-    pkg_names,
-    automagic::get_package_details
-  )
+  out <- list()
 
-  names(out) <- pkg_names
-  # will remove any base R packages
-  out = out[-which(sapply(out, is.null))]
+  for (name_ in  pkg_names) {
+
+    hold <- automagic::get_package_details(name_)
+
+    # will remove any base R packages
+    if (!is.null(hold)) {
+      out[hold$Package] <- hold
+    }
+  }
 
   out
 }
