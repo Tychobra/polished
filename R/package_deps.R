@@ -59,11 +59,11 @@ get_package_deps <- function(
 
     deps_deps <- dplyr::bind_rows(deps_deps)
     deps_deps <- deps_deps[deps_deps$type == "Imports", ]$package
-
     pkg_names <- unique(c(pkg_names, deps_deps))
   }
 
   pkg_names <- sort(pkg_names)
+
 
   # validate packages.  `automagic::get_package_details` will throw an error if the
   # package is not on CRAN or in a public GitHub repo.
@@ -73,6 +73,8 @@ get_package_deps <- function(
   )
 
   names(out) <- pkg_names
+  # will remove any base R packages
+  out = out[-which(sapply(out, is.null))]
 
   out
 }
