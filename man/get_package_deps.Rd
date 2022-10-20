@@ -4,11 +4,15 @@
 \alias{get_package_deps}
 \title{Create a list of R Package Dependencies}
 \usage{
-get_package_deps(app_dir = ".")
+get_package_deps(app_dir = ".", all_deps = FALSE)
 }
 \arguments{
 \item{app_dir}{path to a directory containing R scripts or R Markdown files. Defaults
 to current working directory.}
+
+\item{all_deps}{gets all "Depends", "Imports" and "LinkingTo" package dependencies
+of the packages used by your app. See \code{install.packages(dependencies)} for details on
+package dependencies that will be included.}
 }
 \value{
 a list of package dependencies with installation details

@@ -66,6 +66,7 @@ valid_gcp_regions <- c(
 #' @importFrom utils browseURL
 #' @importFrom httr POST authenticate handle_reset status_code content upload_file
 #' @importFrom jsonlite fromJSON
+#' @importFrom yaml write_yaml
 #'
 #' @export
 #'
@@ -131,9 +132,17 @@ deploy_app <- function(
 
 
   cat("Creating app bundle...")
-  app_zip_path <- bundle_app(
-    app_dir = app_dir
+
+  deps_list <- get_package_deps(
+    app_dir,
+    all_deps = if (is.null(gh_pat)) FALSE else TRUE
   )
+
+  # create yaml file with all the dependencies
+  yml_path <- file.path(app_dir, "deps.yaml")
+  yaml::write_yaml(deps_list, yml_path)
+
+  app_zip_path <- bundle_app(app_dir = app_dir)
   cat(" Done\n")
 
   cat("Deploying App.  Hang tight.  This may take a while...\n")
@@ -214,7 +223,6 @@ deploy_app <- function(
 #'
 #' @export
 #'
-#' @importFrom yaml write_yaml
 #' @importFrom utils tar
 #' @importFrom uuid UUIDgenerate
 #'
@@ -230,13 +238,6 @@ deploy_app <- function(
 bundle_app <- function(
   app_dir = "."
 ) {
-
-
-  deps_list <- get_package_deps(app_dir)
-
-  # create yaml file with all the dependencies
-  yml_path <- file.path(app_dir, "deps.yaml")
-  yaml::write_yaml(deps_list, yml_path)
 
 
   tar_name <- "shiny_app.tar.gz"

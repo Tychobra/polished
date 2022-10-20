@@ -13,6 +13,9 @@
 #'
 #' @param app_dir path to a directory containing R scripts or R Markdown files. Defaults
 #' to current working directory.
+#' @param all_deps gets all "Depends", "Imports" and "LinkingTo" package dependencies
+#' of the packages used by your app. See `install.packages(dependencies)` for details on
+#' package dependencies that will be included.
 #'
 #' @return a list of package dependencies with installation details
 #'
@@ -23,11 +26,13 @@
 #' @examples
 #' #pkg_deps <- polished::get_package_deps("inst/examples/polished_example_01")
 #'
+#' @importFrom desc desc_get_deps
 #' @importFrom automagic parse_packages get_package_details
 #' @importFrom dplyr %>%
 #'
 get_package_deps <- function(
-  app_dir = "."
+  app_dir = ".",
+  all_deps = FALSE
 ) {
 
   # validate args
@@ -45,7 +50,20 @@ get_package_deps <- function(
   )
 
   pkg_names <- unlist(lapply(fls, automagic::parse_packages))
-  pkg_names <- sort(unique(pkg_names))
+  pkg_names <- unique(pkg_names)
+
+  if (isTRUE(all_deps)) {
+    deps_deps <- lapply(pkg_names, function(name_) {
+      desc::desc_get_deps(file = system.file("/", package = name_))
+    })
+
+    deps_deps <- dplyr::bind_rows(deps_deps)
+    deps_deps <- deps_deps[deps_deps$type == "Imports", ]$package
+
+    pkg_names <- unique(c(pkg_names, deps_deps))
+  }
+
+  pkg_names <- sort(pkg_names)
 
   # validate packages.  `automagic::get_package_details` will throw an error if the
   # package is not on CRAN or in a public GitHub repo.
