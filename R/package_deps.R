@@ -75,7 +75,7 @@ get_package_deps <- function(
 
     # will remove any base R packages
     if (!is.null(hold)) {
-      out[hold$Package] <- hold
+      out[[hold$Package]] <- hold
     }
   }
 
