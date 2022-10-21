@@ -61,10 +61,12 @@ valid_gcp_regions <- c(
 #' `golem` package, provide the name of the Shiny app package as a character string.
 #' Defaults to \code{NULL}.  Keep as \code{NULL} for non `golem` Shiny apps.
 #' @param cache Boolean (default: \code{TRUE}) - whether or not to cache the Docker image.
+#' @param gh_pat optional GitHub PAT for installing packages from private GitHub repos.
 #'
 #' @importFrom utils browseURL
 #' @importFrom httr POST authenticate handle_reset status_code content upload_file
 #' @importFrom jsonlite fromJSON
+#' @importFrom yaml write_yaml
 #'
 #' @export
 #'
@@ -89,7 +91,8 @@ deploy_app <- function(
   r_ver = NULL,
   tlmgr = character(0),
   golem_package_name = NULL,
-  cache = TRUE
+  cache = TRUE,
+  gh_pat = NULL
 ) {
 
   if (identical(Sys.getenv("SHINY_HOSTING"), "polished")) {
@@ -129,9 +132,17 @@ deploy_app <- function(
 
 
   cat("Creating app bundle...")
-  app_zip_path <- bundle_app(
-    app_dir = app_dir
+
+  deps_list <- get_package_deps(
+    app_dir,
+    all_deps = if (is.null(gh_pat)) FALSE else TRUE
   )
+
+  # create yaml file with all the dependencies
+  yml_path <- file.path(app_dir, "deps.yaml")
+  yaml::write_yaml(deps_list, yml_path)
+
+  app_zip_path <- bundle_app(app_dir = app_dir)
   cat(" Done\n")
 
   cat("Deploying App.  Hang tight.  This may take a while...\n")
@@ -175,6 +186,7 @@ deploy_app <- function(
       tlmgr = paste(tlmgr, collapse = ","),
       golem_package_name = golem_package_name,
       cache = cache,
+      gh_pat = gh_pat,
       max_sessions = max_sessions
     ),
     encode = "multipart",
@@ -211,7 +223,6 @@ deploy_app <- function(
 #'
 #' @export
 #'
-#' @importFrom yaml write_yaml
 #' @importFrom utils tar
 #' @importFrom uuid UUIDgenerate
 #'
@@ -227,13 +238,6 @@ deploy_app <- function(
 bundle_app <- function(
   app_dir = "."
 ) {
-
-
-  deps_list <- get_package_deps(app_dir)
-
-  # create yaml file with all the dependencies
-  yml_path <- file.path(app_dir, "deps.yaml")
-  yaml::write_yaml(deps_list, yml_path)
 
 
   tar_name <- "shiny_app.tar.gz"

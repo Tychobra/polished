@@ -16,6 +16,7 @@ Imports:
     automagic,
     digest,
     dplyr,
+    desc,
     DT,
     htmltools,
     httr,
