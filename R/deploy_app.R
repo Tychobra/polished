@@ -65,8 +65,7 @@ valid_gcp_regions <- c(
 #'
 #' @importFrom utils browseURL
 #' @importFrom httr POST authenticate handle_reset status_code content upload_file
-#' @importFrom jsonlite fromJSON
-#' @importFrom yaml write_yaml
+#' @importFrom jsonlite fromJSON write_json
 #'
 #' @export
 #'
@@ -133,14 +132,32 @@ deploy_app <- function(
 
   cat("Creating app bundle...")
 
-  deps_list <- get_package_deps(
-    app_dir,
-    all_deps = if (is.null(gh_pat)) FALSE else TRUE
-  )
+  deps_list <- get_package_deps(app_dir)
 
   # create yaml file with all the dependencies
-  yml_path <- file.path(app_dir, "deps.yaml")
-  yaml::write_yaml(deps_list, yml_path)
+  deps_path <- file.path(app_dir, "deps.json")
+  jsonlite::write_json(
+    deps_list,
+    path = deps_path,
+    auto_unbox = TRUE
+  )
+
+  params <- list(
+    app_name = app_name,
+    region = region,
+    ram_gb = ram_gb,
+    r_ver = r_ver,
+    tlmgr = tlmgr,
+    golem_package_name = golem_package_name,
+    cache = cache,
+    gh_pat = gh_pat,
+    max_sessions = max_sessions
+  )
+  jsonlite::write_json(
+    params,
+    path = file.path(app_dir, "params.json"),
+    auto_unbox = TRUE
+  )
 
   app_zip_path <- bundle_app(app_dir = app_dir)
   cat(" Done\n")
@@ -177,17 +194,6 @@ deploy_app <- function(
     ),
     body = list(
       app_zip = zip_to_send
-    ),
-    query = list(
-      app_name = app_name,
-      region = region,
-      ram_gb = ram_gb,
-      r_ver = r_ver,
-      tlmgr = paste(tlmgr, collapse = ","),
-      golem_package_name = golem_package_name,
-      cache = cache,
-      gh_pat = gh_pat,
-      max_sessions = max_sessions
     ),
     encode = "multipart",
     #http_version = 0,
