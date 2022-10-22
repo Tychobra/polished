@@ -13,9 +13,8 @@
 #'
 #' @param app_dir path to a directory containing R scripts or R Markdown files. Defaults
 #' to current working directory.
-#' @param all_deps gets all "Depends", "Imports" and "LinkingTo" package dependencies
-#' of the packages used by your app. See `install.packages(dependencies)` for details on
-#' package dependencies that will be included.
+#' @param all_deps boolean - whether or not to explicitly identify all "Imports" package dependencies
+#' of the packages used by your app.
 #'
 #' @return a list of package dependencies with installation details
 #'
@@ -53,6 +52,7 @@ get_package_deps <- function(
   pkg_names <- unique(pkg_names)
 
   if (isTRUE(all_deps)) {
+    # get all the Imports package dependencies of identified packages
     deps_deps <- lapply(pkg_names, function(name_) {
       desc::desc_get_deps(file = system.file("/", package = name_))
     })
@@ -81,5 +81,3 @@ get_package_deps <- function(
 
   out
 }
-
-
