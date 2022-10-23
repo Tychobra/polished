@@ -139,7 +139,8 @@ deploy_app <- function(
   jsonlite::write_json(
     deps_list,
     path = deps_path,
-    auto_unbox = TRUE
+    auto_unbox = TRUE,
+    pretty = TRUE
   )
 
   params <- list(
