@@ -58,8 +58,9 @@ get_package_deps <- function(
     })
 
     deps_deps <- dplyr::bind_rows(deps_deps)
-    deps_deps <- deps_deps[deps_deps$type == "Imports", ]$package
+    deps_deps <- deps_deps[deps_deps$type %in% c("Depends", "Imports", "LinkingTo"), ]$package
     pkg_names <- unique(c(pkg_names, deps_deps))
+    pkg_names <- pkg_names[pkg_names != "R"]
   }
 
   pkg_names <- sort(pkg_names)
