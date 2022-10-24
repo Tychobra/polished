@@ -157,7 +157,8 @@ deploy_app <- function(
   jsonlite::write_json(
     params,
     path = file.path(app_dir, "params.json"),
-    auto_unbox = TRUE
+    auto_unbox = TRUE,
+    pretty = TRUE
   )
 
   app_zip_path <- bundle_app(app_dir = app_dir)
