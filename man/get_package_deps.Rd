@@ -30,6 +30,7 @@ validating that each detection is indeed a valid \code{CRAN} or public \code{Git
 and can be installed.
 }
 \examples{
+app_dir <- "inst/examples/polished_example_01"
 #pkg_deps <- polished::get_package_deps("inst/examples/polished_example_01")
 
 }

@@ -23,6 +23,7 @@
 #' @seealso [automagic::parse_packages()]
 #'
 #' @examples
+#' app_dir <- "inst/examples/polished_example_01"
 #' #pkg_deps <- polished::get_package_deps("inst/examples/polished_example_01")
 #'
 #' @importFrom desc desc_get_deps
@@ -57,7 +58,7 @@ get_package_deps <- function(
     while (TRUE) {
 
       # get all the Imports package dependencies of identified packages
-      deps_deps <- lapply(pkg_names, function(name_) {
+      deps_deps <- lapply(pkg_names_start, function(name_) {
         desc::desc_get_deps(file = system.file("/", package = name_))
       })
 
@@ -72,10 +73,12 @@ get_package_deps <- function(
       }
       pkg_names_start <- pkg_names_end
     }
+
+    pkg_names <- pkg_names_end
   }
 
 
-  pkg_names <- sort(pkg_names)
+
 
 
   # validate packages.  `automagic::get_package_details` will throw an error if the
