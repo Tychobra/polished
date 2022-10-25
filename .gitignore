@@ -9,3 +9,5 @@ config.yml
 rsconnect/
 inst/doc
 *deps.yaml
+*deps.json
+*params.json

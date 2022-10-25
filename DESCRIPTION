@@ -38,8 +38,7 @@ Imports:
     tibble,
     tidyr,
     utils,
-    uuid,
-    yaml
+    uuid
 Suggests:
     config,
     knitr,
