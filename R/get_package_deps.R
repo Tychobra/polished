@@ -68,7 +68,7 @@ get_package_deps <- function(
       pkg_names_end <- pkg_names_end[pkg_names_end != "R"]
       pkg_names_end <- sort(pkg_names_end)
 
-      if (!identical(pkg_names_end, pkg_names_start)) {
+      if (identical(pkg_names_end, pkg_names_start)) {
         break
       }
       pkg_names_start <- pkg_names_end
