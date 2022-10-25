@@ -1,4 +1,10 @@
 
+#' Valid Regions for Polished Hosting
+#'
+#' Set the `region` argument of `deploy_app()` to one of these regions.
+#'
+#' @export
+#'
 valid_gcp_regions <- c(
   "asia-east1",
   "asia-east2",
