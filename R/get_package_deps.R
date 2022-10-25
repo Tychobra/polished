@@ -49,19 +49,31 @@ get_package_deps <- function(
   )
 
   pkg_names <- unlist(lapply(fls, automagic::parse_packages))
-  pkg_names <- unique(pkg_names)
+  pkg_names <- sort(unique(pkg_names))
 
   if (isTRUE(all_deps)) {
-    # get all the Imports package dependencies of identified packages
-    deps_deps <- lapply(pkg_names, function(name_) {
-      desc::desc_get_deps(file = system.file("/", package = name_))
-    })
+    pkg_names_start <- pkg_names
+    pkg_names_end <- character(0)
+    while (TRUE) {
 
-    deps_deps <- dplyr::bind_rows(deps_deps)
-    deps_deps <- deps_deps[deps_deps$type %in% c("Depends", "Imports", "LinkingTo"), ]$package
-    pkg_names <- unique(c(pkg_names, deps_deps))
-    pkg_names <- pkg_names[pkg_names != "R"]
+      # get all the Imports package dependencies of identified packages
+      deps_deps <- lapply(pkg_names, function(name_) {
+        desc::desc_get_deps(file = system.file("/", package = name_))
+      })
+
+      deps_deps <- dplyr::bind_rows(deps_deps)
+      deps_deps <- deps_deps[deps_deps$type %in% c("Depends", "Imports", "LinkingTo"), ]$package
+      pkg_names_end <- unique(c(pkg_names_start, deps_deps))
+      pkg_names_end <- pkg_names_end[pkg_names_end != "R"]
+      pkg_names_end <- sort(pkg_names_end)
+
+      if (!identical(pkg_names_end, pkg_names_start)) {
+        break
+      }
+      pkg_names_start <- pkg_names_end
+    }
   }
+
 
   pkg_names <- sort(pkg_names)
 
@@ -82,3 +94,19 @@ get_package_deps <- function(
 
   out
 }
+
+# desc_file_deps <- function(pkg_names) {
+#   if (isTRUE(all_deps)) {
+#     # get all the Imports package dependencies of identified packages
+#     deps_deps <- lapply(pkg_names, function(name_) {
+#       desc::desc_get_deps(file = system.file("/", package = name_))
+#     })
+#
+#     deps_deps <- dplyr::bind_rows(deps_deps)
+#     deps_deps <- deps_deps[deps_deps$type %in% c("Depends", "Imports", "LinkingTo"), ]$package
+#     pkg_names <- unique(c(pkg_names, deps_deps))
+#     pkg_names <- pkg_names[pkg_names != "R"]
+#   }
+#
+#   sort(pkg_names)
+# }
