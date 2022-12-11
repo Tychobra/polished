@@ -15,7 +15,8 @@ deploy_app(
   tlmgr = character(0),
   golem_package_name = NULL,
   cache = TRUE,
-  gh_pat = NULL
+  gh_pat = NULL,
+  max_sessions = Inf
 )
 }
 \arguments{
@@ -53,6 +54,10 @@ Defaults to \code{NULL}.  Keep as \code{NULL} for non \code{golem} Shiny apps.}
 \item{cache}{Boolean (default: \code{TRUE}) - whether or not to cache the Docker image.}
 
 \item{gh_pat}{optional GitHub PAT for installing packages from private GitHub repos.}
+
+\item{max_sessions}{the maximum number of concurrent sessions to run on a single app instance before
+starting another instance.  e.g. set to 5 to have a max of 5 user sessions per app instance.
+The default is \code{Inf} which will run all concurrent sessions on only 1 app instance.}
 }
 \description{
 Deploy a Shiny app to Polished Hosting
