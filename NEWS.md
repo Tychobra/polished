@@ -1,5 +1,6 @@
 # polished v0.7.0.9000
 
+- `max_sessions` argument added to `deploy_app()` which enables the new Polished Hosting load balancer.
 - `gh_pat` argument added to `deploy_app()` which can be set to deploy/use private GitHub
 packages on Polished Hosting.
 - new function `auth_filter()` which makes it very simple to add Polished Auth to
