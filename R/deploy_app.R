@@ -362,6 +362,9 @@ dir_copy <- function(from, to, overwrite = TRUE, all.files = TRUE,
   if (!all(res)) {
     # The copy failed; we should clean up after ourselves and return an error
     unlink(to, recursive = TRUE)
+    message( paste( files.from ) )
+    message( paste( files.to ) )
+    message( paste( res ) )
     stop("Could not copy all files from directory '", from, "' to directory '", to, "'.")
   }
   stats::setNames(res, files.relative)
