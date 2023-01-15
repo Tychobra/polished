@@ -143,7 +143,7 @@ deploy_app <- function(
 
   cat("Creating app bundle...")
 
-  deps_list <- get_package_deps(app_dir, all_deps = TRUE)
+  deps_list <- get_package_deps(app_dir, all_deps = FALSE)
 
   # create yaml file with all the dependencies
   deps_path <- file.path(app_dir, "deps.json")
