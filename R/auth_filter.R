@@ -89,7 +89,7 @@ auth_filter <- function(method = c("basic", "cookie")) {
         if (res$status == 200L) {
 
           if (err_msg %in% sign_in_errors) {
-            res$status <- 400L
+            res$status <- 401L
           } else {
             res$status <- 500L
           }
@@ -104,13 +104,14 @@ auth_filter <- function(method = c("basic", "cookie")) {
         plumber::forward()
       } else {
 
-        if (!("basic" %in% method)) {
+        if ("basic" %in% method) {
+          # set err_msg back to NULL and check basic auth
+          err_msg <- NULL
+        } else {
+
           return(list(
             error = jsonlite::unbox(err_msg)
           ))
-        } else {
-          # set err_msg back to NULL and check basic auth
-          err_msg <- NULL
         }
       }
     }
@@ -173,7 +174,7 @@ auth_filter <- function(method = c("basic", "cookie")) {
           err_msg <<- conditionMessage(err)
           if (identical(res$status, 200L)) {
             if (err_msg %in% sign_in_errors) {
-              res$status <- 400L
+              res$status <- 401L
             } else {
               res$status <- 500L
             }
