@@ -86,6 +86,8 @@ auth_filter <- function(method = c("basic", "cookie")) {
       }, error = function(err) {
         print(err)
 
+        err_msg <<- conditionMessage(err)
+
         if (res$status == 200L) {
 
           if (err_msg %in% sign_in_errors) {
@@ -94,8 +96,6 @@ auth_filter <- function(method = c("basic", "cookie")) {
             res$status <- 500L
           }
         }
-
-        err_msg <<- err$message
 
         invisible(NULL)
       })
@@ -171,7 +171,9 @@ auth_filter <- function(method = c("basic", "cookie")) {
         }, error = function(err) {
 
           print("basic auth error")
+
           err_msg <<- conditionMessage(err)
+
           if (identical(res$status, 200L)) {
             if (err_msg %in% sign_in_errors) {
               res$status <- 401L
