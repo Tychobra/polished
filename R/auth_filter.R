@@ -1,6 +1,7 @@
 
 sign_in_errors <- c(
-  "email is not authorized to access this app"
+  "email is not authorized to access this app",
+  "Invalid password"
 )
 
 #' Auth filter for a Plumber API
@@ -35,9 +36,7 @@ auth_filter <- function(method = c("basic", "cookie")) {
     req$polished_session <- NULL
 
     # attempt to find session based on cookie
-    print(list(
-      method = method
-    ))
+
     polished_cookie <- req$cookies$polished
     if ("cookie" %in% method) {
 
@@ -77,7 +76,12 @@ auth_filter <- function(method = c("basic", "cookie")) {
         print(err)
 
         if (res$status == 200L) {
-          res$status <- 500L
+
+          if (err_msg %in% sign_in_errors) {
+            res$status <- 400L
+          } else {
+            res$status <- 500L
+          }
         }
 
         err_msg <<- err$message
@@ -155,10 +159,16 @@ auth_filter <- function(method = c("basic", "cookie")) {
         }, error = function(err) {
 
           print("basic auth error")
-          if (identical(res$status, 200L)) {
-            res$status <- 500L
-          }
           err_msg <<- conditionMessage(err)
+          if (identical(res$status, 200L)) {
+            if (err_msg %in% sign_in_errors) {
+              res$status <- 400L
+            } else {
+              res$status <- 500L
+            }
+
+          }
+
 
           invisible(NULL)
         })
