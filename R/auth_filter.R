@@ -35,8 +35,71 @@ auth_filter <- function(method = c("basic", "cookie")) {
     req$polished_session <- NULL
 
     # attempt to find session based on cookie
-
+    print(list(
+      method = method
+    ))
     polished_cookie <- req$cookies$polished
+    if ("cookie" %in% method) {
+
+      tryCatch({
+
+        if (is.null(polished_cookie)) {
+          res$status <- 401L # unauthorized
+          stop("polished cookie not provided", call. = FALSE)
+        }
+
+        # hash the cookie if sent unhashed
+        if (grepl("p0.", polished_cookie, fixed = TRUE)) {
+          polished_cookie <- digest::digest(polished_cookie)
+        }
+
+        hold_session <- get_sessions(
+          app_uid = .polished$app_uid,
+          hashed_cookie = polished_cookie
+        )
+
+
+
+        sc <- status_code(hold_session$response)
+        if (!identical(sc, 200L)) {
+          res$status <- sc
+          stop(sc$content$error, call. = FALSE)
+        } else {
+          req$polished_session <- hold_session$content
+        }
+
+        if (is.null(hold_session$content)) {
+          res$status <- 401L
+          stop("session not found", call. = FALSE)
+        }
+
+      }, error = function(err) {
+        print(err)
+
+        if (res$status == 200L) {
+          res$status <- 500L
+        }
+
+        err_msg <<- err$message
+
+        invisible(NULL)
+      })
+
+      if (is.null(err_msg)) {
+        plumber::forward()
+      } else {
+
+        if (!("basic" %in% method)) {
+          return(list(
+            error = jsonlite::unbox(err_msg)
+          ))
+        } else {
+          # set err_msg back to NULL and check basic auth
+          err_msg <- NULL
+        }
+      }
+    }
+
     # check basic auth and attempt to sign in
     auth_header <- req[["HTTP_AUTHORIZATION"]]
 
@@ -112,59 +175,6 @@ auth_filter <- function(method = c("basic", "cookie")) {
       }
     }
 
-    if ("cookie" %in% method) {
 
-      tryCatch({
-
-        if (is.null(polished_cookie)) {
-          res$status <- 401L # unauthorized
-          stop("polished cookie not provided", call. = FALSE)
-        }
-
-        # hash the cookie if sent unhashed
-        if (grepl("p0.", polished_cookie, fixed = TRUE)) {
-          polished_cookie <- digest::digest(polished_cookie)
-        }
-
-        hold_session <- get_sessions(
-          app_uid = .polished$app_uid,
-          hashed_cookie = polished_cookie
-        )
-
-
-
-        sc <- status_code(hold_session$response)
-        if (!identical(sc, 200L)) {
-          res$status <- sc
-          stop(sc$content$error, call. = FALSE)
-        } else {
-          req$polished_session <- hold_session$content
-        }
-
-        if (is.null(hold_session$content)) {
-          res$status <- 401L
-          stop("session not found", call. = FALSE)
-        }
-
-      }, error = function(err) {
-        print(err)
-
-        if (res$status == 200L) {
-          res$status <- 500L
-        }
-
-        err_msg <<- err$message
-
-        invisible(NULL)
-      })
-
-      if (is.null(err_msg)) {
-        plumber::forward()
-      } else {
-        return(list(
-          error = jsonlite::unbox(err_msg)
-        ))
-      }
-    }
   }
 }
