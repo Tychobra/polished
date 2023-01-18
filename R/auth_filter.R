@@ -53,7 +53,7 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
         r <- httr::GET(
           url = paste0(.polished$api_url, "/sessions"),
           query = list(
-            hashed_cookie = hashed_cookie,
+            hashed_cookie = polished_cookie,
             app_uid = .polished$app_uid,
             session_started = session_started
           ),
@@ -142,7 +142,14 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
 
           if (is.null(polished_cookie)) {
             polished_cookie <- paste0("api-", uuid::UUIDgenerate())
+            polished_cookie <- digest::digest(polished_cookie)
+          } else if (grepl("p0.", polished_cookie, fixed = TRUE)) {
+            # hash the cookie if sent unhashed
+
+            polished_cookie <- digest::digest(polished_cookie)
+
           }
+
 
 
           r2 <- httr::POST(
@@ -151,7 +158,7 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
               app_uid = .polished$app_uid,
               email = credentials[1],
               password = credentials[2],
-              hashed_cookie = digest::digest(polished_cookie),
+              hashed_cookie = polished_cookie,
               is_invite_required = .polished$is_invite_required
             ),
             encode = "json",
@@ -175,7 +182,7 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
           r3 <- httr::GET(
             url = paste0(.polished$api_url, "/sessions"),
             query = list(
-              hashed_cookie = hashed_cookie,
+              hashed_cookie = polished_cookie,
               app_uid = .polished$app_uid,
               session_started = session_started
             ),
