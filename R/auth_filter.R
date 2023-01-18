@@ -196,7 +196,7 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
           rc3 <- jsonlite::fromJSON(
             httr::content(r3, "text", encoding = "UTF-8")
           )
-          if (!identical(sc, 200L)) {
+          if (!identical(sc3, 200L)) {
             res$status <- sc3
             stop(rc3$error, call. = FALSE)
           } else {
