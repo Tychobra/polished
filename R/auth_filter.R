@@ -88,13 +88,13 @@ auth_filter <- function(method = c("basic", "cookie")) {
 
         err_msg <<- conditionMessage(err)
 
-        if (res$status == 200L) {
+        if ("basic" %in% method) {
+          # set error back to null to check basic auth
+          err_msg <<- NULL
 
-          if ("basic" %in% method) {
-            # set error back to null to check basic auth
-            err_msg <<- NULL
+        } else {
 
-          } else {
+          if (res$status == 200L) {
 
             if (err_msg %in% sign_in_errors) {
               res$status <- 401L
