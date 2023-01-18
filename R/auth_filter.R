@@ -91,6 +91,7 @@ auth_filter <- function(method = c("basic", "cookie")) {
         if ("basic" %in% method) {
           # set error back to null to check basic auth
           err_msg <<- NULL
+          res$status <- 200L
 
         } else {
 
