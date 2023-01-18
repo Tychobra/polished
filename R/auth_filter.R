@@ -55,7 +55,7 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
           query = list(
             hashed_cookie = polished_cookie,
             app_uid = .polished$app_uid,
-            session_started = session_started
+            session_started = FALSE
           ),
           httr::authenticate(
             user = api_key,
@@ -184,7 +184,7 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
             query = list(
               hashed_cookie = polished_cookie,
               app_uid = .polished$app_uid,
-              session_started = session_started
+              session_started = FALSE
             ),
             httr::authenticate(
               user = api_key,
