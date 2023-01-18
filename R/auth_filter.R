@@ -19,9 +19,6 @@ sign_in_errors <- c(
 #'
 auth_filter <- function(method = c("basic", "cookie")) {
 
-  print(list(
-    method = method
-  ))
 
   method <- sort(method)
   if (identical(length(method), 1L)) {
@@ -34,15 +31,10 @@ auth_filter <- function(method = c("basic", "cookie")) {
     }
   }
 
-  print(list(
-    method = method
-  ))
+
 
   function(req, res) {
 
-    print(list(
-      method = method
-    ))
     err_msg <- NULL
     req$polished_session <- NULL
 
