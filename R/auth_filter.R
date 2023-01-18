@@ -237,3 +237,46 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
 
   }
 }
+
+#' add_auth_to_spec
+#'
+#' Add authentication to the openapi plumber spec so that you can use the swagger
+#' documentation with the `auth_filter()`.
+#'
+#' @param x object specifying the openapi plumber spec
+#' @param method the authentication method
+#'
+#' @export
+#'
+add_auth_to_spec <- function(x, method = c("basic", "cookie")) {
+
+  schemes <- list()
+  security <- list()
+  if ("basic" %in% method) {
+    schemes[["basicAuth"]] <- list(
+      "type" = "http",
+      "scheme" = "basic"
+    )
+
+    security <- append(security, list(list("basicAuth" = vector())))
+  }
+
+  if ("cookie" %in% method) {
+    schemes[["cookieAuth"]] <- list(
+      "type" = "apiKey",
+      "in" = "cookie",
+      "name" = "JSESSIONID"
+    )
+
+    security <- append(security, list(list("cookieAuth" = vector())))
+  }
+
+  # Adds the components element to openapi (specifies auth method)
+  x[["components"]] <- list(
+    securitySchemes = schemes
+  )
+
+  x[["security"]] <- security
+
+  x
+}
