@@ -87,7 +87,7 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
 
 
         plumber::forward()
-
+        return(NULL)
 
       }, error = function(err) {
         print(err)
