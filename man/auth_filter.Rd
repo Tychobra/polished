@@ -4,7 +4,7 @@
 \alias{auth_filter}
 \title{Auth filter for a Plumber API}
 \usage{
-auth_filter(method = c("basic", "cookie"))
+auth_filter(method = c("basic", "cookie"), api_key = get_api_key())
 }
 \arguments{
 \item{method}{The authentication method.  Valid options are "basic" and/or "cookie".  If
@@ -15,6 +15,8 @@ using the cookie, and, if that fails, it will attempt to authenticate using basi
 auth.  If you use cookie based auth, and you want to send requests directly from the browser,
 then be sure to set your Plumber API to allow for cookies.  See
 \url{https://polished.tech/blog/polished-plumber} for details.}
+
+\item{api_key}{Your polished API key}
 }
 \description{
 Auth filter for a Plumber API

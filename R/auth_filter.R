@@ -8,10 +8,11 @@
 #' auth.  If you use cookie based auth, and you want to send requests directly from the browser,
 #' then be sure to set your Plumber API to allow for cookies.  See
 #' \url{https://polished.tech/blog/polished-plumber} for details.
+#' @param api_key Your polished API key
 #'
 #' @export
 #'
-auth_filter <- function(method = c("basic", "cookie")) {
+auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) {
 
 
   method <- sort(method)
@@ -49,28 +50,42 @@ auth_filter <- function(method = c("basic", "cookie")) {
           polished_cookie <- digest::digest(polished_cookie)
         }
 
-        hold_session <- get_sessions(
-          app_uid = .polished$app_uid,
-          hashed_cookie = polished_cookie
+        r <- httr::GET(
+          url = paste0(.polished$api_url, "/sessions"),
+          query = list(
+            hashed_cookie = hashed_cookie,
+            app_uid = .polished$app_uid,
+            session_started = session_started
+          ),
+          httr::authenticate(
+            user = api_key,
+            password = ""
+          ),
+          encode = "json"
         )
 
 
-
-        sc <- status_code(hold_session$response)
+        sc <- httr::status_code(r)
+        rc <- jsonlite::fromJSON(
+          httr::content(r, "text", encoding = "UTF-8")
+        )
         if (!identical(sc, 200L)) {
           res$status <- sc
-          stop(sc$content$error, call. = FALSE)
+          stop(rc$error, call. = FALSE)
         } else {
-          req$polished_session <- hold_session$content
+
+          if (identical(length(rc), 0L)) {
+            res$status <- 404L
+            stop("session not found", call. = FALSE)
+          }
+          req$polished_session <- rc
           print(list(
-            cookie_session = hold_session$content
+            cookie_session = rc
           ))
+
         }
 
-        if (is.null(hold_session$content)) {
-          res$status <- 401L
-          stop("session not found", call. = FALSE)
-        }
+
 
       }, error = function(err) {
         print(err)
@@ -130,33 +145,65 @@ auth_filter <- function(method = c("basic", "cookie")) {
           }
 
 
-          r <- polished:::sign_in_email(
-            email = credentials[1],
-            password = credentials[2],
-            hashed_cookie = digest::digest(polished_cookie)
+          r2 <- httr::POST(
+            url = paste0(.polished$api_url, "/sign-in-email"),
+            body = list(
+              app_uid = .polished$app_uid,
+              email = credentials[1],
+              password = credentials[2],
+              hashed_cookie = digest::digest(polished_cookie),
+              is_invite_required = .polished$is_invite_required
+            ),
+            encode = "json",
+            httr::authenticate(
+              user = api_key,
+              password = ""
+            )
           )
 
-          sc <- status_code(r$response)
-          if (!identical(sc, 200L)) {
-            res$status <- sc
-            stop(r$content$error, call. = FALSE)
+
+          sc2 <- httr::status_code(r2)
+          rc2 <- jsonlite::fromJSON(
+            httr::content(r2, "text", encoding = "UTF-8")
+          )
+          if (!identical(sc2, 200L)) {
+            res$status <- sc2
+            stop(rc2$error, call. = FALSE)
           }
-          rc <- r$content
 
-          hold_session <- get_sessions(
-            app_uid = .polished$app_uid,
-            hashed_cookie = rc$hashed_cookie
+
+          r3 <- httr::GET(
+            url = paste0(.polished$api_url, "/sessions"),
+            query = list(
+              hashed_cookie = hashed_cookie,
+              app_uid = .polished$app_uid,
+              session_started = session_started
+            ),
+            httr::authenticate(
+              user = api_key,
+              password = ""
+            ),
+            encode = "json"
           )
 
-          sc2 <- httr::status_code(hold_session$response)
+          sc3 <- httr::status_code(r3)
+          rc3 <- jsonlite::fromJSON(
+            httr::content(r3, "text", encoding = "UTF-8")
+          )
           if (!identical(sc, 200L)) {
-            res$status <- sc
-            stop(hold_session$content$error, call. = FALSE)
+            res$status <- sc3
+            stop(rc3$error, call. = FALSE)
           } else {
 
-            req$polished_session <- hold_session$content
+            if (identical(length(rc3), 0L)) {
+              res$status <- 404L
+              stop("session not found", call. = FALSE)
+            } else {
+              req$polished_session <- rc3
+            }
+
             print(list(
-              basic_session = hold_session$content
+              basic_session = rc3
             ))
           }
 
