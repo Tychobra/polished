@@ -163,7 +163,7 @@ auth_filter <- function(method = c("basic", "cookie")) {
         }, error = function(err) {
 
           print("basic auth error")
-
+          print(err)
           err_msg <<- conditionMessage(err)
 
           if (identical(res$status, 200L)) {
@@ -179,9 +179,7 @@ auth_filter <- function(method = c("basic", "cookie")) {
             error = jsonlite::unbox(err_msg)
           ))
         } else {
-          return(list(
-            plumber::forward()
-          ))
+          plumber::forward()
         }
       }
     }
