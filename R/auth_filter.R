@@ -1,9 +1,3 @@
-
-sign_in_errors <- c(
-  "email is not authorized to access this app",
-  "Invalid password"
-)
-
 #' Auth filter for a Plumber API
 #'
 #' @param method The authentication method.  Valid options are "basic" and/or "cookie".  If
@@ -87,13 +81,10 @@ auth_filter <- function(method = c("basic", "cookie")) {
 
         } else {
 
-          if (res$status == 200L) {
+          if (identical(res$status, 200L)) {
 
-            if (err_msg %in% sign_in_errors) {
-              res$status <- 401L
-            } else {
-              res$status <- 500L
-            }
+            res$status <- 500L
+
           }
         }
 
@@ -169,12 +160,7 @@ auth_filter <- function(method = c("basic", "cookie")) {
           err_msg <<- conditionMessage(err)
 
           if (identical(res$status, 200L)) {
-            if (err_msg %in% sign_in_errors) {
-              res$status <- 401L
-            } else {
-              res$status <- 500L
-            }
-
+            res$status <- 500L
           }
 
 
