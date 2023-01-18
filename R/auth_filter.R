@@ -15,6 +15,8 @@
 auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) {
 
 
+
+
   method <- sort(method)
   if (identical(length(method), 1L)) {
     if (!(method %in% c("basic", "cookie"))) {
@@ -78,10 +80,8 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
             res$status <- 404L
             stop("session not found", call. = FALSE)
           }
+
           req$polished_session <- rc
-          print(list(
-            cookie_session = rc
-          ))
 
         }
 
@@ -208,9 +208,6 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
               req$polished_session <- rc3
             }
 
-            print(list(
-              basic_session = rc3
-            ))
           }
 
         }, error = function(err) {
