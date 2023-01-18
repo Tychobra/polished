@@ -249,6 +249,17 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
 #'
 add_auth_to_spec <- function(method = c("basic", "cookie")) {
 
+  method <- sort(method)
+  if (identical(length(method), 1L)) {
+    if (!(method %in% c("basic", "cookie"))) {
+      stop("invalid `method` argument", call. = FALSE)
+    }
+  } else {
+    if (!identical(method, c("basic", "cookie"))) {
+      stop("invalid `method` argument", call. = FALSE)
+    }
+  }
+
   function(x) {
     schemes <- list()
     security <- list()
