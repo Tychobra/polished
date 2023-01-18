@@ -86,6 +86,8 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
         }
 
 
+        plumber::forward()
+
 
       }, error = function(err) {
         print(err)
@@ -109,10 +111,7 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
         invisible(NULL)
       })
 
-      if (is.null(err_msg)) {
-        plumber::forward()
-      } else {
-
+      if (!is.null(err_msg)) {
         return(list(
           error = jsonlite::unbox(err_msg)
         ))
