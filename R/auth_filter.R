@@ -62,6 +62,9 @@ auth_filter <- function(method = c("basic", "cookie")) {
           stop(sc$content$error, call. = FALSE)
         } else {
           req$polished_session <- hold_session$content
+          print(list(
+            cookie_session = hold_session$content
+          ))
         }
 
         if (is.null(hold_session$content)) {
@@ -150,7 +153,11 @@ auth_filter <- function(method = c("basic", "cookie")) {
             res$status <- sc
             stop(hold_session$content$error, call. = FALSE)
           } else {
+
             req$polished_session <- hold_session$content
+            print(list(
+              basic_session = hold_session$content
+            ))
           }
 
         }, error = function(err) {
