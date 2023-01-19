@@ -77,7 +77,7 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
         } else {
 
           if (identical(length(rc), 0L)) {
-            res$status <- 404L
+            res$status <- 401L
             stop("session not found", call. = FALSE)
           }
 
@@ -202,7 +202,7 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
           } else {
 
             if (identical(length(rc3), 0L)) {
-              res$status <- 404L
+              res$status <- 401L
               stop("session not found", call. = FALSE)
             } else {
               req$polished_session <- rc3
