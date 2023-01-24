@@ -38,10 +38,13 @@ Imports:
     tibble,
     tidyr,
     utils,
-    uuid
+    uuid,
+    yaml
 Suggests:
+    base64enc,
     config,
     knitr,
+    plumber,
     testthat (>= 3.0.0),
     xfun
 VignetteBuilder: 

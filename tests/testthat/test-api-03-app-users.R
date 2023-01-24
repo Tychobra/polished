@@ -4,6 +4,14 @@ test_app <- get_apps(app_name = "polished_test")
 
 test_app <- test_app$content
 
+if (identical(nrow(test_app), 0L)) {
+  add_app(app_name = "polished_test")
+
+  test_app <- get_apps(app_name = "polished_test")
+
+  test_app <- test_app$content
+}
+
 
 test_user <- get_users(email = "test1@tychobra.com")
 

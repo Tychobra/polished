@@ -1,5 +1,5 @@
 
-#' @export
+
 #' @noRd
 create_cookie <- function(is_hashed = TRUE) {
   out <- uuid::UUIDgenerate()
@@ -12,19 +12,18 @@ create_cookie <- function(is_hashed = TRUE) {
 }
 
 
-#' sign in vial email password
+#' sign in via email password
 #'
 #' @param email the user's email address
 #' @param password the user's password
-#' @param cookie the hashed_cookie
+#' @param hashed_cookie the hashed cookie
 #'
-#'
-#' @export
+#' @noRd
 #'
 sign_in_email <- function(
   email,
   password,
-  hashed_cookie = create_cookie()
+  hashed_cookie
 ) {
 
   res <- httr::POST(
@@ -46,7 +45,8 @@ sign_in_email <- function(
   polished_api_res(res)
 }
 
-register_email <- function(email, password, hashed_cookie = create_cookie()) {
+#' @noRd
+register_email <- function(email, password, hashed_cookie) {
 
   res <- httr::POST(
     url = paste0(.polished$api_url, "/register-email"),
