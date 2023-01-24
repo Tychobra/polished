@@ -15,6 +15,9 @@ remove_query_string(
 \item{mode}{the mode to pass to \code{shiny::updateQueryString()}.  Valid values are
 \code{"replace"} or \code{"push"}.}
 }
+\value{
+\code{invisible(NULL)}
+}
 \description{
 Remove the entire query string from the URL.  This function should only be called
 inside the server function of your Shiny app.

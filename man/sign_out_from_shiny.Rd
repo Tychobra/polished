@@ -15,6 +15,9 @@ sign_out_from_shiny(
 \item{redirect_page}{the query string for the page that the user should be redirected
 to after signing out.}
 }
+\value{
+\code{invisible(NULL)}
+}
 \description{
 Call this function to sign a user out of your Shiny app.  This function should
 be called inside the server function of your Shiny app.  See

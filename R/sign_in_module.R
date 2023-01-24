@@ -15,6 +15,8 @@
 #' @importFrom shinyFeedback useShinyFeedback loadingButton
 #' @importFrom shinyjs useShinyjs hidden
 #'
+#' @return the sign in module UI.
+#'
 #' @export
 #'
 #'
@@ -253,6 +255,8 @@ sign_in_module_ui <- function(
 #' @importFrom shinyWidgets sendSweetAlert
 #' @importFrom shinyFeedback showToast hideFeedback showFeedbackDanger resetLoadingButton
 #' @importFrom digest digest
+#'
+#' @return \code{invisible(NULL)}
 #'
 #' @export
 #'
@@ -550,5 +554,5 @@ sign_in_module_ns <- function(input, output, session) {
     })
   )
 
-  invisible()
+  invisible(NULL)
 }

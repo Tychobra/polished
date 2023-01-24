@@ -16,6 +16,9 @@
 #' @importFrom httr GET authenticate content status_code
 #' @importFrom jsonlite fromJSON
 #'
+#' @return a list with one element named "users_trigger".  The "users_trigger" is a reactive value that
+#' increments by 1 after an edit is completed.
+#'
 #' @noRd
 #'
 user_edit_module <- function(input, output, session,

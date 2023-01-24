@@ -57,6 +57,9 @@ to \code{FALSE}.}
 
 \item{...}{arguments to pass to \code{\link{polished_config}}}
 }
+\value{
+\code{invisible(NULL)}
+}
 \description{
 global configuration for \code{polished} authentication
 }

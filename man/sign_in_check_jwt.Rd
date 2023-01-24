@@ -11,6 +11,9 @@ sign_in_check_jwt(jwt, session = shiny::getDefaultReactiveDomain())
 
 \item{session}{the shiny session.}
 }
+\value{
+\code{invisible(NULL)}
+}
 \description{
 This function retrieves the JWT created by the JavaScript from \code{\link{sign_in_js}}
 and signs the user in as long as the token can be verified.

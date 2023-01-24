@@ -59,6 +59,9 @@ Defaults to \code{NULL}.  Keep as \code{NULL} for non \code{golem} Shiny apps.}
 starting another instance.  e.g. set to 5 to have a max of 5 user sessions per app instance.
 The default is \code{Inf} which will run all concurrent sessions on only 1 app instance.}
 }
+\value{
+an object of class \code{polished_api_res}.
+}
 \description{
 Deploy a Shiny app to Polished Hosting
 }

@@ -15,6 +15,9 @@ sign in server logic.}
 \item{custom_admin_server}{Either \code{NULL}, the default, or a Shiny server function containing your custom admin
 server functionality.}
 }
+\value{
+a Shiny server function.
+}
 \description{
 This function is used to secure your Shiny app's server function.  Make sure to pass
 your Shiny app's server function as the first argument to \code{secure_server()} at

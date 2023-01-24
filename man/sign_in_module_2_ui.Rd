@@ -9,6 +9,9 @@ sign_in_module_2_ui(id)
 \arguments{
 \item{id}{the Shiny module \code{id}}
 }
+\value{
+the sign in module UI.
+}
 \description{
 Alternate sign in UI that works regardless of whether or not invites
 are required. The UI displays email sign in inputs on the left, and social sign in options

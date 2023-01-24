@@ -37,6 +37,7 @@
 #'
 #' @export
 #'
+#' @return \code{invisible(NULL)}
 #'
 #' @examples
 #'

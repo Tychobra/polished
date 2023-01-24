@@ -28,6 +28,8 @@
 #' @importFrom htmltools tags HTML
 #' @importFrom stringr str_interp
 #'
+#' @return the html and css to create the default sign in UI.
+#'
 #' @return the UI for the Sign In & Registration pages
 #'
 sign_in_ui_default <- function(

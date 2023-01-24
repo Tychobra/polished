@@ -10,6 +10,8 @@
 #' \url{https://polished.tech/blog/polished-plumber} for details.
 #' @param api_key Your polished API key
 #'
+#' @return a Plumber API filter function
+#'
 #' @export
 #'
 auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) {
@@ -247,6 +249,8 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
 #' shows how you can add this function to your API.
 #'
 #' @param method the authentication method(s)
+#'
+#' @return a function to update the openapi spec.
 #'
 #' @export
 #'

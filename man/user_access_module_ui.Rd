@@ -9,6 +9,9 @@ user_access_module_ui(id)
 \arguments{
 \item{id}{the module id}
 }
+\value{
+the UI to create the user access module.
+}
 \description{
 Shiny module UI for the default user access tab in the \code{polished} Admin Panel.
 }

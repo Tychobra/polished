@@ -13,6 +13,9 @@ sign_in_module(input, output, session)
 
 \item{session}{the Shiny \code{session}}
 }
+\value{
+\code{invisible(NULL)}
+}
 \description{
 This server logic accompanies the \code{\link{sign_in_module_ui}}.
 }

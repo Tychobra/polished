@@ -46,11 +46,15 @@ polished_api_res <- function(resp) {
 #' @param x an S3 object of class \code{polished_api_res}.
 #' @param ... additional arguments.
 #'
+#' @return \code{invisible(NULL)}
+#'
 #' @export
 #'
 print.polished_api_res <- function(x, ...) {
   cat("<Polished ", x$response$url, ">\n", sep = "")
   print(x$content)
+
+  invisible(NULL)
 }
 
 

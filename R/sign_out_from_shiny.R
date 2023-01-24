@@ -12,6 +12,8 @@
 #'
 #' @export
 #'
+#' @return \code{invisible(NULL)}
+#'
 #' @importFrom shiny updateQueryString getDefaultReactiveDomain
 #'
 #'
@@ -36,6 +38,7 @@ sign_out_from_shiny <- function(
     mode = "replace"
   )
 
+  invisible(NULL)
 }
 
 

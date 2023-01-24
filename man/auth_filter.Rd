@@ -18,6 +18,9 @@ then be sure to set your Plumber API to allow for cookies.  See
 
 \item{api_key}{Your polished API key}
 }
+\value{
+a Plumber API filter function
+}
 \description{
 Auth filter for a Plumber API
 }

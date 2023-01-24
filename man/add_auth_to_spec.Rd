@@ -9,6 +9,9 @@ add_auth_to_spec(method = c("basic", "cookie"))
 \arguments{
 \item{method}{the authentication method(s)}
 }
+\value{
+a function to update the openapi spec.
+}
 \description{
 Add authentication to the openapi plumber spec so that you can use the swagger
 documentation with the \code{auth_filter()}.

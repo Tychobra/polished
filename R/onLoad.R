@@ -3,6 +3,8 @@
 #' @importFrom shiny addResourcePath
 #' @importFrom httr set_config config
 #'
+#' @return \code{invisible(NULL)}
+#'
 #' @noRd
 #'
 .onLoad <- function(...) {
@@ -10,5 +12,5 @@
   httr::set_config(httr::config(http_version = 0))
   set_api_url()
 
-  invisible()
+  invisible(NULL)
 }

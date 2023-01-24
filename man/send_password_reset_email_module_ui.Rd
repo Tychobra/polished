@@ -11,6 +11,9 @@ send_password_reset_email_module_ui(id, link_text = "Forgot your password?")
 
 \item{link_text}{text to use for the password reset link.}
 }
+\value{
+the UI to create a password reset link.
+}
 \description{
 the UI for a Shiny module to send a password reset email
 }

@@ -12,6 +12,8 @@
 #'
 #' @export
 #'
+#' @return a Shiny server function.
+#'
 #' @importFrom shiny observeEvent getQueryString updateQueryString callModule onStop
 #' @importFrom uuid UUIDgenerate
 #'

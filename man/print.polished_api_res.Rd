@@ -11,6 +11,9 @@
 
 \item{...}{additional arguments.}
 }
+\value{
+\code{invisible(NULL)}
+}
 \description{
 Generic print function for \code{polished_api_res} S3 class.
 }

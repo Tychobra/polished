@@ -9,6 +9,8 @@
 #' Be sure you know the difference between \code{"default"} & \code{"production"} configuration environments.
 #' Using the \code{"production"} environment will affect the database of the deployed application.
 #'
+#' @return \code{invisible(NULL)}
+#'
 #' @export
 #'
 #'
@@ -29,4 +31,6 @@ set_config_env <- function(override = NULL) {
   }
 
   Sys.setenv(R_CONFIG_ACTIVE = environment)
+
+  invisible(NULL)
 }

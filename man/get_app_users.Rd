@@ -22,7 +22,7 @@ get_app_users(
 so that you do not need to supply this argument with each function call.}
 }
 \value{
-an object of class \code{polished_api_res}.  The \code{content} of the object is a
+an object of class \code{polished_api_res}.  When successful, the \code{content} of the object is a
 tibble of app(s) with the following columns:
 \itemize{
 \item \code{uid}

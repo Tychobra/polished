@@ -13,6 +13,9 @@ user_access_module(input, output, session)
 
 \item{session}{the Shiny server session}
 }
+\value{
+\code{invisible(NULL)}
+}
 \description{
 Server function for the default Shiny module to control user access in the \code{polished}
 Admin Panel.

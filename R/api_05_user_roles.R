@@ -64,6 +64,10 @@ get_user_roles <- function(
 #'
 #' @importFrom httr POST authenticate
 #'
+#' @return an object of class \code{polished_api_res}.  When successful, the `content` of the
+#' \code{polished_api_res} is \code{list(message = "success")}.  In the case of an error, the
+#' content is \code{list(error = "<error message>")}.
+#'
 add_user_role <- function(user_uid, role_uid = NULL, role_name = NULL, api_key = get_api_key()) {
 
   body_out <- list(
@@ -106,6 +110,10 @@ add_user_role <- function(user_uid, role_uid = NULL, role_name = NULL, api_key =
 #' @seealso [get_user_roles()] [add_user_role()]
 #'
 #' @importFrom httr DELETE authenticate
+#'
+#' @return an object of class \code{polished_api_res}.  When successful, the `content` of the
+#' \code{polished_api_res} is \code{list(message = "success")}.  In the case of an error, the
+#' content is \code{list(error = "<error message>")}.
 #'
 delete_user_role <- function(role_uid, user_uid, api_key = get_api_key()) {
 

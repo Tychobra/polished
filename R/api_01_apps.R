@@ -12,13 +12,14 @@
 #' and the \code{app_name} will be ignored.  If the app does not exists, a zero row tibble
 #' will be returned.
 #'
-#' @return an object of class \code{polished_api_res}.  The `content` of the object is a
+#' @return an object of class \code{polished_api_res}.  When successful, the `content` of the object is a
 #' tibble of app(s) with the following columns:
 #' - `uid`
 #' - `app_name`
 #' - `app_url`
 #' - `created_at`
 #' - `modified_at`
+#' In the case of an error, the content is a list with 1 element named "error".
 #'
 #' @export
 #'
@@ -68,6 +69,10 @@ get_apps <- function(
 #'
 #' @importFrom httr POST authenticate
 #'
+#' @return an object of class \code{polished_api_res}.  When successful, the `content` of the
+#' \code{polished_api_res} is \code{list(message = "success")}.  In the case of an error, the
+#' content is \code{list(error = "<error message>")}.
+#'
 add_app <- function(app_name, app_url = NULL, api_key = get_api_key()) {
 
   body_out <- list(
@@ -106,6 +111,10 @@ add_app <- function(app_name, app_url = NULL, api_key = get_api_key()) {
 #' @seealso [get_apps()] [add_app()] [delete_app()]
 #'
 #' @importFrom httr PUT authenticate
+#'
+#' @return an object of class \code{polished_api_res}.  When successful, the `content` of the
+#' \code{polished_api_res} is \code{list(message = "success")}.  In the case of an error, the
+#' content is \code{list(error = "<error message>")}.
 #'
 update_app <- function(app_uid, app_name = NULL, app_url = NULL,
                        api_key = get_api_key()) {
@@ -154,6 +163,10 @@ update_app <- function(app_uid, app_name = NULL, app_url = NULL,
 #' @seealso [get_apps()] [add_app()] [update_app()]
 #'
 #' @importFrom httr DELETE authenticate
+#'
+#' @return an object of class \code{polished_api_res}.  When successful, the `content` of the
+#' \code{polished_api_res} is \code{list(message = "success")}.  In the case of an error, the
+#' content is \code{list(error = "<error message>")}.
 #'
 delete_app <- function(
   app_uid = NULL,

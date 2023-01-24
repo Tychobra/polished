@@ -10,6 +10,8 @@
 #' @importFrom htmltools br tags
 #' @importFrom DT DTOutput
 #'
+#' @return the UI to create the user access module.
+#'
 #' @export
 #'
 user_access_module_ui <- function(id) {
@@ -87,6 +89,8 @@ user_access_module_ui <- function(id) {
 #' @importFrom rlang .data
 #' @importFrom httr GET authenticate stop_for_status content
 #' @importFrom jsonlite fromJSON
+#'
+#' @return \code{invisible(NULL)}
 #'
 #' @export
 #'
@@ -394,4 +398,5 @@ user_access_module <- function(input, output, session) {
     session$reload()
   }, ignoreInit = TRUE)
 
+  invisible(NULL)
 }

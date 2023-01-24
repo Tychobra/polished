@@ -24,6 +24,9 @@ email_input(
 \item{placeholder}{A character string giving the user a hint as to what can be entered
 into the control. Internet Explorer 8 and 9 do not support this option.}
 }
+\value{
+the UI for the email input.
+}
 \description{
 This is a replica of \code{shiny::textInput()} with the HTML input \code{type}
 attribute set to \code{"email"} rather than \code{"text"}.

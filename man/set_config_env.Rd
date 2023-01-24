@@ -11,6 +11,9 @@ set_config_env(override = NULL)
 Be sure you know the difference between \code{"default"} & \code{"production"} configuration environments.
 Using the \code{"production"} environment will affect the database of the deployed application.}
 }
+\value{
+\code{invisible(NULL)}
+}
 \description{
 Determines if the app is deployed to a server or running locally, and adjusts
 the config environment to \code{"production"} or \code{"default"}, respectively.  This function

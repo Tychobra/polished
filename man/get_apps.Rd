@@ -15,7 +15,7 @@ get_apps(app_uid = NULL, app_name = NULL, api_key = get_api_key())
 so that you do not need to supply this argument with each function call.}
 }
 \value{
-an object of class \code{polished_api_res}.  The \code{content} of the object is a
+an object of class \code{polished_api_res}.  When successful, the \code{content} of the object is a
 tibble of app(s) with the following columns:
 \itemize{
 \item \code{uid}
@@ -23,6 +23,7 @@ tibble of app(s) with the following columns:
 \item \code{app_url}
 \item \code{created_at}
 \item \code{modified_at}
+In the case of an error, the content is a list with 1 element named "error".
 }
 }
 \description{

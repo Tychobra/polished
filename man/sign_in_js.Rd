@@ -10,6 +10,9 @@ sign_in_js(ns = function(x) x)
 \item{ns}{the ns function from the Shiny module that this function is called
 within.}
 }
+\value{
+the javascript to and other web dependencies to create the sign in functionality.
+}
 \description{
 This function should be called at the bottom of your custom sign in and registration
 pages UI.  It loads in all the JavaScript dependencies to handle polished sign

@@ -16,6 +16,9 @@ send_password_reset_email_module(input, output, session, email)
 \item{email}{A reactive value returning the email address to send the password
 reset email to.}
 }
+\value{
+\code{invisible(NULL)}
+}
 \description{
 This function sends a request to the \url{https://polished.tech} API to reset a user's
 password.

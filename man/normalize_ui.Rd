@@ -12,6 +12,9 @@ normalize_ui(ui, request_)
 \item{request_}{the request environment passed to the first argument of the UI
 function}
 }
+\value{
+the Shiny UI
+}
 \description{
 the UI passed a shiny app can be a function HTML.  This function normalized the 2 different
 formats so that they both use the character

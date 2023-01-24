@@ -13,6 +13,9 @@ profile_module(input, output, session)
 
 \item{session}{the Shiny server \code{session}}
 }
+\value{
+\code{invisible(NULL)}
+}
 \description{
 The server logic to accompany the  \code{\link{profile_module_ui}}.
 }

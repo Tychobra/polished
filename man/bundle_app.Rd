@@ -10,6 +10,9 @@ bundle_app(app_dir = ".")
 \item{app_dir}{The path to the directory containing your Shiny app.  Defaults to the
 working directory.}
 }
+\value{
+the file path of the app bundle
+}
 \description{
 This function is called by \code{deploy_app()} to compress Shiny apps before
 deploying them to Polished Hosting.  You probably won't need to call this function

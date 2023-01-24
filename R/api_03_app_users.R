@@ -9,7 +9,7 @@
 #' @details If \code{app_uid}, \code{user_uid}, & \code{email} are all \code{NULL},
 #' then all app users will be returned.
 #'
-#' @return an object of class \code{polished_api_res}.  The `content` of the object is a
+#' @return an object of class \code{polished_api_res}.  When successful, the `content` of the object is a
 #' tibble of app(s) with the following columns:
 #' - `uid`
 #' - `app_uid`
@@ -77,6 +77,10 @@ get_app_users <- function(
 #'
 #' @importFrom httr POST authenticate
 #'
+#' @return an object of class \code{polished_api_res}.  When successful, the `content` of the
+#' \code{polished_api_res} is \code{list(message = "success")}.  In the case of an error, the
+#' content is \code{list(error = "<error message>")}.
+#'
 add_app_user <- function(
   app_uid,
   user_uid = NULL,
@@ -140,6 +144,10 @@ add_app_user <- function(
 #'
 #' @importFrom httr PUT authenticate
 #'
+#' @return an object of class \code{polished_api_res}.  When successful, the `content` of the
+#' \code{polished_api_res} is \code{list(message = "success")}.  In the case of an error, the
+#' content is \code{list(error = "<error message>")}.
+#'
 update_app_user <- function(
   app_uid,
   user_uid,
@@ -180,6 +188,10 @@ update_app_user <- function(
 #' @seealso [get_apps()] [add_app()] [update_app_user()]
 #'
 #' @importFrom httr DELETE authenticate
+#'
+#' @return an object of class \code{polished_api_res}.  When successful, the `content` of the
+#' \code{polished_api_res} is \code{list(message = "success")}.  In the case of an error, the
+#' content is \code{list(error = "<error message>")}.
 #'
 delete_app_user <- function(app_uid, user_uid, api_key = get_api_key()) {
 

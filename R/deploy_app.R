@@ -80,6 +80,8 @@ valid_gcp_regions <- c(
 #'
 #' @export
 #'
+#' @return an object of class \code{polished_api_res}.
+#'
 #' @examples
 #'
 #' \dontrun{
@@ -241,6 +243,8 @@ deploy_app <- function(
 #' working directory.
 #'
 #' @export
+#'
+#' @return the file path of the app bundle
 #'
 #' @importFrom utils tar
 #' @importFrom uuid UUIDgenerate

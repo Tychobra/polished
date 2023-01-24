@@ -7,6 +7,8 @@
 #' @importFrom shiny actionLink NS
 #' @importFrom shinyFeedback useShinyFeedback
 #'
+#' @return the UI to create a password reset link.
+#'
 #' @export
 send_password_reset_email_module_ui <- function(id, link_text = "Forgot your password?") {
   ns <- shiny::NS(id)
@@ -35,6 +37,8 @@ send_password_reset_email_module_ui <- function(id, link_text = "Forgot your pas
 #' @importFrom httr POST authenticate content status_code
 #' @importFrom jsonlite fromJSON
 #' @importFrom shinyFeedback showToast
+#'
+#' @return \code{invisible(NULL)}
 #'
 #' @export
 #'
@@ -89,5 +93,6 @@ send_password_reset_email_module <- function(input, output, session, email) {
 
   })
 
+  invisible(NULL)
 }
 

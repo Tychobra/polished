@@ -3,13 +3,12 @@
 #' Given a `path` to a directory this function will scan all `.R` and
 #' `.Rmd` files for any used R Packages along with their CRAN versions or GitHub references.
 #'
-#' @details Currently, detections are made via [automagic::parse_packages()] which supports
+#' @details Currently, packages are detected via [automagic::parse_packages()] which supports
 #'   the following calls within the code: `library()`, `require()`, and
 #'   prefixed `::` calls to functions.
 #'
-#'   Once an initial vector of package detections is built, it is further processed by
-#'   validating that each detection is indeed a valid `CRAN` or public `GitHub` package
-#'   and can be installed.
+#'   Once an initial vector of package is created, each package is a checked that it can
+#'   be downloaded and installed from `CRAN` or `GitHub`.
 #'
 #' @param app_dir path to a directory containing R scripts or R Markdown files. Defaults
 #' to current working directory.
@@ -22,9 +21,6 @@
 #'
 #' @seealso [automagic::parse_packages()]
 #'
-#' @examples
-#' app_dir <- "inst/examples/polished_example_01"
-#' #pkg_deps <- polished::get_package_deps("inst/examples/polished_example_01")
 #'
 #' @importFrom desc desc_get_deps
 #' @importFrom automagic parse_packages get_package_details

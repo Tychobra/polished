@@ -10,6 +10,8 @@
 #' @param placeholder A character string giving the user a hint as to what can be entered
 #' into the control. Internet Explorer 8 and 9 do not support this option.
 #'
+#' @return the UI for the email input.
+#'
 #' @export
 #'
 #' @importFrom htmltools tags tagList

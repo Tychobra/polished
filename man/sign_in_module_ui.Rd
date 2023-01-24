@@ -21,6 +21,9 @@ Set to \code{NULL} if you don't want to use the registration page.}
 receive an email to reset your password.  The default is \code{"Forgot your password?"}.
 Set to \code{NULL} if you don't want to use the registration page.}
 }
+\value{
+the sign in module UI.
+}
 \description{
 UI for the Sign In & Register pages when a user invite is required to Register & Sign In.
 }

@@ -51,6 +51,8 @@ the \code{color} argument.}
 \item{footer_color}{the text color for the copyright text in the footer.}
 }
 \value{
+the html and css to create the default sign in UI.
+
 the UI for the Sign In & Registration pages
 }
 \description{
