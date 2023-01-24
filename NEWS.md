@@ -1,4 +1,4 @@
-# polished v0.7.0.9000
+# polished v0.8.0
 
 - new `add_auth_to_spec()` function to allow you to use the Plumber swagger docs with the new
 `auth_filter()` function.
