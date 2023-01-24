@@ -4,14 +4,16 @@
 \alias{add_auth_to_spec}
 \title{add_auth_to_spec}
 \usage{
-add_auth_to_spec(x, method = c("basic", "cookie"))
+add_auth_to_spec(method = c("basic", "cookie"))
 }
 \arguments{
-\item{x}{object specifying the openapi plumber spec}
-
-\item{method}{the authentication method}
+\item{method}{the authentication method(s)}
 }
 \description{
 Add authentication to the openapi plumber spec so that you can use the swagger
 documentation with the \code{auth_filter()}.
+}
+\details{
+This minimal API example \url{https://github.com/Tychobra/polished_example_apps/blob/master/11_plumber/api/00_start.R}
+shows how you can add this function to your API.
 }

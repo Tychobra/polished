@@ -243,6 +243,9 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
 #' Add authentication to the openapi plumber spec so that you can use the swagger
 #' documentation with the `auth_filter()`.
 #'
+#' @details This minimal API example \url{https://github.com/Tychobra/polished_example_apps/blob/master/11_plumber/api/00_start.R}
+#' shows how you can add this function to your API.
+#'
 #' @param method the authentication method(s)
 #'
 #' @export
