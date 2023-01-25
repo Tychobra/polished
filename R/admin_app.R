@@ -96,6 +96,8 @@ admin_ui <- function(
 #' @param output the Shiny server output
 #' @param session the Shiny server session
 #'
+#' @return \code{invisible(NULL)}
+#'
 #' @importFrom shiny callModule observeEvent
 #'
 #' @export
@@ -117,4 +119,6 @@ admin_server <- function(input, output, session) {
   }, ignoreInit = TRUE)
 
   shiny::callModule(user_access_module, "user_access")
+
+  invisible(NULL)
 }

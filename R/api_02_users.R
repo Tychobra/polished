@@ -64,6 +64,10 @@ get_users <- function(
 #'
 #' @param email the new user's email address.
 #'
+#' @return an object of class \code{polished_api_res}.  When successful, the `content` of the
+#' \code{polished_api_res} is \code{list(message = "success")}.  In the case of an error, the
+#' content is \code{list(error = "<error message>")}.
+#'
 #' @inheritParams get_apps
 #'
 #' @export
@@ -101,6 +105,10 @@ add_user <- function(email, api_key = get_api_key()) {
 #'
 #' @inheritParams get_apps
 #'
+#' @return an object of class \code{polished_api_res}.  When successful, the `content` of the
+#' \code{polished_api_res} is \code{list(message = "success")}.  In the case of an error, the
+#' content is \code{list(error = "<error message>")}.
+#'
 #' @export
 #'
 #' @seealso [get_users()] [add_user()] [update_user()]
@@ -132,6 +140,10 @@ delete_user <- function(user_uid, api_key = get_api_key()) {
 #' @param user_data list of data to update.
 #'
 #' @inheritParams get_apps
+#'
+#' @return an object of class \code{polished_api_res}.  When successful, the `content` of the
+#' \code{polished_api_res} is \code{list(message = "success")}.  In the case of an error, the
+#' content is \code{list(error = "<error message>")}.
 #'
 #' @export
 #'

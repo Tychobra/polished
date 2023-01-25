@@ -13,6 +13,9 @@ admin_server(input, output, session)
 
 \item{session}{the Shiny server session}
 }
+\value{
+\code{invisible(NULL)}
+}
 \description{
 The Shiny module server logic for the \code{polished} Admin Panel, accessible to Admin users.
 }

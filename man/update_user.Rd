@@ -14,6 +14,11 @@ update_user(user_uid, user_data, api_key = get_api_key())
 \item{api_key}{your Polished API key.  Set your polished api key using \code{\link{set_api_key}()}
 so that you do not need to supply this argument with each function call.}
 }
+\value{
+an object of class \code{polished_api_res}.  When successful, the \code{content} of the
+\code{polished_api_res} is \code{list(message = "success")}.  In the case of an error, the
+content is \code{list(error = "<error message>")}.
+}
 \description{
 Polished API - Update a user
 }
