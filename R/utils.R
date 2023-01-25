@@ -151,8 +151,8 @@ is_valid_email <- function(x) {
 #'
 #' @param email the email address to check
 #'
-#' @return boolean - whether of not the email is already registered with the polished
-#' account
+#' @return a list with the a boolean element named "is_registered", and an "error"
+#' element if there is an error status code returned from the Polished Auth API request.
 #'
 #' @noRd
 #'
@@ -174,14 +174,21 @@ is_email_registered <- function(email) {
   )
 
   if (!identical(httr::status_code(user_res), 200L)) {
-    print(user_res_content)
-    stop("error checking user registration", .call = FALSE)
-  }
-
-  if (isTRUE(user_res_content$is_password_set)) {
-    out <- TRUE
+    out <- list(
+      is_registered = FALSE,
+      error = user_res_content
+    )
   } else {
-    out <- FALSE
+    if (isTRUE(user_res_content$is_password_set)) {
+      out <- list(
+        is_registered = TRUE
+      )
+
+    } else {
+      out <- list(
+        is_registered = FALSE
+      )
+    }
   }
 
 

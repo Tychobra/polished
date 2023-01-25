@@ -356,7 +356,12 @@ sign_in_module_ns <- function(input, output, session) {
 
         # check if user is not registered.  If user is not registered, send them to
         # the registration page and auto populate the registration email input
-        if (is_email_registered(email)) {
+        is_reg_list <- is_email_registered(email)
+        if (!is.null(is_reg_list$error)) {
+          stop(is_reg_list$error, call. = FALSE)
+        }
+
+        if (isTRUE(is_reg_list$is_registered)) {
           # user is invited, so continue the sign in process
           shinyjs::hide("submit_continue_sign_in")
 
