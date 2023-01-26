@@ -108,8 +108,8 @@ verify_email_server <- function(input, output, session) {
         }, error = function(err) {
 
           msg <- "unable to check email verification status"
-          print(msg)
-          print(err)
+          warning(msg)
+          warning(conditionMessage(err))
           showToast("error", msg)
 
           invisible(NULL)
@@ -165,14 +165,18 @@ verify_email_server <- function(input, output, session) {
     }, error = function(err) {
 
 
-      print("unable to resend verification email")
-      print(err)
+      msg <- "unable to resend verification email"
+      warning(msg)
+
+      warning(conditionMessage(err))
 
       shinyFeedback::showToast(
         "error",
-        "Error resending verification email",
+        msg,
         .options = polished_toast_options
       )
+
+      invisible(NULL)
     })
 
   })
@@ -185,8 +189,8 @@ verify_email_server <- function(input, output, session) {
       session$reload()
     }, error = function(err) {
       msg <- "unable to sign out"
-      print(msg)
-      print(err)
+      warning(msg)
+      warning(conditionMessage(err))
       showToast("error", msg)
 
       invisible(NULL)

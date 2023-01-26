@@ -296,7 +296,7 @@ secure_rmd <- function(
           sign_out_from_shiny(session)
           session$reload()
         }, error = function(err) {
-          print(err)
+          warning(conditionMessage(err))
         })
 
       })
@@ -351,7 +351,7 @@ secure_rmd <- function(
           sign_out_from_shiny(session)
           session$reload()
         }, error = function(err) {
-          print(err)
+          warning(conditionMessage(err))
         })
 
       })

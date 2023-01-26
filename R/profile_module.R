@@ -83,12 +83,16 @@ profile_module <- function(input, output, session) {
 
     }, error = function(err) {
 
-      print(err)
+      msg <- "Sign Out Error"
+      warning(msg)
+      warning(conditionMessage(err))
       shinyFeedback::showToast(
         "error",
-        "Sign Out Error",
+        msg,
         .options = polished_toast_options
       )
+
+      invisible(NULL)
     })
 
   })

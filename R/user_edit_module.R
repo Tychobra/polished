@@ -59,7 +59,8 @@ user_edit_module <- function(input, output, session,
       }
 
     }, error = function(err) {
-      print(err)
+      warning(conditionMessage(err))
+      invisible(NULL)
     })
 
   }, priority = 1)
@@ -220,41 +221,18 @@ user_edit_module <- function(input, output, session,
         )
       }, error = function(err) {
 
-        if (err$message == "unique user limit exceeded") {
-          shinyFeedback::showToast(
-            "error",
-            shiny::HTML(
-              paste0(
-                tags$div(
-                  class = "text-center",
-                  "Unique User Limit Exceeded!",
-                  tags$br(),
-                  "For unlimited users, enable billing in the ",
-                  tags$a(
-                    href = "https://dashboard.polished.tech",
-                    target = "_blank",
-                    tags$b("Polished Dashboard"),
-                    shiny::icon("external-link-alt")
-                  )
-                )
-              )
-            ),
-            .options = list(
-              positionClass = "toast-top-center",
-              newestOnTop = TRUE,
-              timeOut = 0,
-              extendedTimeOut = 0
-            )
-          )
-        } else {
-          shinyFeedback::showToast(
-            "error",
-            err$message,
-            .options = polished_toast_options
-          )
-        }
+        err_msg <- conditionMessage(err)
 
-        print(err)
+
+        shinyFeedback::showToast(
+          "error",
+          err_msg,
+          .options = polished_toast_options
+        )
+
+        warning(err_msg)
+
+        invisible(NULL)
       })
 
     } else {
@@ -293,13 +271,21 @@ user_edit_module <- function(input, output, session,
           "User successfully edited!",
           .options = polished_toast_options
         )
-      }, error = function(e) {
+      }, error = function(err) {
+
+        msg <- "unable to edit user"
+
+        warning(msg)
+
         shinyFeedback::showToast(
           "error",
-          "Error editing user",
+          msg,
           .options = polished_toast_options
         )
-        print(e)
+
+        warning(conditionMessage(err))
+
+        invisible(NULL)
       })
     }
 

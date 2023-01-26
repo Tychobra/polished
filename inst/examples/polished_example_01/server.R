@@ -15,9 +15,10 @@ server <- function(input, output, session) {
     }, error = function(err) {
 
       msg <- "unable to sign out"
-      print(msg)
-      print(err)
+      warning(msg)
+      warning(conditionMessage(err))
 
+      invisible(NULL)
     })
 
   })

@@ -113,11 +113,13 @@ sign_in_check_jwt <- function(jwt, session = shiny::getDefaultReactiveDomain()) 
 
     }, error = function(err) {
       shinyFeedback::resetLoadingButton('sign_in_submit')
-      print(err)
+
+      err_msg <- conditionMessage(err)
+      warning(err_msg)
 
       shinyFeedback::showToast(
         "error",
-        err$message,
+        err_msg,
         .options = polished_toast_options
       )
 

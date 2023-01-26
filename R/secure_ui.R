@@ -116,13 +116,14 @@ secure_ui <- function(
 
 
       }, error = function(err) {
-        print("sign_in_ui_1")
 
         if (isTRUE(.polished$is_auth_required) && identical(err$message, "user not invited") && !identical(page_query, "sign_in")) {
           force_sign_out <<- TRUE
         }
 
-        print(err)
+        warning(conditionMessage(err))
+
+        invisible(NULL)
       })
     }
 

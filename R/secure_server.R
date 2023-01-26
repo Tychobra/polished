@@ -59,8 +59,8 @@ secure_server <- function(
           global_user <- global_user_res$content
 
         }, error = function(err) {
-          print("secure_server: unable to get session")
-          print(err)
+          warning("secure_server: unable to get session")
+          warning(conditionMessage(err))
           invisible(NULL)
         })
       }
@@ -204,8 +204,9 @@ secure_server <- function(
                 )
 
               }, catch = function(err) {
-                print('error setting the session to incative')
-                print(err)
+                warning('error setting the session to incative')
+                warning(conditionMessage(err))
+                invisible(NULL)
               })
 
             })

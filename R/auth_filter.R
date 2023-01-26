@@ -92,9 +92,10 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
         return(NULL)
 
       }, error = function(err) {
-        print(err)
+
 
         err_msg <<- conditionMessage(err)
+        warning(err_msg)
 
         if ("basic" %in% method) {
           # set error back to null to check basic auth
@@ -214,9 +215,10 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
 
         }, error = function(err) {
 
-          print("basic auth error")
-          print(err)
+          warning("basic auth error")
+
           err_msg <<- conditionMessage(err)
+          warning(err_msg)
 
           if (identical(res$status, 200L)) {
             res$status <- 500L

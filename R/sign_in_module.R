@@ -407,11 +407,12 @@ sign_in_module_ns <- function(input, output, session) {
 
     }, error = function(err) {
       # user is not invited
-      print(err)
+      err_msg <- conditionMessage(err)
+      warning(err_msg)
       shinyWidgets::sendSweetAlert(
         session,
         title = "Error",
-        text = err$message,
+        text = err_msg,
         type = "error"
       )
 
@@ -479,9 +480,9 @@ sign_in_module_ns <- function(input, output, session) {
 
       shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
 
-    }, error = function(e) {
+    }, error = function(err) {
       # user is not invited
-      print(e)
+      warning(conditionMessage(err))
       shinyWidgets::sendSweetAlert(
         session,
         title = "Error",
@@ -526,7 +527,7 @@ sign_in_module_ns <- function(input, output, session) {
 
       shinyFeedback::resetLoadingButton('register_submit')
 
-      print(err)
+      warning(conditionMessage(err))
       shinyFeedback::showToast(
         "error",
         err$message,

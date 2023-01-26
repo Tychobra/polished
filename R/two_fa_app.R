@@ -111,8 +111,8 @@ two_fa_server <- function(input, output, session) {
     }, error = function(err) {
 
       msg <- "unable to get 2FA code"
-      print(msg)
-      print(err)
+      warning(msg)
+      warning(conditionMessage(err))
       showToast("error", msg)
 
       invisible(NULL)
@@ -191,8 +191,8 @@ two_fa_server <- function(input, output, session) {
         }, error = function(err) {
 
           msg <- "unable to verify 2FA code"
-          print(msg)
-          print(err)
+          warning(msg)
+          warning(conditionMessage(err))
           showToast("error", msg)
 
           invisible(NULL)
@@ -213,8 +213,8 @@ two_fa_server <- function(input, output, session) {
       session$reload()
     }, error = function(err) {
       msg <- "error connecting to server"
-      print(msg)
-      print(err)
+      warning(msg)
+      warning(conditionMessage(err))
       showToast("error", msg)
 
       invisible(NULL)

@@ -143,8 +143,8 @@ user_access_module <- function(input, output, session) {
     }, error = function(err) {
 
       msg <- "unable to get users"
-      print(msg)
-      print(err)
+      warning(msg)
+      warning(conditionMessage(err))
 
       showToast(
         "error",
@@ -365,13 +365,18 @@ user_access_module <- function(input, output, session) {
         .options = polished_toast_options
       )
       users_trigger(users_trigger() + 1)
-    }, error = function(e) {
+    }, error = function(err) {
+
+      msg <- "unable to delete delete user"
+      warning(msg)
       shinyFeedback::showToast(
         "error",
-        "Error deleting user",
+        msg,
         .options = polished_toast_options
       )
-      print(e)
+      warning(conditionMessage(err))
+
+      invisible(NULL)
     })
 
   })
