@@ -33,3 +33,7 @@
 ## Reverse dependencies
 
 There are no reverse dependencies.
+
+## LICENSE update
+
+The license copyright file has been removed.
