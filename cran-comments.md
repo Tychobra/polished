@@ -34,7 +34,8 @@
 
 There are no reverse dependencies.
 
-## LICENSE update
+## LICENSE copyright update
 
-The LICENSE file has been removed and the LICENSE in the DESCRIPTION file
-is now MIT only, not MIT + file LICENSE as it was previously.
+Tychobra LLC has been added as an author "cph" and "fnd" in the DESCRIPTION file, and
+the LICENSE file has been updated to denote "polished authors" as the copyright holders.
+This was done to resolve a copyright issue issue reported in the CRAN submission process. 
