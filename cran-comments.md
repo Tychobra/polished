@@ -36,4 +36,5 @@ There are no reverse dependencies.
 
 ## LICENSE update
 
-The license copyright file has been removed.
+The LICENSE file has been removed and the LICENSE in the DESCRIPTION file
+is now MIT only, not MIT + file LICENSE as it was previously.
