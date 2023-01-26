@@ -4,11 +4,12 @@ Title: Authentication and Hosting for 'shiny' Apps
 Version: 0.8.0
 Authors@R: c(
   person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre")),
-  person("Patrick", "Howard", email = "patrick.howard@tychobra.com", role = c("aut")))
+  person("Patrick", "Howard", email = "patrick.howard@tychobra.com", role = c("aut")),
+  person("Tychobra LLC", role = c("cph", "fnd")))
 Maintainer: Andy Merlino <andy.merlino@tychobra.com>
 Description: Authentication, user administration, hosting, and additional infrastructure for 'shiny' apps. See
   <https://polished.tech> for additional documentation and examples.
-License: MIT
+License: MIT + file LICENSE
 URL: https://github.com/tychobra/polished,
     https://polished.tech
 BugReports: https://github.com/tychobra/polished/issues
