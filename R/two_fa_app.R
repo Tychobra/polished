@@ -73,7 +73,12 @@ two_fa_ui <- function() {
         )
       )
     ),
-    tags$script(src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"),
+    tags$script(
+      src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js",
+      integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==",
+      crossorigin="anonymous",
+      referrerpolicy="no-referrer"
+    ),
     tags$script(src = "polish/js/two_fa.js?version=4")
   )
 }
