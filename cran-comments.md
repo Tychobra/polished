@@ -25,8 +25,6 @@
 
 There are no reverse dependencies.
 
-## LICENSE copyright update
+## Comments
 
-Tychobra LLC has been added as an author "cph" and "fnd" in the DESCRIPTION file, and
-the LICENSE file has been updated to denote "polished authors" as the copyright holders.
-This was done to resolve a copyright issue issue reported in the CRAN submission process. 
+This is a patch release to fix a UX bug
