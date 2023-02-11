@@ -417,34 +417,19 @@ sign_in_module_2_ns <- function(input, output, session) {
 
       } else {
 
-        is_reg_list <- is_email_registered(email)
-        if (!is.null(is_reg_list$error)) {
-          stop(is_reg_list$error, call. = FALSE)
-        }
 
-        if (isTRUE(is_reg_list$is_registered)) {
+        # user is invited and not yet registered
+        shinyjs::hide("continue_registration")
 
-          shinyWidgets::sendSweetAlert(
-            session,
-            title = "Already Registed",
-            text = "This email has already registered",
-            type = "error"
-          )
+        shinyjs::show(
+          "register_passwords",
+          anim = TRUE
+        )
 
-        } else {
-          # user is invited and not yet registered
-          shinyjs::hide("continue_registration")
+        # NEED to sleep this exact amount to allow animation (above) to show w/o bug
+        Sys.sleep(.25)
 
-          shinyjs::show(
-            "register_passwords",
-            anim = TRUE
-          )
-
-          # NEED to sleep this exact amount to allow animation (above) to show w/o bug
-          Sys.sleep(.25)
-
-          shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
-        }
+        shinyjs::runjs(paste0("$('#", ns('register_password'), "').focus()"))
 
 
       }
