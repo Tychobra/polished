@@ -8,15 +8,6 @@
 
 ❯ checking CRAN incoming feasibility ... [22s] NOTE
   Maintainer: 'Andy Merlino <andy.merlino@tychobra.com>'
-  
-  New submission
-  
-  
-  Package was archived on CRAN
-  CRAN repository db overrides:
-    X-CRAN-Comment: Archived on 2023-01-24 for policy violation.
-  
-    On Internet access.
 
 ❯ checking package dependencies ... NOTE
   Imports includes 25 non-default packages.
