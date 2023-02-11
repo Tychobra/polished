@@ -1,3 +1,7 @@
+# polished v0.8.1
+
+- bug fix to correct registration flow for email invite required
+
 # polished v0.8.0
 
 - new `add_auth_to_spec()` function to allow you to use the Plumber swagger docs with the new
