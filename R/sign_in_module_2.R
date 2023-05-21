@@ -28,6 +28,7 @@ sign_in_module_2_ui <- function(id) {
       style = "width: 100%;",
       tags$label(
         tagList(icon("unlock-alt"), "password"),
+        class = "control-label",
         `for` = ns("sign_in_password")
       ),
       tags$input(
@@ -100,6 +101,7 @@ sign_in_module_2_ui <- function(id) {
       style = "width: 100%",
       tags$label(
         tagList(icon("unlock-alt"), "password"),
+        class = "control-label",
         `for` = ns("register_password")
       ),
       tags$input(
@@ -114,6 +116,7 @@ sign_in_module_2_ui <- function(id) {
       style = "width: 100%",
       tags$label(
         tagList(shiny::icon("unlock-alt"), "verify password"),
+        class = "control-label",
         `for` = ns("register_password_verify")
       ),
       tags$input(
