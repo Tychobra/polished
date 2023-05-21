@@ -28,7 +28,7 @@ sign_in_module_2_ui <- function(id) {
       style = "width: 100%;",
       tags$label(
         tagList(icon("unlock-alt"), "password"),
-        `for` = "sign_in_password"
+        `for` = ns("sign_in_password")
       ),
       tags$input(
         id = ns("sign_in_password"),
