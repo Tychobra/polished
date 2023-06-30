@@ -83,6 +83,7 @@ auth_filter <- function(method = c("basic", "cookie"), api_key = get_api_key()) 
             stop("session not found", call. = FALSE)
           }
 
+
           req$polished_session <- rc
 
         }
