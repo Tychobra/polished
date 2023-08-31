@@ -17,7 +17,7 @@
 remove_query_string <- function(session = shiny::getDefaultReactiveDomain(), mode = "replace") {
 
   shiny::updateQueryString(
-    "?",
+    "/",
     mode = mode,
     session = session
   )
