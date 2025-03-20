@@ -100,7 +100,7 @@ get_api_key <- function() {
 
 
 set_api_url <- function(
-  api_url = "https://auth-api.polished.tech/v1",
+  api_url = "https://auth-api-1092004487014.us-east1.run.app/v1",
   host_api_url = "https://host-api.polished.tech/v1"
 ) {
 
